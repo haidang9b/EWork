@@ -30,8 +30,9 @@ namespace EW.WebAPI.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] string value)
         {
+            return Ok(value);
         }
 
         // PUT api/<UsersController>/5

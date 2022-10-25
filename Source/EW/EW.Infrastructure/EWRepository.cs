@@ -70,7 +70,7 @@ namespace EW.Infrastructure
 
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate);
 
-        public IQueryable<TEntity> GetAll() => _dbSet.AsQueryable();
+        public IQueryable<TEntity> GetAll() => _dbSet.AsNoTracking().AsQueryable();
 
         public async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbSet.ToListAsync();
 
