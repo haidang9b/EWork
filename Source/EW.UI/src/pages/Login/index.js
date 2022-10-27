@@ -14,11 +14,18 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../../redux/auth.slice";
+import useAuth from "../../hook/useAuth";
 const Login = () => {
+    const { user } = useAuth();
+    console.log(user);
+    const dispatch = useDispatch();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const handleSubmit = () => {
         console.log(username, password);
+        dispatch(handleLogin({ username, password }));
     };
 
     const handleLoginGoogle = () => {

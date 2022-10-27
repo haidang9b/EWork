@@ -56,7 +56,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseStaticFiles();
-
+app.UseCors(options => options
+                .WithOrigins(new[] { "http://localhost:3000" })
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 app.Run();
 
 
