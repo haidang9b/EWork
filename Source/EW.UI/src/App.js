@@ -13,7 +13,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route element={<RequireAuth allowedRoles={["Student"]} />}>
+            <Route element={<RequireAuth allowedRoles={["Faculty"]} />}>
                 <Route path="dashboard" element={<Dashboard />} />
             </Route>
             <Route path="unauthorized" element={<Unauthorized />} />

@@ -1,5 +1,4 @@
-import { accessTokenCurrentSelector } from "../redux/selectors";
-import { useSelector } from "react-redux";
+import TokenService from "../common/apis/token.service";
 
 const getUserFromToken = (token) => {
     try {
@@ -22,7 +21,7 @@ const getUserFromToken = (token) => {
     }
 };
 const useAuth = () => {
-    let token = useSelector(accessTokenCurrentSelector);
+    let token = TokenService.getAccessToken();
 
     return {
         user: getUserFromToken(token),

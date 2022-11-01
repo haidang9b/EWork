@@ -1,10 +1,5 @@
 ﻿using EW.Domain;
 using EW.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Infrastructure
 {
@@ -32,6 +27,7 @@ namespace EW.Infrastructure
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+
         }
 
         public IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity

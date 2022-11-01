@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GET_USERS_URL } from "../common/apiUrl";
 import httpClient from "../common/apis/httpClient";
-
+import { GET_USERS_URL } from "../common/apiUrl";
 const usersSlice = createSlice({
     name: "users",
     initialState: {
@@ -15,8 +14,8 @@ const usersSlice = createSlice({
             })
             .addCase(getUsers.fulfilled, (state, action) => {
                 console.log(action.payload);
-                if (action.payload.success) {
-                    state.users = action.payload.users;
+                if (action.payload.data) {
+                    state.users = action.payload.data;
                 }
                 state.isLoading = false;
             });
@@ -25,6 +24,7 @@ const usersSlice = createSlice({
 
 export const getUsers = createAsyncThunk("users/getUsers", async () => {
     const response = await httpClient.get(GET_USERS_URL);
+    console.log("chay trong get users");
     return response.data;
 });
 

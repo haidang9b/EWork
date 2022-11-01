@@ -1,12 +1,7 @@
 ﻿using EW.Domain;
 using EW.Repository;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Infrastructure
 {
@@ -19,62 +14,110 @@ namespace EW.Infrastructure
         {
             _dbContext = dbContext;
         }
-        public bool Add(TEntity entity)
+        public void Add(TEntity entity)
         {
             _dbSet.Add(entity);
-            return _dbContext.SaveChanges() > 0;
         }
 
-        public async Task<bool> AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public bool AddRange(IEnumerable<TEntity> entities)
+        public void AddRange(IEnumerable<TEntity> entities)
         {
             _dbSet.AddRange(entities);
-            return _dbContext.SaveChanges() > 0;
         }
 
-        public async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await _dbSet.AddRangeAsync(entities);
-            return await _dbContext.SaveChangesAsync() > 0;
         }
 
         public bool Any(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbSet.Any(predicate);
+            return _dbSet.Where(predicate).Any();
         }
 
-        public bool Delete(TEntity entity)
+        public void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
-            return _dbContext.SaveChanges() > 0;
         }
 
-        public bool DeleteRange(IEnumerable<TEntity> entities)
+        public void DeleteRange(IEnumerable<TEntity> entities)
         {
             _dbSet.RemoveRange(entities);
-            return _dbContext.SaveChanges() > 0;
         }
 
         public TEntity Find(long id) => _dbSet.Find(id);
 
         public async Task<TEntity> FindAsync(long id) => await _dbSet.FindAsync(id);
 
-        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate) => _dbSet.FirstOrDefault(predicate);
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
+        {
+            var query = _dbSet.Where(predicate);
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return query.FirstOrDefault();
+        }
 
-        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => await _dbSet.FirstOrDefaultAsync(predicate);
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
+        {
+            var query = _dbSet.Where(predicate);
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.FirstOrDefaultAsync();
+        }
 
-        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate);
+        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
+        {
+            var query = _dbSet.Where(predicate);
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return query;
+        }
 
-        public IQueryable<TEntity> GetAll() => _dbSet.AsNoTracking().AsQueryable();
+        public IQueryable<TEntity> GetAll(string includeProperties = "")
+        {
+            var query = _dbSet.AsQueryable();
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return query;
+        }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbSet.ToListAsync();
+        public async Task<IEnumerable<TEntity>> GetAllAsync(string includeProperties = "")
+        {
+            var query = _dbSet.AsQueryable();
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.ToListAsync();
+        }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate) => await _dbSet.Where(predicate).ToListAsync();
+        public async Task<IList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
+        {
+            var query = _dbSet.Where(predicate);
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.ToListAsync();
+        }
 
         public TEntity InsertOrUpdate(TEntity entity)
         {
@@ -83,30 +126,21 @@ namespace EW.Infrastructure
             return result.Entity;
         }
 
-        public bool Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
-            return _dbContext.SaveChanges() > 0;
         }
 
-        public async Task<bool> UpdateAsync(TEntity entity)
-        {
-            _dbSet.Attach(entity);
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            return await _dbContext.SaveChangesAsync() > 0;
-        }
 
-        public bool UpdateRange(IEnumerable<TEntity> entities)
+        public void UpdateRange(IEnumerable<TEntity> entities)
         {
+            _dbContext.ChangeTracker.Clear();
+            foreach (var en in entities)
+            {
+                _dbContext.Entry(en).State = EntityState.Modified;
+            }
             _dbSet.UpdateRange(entities);
-            return _dbContext.SaveChanges() > 0;
-        }
-
-        public async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entities)
-        {
-            _dbSet.UpdateRange(entities);
-            return await _dbContext.SaveChangesAsync() > 0;
         }
     }
 }
