@@ -1,9 +1,4 @@
 ﻿using EW.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Services.Constracts
 {
@@ -13,5 +8,6 @@ namespace EW.Services.Constracts
         Task<bool> AddUser(User user);
         Task<User> GetUser(User user);
         Task<bool> Register(User user);
+        Task<bool> RegisterWithGoogle(User user);
     }
 }

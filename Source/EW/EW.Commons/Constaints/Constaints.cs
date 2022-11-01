@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EW.Commons.Constaints
+﻿namespace EW.Commons.Constaints
 {
     public static class Constaints
     {

@@ -2,13 +2,9 @@
 using EW.Domain.Entities;
 using EW.Services.Constracts;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Services.Business
 {
@@ -27,7 +23,7 @@ namespace EW.Services.Business
             var signingCredentials =
                 new SigningCredentials(_keyRefreshToken, SecurityAlgorithms.HmacSha256Signature);
             var header = new JwtHeader(signingCredentials);
-            var payload = new JwtPayload(user.Email, null, null, null, DateTime.Now.AddSeconds(45)); // The expired time of payload is 5 days
+            var payload = new JwtPayload(user.Email, null, null, null, DateTime.Now.AddDays(5)); // The expired time of payload is 5 days
             var securityToken = new JwtSecurityToken(header, payload);
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }

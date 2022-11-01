@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import { GoogleLogin } from "react-google-login";
+
 import {
     CardActions,
     CardContent,
@@ -13,17 +15,47 @@ import { SendSharp } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
-import GoogleIcon from "@mui/icons-material/Google";
+import { useDispatch } from "react-redux";
+import { handleLogin, handleLoginGoogle } from "../../redux/auth.slice";
+import useAuth from "../../hook/useAuth";
+import { gapi } from "gapi-script";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+    const navigate = useNavigate();
+    const clientId = process.env.REACT_APP_CLIENT_ID;
+    const { user } = useAuth();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const handleSubmit = () => {
-        console.log(username, password);
+        dispatch(handleLogin({ username, password }));
     };
 
-    const handleLoginGoogle = () => {
-        console.log("Login with google");
+    const responseGoogle = (response) => {
+        if (response.googleId !== "") {
+            let { email, imageUrl, name, googleId } = response.profileObj;
+            let obj = {
+                email,
+                imageUrl,
+                name,
+                googleId,
+            };
+            let data = dispatch(handleLoginGoogle(obj));
+            console.log(data);
+        }
     };
+    useEffect(() => {
+        const initClient = () => {
+            gapi.client.init({
+                clientId: clientId,
+                scope: "",
+            });
+        };
+        gapi.load("client:auth2", initClient);
+    });
+    // if (user) {
+    //     navigate("/", { replace: true });
+    // }
     return (
         <Container>
             <Grid
@@ -79,17 +111,13 @@ const Login = () => {
                             <br />
                             <Divider>Login with</Divider>
                             <br />
-                            <Button
-                                type="button"
-                                variant="outlined"
-                                startIcon={<GoogleIcon />}
-                                onClick={handleLoginGoogle}
-                                sx={{
-                                    minWidth: "100%",
-                                }}
-                            >
-                                Google
-                            </Button>
+                            <GoogleLogin
+                                clientId={clientId}
+                                buttonText="Login With Google"
+                                onSuccess={responseGoogle}
+                                onFailure={responseGoogle}
+                                cookiePolicy={"single_host_origin"}
+                            />
                         </Stack>
                     </CardActions>
                 </Card>

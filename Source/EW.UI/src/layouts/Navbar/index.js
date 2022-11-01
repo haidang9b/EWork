@@ -12,11 +12,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-
+import { useNavigate } from "react-router-dom";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -42,11 +43,11 @@ const Navbar = () => {
                     <AdbIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
                     />
+
                     <Typography
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: "none", md: "flex" },
@@ -56,6 +57,7 @@ const Navbar = () => {
                             color: "inherit",
                             textDecoration: "none",
                         }}
+                        onClick={() => navigate("/dashboard")}
                     >
                         LOGO
                     </Typography>
