@@ -1,12 +1,12 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { Status } from "../common/constants";
+export const statusAuthCurrentSelector = (state) => state.auth.status;
+export const statusUsersCurrentSelector = (state) => state.users.status;
 
-export const accessTokenCurrentSelector = (state) => state.auth.accessToken;
-export const refreshTokenCurrentSelector = (state) => state.auth.refreshToken;
-export const usersSelector = (state) => state.users.users;
-export const isLoadingAuthCurrentSelector = (state) => state.auth.isLoading;
 export const isLoadingSelector = createSelector(
-    isLoadingAuthCurrentSelector,
-    (loadingAuth) => {
-        return loadingAuth;
+    statusAuthCurrentSelector,
+    statusUsersCurrentSelector,
+    (statusAuth, statusUsers) => {
+        return statusAuth === Status.loading || statusUsers === Status.loading;
     }
 );
