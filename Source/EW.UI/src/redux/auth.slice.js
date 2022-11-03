@@ -1,25 +1,22 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../common/apis/httpClient";
 import { LOGIN_GOOGLE_URL, LOGIN_URL } from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
+import { Status } from "../common/constants";
+
+const initialState = {
+    accessToken: null,
+    refreshToken: null,
+    status: Status.idle,
+};
+
 const authSlice = createSlice({
     name: "auth",
-    initialState: {
-        accessToken: null,
-        refreshToken: null,
-        isLoading: false,
-    },
-    reducers: {
-        handleLogout: (state) => {
-            state.accessToken = null;
-            state.refreshToken = null;
-            TokenService.clearToken();
-        },
-    },
+    initialState: initialState,
     extraReducers: (builder) => {
         builder
             .addCase(handleLogin.pending, (state, action) => {
-                state.isLoading = true;
+                state.status = Status.loading;
             })
             .addCase(handleLogin.fulfilled, (state, action) => {
                 if (
@@ -31,13 +28,13 @@ const authSlice = createSlice({
                     state.accessToken = action.payload?.accessToken;
                     state.refreshToken = action.payload?.refreshToken;
                 }
-                state.isLoading = false;
+                state.status = Status.succeeded;
             })
             .addCase(handleLogin.rejected, (state, action) => {
-                state.isLoading = false;
+                state.status = Status.failed;
             })
             .addCase(handleRefreshToken.pending, (state, action) => {
-                state.isLoading = true;
+                state.status = Status.loading;
             })
             .addCase(handleRefreshToken.fulfilled, (state, action) => {
                 if (
@@ -49,17 +46,15 @@ const authSlice = createSlice({
                     state.accessToken = action.payload?.accessToken;
                     state.refreshToken = action.payload?.refreshToken;
                 }
-                state.isLoading = false;
+                state.status = Status.succeeded;
             })
             .addCase(handleRefreshToken.rejected, (state, action) => {
-                state.isLoading = false;
+                state.status = Status.failed;
             })
             .addCase(handleLoginGoogle.pending, (state, action) => {
-                state.isLoading = true;
+                state.status = Status.loading;
             })
             .addCase(handleLoginGoogle.fulfilled, (state, action) => {
-                state.isLoading = false;
-                console.log(action.payload);
                 if (
                     action.payload.data?.accessToken &&
                     action.payload.data?.refreshToken
@@ -72,19 +67,32 @@ const authSlice = createSlice({
                     );
                     state.accessToken = action.payload.data.accessToken;
                     state.refreshToken = action.payload.data.refreshToken;
+                    state.status = Status.succeeded;
                 }
             })
             .addCase(handleLoginGoogle.rejected, (state, action) => {
-                state.isLoading = false;
-            });
+                state.status = Status.failed;
+            })
+            .addCase(handleLogout.pending, logoutAccount)
+            .addCase(handleLogout.fulfilled, logoutAccount)
+            .addCase(handleLogout.rejected, logoutAccount);
     },
 });
+
+const logoutAccount = (state, action) => {
+    state.accessToken = null;
+    state.refreshToken = null;
+    state.status = Status.idle;
+};
 
 export const handleLogin = createAsyncThunk("auth/login", async (user) => {
     const response = await httpClient.post(LOGIN_URL, user);
     return response.data.data;
 });
-
+export const handleLogout = createAsyncThunk("auth/logout", () => {
+    TokenService.clearToken();
+    return null;
+});
 export const handleRefreshToken = createAsyncThunk(
     "auth/refreshToken",
     (res) => {
@@ -104,3 +112,4 @@ export const handleLoginGoogle = createAsyncThunk(
     }
 );
 export default authSlice;
+export const authSelector = (state) => state.auth;

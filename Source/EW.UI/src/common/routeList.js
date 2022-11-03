@@ -1,4 +1,3 @@
-import React from "react";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Missing from "../pages/Missing";
@@ -10,4 +9,33 @@ const routesPublic = [
     { path: "*", element: <Missing /> },
 ];
 const routesPrivate = [{ path: "dashboard", element: <Dashboard /> }];
-export { routesPublic, routesPrivate };
+const navbarLinks = [
+    {
+        name: "Việc làm",
+        path: "jobs",
+    },
+    {
+        name: "Công ty",
+        path: "companies",
+    },
+    {
+        name: "Blog",
+        path: "blogs",
+    },
+];
+
+const settingNonLoginLinks = [
+    {
+        name: "Trang cá nhân",
+        path: "my-profile",
+    },
+    {
+        name: "Thông tin tài khoản",
+        path: "accounts",
+    },
+    {
+        name: "Đổi mật khẩu",
+        path: "change-password",
+    },
+];
+export { routesPublic, routesPrivate, navbarLinks, settingNonLoginLinks };

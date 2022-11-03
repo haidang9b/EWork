@@ -1,7 +1,12 @@
 import React from "react";
+import Loading from "../../components/Loading";
 
 function Unauthorized() {
-    return <div>Unauthorized</div>;
+    return (
+        <div>
+            <Loading />
+        </div>
+    );
 }
 
 export default Unauthorized;

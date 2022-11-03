@@ -13,14 +13,74 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { navbarLinks, settingNonLoginLinks } from "../../common/routeList";
+import useAuth from "../../hook/useAuth";
+import { useDispatch } from "react-redux";
+import { handleLogout } from "../../redux/auth.slice";
+
+const RightMenuLogin = ({
+    handleCloseUserMenu,
+    navigate,
+    handleLogoutUser,
+}) => {
+    return (
+        <>
+            {settingNonLoginLinks.map((setting) => (
+                <MenuItem
+                    key={setting.name}
+                    onClick={() => {
+                        handleCloseUserMenu();
+                        navigate(setting.path);
+                    }}
+                >
+                    <Typography textAlign="center">{setting.name}</Typography>
+                </MenuItem>
+            ))}
+            <MenuItem
+                onClick={() => {
+                    handleCloseUserMenu();
+                    handleLogoutUser();
+                }}
+            >
+                <Typography textAlign="center">Đăng xuất</Typography>
+            </MenuItem>
+        </>
+    );
+};
+
+const RightMenuNonLogin = ({ navigate, handleCloseUserMenu }) => {
+    return (
+        <>
+            <MenuItem
+                onClick={() => {
+                    handleCloseUserMenu();
+                    navigate("recruiter");
+                }}
+            >
+                <Typography textAlign="center">Nhà tuyển dụng</Typography>
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleCloseUserMenu();
+                    navigate("login");
+                }}
+            >
+                <Typography textAlign="center">Đăng nhập</Typography>
+            </MenuItem>
+        </>
+    );
+};
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user } = useAuth();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-
+    const handleLogoutUser = () => {
+        dispatch(handleLogout());
+        navigate("/");
+    };
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -34,6 +94,7 @@ const Navbar = () => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+        console.log("handleCloseUserMenu");
     };
 
     return (
@@ -59,7 +120,7 @@ const Navbar = () => {
                         }}
                         onClick={() => navigate("/dashboard")}
                     >
-                        LOGO
+                        EWork
                     </Typography>
 
                     <Box
@@ -96,13 +157,16 @@ const Navbar = () => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {pages.map((page) => (
+                            {navbarLinks.map((page) => (
                                 <MenuItem
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                                    key={page.name}
+                                    onClick={() => {
+                                        handleCloseNavMenu();
+                                        navigate(page.path);
+                                    }}
                                 >
                                     <Typography textAlign="center">
-                                        {page}
+                                        {page.name}
                                     </Typography>
                                 </MenuItem>
                             ))}
@@ -115,7 +179,7 @@ const Navbar = () => {
                         variant="h5"
                         noWrap
                         component="a"
-                        href=""
+                        onClick={() => navigate("/")}
                         sx={{
                             mr: 2,
                             display: { xs: "flex", md: "none" },
@@ -127,7 +191,7 @@ const Navbar = () => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        EWork
                     </Typography>
                     <Box
                         sx={{
@@ -135,13 +199,16 @@ const Navbar = () => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        {pages.map((page) => (
+                        {navbarLinks.map((page) => (
                             <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
+                                key={page.name}
+                                onClick={() => {
+                                    handleCloseNavMenu();
+                                    navigate(page.path);
+                                }}
                                 sx={{ my: 2, color: "white", display: "block" }}
                             >
-                                {page}
+                                {page.name}
                             </Button>
                         ))}
                     </Box>
@@ -174,16 +241,19 @@ const Navbar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem
-                                    key={setting}
-                                    onClick={handleCloseUserMenu}
-                                >
-                                    <Typography textAlign="center">
-                                        {setting}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
+                            {user && (
+                                <RightMenuLogin
+                                    handleCloseUserMenu={handleCloseUserMenu}
+                                    navigate={navigate}
+                                    handleLogoutUser={handleLogoutUser}
+                                />
+                            )}
+                            {!user && (
+                                <RightMenuNonLogin
+                                    navigate={navigate}
+                                    handleCloseUserMenu={handleCloseUserMenu}
+                                />
+                            )}
                         </Menu>
                     </Box>
                 </Toolbar>

@@ -1,31 +1,36 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../common/apis/httpClient";
 import { GET_USERS_URL } from "../common/apiUrl";
+import { Status } from "../common/constants";
+const initialState = {
+    users: null,
+    status: Status.idle,
+};
 const usersSlice = createSlice({
     name: "users",
-    initialState: {
-        users: null,
-        isLoading: false,
-    },
+    initialState: initialState,
     extraReducers: (builder) => {
         builder
             .addCase(getUsers.pending, (state, action) => {
-                state.isLoading = true;
+                state.status = Status.loading;
             })
             .addCase(getUsers.fulfilled, (state, action) => {
                 console.log(action.payload);
                 if (action.payload.data) {
                     state.users = action.payload.data;
                 }
-                state.isLoading = false;
+                state.status = Status.succeeded;
+            })
+            .addCase(getUsers.rejected, (state, action) => {
+                state.status = Status.failed;
             });
     },
 });
 
 export const getUsers = createAsyncThunk("users/getUsers", async () => {
     const response = await httpClient.get(GET_USERS_URL);
-    console.log("chay trong get users");
     return response.data;
 });
 
 export default usersSlice;
+export const usersSelector = (state) => state.users;
