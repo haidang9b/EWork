@@ -17,6 +17,8 @@ import { navbarLinks, settingNonLoginLinks } from "../../common/routeList";
 import useAuth from "../../hook/useAuth";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
+import { ListItemIcon } from "@mui/material";
+import { Group, Login, Logout } from "@mui/icons-material";
 
 const RightMenuLogin = ({
     handleCloseUserMenu,
@@ -33,6 +35,7 @@ const RightMenuLogin = ({
                         navigate(setting.path);
                     }}
                 >
+                    {setting.childComponent}
                     <Typography textAlign="center">{setting.name}</Typography>
                 </MenuItem>
             ))}
@@ -42,6 +45,9 @@ const RightMenuLogin = ({
                     handleLogoutUser();
                 }}
             >
+                <ListItemIcon>
+                    <Logout fontSize="small" />
+                </ListItemIcon>
                 <Typography textAlign="center">Đăng xuất</Typography>
             </MenuItem>
         </>
@@ -57,6 +63,9 @@ const RightMenuNonLogin = ({ navigate, handleCloseUserMenu }) => {
                     navigate("recruiter");
                 }}
             >
+                <ListItemIcon>
+                    <Group fontSize="small" />
+                </ListItemIcon>
                 <Typography textAlign="center">Nhà tuyển dụng</Typography>
             </MenuItem>
             <MenuItem
@@ -65,6 +74,9 @@ const RightMenuNonLogin = ({ navigate, handleCloseUserMenu }) => {
                     navigate("login");
                 }}
             >
+                <ListItemIcon>
+                    <Login fontSize="small" />
+                </ListItemIcon>
                 <Typography textAlign="center">Đăng nhập</Typography>
             </MenuItem>
         </>

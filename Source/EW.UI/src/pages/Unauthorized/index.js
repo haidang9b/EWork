@@ -1,11 +1,12 @@
 import React from "react";
-import Loading from "../../components/Loading";
+import Hero from "../../components/Hero";
 
 function Unauthorized() {
     return (
-        <div>
-            <Loading />
-        </div>
+        <Hero
+            title="Không có quyền truy cập"
+            subtitle="Bạn không có quyền truy cập trang web này, vui lòng truy cập vào đường dẫn khác"
+        ></Hero>
     );
 }
 

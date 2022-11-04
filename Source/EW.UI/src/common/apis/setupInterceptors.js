@@ -1,3 +1,4 @@
+import { handleRefreshToken } from "../../redux/auth.slice";
 import { REFRESH_TOKEN_URL } from "../apiUrl";
 import axiosInstance from "./httpClient";
 import TokenService from "./token.service";
@@ -12,7 +13,6 @@ const setup = (store) => {
             return config;
         },
         (error) => {
-            console.log(error);
             return Promise.reject(error);
         }
     );
@@ -43,16 +43,14 @@ const setup = (store) => {
                                 TokenService.setRefreshToken(
                                     res.data?.data?.refreshToken
                                 );
-                                console.log(TokenService.getAccessToken());
+                                dispatch(handleRefreshToken(res));
                             });
                         return axiosInstance(originalConfig);
                     } catch (_error) {
-                        console.log(_error);
                         return Promise.reject(_error);
                     }
                 }
             }
-
             return Promise.reject(error);
         }
     );

@@ -25,6 +25,7 @@ import { gapi } from "gapi-script";
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { Status } from "../../common/constants";
+import CustomAlert from "../../components/CustomAlert";
 const Login = () => {
     const auth = useSelector(authSelector);
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -66,6 +67,12 @@ const Login = () => {
                 <Loading />
             ) : (
                 <Container>
+                    {auth.status === Status.failed && (
+                        <CustomAlert
+                            message="Tài khoản hoặc mật khẩu không chính xác"
+                            type="error"
+                        />
+                    )}
                     <Grid
                         container
                         spacing={0}

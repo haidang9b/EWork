@@ -7,6 +7,7 @@ export const isLoadingSelector = createSelector(
     statusAuthCurrentSelector,
     statusUsersCurrentSelector,
     (statusAuth, statusUsers) => {
+        console.log(statusAuth, statusUsers);
         return statusAuth === Status.loading || statusUsers === Status.loading;
     }
 );
