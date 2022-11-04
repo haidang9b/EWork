@@ -2,6 +2,8 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Missing from "../pages/Missing";
 import Dashboard from "../pages/Dashboard";
+import { Avatar, ListItemIcon } from "@mui/material";
+import { Settings } from "@mui/icons-material";
 const routesPublic = [
     { path: "/", element: <Home /> },
     { path: "home", element: <Home /> },
@@ -26,16 +28,22 @@ const navbarLinks = [
 
 const settingNonLoginLinks = [
     {
-        name: "Trang cá nhân",
-        path: "my-profile",
-    },
-    {
         name: "Thông tin tài khoản",
         path: "accounts",
+        childComponent: (
+            <ListItemIcon>
+                <Avatar fontSize="small" />
+            </ListItemIcon>
+        ),
     },
     {
-        name: "Đổi mật khẩu",
-        path: "change-password",
+        name: "Cài đặt",
+        path: "settings",
+        childComponent: (
+            <ListItemIcon>
+                <Settings fontSize="small" />
+            </ListItemIcon>
+        ),
     },
 ];
 export { routesPublic, routesPrivate, navbarLinks, settingNonLoginLinks };

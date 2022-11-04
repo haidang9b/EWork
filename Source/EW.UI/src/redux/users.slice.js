@@ -15,7 +15,6 @@ const usersSlice = createSlice({
                 state.status = Status.loading;
             })
             .addCase(getUsers.fulfilled, (state, action) => {
-                console.log(action.payload);
                 if (action.payload.data) {
                     state.users = action.payload.data;
                 }
