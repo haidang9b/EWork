@@ -79,6 +79,9 @@ const Login = () => {
                         direction="column"
                         alignItems="center"
                         justify="center"
+                        sx={{
+                            padding: "2%",
+                        }}
                     >
                         <Card
                             sx={{
