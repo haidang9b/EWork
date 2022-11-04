@@ -106,7 +106,6 @@ const Navbar = () => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
-        console.log("handleCloseUserMenu");
     };
 
     return (
