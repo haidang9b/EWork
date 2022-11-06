@@ -9,7 +9,7 @@ const Dashboard = () => {
     const isLoading = useSelector(isLoadingSelector);
     useEffect(() => {
         dispatch(getUsers());
-    }, []);
+    }, [dispatch]);
     return (
         <div>
             {isLoading && <Loading />}

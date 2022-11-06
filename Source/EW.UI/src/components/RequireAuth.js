@@ -1,5 +1,4 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
 import useAuth from "../hook/useAuth";
 const RequireAuth = ({ allowedRoles }) => {
     const { user } = useAuth();

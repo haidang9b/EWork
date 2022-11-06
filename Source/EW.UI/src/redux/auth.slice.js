@@ -5,8 +5,7 @@ import TokenService from "../common/apis/token.service";
 import { Status } from "../common/constants";
 
 const initialState = {
-    accessToken: null,
-    refreshToken: null,
+    user: TokenService.getUserFromToken(TokenService.getAccessToken()) | null,
     status: Status.idle,
 };
 
@@ -26,8 +25,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.accessToken = action.payload.data.accessToken;
-                    state.refreshToken = action.payload.data.refreshToken;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -47,8 +44,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.accessToken = action.payload.data.accessToken;
-                    state.refreshToken = action.payload.data.refreshToken;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -71,8 +66,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.accessToken = action.payload.data.accessToken;
-                    state.refreshToken = action.payload.data.refreshToken;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
