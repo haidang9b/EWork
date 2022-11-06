@@ -57,7 +57,7 @@ const Login = () => {
             });
         };
         gapi.load("client:auth2", initClient);
-    }, []);
+    }, [clientId]);
 
     return (
         <>
