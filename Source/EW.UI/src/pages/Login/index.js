@@ -42,11 +42,9 @@ const Login = () => {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        console.log(obj);
         dispatch(handleLogin(obj));
     };
 
-    console.log("re-render");
     const responseGoogle = (response) => {
         if (response.googleId !== "") {
             let { email, imageUrl, name, googleId } = response.profileObj;
