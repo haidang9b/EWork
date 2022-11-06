@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { GoogleLogin } from "react-google-login";
@@ -25,17 +25,28 @@ import { gapi } from "gapi-script";
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { Status } from "../../common/constants";
-import CustomAlert from "../../components/CustomAlert";
+import Notification from "../../components/Notification";
 const Login = () => {
     const auth = useSelector(authSelector);
     const clientId = process.env.REACT_APP_CLIENT_ID;
+    const [notify, setNotify] = useState({
+        isOpen: false,
+        message: "",
+        type: "error",
+    });
     const dispatch = useDispatch();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const usernameRef = useRef(null);
+    const passwordRef = useRef(null);
     const handleSubmit = () => {
-        dispatch(handleLogin({ username, password }));
+        let obj = {
+            Username: usernameRef.current.value,
+            Password: passwordRef.current.value,
+        };
+        console.log(obj);
+        dispatch(handleLogin(obj));
     };
 
+    console.log("re-render");
     const responseGoogle = (response) => {
         if (response.googleId !== "") {
             let { email, imageUrl, name, googleId } = response.profileObj;
@@ -58,7 +69,15 @@ const Login = () => {
         };
         gapi.load("client:auth2", initClient);
     }, [clientId]);
-
+    useEffect(() => {
+        if (auth.status === Status.failed) {
+            setNotify({
+                isOpen: true,
+                message: "Login failed",
+                type: "error",
+            });
+        }
+    }, [auth]);
     return (
         <>
             {auth && auth.status === Status.succeeded ? (
@@ -67,12 +86,6 @@ const Login = () => {
                 <Loading />
             ) : (
                 <Container>
-                    {auth.status === Status.failed && (
-                        <CustomAlert
-                            message="Tài khoản hoặc mật khẩu không chính xác"
-                            type="error"
-                        />
-                    )}
                     <Grid
                         container
                         spacing={0}
@@ -101,9 +114,7 @@ const Login = () => {
                                         variant="standard"
                                         fullWidth
                                         required
-                                        onChange={(e) =>
-                                            setUsername(e.target.value)
-                                        }
+                                        inputRef={usernameRef}
                                     />
                                     <TextField
                                         label="Mật khẩu"
@@ -111,9 +122,7 @@ const Login = () => {
                                         fullWidth
                                         required
                                         type="password"
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
+                                        inputRef={passwordRef}
                                     />
                                 </Box>
                             </CardContent>
@@ -144,6 +153,7 @@ const Login = () => {
                             </CardActions>
                         </Card>
                     </Grid>
+                    <Notification notify={notify} setNotify={setNotify} />
                 </Container>
             )}
         </>

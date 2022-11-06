@@ -60,7 +60,7 @@ const RightMenuNonLogin = ({ navigate, handleCloseUserMenu }) => {
             <MenuItem
                 onClick={() => {
                     handleCloseUserMenu();
-                    navigate("recruiter");
+                    navigate("recruiter-sign-up");
                 }}
             >
                 <ListItemIcon>
