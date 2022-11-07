@@ -1,57 +1,84 @@
-import { Button, TextField } from "@mui/material";
+import {
+    Button,
+    Card,
+    CardContent,
+    InputAdornment,
+    Stack,
+    TextField,
+} from "@mui/material";
 import { Box } from "@mui/system";
+import SearchIcon from "@mui/icons-material/Search";
+import { LocationOn } from "@mui/icons-material";
 
 const SearchBar = () => {
     return (
-        <Box
+        <Card
             sx={{
-                paddingTop: "6px",
+                marginTop: "20px",
             }}
-            textAlign="center"
         >
-            <TextField
-                id="TextSearch"
-                label="Tìm kiếm kỹ năng, chức vụ, công ti,..."
-                variant="outlined"
-                sx={{
-                    padding: "6px",
-                    width: {
-                        sm: "100%",
-                        md: "59%",
-                        lg: "59%",
-                    },
-                }}
-            />
-            <TextField
-                id="TextLocation"
-                label="Vị trí"
-                variant="outlined"
-                sx={{
-                    padding: "6px",
-                    width: {
-                        sm: "100%",
-                        md: "24%",
-                        lg: "24%",
-                    },
-                }}
-            />
-
-            <Button
-                type="button"
-                variant="contained"
-                sx={{
-                    padding: "6px",
-                    width: {
-                        sm: "100%",
-                        md: "10%",
-                        lg: "10%",
-                    },
-                    alignItems: "center",
-                }}
-            >
-                Tìm kiếm
-            </Button>
-        </Box>
+            <CardContent>
+                <Box textAlign="center" justifyContent="flex-end">
+                    <TextField
+                        id="TextSearch"
+                        label="Tìm kiếm kỹ năng, chức vụ, công ti,..."
+                        variant="outlined"
+                        sx={{
+                            padding: "6px",
+                            width: {
+                                sm: "100%",
+                                md: "59%",
+                                lg: "59%",
+                            },
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        id="TextLocation"
+                        label="Vị trí"
+                        variant="outlined"
+                        sx={{
+                            padding: "6px",
+                            width: {
+                                sm: "100%",
+                                md: "24%",
+                                lg: "24%",
+                            },
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LocationOn />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <Button
+                        type="button"
+                        variant="contained"
+                        sx={{
+                            width: {
+                                sm: "100%",
+                                md: "10%",
+                                lg: "10%",
+                            },
+                            marginTop: {
+                                md: "1.2%",
+                                lg: "1.2%",
+                            },
+                        }}
+                    >
+                        Tìm kiếm
+                    </Button>
+                </Box>
+            </CardContent>
+        </Card>
     );
 };
 
