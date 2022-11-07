@@ -1,6 +1,13 @@
-import { Button, Grid, TextField, Typography, Box } from "@mui/material";
+import {
+    Button,
+    Grid,
+    TextField,
+    Typography,
+    Card,
+    Divider,
+} from "@mui/material";
 import { Container, Stack } from "@mui/system";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./create-recruiter.css";
 import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
 import { Send } from "@mui/icons-material";
@@ -20,6 +27,10 @@ const CreateRecruiter = () => {
         message: "",
         type: "error",
     });
+
+    useEffect(() => {
+        document.title = "Nhà tuyển dụng";
+    }, []);
     const handleSubmit = (e) => {
         e.preventDefault();
         if (fullnameRef.current.value?.length < 6) {
@@ -70,13 +81,28 @@ const CreateRecruiter = () => {
     };
     return (
         <Container>
-            <Box sx={{ borderRadius: 1 }}>
+            <Card
+                sx={{
+                    marginTop: "10px",
+                    paddingTop: "10px",
+                    paddingBottom: "10px",
+                }}
+            >
                 <Stack
                     direction="row"
+                    divider={
+                        <Divider
+                            orientation="vertical"
+                            flexItem
+                            sx={{
+                                display: {
+                                    xs: "none",
+                                    md: "block",
+                                },
+                            }}
+                        />
+                    }
                     spacing={1}
-                    sx={{
-                        marginTop: "10px",
-                    }}
                 >
                     <Grid
                         sx={{
@@ -200,7 +226,7 @@ const CreateRecruiter = () => {
                         </form>
                     </Grid>
                 </Stack>
-            </Box>
+            </Card>
 
             <Notification notify={notify} setNotify={setNotify} />
         </Container>
