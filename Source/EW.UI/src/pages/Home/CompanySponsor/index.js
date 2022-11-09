@@ -1,4 +1,4 @@
-import { Card, CardContent, Stack, Typography } from "@mui/material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import ImageDefault from "../../../assets/images/company-default.webp";
@@ -18,7 +18,7 @@ const CompanySponsor = () => {
                     <img src={ImageDefault} />
                     <Typography variant="h5">Samsung</Typography>
                     <p>
-                        <a href="#">5 cong viec</a> - Ho Chi Minh
+                        <Button>5 cong viec</Button> - Ho Chi Minh
                     </p>
                 </Box>
             </CardContent>

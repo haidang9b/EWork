@@ -18,7 +18,7 @@ import useAuth from "../../hook/useAuth";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
 import { ListItemIcon } from "@mui/material";
-import { Group, Login, Logout } from "@mui/icons-material";
+import { Face, Group, Login, Logout } from "@mui/icons-material";
 
 const RightMenuLogin = ({
     handleCloseUserMenu,
@@ -224,49 +224,80 @@ const Navbar = () => {
                         ))}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton
-                                onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
+                    {!user && (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open Logins">
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Face />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: "45px" }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
                             >
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="/static/images/avatar/2.jpg"
+                                <RightMenuNonLogin
+                                    navigate={navigate}
+                                    handleCloseUserMenu={handleCloseUserMenu}
                                 />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {user && (
+                            </Menu>
+                        </Box>
+                    )}
+                    {user && (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Avatar
+                                        alt="Avatar"
+                                        src={
+                                            user?.certthumbprint
+                                                ? user?.certthumbprint
+                                                : "/static/images/avatar/2.jpg"
+                                        }
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: "45px" }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
                                 <RightMenuLogin
                                     handleCloseUserMenu={handleCloseUserMenu}
                                     navigate={navigate}
                                     handleLogoutUser={handleLogoutUser}
                                 />
-                            )}
-                            {!user && (
-                                <RightMenuNonLogin
-                                    navigate={navigate}
-                                    handleCloseUserMenu={handleCloseUserMenu}
-                                />
-                            )}
-                        </Menu>
-                    </Box>
+                            </Menu>
+                        </Box>
+                    )}
                 </Toolbar>
             </Container>
         </AppBar>

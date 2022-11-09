@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EW.Infrastructure.Migrations
 {
     [DbContext(typeof(EWContext))]
-    [Migration("20221024100628_remove-dept")]
-    partial class removedept
+    [Migration("20221108093311_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,26 +49,26 @@ namespace EW.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9717), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(8978), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Faculty",
                             Name = "Faculty",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9736), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(8996), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9737), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(8997), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Business",
                             Name = "Business",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9738), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(8998), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9740), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(8999), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Student",
                             Name = "Student",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 10, 24, 17, 6, 28, 180, DateTimeKind.Unspecified).AddTicks(9740), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 11, 8, 16, 33, 10, 907, DateTimeKind.Unspecified).AddTicks(9000), new TimeSpan(0, 7, 0, 0, 0))
                         });
                 });
 
@@ -86,6 +86,10 @@ namespace EW.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -117,12 +121,17 @@ namespace EW.Infrastructure.Migrations
             modelBuilder.Entity("EW.Domain.Entities.User", b =>
                 {
                     b.HasOne("EW.Domain.Entities.Role", "Role")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EW.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

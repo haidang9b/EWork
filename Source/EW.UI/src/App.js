@@ -7,6 +7,7 @@ import RequireAuth from "./components/RequireAuth";
 import Missing from "./pages/Missing";
 import Unauthorized from "./pages/Unauthorized";
 import CreateRecruiter from "./pages/CreateRecruiter";
+import AccoutnManagement from "./pages/AccountManagement";
 function App() {
     return (
         <Routes>
@@ -16,6 +17,10 @@ function App() {
             <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
             <Route element={<RequireAuth allowedRoles={["Faculty"]} />}>
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route
+                    path="account-management"
+                    element={<AccoutnManagement />}
+                />
             </Route>
             <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="*" element={<Missing />} />
