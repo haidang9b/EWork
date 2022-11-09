@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import httpClient from "../common/apis/httpClient";
-import { GET_USERS_URL } from "../common/apiUrl";
-import { Status } from "../common/constants";
+import httpClient from "../../common/apis/httpClient";
+import { GET_USERS_URL } from "../../common/apiUrl";
+import { Status } from "../../common/constants";
 const initialState = {
-    users: null,
+    users: [],
     status: Status.idle,
 };
 const usersSlice = createSlice({

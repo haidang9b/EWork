@@ -35,7 +35,8 @@ namespace EW.Services.Business
                 new Claim(JwtRegisteredClaimNames.NameId, user.Email),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role.Name),
-                new Claim(ClaimTypes.GivenName, user.FullName)
+                new Claim(ClaimTypes.GivenName, user.FullName),
+                new Claim(ClaimTypes.Thumbprint, user.ImageUrl),
             };
             var creds = new SigningCredentials(_keyAccessToken, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor

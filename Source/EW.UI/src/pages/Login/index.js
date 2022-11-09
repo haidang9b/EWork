@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { GoogleLogin } from "react-google-login";
-
 import {
     CardActions,
     CardContent,
@@ -66,16 +65,16 @@ const Login = () => {
             });
         };
         gapi.load("client:auth2", initClient);
-    }, [clientId]);
-    useEffect(() => {
         if (auth.status === Status.failed) {
             setNotify({
                 isOpen: true,
-                message: "Login failed",
+                message: "Tài khoản hoặc mật khẩu không chính xác",
                 type: "error",
             });
+            passwordRef.current = "";
         }
-    }, [auth]);
+    }, [clientId, auth]);
+
     return (
         <>
             {auth && auth.status === Status.succeeded ? (

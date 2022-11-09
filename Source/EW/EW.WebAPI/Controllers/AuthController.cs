@@ -157,6 +157,7 @@ namespace EW.WebAPI.Controllers
                     Username = model.GoogleId,
                     Email = model.Email,
                     FullName = model.FullName,
+                    ImageUrl = model.ImageUrl
 
                 });
                 if(!resultRegister)
