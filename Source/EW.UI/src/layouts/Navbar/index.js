@@ -29,7 +29,7 @@ const RightMenuLogin = ({
         <>
             {settingNonLoginLinks.map((setting) => (
                 <MenuItem
-                    key={setting.name}
+                    key={JSON.stringify(setting)}
                     onClick={() => {
                         handleCloseUserMenu();
                         navigate(setting.path);
@@ -170,7 +170,7 @@ const Navbar = () => {
                         >
                             {navbarLinks.map((page) => (
                                 <MenuItem
-                                    key={page.name}
+                                    key={JSON.stringify(page)}
                                     onClick={() => {
                                         handleCloseNavMenu();
                                         navigate(page.path);
@@ -212,7 +212,7 @@ const Navbar = () => {
                     >
                         {navbarLinks.map((page) => (
                             <Button
-                                key={page.name}
+                                key={JSON.stringify(page)}
                                 onClick={() => {
                                     handleCloseNavMenu();
                                     navigate(page.path);

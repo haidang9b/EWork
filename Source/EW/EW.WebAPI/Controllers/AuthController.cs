@@ -115,6 +115,7 @@ namespace EW.WebAPI.Controllers
             {
                 result.InternalError();
                 _logger.LogError(e.Message);
+                return Forbid();
             }
             return Ok(result);
         }
@@ -185,5 +186,7 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+
+       
     }
 }

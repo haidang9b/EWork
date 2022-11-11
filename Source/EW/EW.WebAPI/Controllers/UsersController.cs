@@ -1,4 +1,7 @@
 ﻿using EW.Services.Constracts;
+using EW.WebAPI.Models;
+using EW.WebAPI.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,15 +13,28 @@ namespace EW.WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
         // GET: api/<UsersController>
+        [Authorize(Roles = "Faculty")]
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(_userService.GetUsers());
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _userService.GetUsers();
+            }
+            catch (Exception e)
+            {
+                result.InternalError();
+                _logger.LogError(e.Message);
+            }
+            return Ok(result);
         }
 
         // GET api/<UsersController>/5
@@ -46,5 +62,23 @@ namespace EW.WebAPI.Controllers
         public void Delete(int id)
         {
         }
+
+        /*[HttpPut("update-password")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
+                result.InternalError();
+            }
+
+            return Ok(result);
+        }*/
     }
 }

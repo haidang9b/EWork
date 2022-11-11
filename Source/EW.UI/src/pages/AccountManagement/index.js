@@ -8,27 +8,34 @@ import { isLoadingSelector } from "../../redux/selectors";
 import Loading from "../../components/Loading";
 import ConfirmDialog from "../../components/ConfirmDialog";
 
-const UpdateUserDialog = (props) => {
-    const { userDialog, setUserDialog } = props;
-    return (
-        <Dialog
-            open={userDialog.isOpen}
-            onClose={() => setUserDialog({ ...userDialog, isOpen: false })}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle>{userDialog.title}</DialogTitle>
-            <DialogContent></DialogContent>
-        </Dialog>
-    );
-};
+// const UpdateUserDialog = (props) => {
+//     const { userDialog, setUserDialog } = props;
+//     return (
+//         <Dialog
+//             open={userDialog.isOpen}
+//             onClose={() => setUserDialog({ ...userDialog, isOpen: false })}
+//             aria-labelledby="alert-dialog-title"
+//             aria-describedby="alert-dialog-description"
+//         >
+//             <DialogTitle>{userDialog.title}</DialogTitle>
+//             <DialogContent></DialogContent>
+//         </Dialog>
+//     );
+// };
 
-const TableAccount = ({ rows }) => {
+const AccountManagement = () => {
+    const dispatch = useDispatch();
+    const users = useSelector(usersSelector);
+    const isLoading = useSelector(isLoadingSelector);
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
         subtitle: "",
     });
+    useEffect(() => {
+        dispatch(getUsers());
+    }, [dispatch]);
+    console.log("re-render");
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },
@@ -89,30 +96,6 @@ const TableAccount = ({ rows }) => {
         },
     ];
     return (
-        <div style={{ height: 400, width: "100%" }}>
-            <ConfirmDialog
-                confirm={confirmDialog}
-                setConfirm={setConfirmDialog}
-            />
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-            />
-        </div>
-    );
-};
-
-const AccountManagement = () => {
-    const dispatch = useDispatch();
-    const users = useSelector(usersSelector);
-    const isLoading = useSelector(isLoadingSelector);
-    useEffect(() => {
-        dispatch(getUsers());
-    }, [dispatch]);
-
-    return (
         <>
             {isLoading && <Loading />}
             {!isLoading && (
@@ -122,7 +105,18 @@ const AccountManagement = () => {
                     }}
                 >
                     <Box textAlign="center">
-                        <TableAccount rows={users.users} />
+                        <div style={{ height: 400, width: "100%" }}>
+                            <ConfirmDialog
+                                confirm={confirmDialog}
+                                setConfirm={setConfirmDialog}
+                            />
+                            <DataGrid
+                                rows={users.users}
+                                columns={columns}
+                                pageSize={10}
+                                rowsPerPageOptions={[10]}
+                            />
+                        </div>
                     </Box>
                 </Container>
             )}
