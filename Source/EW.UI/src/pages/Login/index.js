@@ -36,15 +36,42 @@ const Login = () => {
     const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        if (usernameRef.current?.value?.length === 0) {
+            setNotify({
+                ...notify,
+                isOpen: true,
+                message: "Vui lòng nhập tài khoản",
+                type: "error",
+            });
+            usernameRef.current.focus();
+            return;
+        } else if (passwordRef.current?.value?.length === 0) {
+            setNotify({
+                ...notify,
+                isOpen: true,
+                message: "Vui lòng nhập mật khẩu",
+                type: "error",
+            });
+            passwordRef.current.focus();
+            return;
+        }
         let obj = {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        dispatch(handleLogin(obj));
+        let res = await dispatch(handleLogin(obj));
+        let result = res.payload;
+
+        setNotify({
+            ...notify,
+            isOpen: true,
+            message: result.message,
+            type: result.isSuccess ? "success" : "error",
+        });
     };
 
-    const responseGoogle = (response) => {
+    const responseGoogle = async (response) => {
         if (response.googleId !== "") {
             let { email, imageUrl, name, googleId } = response.profileObj;
             let obj = {
@@ -53,7 +80,14 @@ const Login = () => {
                 name,
                 googleId,
             };
-            dispatch(handleLoginGoogle(obj));
+            let res = await dispatch(handleLoginGoogle(obj));
+            let result = res.payload;
+            setNotify({
+                ...notify,
+                isOpen: true,
+                message: result.message,
+                type: result.isSuccess ? "success" : "error",
+            });
         }
     };
     useEffect(() => {
@@ -65,14 +99,6 @@ const Login = () => {
             });
         };
         gapi.load("client:auth2", initClient);
-        if (auth.status === Status.failed) {
-            setNotify({
-                isOpen: true,
-                message: "Tài khoản hoặc mật khẩu không chính xác",
-                type: "error",
-            });
-            passwordRef.current = "";
-        }
     }, [clientId, auth]);
 
     return (

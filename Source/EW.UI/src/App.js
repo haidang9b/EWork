@@ -8,6 +8,7 @@ import Missing from "./pages/Missing";
 import Unauthorized from "./pages/Unauthorized";
 import CreateRecruiter from "./pages/CreateRecruiter";
 import AccoutnManagement from "./pages/AccountManagement";
+import RecruiterManagement from "./pages/RecruiterManagement";
 function App() {
     return (
         <Routes>
@@ -20,6 +21,10 @@ function App() {
                 <Route
                     path="account-management"
                     element={<AccoutnManagement />}
+                />
+                <Route
+                    path="recruiter-management"
+                    element={<RecruiterManagement />}
                 />
             </Route>
             <Route path="unauthorized" element={<Unauthorized />} />
