@@ -24,6 +24,11 @@ namespace EW.Services.Business
             return await _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task<IEnumerable<Role>> GetRoles()
+        {
+            return await _unitOfWork.Repository<Role>().GetAllAsync();
+        }
+
         public async Task<User> GetUser(User user)
         {
             var result = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id || item.Email == user.Email || item.Username == user.Username, includeProperties: "Role");
@@ -32,7 +37,7 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _unitOfWork.Repository<User>().GetAllAsync();
+            return await _unitOfWork.Repository<User>().GetAllAsync(includeProperties: "Role");
         }
 
         public async Task<bool> Register(User user)

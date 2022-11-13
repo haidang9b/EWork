@@ -1,49 +1,114 @@
-import Login from "../pages/Login";
-import Home from "../pages/Home";
-import Missing from "../pages/Missing";
-import Dashboard from "../pages/Dashboard";
-import { Avatar, ListItemIcon } from "@mui/material";
-import { Settings } from "@mui/icons-material";
-const routesPublic = [
-    { path: "/", element: <Home /> },
-    { path: "home", element: <Home /> },
-    { path: "login", element: <Login /> },
-    { path: "*", element: <Missing /> },
-];
-const routesPrivate = [{ path: "dashboard", element: <Dashboard /> }];
-const navbarLinks = [
+import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io";
+import * as FaIcons from "react-icons/fa";
+import * as CgIcons from "react-icons/cg";
+
+const sidebarNonLoginData = [
+    { title: "Trang chủ", path: "/", icon: <AiIcons.AiFillHome /> },
     {
-        name: "Việc làm",
+        title: "Việc làm",
         path: "jobs",
+        icon: <AiIcons.AiOutlineTeam />,
     },
     {
-        name: "Công ty",
+        title: "Công ty",
         path: "companies",
+        icon: <CgIcons.CgOrganisation />,
     },
     {
-        name: "Blog",
+        title: "Blog",
         path: "blogs",
+        icon: <FaIcons.FaNewspaper />,
+    },
+];
+const sidebarStudentData = [
+    {
+        title: "Trang chủ",
+        path: "/",
+        icon: <AiIcons.AiFillHome />,
+    },
+    {
+        title: "Thông tin cá nhân",
+        path: "/profile",
+        icon: <IoIcons.IoMdPerson />,
+    },
+    {
+        title: "Quản lý CV",
+        path: "/recruitment-post",
+        icon: <IoIcons.IoMdPaperPlane />,
+    },
+    {
+        title: "Nhà tuyển dụng xem hồ sơ",
+        path: "/recruitment-post",
+        icon: <IoIcons.IoMdPaperPlane />,
+    },
+    {
+        title: "My Jobs",
+        path: "/recruitment-post",
+        icon: <IoIcons.IoMdPaperPlane />,
+    },
+    {
+        title: "My Companies",
+        path: "/recruitment-post",
+        icon: <IoIcons.IoMdPaperPlane />,
     },
 ];
 
-const settingNonLoginLinks = [
+const sidebarRecruiterData = [
     {
-        name: "Thông tin tài khoản",
-        path: "accounts",
-        childComponent: (
-            <ListItemIcon>
-                <Avatar fontSize="small" />
-            </ListItemIcon>
-        ),
+        title: "Trang chủ",
+        path: "/",
+        icon: <AiIcons.AiFillHome />,
     },
     {
-        name: "Cài đặt",
-        path: "settings",
-        childComponent: (
-            <ListItemIcon>
-                <Settings fontSize="small" />
-            </ListItemIcon>
-        ),
+        title: "Tìm kiếm sinh viên",
+        path: "/search-student",
+        icon: <IoIcons.IoMdPerson />,
+    },
+    {
+        title: "Bài tuyển dụng",
+        path: "/recruitment-post",
+        icon: <IoIcons.IoMdPaperPlane />,
     },
 ];
-export { routesPublic, routesPrivate, navbarLinks, settingNonLoginLinks };
+
+const sidebarFacultyData = [
+    {
+        title: "Trang chủ",
+        path: "/",
+        icon: <AiIcons.AiFillHome />,
+    },
+    {
+        title: "Báo cáo",
+        path: "/reports",
+        icon: <IoIcons.IoIosPaper />,
+    },
+    {
+        title: "Tài khoản",
+        path: "/account-management",
+        icon: <FaIcons.FaCartPlus />,
+    },
+    ,
+    {
+        title: "Nhà tuyển dụng",
+        path: "/recruiter-management",
+        icon: <IoIcons.IoMdPeople />,
+    },
+    ,
+    {
+        title: "Blogs",
+        path: "/blog-management",
+        icon: <FaIcons.FaNewspaper />,
+    },
+    {
+        title: "Hỗ trợ",
+        path: "/supports",
+        icon: <IoIcons.IoMdHelpCircle />,
+    },
+];
+export {
+    sidebarNonLoginData,
+    sidebarFacultyData,
+    sidebarStudentData,
+    sidebarRecruiterData,
+};

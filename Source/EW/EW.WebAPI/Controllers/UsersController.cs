@@ -63,6 +63,26 @@ namespace EW.WebAPI.Controllers
         {
         }
 
+        [HttpGet("roles")]
+        [Authorize(Roles = "Faculty")]
+        public async Task<IActionResult> GetRoles()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _userService.GetRoles();
+                result.IsSuccess = true;
+                result.Message = "Lấy các quyền thành công";
+            }
+            catch(Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
         /*[HttpPut("update-password")]
         [Authorize]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
