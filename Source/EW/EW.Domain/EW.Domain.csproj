@@ -10,4 +10,8 @@
     <ProjectReference Include="..\EW.Commons\EW.Commons.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
+
 </Project>

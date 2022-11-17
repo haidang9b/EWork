@@ -20,6 +20,7 @@ import {
 } from "../RecruiterManagement/recruiter.slice";
 import { Status } from "../../common/constants";
 import Loading from "../../components/Loading";
+import { getPageName } from "../../common/nameApp";
 
 const CreateRecruiter = () => {
     const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const CreateRecruiter = () => {
     });
 
     useEffect(() => {
-        document.title = "Nhà tuyển dụng";
+        document.title = getPageName("Nhà tuyển dụng");
     }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -1,5 +1,7 @@
 import React from "react";
 import "./hero.css";
+import PropTypes from "prop-types";
+
 const Hero = ({ children, title, subtitle }) => {
     return (
         <div id="notfound">
@@ -13,5 +15,11 @@ const Hero = ({ children, title, subtitle }) => {
             </div>
         </div>
     );
+};
+
+Hero.propTypes = {
+    children: PropTypes.node,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
 };
 export default Hero;

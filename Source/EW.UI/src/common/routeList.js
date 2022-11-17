@@ -34,7 +34,7 @@ const sidebarStudentData = [
     },
     {
         title: "Quản lý CV",
-        path: "/recruitment-post",
+        path: "/my-cv",
         icon: <IoIcons.IoMdPaperPlane />,
     },
     {
@@ -88,13 +88,11 @@ const sidebarFacultyData = [
         path: "/account-management",
         icon: <FaIcons.FaCartPlus />,
     },
-    ,
     {
         title: "Nhà tuyển dụng",
         path: "/recruiter-management",
         icon: <IoIcons.IoMdPeople />,
     },
-    ,
     {
         title: "Blogs",
         path: "/blog-management",
