@@ -61,14 +61,12 @@ const Login = () => {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        let res = dispatch(handleLogin(obj));
-        let result = res.payload;
-
+        let res = await dispatch(handleLogin(obj)).unwrap();
         setNotify({
             ...notify,
             isOpen: true,
-            message: result.message,
-            type: result.isSuccess ? "success" : "error",
+            message: res.message,
+            type: res.isSuccess ? "success" : "error",
         });
     };
 
@@ -81,13 +79,12 @@ const Login = () => {
                 name,
                 googleId,
             };
-            let res = dispatch(handleLoginGoogle(obj));
-            let result = res.payload;
+            let res = await dispatch(handleLoginGoogle(obj)).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,
-                message: result.message,
-                type: result.isSuccess ? "success" : "error",
+                message: res.message,
+                type: res.isSuccess ? "success" : "error",
             });
         }
     };
