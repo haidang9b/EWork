@@ -81,5 +81,11 @@ namespace EW.Services.Business
             });
             return await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<bool> UpdateUser(User user)
+        {
+            _unitOfWork.Repository<User>().Update(user);
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

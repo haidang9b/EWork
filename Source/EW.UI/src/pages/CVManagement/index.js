@@ -2,19 +2,22 @@ import { CloudUploadOutlined } from "@mui/icons-material";
 import {
     Button,
     Dialog,
+    DialogActions,
     DialogContent,
     DialogTitle,
     Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import RichTextEditor from "../../components/RichTextEditor";
 
 import "./CVManagement.css";
 import { getProfile } from "./profile.slice";
 
 const CoverLetterModal = (props) => {
     const { coverLetterDialog, setCoverLetterDialog } = props;
+    const editorRef = useRef(null);
     return (
         <Dialog
             open={coverLetterDialog.isOpen}
@@ -25,17 +28,19 @@ const CoverLetterModal = (props) => {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle>
-                <Typography variant="h6">
+                <Typography variant="h6" component={"div"}>
                     Thư giới thiệu(Cover Letter)
                 </Typography>
-                <small>
-                    Hãy viết đoạn giới thiệu bản thân để gây ấn tượng với Nhà
-                    tuyển dụng và tăng cơ hội với những vị trí công việc hấp
-                    dẫn.
-                </small>
             </DialogTitle>
 
-            <DialogContent></DialogContent>
+            <DialogContent>
+                <RichTextEditor text={"test"} />
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={() => {}}>
+                    OK
+                </Button>
+            </DialogActions>
         </Dialog>
     );
 };
@@ -46,6 +51,7 @@ const CVManagement = () => {
         isOpen: false,
         content: "",
     });
+
     const handleOpenCoverLetterDialog = () => {
         setCoverLetterDialog({
             ...coverLetterDialog,

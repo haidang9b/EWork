@@ -61,7 +61,7 @@ const Login = () => {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        let res = await dispatch(handleLogin(obj));
+        let res = dispatch(handleLogin(obj));
         let result = res.payload;
 
         setNotify({
@@ -81,7 +81,7 @@ const Login = () => {
                 name,
                 googleId,
             };
-            let res = await dispatch(handleLoginGoogle(obj));
+            let res = dispatch(handleLoginGoogle(obj));
             let result = res.payload;
             setNotify({
                 ...notify,

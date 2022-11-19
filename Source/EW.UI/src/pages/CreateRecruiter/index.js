@@ -110,15 +110,6 @@ const CreateRecruiter = () => {
             message: result.message,
             type: result.isSuccess ? "success" : "error",
         });
-
-        // if (result.isSuccess) {
-        //     fullnameRef.current = "";
-        //     positionRef.current = "";
-        //     emailRef.current = "";
-        //     companyNameRef.current = "";
-        //     phoneNumberRef.current = "";
-        //     addressRef.current = "";
-        // }
     };
     return (
         <Container>

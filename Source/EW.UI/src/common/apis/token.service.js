@@ -18,7 +18,6 @@ class TokenService {
         localStorage.setItem(REFRESH_TOKEN_NAME, token);
     }
     clearToken() {
-        console.log("ddax clean");
         localStorage.removeItem(REFRESH_TOKEN_NAME);
         localStorage.removeItem(ACCESS_TOKEN_NAME);
     }

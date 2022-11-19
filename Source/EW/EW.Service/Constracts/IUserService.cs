@@ -10,5 +10,6 @@ namespace EW.Services.Constracts
         Task<bool> Register(User user);
         Task<bool> RegisterWithGoogle(User user);
         Task<IEnumerable<Role>> GetRoles();
+        Task<bool> UpdateUser(User user);
     }
 }

@@ -87,28 +87,6 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
-        [Authorize]
-        [HttpGet("get-profile")]
-        public async Task<IActionResult> GetProfile()
-        {
-            var result = new ApiResult();
-            try
-            {
-                var user = await _userService.GetUser(new User { Username = User.Identity.Name });
-                result.Data = new UserProfileViewModel
-                {
-                    Experences = (List<UserExperence>)user.Experences,
-                    CVs = (List<UserCV>)user.CVs,
-                    CoverLetter = user.CoverLetter,
-                };
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
-        }
 
         /*[HttpPut("update-password")]
         [Authorize]
