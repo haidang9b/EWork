@@ -1,8 +1,11 @@
-﻿using EW.Services.Constracts;
+﻿using EW.Domain.Entities;
+using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,10 +17,12 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
-        public UsersController(IUserService userService, ILogger<UsersController> logger)
+        private readonly ITokenService _tokenService;
+        public UsersController(IUserService userService, ILogger<UsersController> logger, ITokenService tokenService)
         {
             _userService = userService;
             _logger = logger;
+            _tokenService = tokenService;
         }
         // GET: api/<UsersController>
         [Authorize(Roles = "Faculty")]

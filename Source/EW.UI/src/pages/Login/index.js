@@ -25,6 +25,7 @@ import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { Status } from "../../common/constants";
 import Notification from "../../components/Notification";
+import { getPageName } from "../../common/nameApp";
 const Login = () => {
     const auth = useSelector(authSelector);
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -60,14 +61,12 @@ const Login = () => {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        let res = await dispatch(handleLogin(obj));
-        let result = res.payload;
-
+        let res = await dispatch(handleLogin(obj)).unwrap();
         setNotify({
             ...notify,
             isOpen: true,
-            message: result.message,
-            type: result.isSuccess ? "success" : "error",
+            message: res.message,
+            type: res.isSuccess ? "success" : "error",
         });
     };
 
@@ -80,18 +79,17 @@ const Login = () => {
                 name,
                 googleId,
             };
-            let res = await dispatch(handleLoginGoogle(obj));
-            let result = res.payload;
+            let res = await dispatch(handleLoginGoogle(obj)).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,
-                message: result.message,
-                type: result.isSuccess ? "success" : "error",
+                message: res.message,
+                type: res.isSuccess ? "success" : "error",
             });
         }
     };
     useEffect(() => {
-        document.title = "Đăng nhập";
+        document.title = getPageName("Đăng nhập");
         const initClient = () => {
             gapi.client.init({
                 clientId: clientId,

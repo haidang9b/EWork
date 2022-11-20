@@ -50,6 +50,21 @@ namespace EW.Services.Business
             return tokenHandler.WriteToken(token);
         }
 
+        public JwtSecurityToken GetPayloadAccessToken(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            handler.ValidateToken(accessToken, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _keyAccessToken,
+                ValidateIssuer = false,
+                ValidateAudience = false
+            }, out SecurityToken validatedToken);
+
+            return validatedToken as JwtSecurityToken;
+        }
+
         public JwtSecurityToken GetPayloadRefreshToken(string refreshToken)
         {
             var handler = new JwtSecurityTokenHandler();

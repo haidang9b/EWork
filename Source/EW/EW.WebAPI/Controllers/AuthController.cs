@@ -141,9 +141,16 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> GetUsersById(int id)
         {
             var result = new ApiResult();
-           
+            try
+            {
                 result.Data = await _userService.GetUser(new User { Id = id });
-            
+            }
+            catch(Exception e)
+            {
+                result.InternalError();
+                _logger.LogError(e.Message);
+            }
+
             return Ok(result);
         }
 

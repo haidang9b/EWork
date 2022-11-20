@@ -25,11 +25,11 @@ const ConfirmDialog = (props) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={confirm.onConfirm}>Yes</Button>
+                <Button onClick={confirm.onConfirm}>OK</Button>
                 <Button
                     onClick={() => setConfirm({ ...confirm, isOpen: false })}
                 >
-                    No
+                    Hủy
                 </Button>
             </DialogActions>
         </Dialog>

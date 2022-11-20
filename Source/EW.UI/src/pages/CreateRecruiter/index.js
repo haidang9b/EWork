@@ -20,6 +20,7 @@ import {
 } from "../RecruiterManagement/recruiter.slice";
 import { Status } from "../../common/constants";
 import Loading from "../../components/Loading";
+import { getPageName } from "../../common/nameApp";
 
 const CreateRecruiter = () => {
     const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const CreateRecruiter = () => {
     });
 
     useEffect(() => {
-        document.title = "Nhà tuyển dụng";
+        document.title = getPageName("Nhà tuyển dụng");
     }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -101,23 +102,13 @@ const CreateRecruiter = () => {
             companyName: companyNameRef.current.value,
             address: addressRef.current.value,
         };
-        let response = await dispatch(RecruiterRegister(data));
-        let result = response.payload;
+        let result = await dispatch(RecruiterRegister(data)).unwrap();
 
         setNotify({
             isOpen: true,
             message: result.message,
             type: result.isSuccess ? "success" : "error",
         });
-
-        // if (result.isSuccess) {
-        //     fullnameRef.current = "";
-        //     positionRef.current = "";
-        //     emailRef.current = "";
-        //     companyNameRef.current = "";
-        //     phoneNumberRef.current = "";
-        //     addressRef.current = "";
-        // }
     };
     return (
         <Container>

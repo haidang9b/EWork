@@ -1,8 +1,12 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+import { getPageName } from "../../common/nameApp";
 import Hero from "../../components/Hero";
 
 function Unauthorized() {
+    useEffect(() => {
+        document.title = getPageName("Không có quyền");
+    }, []);
     return (
         <Hero
             title="Không có quyền truy cập"

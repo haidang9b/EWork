@@ -9,6 +9,8 @@ import Unauthorized from "./pages/Unauthorized";
 import CreateRecruiter from "./pages/CreateRecruiter";
 import AccoutnManagement from "./pages/AccountManagement";
 import RecruiterManagement from "./pages/RecruiterManagement";
+import Profile from "./pages/Profile";
+import CVManagement from "./pages/CVManagement";
 function App() {
     return (
         <Routes>
@@ -16,6 +18,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
+            <Route path="profile" element={<Profile />} />
             <Route element={<RequireAuth allowedRoles={["Faculty"]} />}>
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route
@@ -26,6 +29,9 @@ function App() {
                     path="recruiter-management"
                     element={<RecruiterManagement />}
                 />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={["Student"]} />}>
+                <Route path="my-cv" element={<CVManagement />} />
             </Route>
             <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="*" element={<Missing />} />

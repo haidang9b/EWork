@@ -1,7 +1,7 @@
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import ImageDefault from "../../../assets/images/company-default.webp";
+// import ImageDefault from "../../../assets/images/company-default.webp";
 const CompanySponsor = () => {
     return (
         <Card
@@ -15,7 +15,7 @@ const CompanySponsor = () => {
         >
             <CardContent>
                 <Box textAlign="center">
-                    <img src={ImageDefault} />
+                    {/* <img src={ImageDefault} /> */}
                     <Typography variant="h5">Samsung</Typography>
                     <p>
                         <Button>5 cong viec</Button> - Ho Chi Minh

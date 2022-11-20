@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { getPageName } from "../../common/nameApp";
 import Hero from "../../components/Hero";
 
 const Missing = () => {
+    useEffect(() => {
+        document.title = getPageName("Không tìm thấy");
+    }, []);
     return (
         <Hero
             title="Đường dẫn không hợp lệ"
