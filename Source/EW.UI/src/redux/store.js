@@ -7,7 +7,7 @@ const rootReducer = combineReducers({
     auth: authSlice.reducer,
     users: usersSlice.reducer,
     recruiter: recruiterSlice.reducer,
-    userDetail: profileSlice.reducer,
+    profile: profileSlice.reducer,
 });
 
 export const store = configureStore({

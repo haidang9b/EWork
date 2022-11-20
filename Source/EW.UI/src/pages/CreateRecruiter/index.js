@@ -102,8 +102,7 @@ const CreateRecruiter = () => {
             companyName: companyNameRef.current.value,
             address: addressRef.current.value,
         };
-        let response = await dispatch(RecruiterRegister(data));
-        let result = response.payload;
+        let result = await dispatch(RecruiterRegister(data)).unwrap();
 
         setNotify({
             isOpen: true,

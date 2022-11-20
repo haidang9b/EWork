@@ -1,57 +1,69 @@
 import { CloudUploadOutlined } from "@mui/icons-material";
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Typography,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import RichTextEditor from "../../components/RichTextEditor";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Notification from "../../components/Notification";
+import CoverLetterModal from "./CoverLetterModal";
 
 import "./CVManagement.css";
-import { getProfile } from "./profile.slice";
-
-const CoverLetterModal = (props) => {
-    const { coverLetterDialog, setCoverLetterDialog } = props;
-    const editorRef = useRef(null);
-    return (
-        <Dialog
-            open={coverLetterDialog.isOpen}
-            onClose={() =>
-                setCoverLetterDialog({ ...coverLetterDialog, isOpen: false })
-            }
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle>
-                <Typography variant="h6" component={"div"}>
-                    Thư giới thiệu(Cover Letter)
-                </Typography>
-            </DialogTitle>
-
-            <DialogContent>
-                <RichTextEditor text={"test"} />
-            </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" onClick={() => {}}>
-                    OK
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
-};
+import {
+    editCoverLetter,
+    getProfile,
+    profileSelector,
+    uploadNewCV,
+} from "./profile.slice";
+import UploadCVModal from "./UploadCVModal";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
+    const profile = useSelector(profileSelector);
+    const [notify, setNotify] = useState({
+        isOpen: false,
+        message: "",
+        type: "error",
+    });
     const [coverLetterDialog, setCoverLetterDialog] = useState({
         isOpen: false,
-        content: "",
+        onOK: async (text) => {
+            let obj = {
+                CoverLetter: text,
+            };
+            const result = await dispatch(editCoverLetter(obj)).unwrap();
+            setNotify({
+                ...notify,
+                isOpen: true,
+                message: result.message,
+                type: result.isSuccess ? "success" : "error",
+            });
+            if (result.isSuccess) {
+                setCoverLetterDialog({
+                    ...coverLetterDialog,
+                    isOpen: false,
+                });
+            }
+        },
     });
 
+    const [uploadCVDialog, setUploadCVDialog] = useState({
+        isOpen: false,
+        onUpload: async (file) => {
+            const result = await dispatch(uploadNewCV(file)).unwrap();
+            console.log(result);
+            setNotify({
+                ...notify,
+                isOpen: true,
+                message: result.message,
+                type: result.isSuccess ? "success" : "error",
+            });
+            if (result.isSuccess) {
+                setUploadCVDialog({
+                    ...uploadCVDialog,
+                    isOpen: false,
+                });
+            }
+        },
+    });
     const handleOpenCoverLetterDialog = () => {
         setCoverLetterDialog({
             ...coverLetterDialog,
@@ -71,6 +83,10 @@ const CVManagement = () => {
                 <CoverLetterModal
                     coverLetterDialog={coverLetterDialog}
                     setCoverLetterDialog={setCoverLetterDialog}
+                />
+                <UploadCVModal
+                    uploadCVDialog={uploadCVDialog}
+                    setUploadCVDialog={setUploadCVDialog}
                 />
                 <Box sx={{ width: "100%" }}>
                     <div className="d-flex space-btw">
@@ -98,12 +114,19 @@ const CVManagement = () => {
                                 variant="contained"
                                 color="success"
                                 startIcon={<CloudUploadOutlined />}
+                                onClick={() =>
+                                    setUploadCVDialog({
+                                        ...uploadCVDialog,
+                                        isOpen: true,
+                                    })
+                                }
                             >
                                 Tải CV lên
                             </Button>
                         </div>
                     </div>
                 </Box>
+                <Notification notify={notify} setNotify={setNotify} />
             </Container>
         </>
     );

@@ -66,9 +66,14 @@ namespace EW.WebAPI.Controllers
                     var updateResult = await _userService.UpdateUser(user);
                     result.IsSuccess = updateResult;
                     if (updateResult)
+                    {
+                        result.Data = model.CoverLetter;
                         result.Message = "Cập nhật thư giới thiệu thành công";
+                    }    
                     else
+                    {
                         result.Message = "Cập nhật thư giới thiệu thất bại";
+                    }
                 }
             }
             catch (Exception ex)

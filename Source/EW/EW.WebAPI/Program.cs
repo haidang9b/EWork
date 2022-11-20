@@ -76,5 +76,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<IRecruiterService, RecruiterService>();
+    services.AddScoped<IUserCVService, UserCVService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
