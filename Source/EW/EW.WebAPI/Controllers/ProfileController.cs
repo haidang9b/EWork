@@ -16,11 +16,13 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ILogger<ProfileController> _logger;
+        private readonly IUserCVService _userCVService;
 
-        public ProfileController(IUserService userService, ILogger<ProfileController> logger)
+        public ProfileController(IUserService userService, ILogger<ProfileController> logger, IUserCVService userCVService)
         {
             _userService = userService;
             _logger = logger;
+            _userCVService = userCVService;
         }
 
 
@@ -33,8 +35,8 @@ namespace EW.WebAPI.Controllers
                 var user = await _userService.GetUser(new User { Username = User.Identity.Name });
                 result.Data = new UserProfileViewModel
                 {
-                    Experences = (List<UserExperence>)user.Experences,
-                    CVs = (List<UserCV>)user.CVs,
+                    Experiences = user.Experences,
+                    CVs = await _userCVService.GetUserCVsByUser(user),
                     CoverLetter = user.CoverLetter,
                 };
             }

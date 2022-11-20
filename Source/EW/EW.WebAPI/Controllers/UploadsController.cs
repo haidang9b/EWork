@@ -35,7 +35,7 @@ namespace EW.WebAPI.Controllers
             {
                 var fileExtension = Path.GetExtension(model.File.FileName);
                 var acceptExtensionFiles = new string[] { ".docx", ".doc", ".pdf" };
-
+                var fileNameRequest = model.File.FileName; 
                 if (!acceptExtensionFiles.Contains(fileExtension))
                 {
                     result.IsSuccess = false;
@@ -59,7 +59,7 @@ namespace EW.WebAPI.Controllers
                     var ownerCV = new UserCV
                     {
                         CVUrl = resultUpload.Path,
-                        CVName = model.File.FileName,
+                        CVName = fileNameRequest,
                         UserId = user.Id
                     };
 

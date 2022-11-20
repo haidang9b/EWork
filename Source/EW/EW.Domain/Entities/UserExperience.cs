@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EW.Domain.Entities
 {
-    public class UserExperence:BaseEntity
+    public class UserExperience:BaseEntity
     {
         [ForeignKey("User")]
         public long UserId { get; set; }

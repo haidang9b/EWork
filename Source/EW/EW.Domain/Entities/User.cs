@@ -15,7 +15,9 @@ namespace EW.Domain.Entities
         [ForeignKey("Role")]
         public long RoleId { get; set; }
         public Role Role { get; set; }
-        public virtual ICollection<UserExperence> Experences { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<UserExperience> Experences { get; set; }
+        [JsonIgnore]
         public virtual ICollection<UserCV> CVs { get; set; }
 
     }

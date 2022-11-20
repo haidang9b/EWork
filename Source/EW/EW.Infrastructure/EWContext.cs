@@ -23,6 +23,6 @@ namespace EW.Infrastructure
         public DbSet<User> Users { get; set; }
         public DbSet<Recruiter> Recruiters { get; set; }
         public DbSet<UserCV> UserCvs { get; set; }
-        public DbSet<UserExperence> UserExperences { get; set; }
+        public DbSet<UserExperience> UserExperiences { get; set; }
     }
 }

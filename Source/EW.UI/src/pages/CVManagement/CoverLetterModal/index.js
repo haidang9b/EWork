@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    TextField,
     Typography,
 } from "@mui/material";
-import { Quill } from "quill";
 import { useSelector } from "react-redux";
 import { profileSelector } from "../profile.slice";
+import RichTextEditor from "../../../components/RichTextEditor";
 
 const CoverLetterModal = (props) => {
     const { coverLetterDialog, setCoverLetterDialog } = props;
     const profile = useSelector(profileSelector);
-    const [text, setText] = useState("");
-    useEffect(() => setText(profile.coverLetter), [profile]);
+    const [editor, setEditor] = useState();
 
     return (
         <Dialog
@@ -35,19 +33,18 @@ const CoverLetterModal = (props) => {
 
             <DialogContent>
                 {/* <div id="quill-editor"></div> */}
-                <TextField
-                    id="outlined-basic"
-                    label="Thư giới thiệu"
-                    variant="outlined"
-                    type="text"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                ></TextField>
+
+                <RichTextEditor
+                    editor={editor}
+                    setEditor={setEditor}
+                    initialHTML={profile?.coverLetter}
+                />
             </DialogContent>
             <DialogActions>
                 <Button
                     variant="outlined"
                     onClick={async () => {
+                        const text = editor?.root?.innerHTML;
                         return await coverLetterDialog.onOK(text);
                     }}
                 >
