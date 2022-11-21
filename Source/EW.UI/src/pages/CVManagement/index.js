@@ -9,10 +9,10 @@ import CoverLetterModal from "./CoverLetterModal";
 import "./CVManagement.css";
 import ListMyCV from "./ListMyCV";
 import {
-    editCoverLetter,
-    getProfile,
+    editCoverLetterThunk,
+    getProfileThunk,
     profileSelector,
-    uploadNewCV,
+    uploadNewCVThunk,
 } from "./profile.slice";
 import UploadCVModal from "./UploadCVModal";
 
@@ -30,7 +30,7 @@ const CVManagement = () => {
             let obj = {
                 CoverLetter: text,
             };
-            const result = await dispatch(editCoverLetter(obj)).unwrap();
+            const result = await dispatch(editCoverLetterThunk(obj)).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,
@@ -49,7 +49,7 @@ const CVManagement = () => {
     const [uploadCVDialog, setUploadCVDialog] = useState({
         isOpen: false,
         onUpload: async (file) => {
-            const result = await dispatch(uploadNewCV(file)).unwrap();
+            const result = await dispatch(uploadNewCVThunk(file)).unwrap();
             console.log(result);
             setNotify({
                 ...notify,
@@ -72,7 +72,7 @@ const CVManagement = () => {
         });
     };
     useEffect(() => {
-        dispatch(getProfile());
+        dispatch(getProfileThunk());
     }, [dispatch]);
     return (
         <>

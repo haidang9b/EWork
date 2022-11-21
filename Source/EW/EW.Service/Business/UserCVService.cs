@@ -30,9 +30,11 @@ namespace EW.Services.Business
             return await _unitOfWork.Repository<UserCV>().GetAsync(item => item.UserId == model.Id);
         }
 
-        public Task<bool> RemoveCV(UserCV model)
+        public async Task<bool> RemoveCV(UserCV model)
         {
-            throw new NotImplementedException();
+            var cv = await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(cv => cv.Id == model.Id);
+            _unitOfWork.Repository<UserCV>().Delete(cv);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }

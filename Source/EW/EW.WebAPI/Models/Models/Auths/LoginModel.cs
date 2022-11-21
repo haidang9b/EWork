@@ -1,4 +1,4 @@
-﻿namespace EW.WebAPI.Models.Models
+﻿namespace EW.WebAPI.Models.Models.Auths
 {
     public class LoginModel
     {

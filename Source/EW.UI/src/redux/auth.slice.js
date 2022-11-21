@@ -14,10 +14,10 @@ const authSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(handleLogin.pending, (state, action) => {
+            .addCase(handleLoginThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(handleLogin.fulfilled, (state, action) => {
+            .addCase(handleLoginThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     TokenService.setAccessToken(
                         action.payload.data.accessToken
@@ -30,13 +30,13 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleLogin.rejected, (state, action) => {
+            .addCase(handleLoginThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(handleRefreshToken.pending, (state, action) => {
+            .addCase(handleRefreshTokenThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(handleRefreshToken.fulfilled, (state, action) => {
+            .addCase(handleRefreshTokenThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     TokenService.setAccessToken(
                         action.payload.data.accessToken
@@ -49,13 +49,13 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleRefreshToken.rejected, (state, action) => {
+            .addCase(handleRefreshTokenThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(handleLoginGoogle.pending, (state, action) => {
+            .addCase(handleLoginGoogleThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(handleLoginGoogle.fulfilled, (state, action) => {
+            .addCase(handleLoginGoogleThunk.fulfilled, (state, action) => {
                 if (
                     action.payload.data?.accessToken &&
                     action.payload.data?.refreshToken
@@ -71,7 +71,7 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleLoginGoogle.rejected, (state, action) => {
+            .addCase(handleLoginGoogleThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
             .addCase(handleLogout.pending, logoutAccount)
@@ -86,7 +86,7 @@ const logoutAccount = (state, action) => {
     state.status = Status.idle;
 };
 
-export const handleLogin = createAsyncThunk("auth/login", async (user) => {
+export const handleLoginThunk = createAsyncThunk("auth/login", async (user) => {
     const response = await httpClient.post(LOGIN_URL, user);
     return response.data;
 });
@@ -94,13 +94,13 @@ export const handleLogout = createAsyncThunk("auth/logout", () => {
     TokenService.clearToken();
     return null;
 });
-export const handleRefreshToken = createAsyncThunk(
+export const handleRefreshTokenThunk = createAsyncThunk(
     "auth/refreshToken",
     (res) => {
         return res.data;
     }
 );
-export const handleLoginGoogle = createAsyncThunk(
+export const handleLoginGoogleThunk = createAsyncThunk(
     "auth/loginwithgoogle",
     async (profileObj) => {
         const response = await httpClient.post(LOGIN_GOOGLE_URL, {

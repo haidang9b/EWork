@@ -13,10 +13,10 @@ const recruiterSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(RecruiterRegister.pending, (state, action) => {
+            .addCase(recruiterRegisterThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(RecruiterRegister.fulfilled, (state, action) => {
+            .addCase(recruiterRegisterThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     state.status = Status.succeeded;
                     state.message = action.payload?.message;
@@ -25,18 +25,21 @@ const recruiterSlice = createSlice({
                     state.message = action.payload?.message;
                 }
             })
-            .addCase(RecruiterRegister.rejected, (state, action) => {
+            .addCase(recruiterRegisterThunk.rejected, (state, action) => {
                 state.status = Status.failed;
                 state.message = "Không thể đăng ký tài khoản";
             });
     },
 });
 
-export const RecruiterRegister = createAsyncThunk("recruiter", async (obj) => {
-    const response = await httpClient.post(RECRUITER_REGISTER_URL, obj);
-    console.log(response.data);
-    return response.data;
-});
+export const recruiterRegisterThunk = createAsyncThunk(
+    "recruiter",
+    async (obj) => {
+        const response = await httpClient.post(RECRUITER_REGISTER_URL, obj);
+        console.log(response.data);
+        return response.data;
+    }
+);
 
 export default recruiterSlice;
 export const recruiterSelector = (state) => state.recruiter;

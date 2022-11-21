@@ -1,7 +1,7 @@
 ﻿using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Profiles;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -81,6 +81,30 @@ namespace EW.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("remove-cv")]
+        public async Task<IActionResult> RemoveCVUser(long Id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _userCVService.RemoveCV(new UserCV { Id = Id });
+                if (result.IsSuccess)
+                {
+                    result.Message = "Xóa CV này thành công";
+                }
+                else
+                {
+                    result.Message = "Không thể xóa CV này";
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
                 result.InternalError();
             }
             return Ok(result);

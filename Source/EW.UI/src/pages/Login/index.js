@@ -16,8 +16,8 @@ import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    handleLogin,
-    handleLoginGoogle,
+    handleLoginThunk,
+    handleLoginGoogleThunk,
     authSelector,
 } from "../../redux/auth.slice";
 import { gapi } from "gapi-script";
@@ -61,7 +61,7 @@ const Login = () => {
             Username: usernameRef.current.value,
             Password: passwordRef.current.value,
         };
-        let res = await dispatch(handleLogin(obj)).unwrap();
+        let res = await dispatch(handleLoginThunk(obj)).unwrap();
         setNotify({
             ...notify,
             isOpen: true,
@@ -79,7 +79,7 @@ const Login = () => {
                 name,
                 googleId,
             };
-            let res = await dispatch(handleLoginGoogle(obj)).unwrap();
+            let res = await dispatch(handleLoginGoogleThunk(obj)).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,

@@ -15,7 +15,7 @@ import {
     TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles, getUsers, usersSelector } from "./users.slice";
+import { getRolesThunk, getUsersThunk, usersSelector } from "./users.slice";
 import { isLoadingSelector } from "../../redux/selectors";
 import Loading from "../../components/Loading";
 import ConfirmDialog from "../../components/ConfirmDialog";
@@ -184,8 +184,8 @@ const AccountManagement = () => {
     });
     useEffect(() => {
         document.title = getPageName("Quản lý tài khoản");
-        dispatch(getUsers());
-        dispatch(getRoles());
+        dispatch(getUsersThunk());
+        dispatch(getRolesThunk());
     }, [dispatch]);
     const [userDialog, setUserDialog] = useState({
         isOpen: false,

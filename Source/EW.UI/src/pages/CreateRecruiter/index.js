@@ -15,7 +15,7 @@ import Notification from "../../components/Notification";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    RecruiterRegister,
+    recruiterRegisterThunk,
     recruiterSelector,
 } from "../RecruiterManagement/recruiter.slice";
 import { Status } from "../../common/constants";
@@ -102,7 +102,7 @@ const CreateRecruiter = () => {
             companyName: companyNameRef.current.value,
             address: addressRef.current.value,
         };
-        let result = await dispatch(RecruiterRegister(data)).unwrap();
+        let result = await dispatch(recruiterRegisterThunk(data)).unwrap();
 
         setNotify({
             isOpen: true,
