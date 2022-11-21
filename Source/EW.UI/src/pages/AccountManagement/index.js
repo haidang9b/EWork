@@ -10,6 +10,7 @@ import {
     DialogTitle,
     InputLabel,
     MenuItem,
+    Paper,
     Select,
     TextField,
 } from "@mui/material";
@@ -283,19 +284,20 @@ const AccountManagement = () => {
                     <Button variant="contained" onClick={addNewAccount}>
                         Thêm tài khoản
                     </Button>
+                    <ConfirmDialog
+                        confirm={confirmDialog}
+                        setConfirm={setConfirmDialog}
+                    />
                     <Box textAlign="center">
-                        <div style={{ height: 400, width: "100%" }}>
-                            <ConfirmDialog
-                                confirm={confirmDialog}
-                                setConfirm={setConfirmDialog}
-                            />
+                        <Paper style={{ width: "100%" }}>
                             <DataGrid
                                 rows={users.users}
                                 columns={columns}
                                 pageSize={10}
                                 rowsPerPageOptions={[10]}
+                                autoHeight={true}
                             />
-                        </div>
+                        </Paper>
                     </Box>
                     <UpdateUserDialog
                         userDialog={userDialog}

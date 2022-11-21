@@ -54,6 +54,14 @@ if (app.Environment.IsDevelopment() == false)
     app.UseHsts();
 }
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<EWContext>();
+    context.Database.Migrate();
+}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

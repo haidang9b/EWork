@@ -7,6 +7,7 @@ import Notification from "../../components/Notification";
 import CoverLetterModal from "./CoverLetterModal";
 
 import "./CVManagement.css";
+import ListMyCV from "./ListMyCV";
 import {
     editCoverLetter,
     getProfile,
@@ -126,6 +127,7 @@ const CVManagement = () => {
                         </div>
                     </div>
                 </Box>
+                <ListMyCV />
                 <Notification notify={notify} setNotify={setNotify} />
             </Container>
         </>

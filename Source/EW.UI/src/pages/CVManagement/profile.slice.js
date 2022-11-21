@@ -23,11 +23,8 @@ const profileSlice = createSlice({
                 state.status = Status.loading;
             })
             .addCase(getProfile.fulfilled, (state, action) => {
-                state.cvs = [...state.cvs, action.payload?.data?.cVs];
-                state.experiences = [
-                    ...state.experiences,
-                    action.payload?.data?.experences,
-                ];
+                state.cvs = action.payload?.data?.cVs;
+                state.experiences = action.payload?.data?.experences;
                 state.coverLetter = action.payload?.data?.coverLetter;
                 console.log(action.payload);
                 state.status = Status.succeeded;
