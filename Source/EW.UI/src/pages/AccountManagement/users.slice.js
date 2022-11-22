@@ -12,37 +12,37 @@ const usersSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(getUsers.pending, (state, action) => {
+            .addCase(getUsersThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(getUsers.fulfilled, (state, action) => {
+            .addCase(getUsersThunk.fulfilled, (state, action) => {
                 if (action.payload.data) {
                     state.users = action.payload.data;
                 }
                 state.status = Status.succeeded;
             })
-            .addCase(getUsers.rejected, (state, action) => {
+            .addCase(getUsersThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(getRoles.fulfilled, (state, action) => {
+            .addCase(getRolesThunk.fulfilled, (state, action) => {
                 if (action.payload?.data) {
                     state.roles = action.payload?.data;
                 } else {
                     state.roles = [];
                 }
             })
-            .addCase(getRoles.rejected, (state, action) => {
+            .addCase(getRolesThunk.rejected, (state, action) => {
                 state.roles = [];
             });
     },
 });
 
-export const getUsers = createAsyncThunk("users/getUsers", async () => {
+export const getUsersThunk = createAsyncThunk("users/getUsers", async () => {
     const response = await httpClient.get(GET_USERS_URL);
     return response.data;
 });
 
-export const getRoles = createAsyncThunk("users/getRoles", async () => {
+export const getRolesThunk = createAsyncThunk("users/getRoles", async () => {
     const response = await httpClient.get(GET_ROLES_URL);
     return response.data;
 });

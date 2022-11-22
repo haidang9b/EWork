@@ -10,17 +10,18 @@ import {
     DialogTitle,
     InputLabel,
     MenuItem,
+    Paper,
     Select,
     TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles, getUsers, usersSelector } from "./users.slice";
-import { isLoadingSelector } from "../../redux/selectors";
-import Loading from "../../components/Loading";
+import { getRolesThunk, getUsersThunk, usersSelector } from "./users.slice";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { getPageName } from "../../common/nameApp";
 import Notification from "../../components/Notification";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
+import SkeletonTable from "../../components/SkeletonTable";
+import { Status } from "../../common/constants";
 
 const UpdateUserDialog = (props) => {
     const { userDialog, setUserDialog } = props;
@@ -38,6 +39,7 @@ const UpdateUserDialog = (props) => {
                 ...userDialog.notify,
                 isOpen: true,
                 type: "error",
+                title: "Thêm tài khoản",
                 message: "Vui lòng chọn quyền tài khoản",
             });
         } else if (usernameRef.current.value?.length === 0) {
@@ -169,7 +171,6 @@ const UpdateUserDialog = (props) => {
 const AccountManagement = () => {
     const dispatch = useDispatch();
     const users = useSelector(usersSelector);
-    const isLoading = useSelector(isLoadingSelector);
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -183,8 +184,8 @@ const AccountManagement = () => {
     });
     useEffect(() => {
         document.title = getPageName("Quản lý tài khoản");
-        dispatch(getUsers());
-        dispatch(getRoles());
+        dispatch(getUsersThunk());
+        dispatch(getRolesThunk());
     }, [dispatch]);
     const [userDialog, setUserDialog] = useState({
         isOpen: false,
@@ -205,7 +206,6 @@ const AccountManagement = () => {
         });
     };
 
-    console.log("re-render");
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },
@@ -238,9 +238,7 @@ const AccountManagement = () => {
             sortable: false,
             width: 200,
             renderCell: (cellValues) => {
-                const onClick = (e) => {
-                    console.log(cellValues.row);
-                };
+                const onClick = (e) => {};
 
                 const onClickDeleteUser = () => {
                     setConfirmDialog({
@@ -248,7 +246,6 @@ const AccountManagement = () => {
                         title: `Xác nhận xóa tài khoản`,
                         subtitle: `Bạn có muốn xóa tài khoản ${cellValues.row?.username} không?`,
                         onConfirm: () => {
-                            console.log(cellValues.row);
                             setConfirmDialog({
                                 ...confirmDialog,
                                 isOpen: false,
@@ -271,39 +268,39 @@ const AccountManagement = () => {
         },
     ];
     return (
-        <>
-            {isLoading && <Loading />}
-            {!isLoading && (
-                <Container
-                    sx={{
-                        marginTop: "2%",
-                    }}
-                >
-                    <Notification notify={notify} setNotify={setNotify} />
-                    <Button variant="contained" onClick={addNewAccount}>
-                        Thêm tài khoản
-                    </Button>
-                    <Box textAlign="center">
-                        <div style={{ height: 400, width: "100%" }}>
-                            <ConfirmDialog
-                                confirm={confirmDialog}
-                                setConfirm={setConfirmDialog}
-                            />
-                            <DataGrid
-                                rows={users.users}
-                                columns={columns}
-                                pageSize={10}
-                                rowsPerPageOptions={[10]}
-                            />
-                        </div>
-                    </Box>
-                    <UpdateUserDialog
-                        userDialog={userDialog}
-                        setUserDialog={setUserDialog}
-                    />
-                </Container>
-            )}
-        </>
+        <Container
+            sx={{
+                marginTop: "2%",
+            }}
+        >
+            <Notification notify={notify} setNotify={setNotify} />
+            <Button variant="contained" onClick={addNewAccount}>
+                Thêm tài khoản
+            </Button>
+            <ConfirmDialog
+                confirm={confirmDialog}
+                setConfirm={setConfirmDialog}
+            />
+            <Box textAlign="center">
+                {users?.status === Status.loading ? (
+                    <SkeletonTable />
+                ) : (
+                    <Paper style={{ width: "100%" }}>
+                        <DataGrid
+                            rows={users.users}
+                            columns={columns}
+                            pageSize={10}
+                            rowsPerPageOptions={[10]}
+                            autoHeight={true}
+                        />
+                    </Paper>
+                )}
+            </Box>
+            <UpdateUserDialog
+                userDialog={userDialog}
+                setUserDialog={setUserDialog}
+            />
+        </Container>
     );
 };
 

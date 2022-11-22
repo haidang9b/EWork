@@ -2,7 +2,8 @@
 using EW.Domain.ViewModels;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Profiles;
+using EW.WebAPI.Models.Models.Uploads;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace EW.WebAPI.Controllers
             {
                 var fileExtension = Path.GetExtension(model.File.FileName);
                 var acceptExtensionFiles = new string[] { ".docx", ".doc", ".pdf" };
-
+                var fileNameRequest = model.File.FileName; 
                 if (!acceptExtensionFiles.Contains(fileExtension))
                 {
                     result.IsSuccess = false;
@@ -59,7 +60,7 @@ namespace EW.WebAPI.Controllers
                     var ownerCV = new UserCV
                     {
                         CVUrl = resultUpload.Path,
-                        CVName = model.File.FileName,
+                        CVName = fileNameRequest,
                         UserId = user.Id
                     };
 
@@ -68,7 +69,7 @@ namespace EW.WebAPI.Controllers
                     {
                         result.IsSuccess = true;
                         result.Message = "Upload cv thành công";
-                        result.Data = resultUpload.Path;
+                        result.Data = await _userCVService.GetUserCVByInfo(new UserCV { CVUrl = resultUpload.Path});
                     }
                     else
                     {

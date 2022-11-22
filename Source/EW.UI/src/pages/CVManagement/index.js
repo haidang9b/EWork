@@ -2,22 +2,22 @@ import { CloudUploadOutlined } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getPageName } from "../../common/nameApp";
 import Notification from "../../components/Notification";
 import CoverLetterModal from "./CoverLetterModal";
 
 import "./CVManagement.css";
+import ListMyCV from "./ListMyCV";
 import {
-    editCoverLetter,
-    getProfile,
-    profileSelector,
-    uploadNewCV,
+    editCoverLetterThunk,
+    getProfileThunk,
+    uploadNewCVThunk,
 } from "./profile.slice";
 import UploadCVModal from "./UploadCVModal";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
-    const profile = useSelector(profileSelector);
     const [notify, setNotify] = useState({
         isOpen: false,
         message: "",
@@ -29,7 +29,7 @@ const CVManagement = () => {
             let obj = {
                 CoverLetter: text,
             };
-            const result = await dispatch(editCoverLetter(obj)).unwrap();
+            const result = await dispatch(editCoverLetterThunk(obj)).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,
@@ -48,15 +48,17 @@ const CVManagement = () => {
     const [uploadCVDialog, setUploadCVDialog] = useState({
         isOpen: false,
         onUpload: async (file) => {
-            const result = await dispatch(uploadNewCV(file)).unwrap();
-            console.log(result);
+            const resultDispatch = await dispatch(
+                uploadNewCVThunk(file)
+            ).unwrap();
             setNotify({
                 ...notify,
                 isOpen: true,
-                message: result.message,
-                type: result.isSuccess ? "success" : "error",
+                message: resultDispatch.message,
+                title: "Đăng tải CV mới",
+                type: resultDispatch.isSuccess ? "success" : "error",
             });
-            if (result.isSuccess) {
+            if (resultDispatch.isSuccess) {
                 setUploadCVDialog({
                     ...uploadCVDialog,
                     isOpen: false,
@@ -71,7 +73,8 @@ const CVManagement = () => {
         });
     };
     useEffect(() => {
-        dispatch(getProfile());
+        document.title = getPageName("Quản lý CV");
+        dispatch(getProfileThunk());
     }, [dispatch]);
     return (
         <>
@@ -126,6 +129,7 @@ const CVManagement = () => {
                         </div>
                     </div>
                 </Box>
+                <ListMyCV notify={notify} setNotify={setNotify} />
                 <Notification notify={notify} setNotify={setNotify} />
             </Container>
         </>

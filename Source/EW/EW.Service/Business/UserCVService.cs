@@ -25,9 +25,20 @@ namespace EW.Services.Business
             return await _unitOfWork.SaveChangeAsync();
         }
 
-        public Task<bool> RemoveCV(UserCV model)
+        public async Task<UserCV> GetUserCVByInfo(UserCV model)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.Id || item.CVUrl == model.CVUrl);
+        }
+
+        public async Task<IEnumerable<UserCV>> GetUserCVsByUser(User model)
+        {
+            return await _unitOfWork.Repository<UserCV>().GetAsync(item => item.UserId == model.Id);
+        }
+
+        public async Task<bool> RemoveCV(UserCV model)
+        {
+            _unitOfWork.Repository<UserCV>().Delete(model);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }

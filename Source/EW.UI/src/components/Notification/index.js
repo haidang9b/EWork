@@ -1,4 +1,4 @@
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import React from "react";
 
 export default function Notification(props) {
@@ -27,6 +27,7 @@ export default function Notification(props) {
                     severity={notify.type}
                     sx={{ width: "100%" }}
                 >
+                    <AlertTitle>{notify.title}</AlertTitle>
                     {notify.message}
                 </Alert>
             </Snackbar>

@@ -1,7 +1,7 @@
 ﻿using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -35,7 +35,7 @@ const sidebarStudentData = [
     {
         title: "Quản lý CV",
         path: "/my-cv",
-        icon: <IoIcons.IoMdPaperPlane />,
+        icon: <IoIcons.IoMdDocument />,
     },
     {
         title: "Nhà tuyển dụng xem hồ sơ",
