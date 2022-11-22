@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
+    DELETE_REMOVE_CV_URL,
     EDIT_COVER_LETTER_URL,
     GET_PROFILE_URL,
     UPLOAD_NEW_CV_URL,
@@ -26,7 +27,6 @@ const profileSlice = createSlice({
                 state.cvs = action.payload?.data?.cVs;
                 state.experiences = action.payload?.data?.experences;
                 state.coverLetter = action.payload?.data?.coverLetter;
-                console.log(action.payload);
                 state.status = Status.succeeded;
             })
             .addCase(getProfileThunk.rejected, (state, action) => {
@@ -46,13 +46,35 @@ const profileSlice = createSlice({
             .addCase(editCoverLetterThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(uploadNewCVThunk.pending, (state, payload) => {
+            .addCase(uploadNewCVThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(uploadNewCVThunk.fulfilled, (state, payload) => {
-                state.status = Status.succeeded;
+            .addCase(uploadNewCVThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.status = Status.succeeded;
+                    state.cvs.push(action.payload?.data);
+                } else {
+                    state.status = Status.failed;
+                }
             })
-            .addCase(uploadNewCVThunk.rejected, (state, payload) => {
+            .addCase(uploadNewCVThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(removeCVThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(removeCVThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.status = Status.succeeded;
+                    let newData = state.cvs.filter(
+                        (item) => item.id !== action.payload?.data?.id
+                    );
+                    state.cvs = newData;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(removeCVThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             }),
 });
@@ -75,7 +97,6 @@ export const editCoverLetterThunk = createAsyncThunk(
 export const uploadNewCVThunk = createAsyncThunk(
     "profile/uploadNewCV",
     async (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append("File", file);
         const response = await httpClient.post(UPLOAD_NEW_CV_URL, formData, {
@@ -87,7 +108,15 @@ export const uploadNewCVThunk = createAsyncThunk(
     }
 );
 
-export const removeCVThunk = createAsyncThunk();
+export const removeCVThunk = createAsyncThunk(
+    "profile/removeCV",
+    async (id) => {
+        const response = await httpClient.delete(
+            `${DELETE_REMOVE_CV_URL}/${id}`
+        );
+        return response.data;
+    }
+);
 
 export const profileSelector = (state) => state.profile;
 export default profileSlice;

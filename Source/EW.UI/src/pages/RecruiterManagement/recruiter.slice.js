@@ -36,7 +36,6 @@ export const recruiterRegisterThunk = createAsyncThunk(
     "recruiter",
     async (obj) => {
         const response = await httpClient.post(RECRUITER_REGISTER_URL, obj);
-        console.log(response.data);
         return response.data;
     }
 );

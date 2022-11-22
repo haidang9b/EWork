@@ -2,7 +2,8 @@
 using EW.Domain.ViewModels;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Profiles;
+using EW.WebAPI.Models.Models.Uploads;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ namespace EW.WebAPI.Controllers
                     {
                         result.IsSuccess = true;
                         result.Message = "Upload cv thành công";
-                        result.Data = resultUpload.Path;
+                        result.Data = await _userCVService.GetUserCVByInfo(new UserCV { CVUrl = resultUpload.Path});
                     }
                     else
                     {

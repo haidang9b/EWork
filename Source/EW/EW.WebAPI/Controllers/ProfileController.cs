@@ -86,16 +86,25 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("remove-cv")]
+        [HttpDelete("remove-cv/{id:long}")]
         public async Task<IActionResult> RemoveCVUser(long Id)
         {
             var result = new ApiResult();
             try
             {
-                result.IsSuccess = await _userCVService.RemoveCV(new UserCV { Id = Id });
+                var exist = await _userCVService.GetUserCVByInfo(new UserCV { Id = Id });
+                if(exist == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không có CV nào từ mã số này";
+                    return Ok(result);
+
+                }
+                result.IsSuccess = await _userCVService.RemoveCV(exist);
                 if (result.IsSuccess)
                 {
                     result.Message = "Xóa CV này thành công";
+                    result.Data = exist;
                 }
                 else
                 {

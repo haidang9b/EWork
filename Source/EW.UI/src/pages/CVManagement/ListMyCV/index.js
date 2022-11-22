@@ -1,15 +1,22 @@
 import { Delete, Download, RemoveRedEyeOutlined } from "@mui/icons-material";
-import { Button, IconButton, Paper } from "@mui/material";
+import { IconButton, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
-import Loading from "../../../components/Loading";
-import { profileSelector } from "../profile.slice";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+import SkeletonTable from "../../../components/SkeletonTable";
+import { profileSelector, removeCVThunk } from "../profile.slice";
 
-const ListMyCV = () => {
+const ListMyCV = (props) => {
+    const { notify, setNotify } = props;
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "",
+        subtitle: "",
+    });
+    const dispatch = useDispatch();
     const profile = useSelector(profileSelector);
-    console.log(profile?.cvs);
     const columns = [
         {
             field: "id",
@@ -23,8 +30,34 @@ const ListMyCV = () => {
             headerName: "Action",
             width: 240,
             renderCell: (cellValues) => {
-                const onClick = (e) => {
-                    console.log(cellValues.row?.cvUrl);
+                const onClick = (e) => {};
+                const onDelete = () => {
+                    setConfirmDialog({
+                        ...confirmDialog,
+                        isOpen: true,
+                        title: "Xác minh xóa CV",
+                        subtitle: `Bạn có đồng ý xóa CV ${cellValues.row?.cvName} không?`,
+                        onConfirm: async () => {
+                            let resultDispatch = await dispatch(
+                                removeCVThunk(cellValues.row?.id)
+                            ).unwrap();
+                            if (resultDispatch.isSuccess) {
+                                setNotify({
+                                    ...notify,
+                                    isOpen: true,
+                                    title: "Xóa CV",
+                                    message: resultDispatch.message,
+                                    type: resultDispatch.isSuccess
+                                        ? "success"
+                                        : "error",
+                                });
+                            }
+                            setConfirmDialog({
+                                ...confirmDialog,
+                                isOpen: false,
+                            });
+                        },
+                    });
                 };
                 return (
                     <>
@@ -35,10 +68,18 @@ const ListMyCV = () => {
                         >
                             <RemoveRedEyeOutlined />
                         </IconButton>
-                        <IconButton variant="contained">
+                        <IconButton
+                            variant="contained"
+                            href={cellValues.row?.cvUrl}
+                            target="_blank"
+                            download
+                        >
                             <Download />
                         </IconButton>
-                        <IconButton variant="contained">
+                        <IconButton
+                            variant="contained"
+                            onClick={() => onDelete()}
+                        >
                             <Delete />
                         </IconButton>
                     </>
@@ -46,10 +87,11 @@ const ListMyCV = () => {
             },
         },
     ];
+
     return (
         <>
             {profile.status === Status.loading ? (
-                <Loading />
+                <SkeletonTable />
             ) : (
                 <Paper
                     sx={{ width: "100%", overflow: "hidden", marginTop: "8px" }}
@@ -61,6 +103,10 @@ const ListMyCV = () => {
                         rowsPerPageOptions={[10]}
                         autoHeight={true}
                         sty
+                    />
+                    <ConfirmDialog
+                        confirm={confirmDialog}
+                        setConfirm={setConfirmDialog}
                     />
                 </Paper>
             )}

@@ -25,6 +25,11 @@ namespace EW.Services.Business
             return await _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task<UserCV> GetUserCVByInfo(UserCV model)
+        {
+            return await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.Id || item.CVUrl == model.CVUrl);
+        }
+
         public async Task<IEnumerable<UserCV>> GetUserCVsByUser(User model)
         {
             return await _unitOfWork.Repository<UserCV>().GetAsync(item => item.UserId == model.Id);
@@ -32,8 +37,7 @@ namespace EW.Services.Business
 
         public async Task<bool> RemoveCV(UserCV model)
         {
-            var cv = await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(cv => cv.Id == model.Id);
-            _unitOfWork.Repository<UserCV>().Delete(cv);
+            _unitOfWork.Repository<UserCV>().Delete(model);
             return await _unitOfWork.SaveChangeAsync();
         }
     }
