@@ -17,9 +17,16 @@ const Hero = ({ children, title, subtitle }) => {
     );
 };
 
+Hero.displayName = "Hero";
+
 Hero.propTypes = {
     children: PropTypes.node,
     title: PropTypes.string,
     subtitle: PropTypes.string,
+};
+
+Hero.defaultProps = {
+    title: "",
+    subtitle: "",
 };
 export default Hero;

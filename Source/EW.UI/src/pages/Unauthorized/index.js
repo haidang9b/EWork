@@ -17,4 +17,6 @@ function Unauthorized() {
     );
 }
 
+Unauthorized.displayName = "Unauthorized";
+
 export default Unauthorized;

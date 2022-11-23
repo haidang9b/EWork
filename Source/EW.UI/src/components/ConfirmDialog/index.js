@@ -7,10 +7,9 @@ import {
     DialogContentText,
 } from "@mui/material";
 import React from "react";
+import PropTypes from "prop-types";
 
-const ConfirmDialog = (props) => {
-    const { confirm, setConfirm } = props;
-
+const ConfirmDialog = ({ confirm, setConfirm }) => {
     return (
         <Dialog
             open={confirm.isOpen}
@@ -34,6 +33,13 @@ const ConfirmDialog = (props) => {
             </DialogActions>
         </Dialog>
     );
+};
+
+ConfirmDialog.displayName = "ConfirmDialog";
+
+ConfirmDialog.propTypes = {
+    confirm: PropTypes.object,
+    setConfirm: PropTypes.func,
 };
 
 export default ConfirmDialog;

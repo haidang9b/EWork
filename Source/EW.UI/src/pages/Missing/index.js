@@ -14,4 +14,6 @@ const Missing = () => {
     );
 };
 
+Missing.displayName = "Missing";
+
 export default Missing;

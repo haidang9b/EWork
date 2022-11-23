@@ -1,9 +1,8 @@
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import React from "react";
+import PropTypes from "prop-types";
 
-export default function Notification(props) {
-    const { notify, setNotify } = props;
-
+const Notification = ({ notify, setNotify }) => {
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
@@ -33,4 +32,21 @@ export default function Notification(props) {
             </Snackbar>
         </>
     );
-}
+};
+
+Notification.displayName = "Notification";
+
+Notification.propTypes = {
+    notify: PropTypes.object,
+    setNotify: PropTypes.func,
+};
+
+Notification.defaultProps = {
+    notify: {
+        isOpen: false,
+        type: "error",
+        title: "",
+        message: "",
+    },
+};
+export default Notification;

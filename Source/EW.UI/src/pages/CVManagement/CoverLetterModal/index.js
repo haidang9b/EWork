@@ -10,9 +10,9 @@ import {
 import { useSelector } from "react-redux";
 import { profileSelector } from "../profile.slice";
 import RichTextEditor from "../../../components/RichTextEditor";
+import PropTypes from "prop-types";
 
-const CoverLetterModal = (props) => {
-    const { coverLetterDialog, setCoverLetterDialog } = props;
+const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
     const profile = useSelector(profileSelector);
     const [editor, setEditor] = useState();
 
@@ -54,4 +54,12 @@ const CoverLetterModal = (props) => {
         </Dialog>
     );
 };
+
+CoverLetterModal.displayName = "CoverLetterModal";
+
+CoverLetterModal.propTypes = {
+    coverLetterDialog: PropTypes.object,
+    setCoverLetterDialog: PropTypes.func,
+};
+
 export default CoverLetterModal;

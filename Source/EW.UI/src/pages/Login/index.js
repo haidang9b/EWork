@@ -15,17 +15,18 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
+import { gapi } from "gapi-script";
 import {
     handleLoginThunk,
     handleLoginGoogleThunk,
     authSelector,
 } from "../../redux/auth.slice";
-import { gapi } from "gapi-script";
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { Status } from "../../common/constants";
 import Notification from "../../components/Notification";
 import { getPageName } from "../../common/nameApp";
+
 const Login = () => {
     const auth = useSelector(authSelector);
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -180,5 +181,7 @@ const Login = () => {
         </>
     );
 };
+
+Login.displayName = "Login";
 
 export default Login;

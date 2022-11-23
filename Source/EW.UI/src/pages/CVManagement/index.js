@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
 import Notification from "../../components/Notification";
 import CoverLetterModal from "./CoverLetterModal";
-
-import "./CVManagement.css";
 import ListMyCV from "./ListMyCV";
 import {
     editCoverLetterThunk,
@@ -15,6 +13,7 @@ import {
     uploadNewCVThunk,
 } from "./profile.slice";
 import UploadCVModal from "./UploadCVModal";
+import "./CVManagement.css";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
@@ -135,4 +134,7 @@ const CVManagement = () => {
         </>
     );
 };
+
+CVManagement.displayName = "CVManagement";
+
 export default CVManagement;

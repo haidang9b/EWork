@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
+import { Status } from "../../common/constants";
 import {
     DELETE_REMOVE_CV_URL,
     EDIT_COVER_LETTER_URL,
     GET_PROFILE_URL,
     UPLOAD_NEW_CV_URL,
 } from "../../common/apiUrl";
-import { Status } from "../../common/constants";
 
 const initialState = {
     cvs: [],
