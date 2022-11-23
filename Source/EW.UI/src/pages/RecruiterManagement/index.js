@@ -7,4 +7,6 @@ const RecruiterManagement = () => {
     return <div>RecruiterManagement</div>;
 };
 
+RecruiterManagement.displayName = "RecruiterManagement";
+
 export default RecruiterManagement;

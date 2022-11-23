@@ -269,4 +269,6 @@ const CreateRecruiter = () => {
     );
 };
 
+CreateRecruiter.displayName = "CreateRecruiter";
+
 export default CreateRecruiter;

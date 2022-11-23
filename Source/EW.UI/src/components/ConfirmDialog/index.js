@@ -35,6 +35,8 @@ const ConfirmDialog = ({ confirm, setConfirm }) => {
     );
 };
 
+ConfirmDialog.displayName = "ConfirmDialog";
+
 ConfirmDialog.propTypes = {
     confirm: PropTypes.object,
     setConfirm: PropTypes.func,

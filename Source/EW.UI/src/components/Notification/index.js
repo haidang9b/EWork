@@ -34,6 +34,8 @@ const Notification = ({ notify, setNotify }) => {
     );
 };
 
+Notification.displayName = "Notification";
+
 Notification.propTypes = {
     notify: PropTypes.object,
     setNotify: PropTypes.func,

@@ -21,6 +21,8 @@ const RichTextEditor = ({ editor, setEditor, initialHTML }) => {
     return <div id="quill-editor" ref={wrapperRef}></div>;
 };
 
+RichTextEditor.displayName = "RichTextEditor";
+
 RichTextEditor.propTypes = {
     editor: PropTypes.object,
     setEditor: PropTypes.func,

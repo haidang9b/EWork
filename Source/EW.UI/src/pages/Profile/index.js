@@ -116,6 +116,8 @@ const Profile = () => {
     );
 };
 
+Profile.displayName = "Profile";
+
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,

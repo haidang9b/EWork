@@ -142,4 +142,7 @@ const SkeletonTable = () => {
         </Paper>
     );
 };
+
+SkeletonTable.displayName = "SkeletonTable";
+
 export default SkeletonTable;

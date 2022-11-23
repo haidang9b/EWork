@@ -115,6 +115,8 @@ const ListMyCV = ({ notify, setNotify }) => {
     );
 };
 
+ListMyCV.displayName = "ListMyCV";
+
 ListMyCV.propTypes = {
     notify: PropTypes.object,
     setNotify: PropTypes.func,

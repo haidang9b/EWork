@@ -134,4 +134,7 @@ const CVManagement = () => {
         </>
     );
 };
+
+CVManagement.displayName = "CVManagement";
+
 export default CVManagement;

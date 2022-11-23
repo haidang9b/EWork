@@ -31,7 +31,7 @@ import { Group, Login, Logout } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
 
-export default function Navbar() {
+const Navbar = () => {
     const { user } = useAuth();
     const dispatch = useDispatch();
     let navbarItemsList =
@@ -249,4 +249,6 @@ export default function Navbar() {
             </Drawer>
         </Box>
     );
-}
+};
+Navbar.displayName = "Navbar";
+export default Navbar;
