@@ -22,4 +22,9 @@ Hero.propTypes = {
     title: PropTypes.string,
     subtitle: PropTypes.string,
 };
+
+Hero.defaultProps = {
+    title: "",
+    subtitle: "",
+};
 export default Hero;

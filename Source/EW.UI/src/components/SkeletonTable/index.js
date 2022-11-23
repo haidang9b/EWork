@@ -15,51 +15,130 @@ const SkeletonTable = () => {
                 }}
             >
                 <Skeleton
-                    key={Math.random()}
                     variant="rounded"
                     width="10%"
-                    height={40}
+                    height={20}
                     animation="wave"
                 />
                 <Skeleton
-                    key={Math.random()}
                     variant="rounded"
                     width="10%"
-                    height={40}
+                    height={20}
                     animation="wave"
                 />
                 <Skeleton
-                    key={Math.random()}
                     variant="rounded"
                     width="10%"
-                    height={40}
+                    height={20}
                     animation="wave"
                 />
                 <Skeleton
-                    key={Math.random()}
                     variant="rounded"
                     width="10%"
-                    height={40}
+                    height={20}
                     animation="wave"
                 />
             </Stack>
-            {Array.apply(0, Array(10)).map(function (x, index) {
-                return (
-                    <>
-                        <Divider />
-                        <Skeleton
-                            key={Math.random()}
-                            variant="rounded"
-                            sx={{
-                                margin: "1% 2% 1% 2%",
-                            }}
-                            width={"96%"}
-                            height={40}
-                            animation="wave"
-                        />
-                    </>
-                );
-            })}
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
+            <Divider />
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    margin: "1% 2% 1% 2%",
+                }}
+                width={"96%"}
+                height={20}
+                animation="wave"
+            />
         </Paper>
     );
 };

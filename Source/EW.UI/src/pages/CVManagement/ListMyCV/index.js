@@ -7,9 +7,9 @@ import { Status } from "../../../common/constants";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import SkeletonTable from "../../../components/SkeletonTable";
 import { profileSelector, removeCVThunk } from "../profile.slice";
+import PropTypes from "prop-types";
 
-const ListMyCV = (props) => {
-    const { notify, setNotify } = props;
+const ListMyCV = ({ notify, setNotify }) => {
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -101,6 +101,7 @@ const ListMyCV = (props) => {
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}
+                        disableSelectionOnClick
                         autoHeight={true}
                         sty
                     />
@@ -112,6 +113,11 @@ const ListMyCV = (props) => {
             )}
         </>
     );
+};
+
+ListMyCV.propTypes = {
+    notify: PropTypes.object,
+    setNotify: PropTypes.func,
 };
 
 export default ListMyCV;

@@ -7,8 +7,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import "./upload.css";
-const UploadCVModal = (props) => {
-    const { uploadCVDialog, setUploadCVDialog } = props;
+import PropTypes from "prop-types";
+
+const UploadCVModal = ({ uploadCVDialog, setUploadCVDialog }) => {
     const [cv, setCV] = useState(null);
     const [error, setError] = useState("");
     const handleChangeFile = (e) => {
@@ -62,4 +63,10 @@ const UploadCVModal = (props) => {
         </>
     );
 };
+
+UploadCVModal.propTypes = {
+    uploadCVDialog: PropTypes.object,
+    setUploadCVDialog: PropTypes.func,
+};
+
 export default UploadCVModal;

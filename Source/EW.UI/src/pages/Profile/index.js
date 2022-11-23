@@ -11,6 +11,7 @@ import { Box, Container } from "@mui/system";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import useAuth from "../../hook/useAuth";
+
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
     return (
@@ -30,11 +31,6 @@ const TabPanel = (props) => {
     );
 };
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -118,6 +114,12 @@ const Profile = () => {
             </Container>
         </>
     );
+};
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
 };
 
 export default Profile;

@@ -1,10 +1,9 @@
 import React, { useCallback } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import PropTypes from "prop-types";
 
-const RichTextEditor = (props) => {
-    // eslint-disable-next-line
-    const { editor, setEditor, initialHTML } = props;
+const RichTextEditor = ({ editor, setEditor, initialHTML }) => {
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;
         wrapper.innerHTML = "";
@@ -22,4 +21,13 @@ const RichTextEditor = (props) => {
     return <div id="quill-editor" ref={wrapperRef}></div>;
 };
 
+RichTextEditor.propTypes = {
+    editor: PropTypes.object,
+    setEditor: PropTypes.func,
+    initialHTML: PropTypes.string,
+};
+
+RichTextEditor.defaultProps = {
+    initialHTML: "",
+};
 export default RichTextEditor;
