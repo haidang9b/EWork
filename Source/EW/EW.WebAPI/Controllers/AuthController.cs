@@ -65,7 +65,7 @@ namespace EW.WebAPI.Controllers
                 var exit = await _userService.GetUser(new User { Username = model.Username });
                 if (exit != null && BCrypt.Net.BCrypt.Verify(model.Password, exit.Password))
                 {
-                    result.Message = "Login is successfully";
+                    result.Message = "Đăng nhập thành công";
                     var rfToken = _tokenService.CreateRefreshToken(exit);
                     var data = new LoginViewModel
                     {
@@ -77,7 +77,7 @@ namespace EW.WebAPI.Controllers
                 else
                 {
                     result.IsSuccess = false;
-                    result.Message = "Username or password is incorrect";
+                    result.Message = "Tài khoản hoặc mật khẩu không chính xác";
                 }
             }
             catch (Exception error)
@@ -170,7 +170,7 @@ namespace EW.WebAPI.Controllers
                 });
                 if(!resultRegister)
                 {
-                    result.Message = "Have error in process login";
+                    result.Message = "Có lỗi trong quá trình đăng nhập";
                     result.IsSuccess = false;
                 }
                 else
@@ -183,6 +183,7 @@ namespace EW.WebAPI.Controllers
                         RefreshToken = rfToken,
                     };
                     result.Data = data;
+                    result.Message = "Đăng nhập thành công";
                 }
                 
             }

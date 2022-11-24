@@ -54,7 +54,8 @@ namespace EW.Services.Business
                 UpdatedDate = DateTimeOffset.Now,
                 RoleId = (long)ERole.ID_Faculty,
                 IsActive = true,
-                ImageUrl = ""
+                ImageUrl = "",
+                CoverLetter = ""
             });
 
             return await _unitOfWork.SaveChangeAsync();

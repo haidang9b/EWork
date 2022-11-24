@@ -4,7 +4,6 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
-import { Notification } from "../../components";
 import CoverLetterModal from "./CoverLetterModal";
 import ListMyCV from "./ListMyCV";
 import {
@@ -14,14 +13,13 @@ import {
 } from "./profile.slice";
 import UploadCVModal from "./UploadCVModal";
 import "./CVManagement.css";
+import { notificationActions } from "../../components/Notification/notification.slice";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
-    const [notify, setNotify] = useState({
-        isOpen: false,
-        message: "",
-        type: "error",
-    });
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
     const [coverLetterDialog, setCoverLetterDialog] = useState({
         isOpen: false,
         onOK: async (text) => {
@@ -30,10 +28,10 @@ const CVManagement = () => {
             };
             const result = await dispatch(editCoverLetterThunk(obj)).unwrap();
             setNotify({
-                ...notify,
                 isOpen: true,
                 message: result.message,
                 type: result.isSuccess ? "success" : "error",
+                title: "Chỉnh sửa thư giới thiệu",
             });
             if (result.isSuccess) {
                 setCoverLetterDialog({
@@ -51,7 +49,6 @@ const CVManagement = () => {
                 uploadNewCVThunk(file)
             ).unwrap();
             setNotify({
-                ...notify,
                 isOpen: true,
                 message: resultDispatch.message,
                 title: "Đăng tải CV mới",
@@ -128,8 +125,7 @@ const CVManagement = () => {
                         </div>
                     </div>
                 </Box>
-                <ListMyCV notify={notify} setNotify={setNotify} />
-                <Notification notify={notify} setNotify={setNotify} />
+                <ListMyCV />
             </Container>
         </>
     );

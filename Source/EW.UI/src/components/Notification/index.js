@@ -1,16 +1,19 @@
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import React from "react";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    notificationActions,
+    notificationSelector,
+} from "./notification.slice";
 
-const Notification = ({ notify, setNotify }) => {
+const Notification = () => {
+    const dispatch = useDispatch();
+    const notify = useSelector(notificationSelector);
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
         }
-        setNotify({
-            ...notify,
-            isOpen: false,
-        });
+        dispatch(notificationActions.closeNotify());
     };
 
     return (
@@ -39,17 +42,4 @@ const Notification = ({ notify, setNotify }) => {
 
 Notification.displayName = "Notification";
 
-Notification.propTypes = {
-    notify: PropTypes.object.isRequired,
-    setNotify: PropTypes.func.isRequired,
-};
-
-Notification.defaultProps = {
-    notify: {
-        isOpen: false,
-        type: "error",
-        title: "",
-        message: "",
-    },
-};
 export default Notification;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
     Button,
     Dialog,
@@ -6,65 +6,81 @@ import {
     DialogContent,
     DialogTitle,
     InputLabel,
-    MenuItem,
-    Select,
     TextField,
 } from "@mui/material";
 import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { addNewAccountAdminThunk } from "../users.slice";
+import { notificationActions } from "../../../components/Notification/notification.slice";
 
-const UserDialog = ({ userDialog, setUserDialog, notify, setNotify }) => {
-    const roles = userDialog.roles;
-    const [role, setRole] = useState("");
+const UserDialog = ({ userDialog, setUserDialog }) => {
+    const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const fullnameRef = useRef(null);
     const phoneNumberRef = useRef(null);
     const emailRef = useRef(null);
-
-    const handleSubmit = () => {
-        if (!role) {
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
+    const handleSubmit = async () => {
+        if (usernameRef.current.value?.length === 0) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 type: "error",
-                title: "Thêm tài khoản",
-                message: "Vui lòng chọn quyền tài khoản",
-            });
-        } else if (usernameRef.current.value?.length === 0) {
-            setNotify({
-                ...notify,
-                isOpen: true,
-                type: "error",
+                title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập Tên người dùng",
             });
         } else if (passwordRef.current.value?.length === 0) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 type: "error",
+                title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập mật khẩu",
             });
         } else if (!ValidatePhoneNumber(phoneNumberRef.current.value)) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 type: "error",
+                title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập số điện thoại hợp lệ",
             });
         } else if (!ValidateEmail(emailRef.current.value)) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 type: "error",
+                title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập email hợp lệ",
             });
         } else if (fullnameRef.current.value?.length === 0) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 type: "error",
+                title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập tên",
+            });
+        } else {
+            let obj = {
+                Username: usernameRef.current.value,
+                Password: passwordRef.current.value,
+                NumberPhone: phoneNumberRef.current.value,
+                Email: emailRef.current.value,
+                FullName: fullnameRef.current.value,
+            };
+
+            const resultDispatch = await dispatch(
+                addNewAccountAdminThunk(obj)
+            ).unwrap();
+            setNotify({
+                isOpen: true,
+                title: "Thêm tài khoản cấp khoa",
+                message: resultDispatch.message,
+                type: resultDispatch.isSuccess ? "success" : "error",
+            });
+            setUserDialog({
+                ...userDialog,
+                isOpen: false,
             });
         }
     };
@@ -78,22 +94,18 @@ const UserDialog = ({ userDialog, setUserDialog, notify, setNotify }) => {
             <DialogTitle>{userDialog.title}</DialogTitle>
             <DialogContent>
                 <InputLabel id="select-role">Quyền</InputLabel>
-                <Select
-                    labelId="select-role"
-                    value={role}
-                    placeholder="Vui lòng chọn quyền"
+                <TextField
+                    label="Quyền"
+                    variant="outlined"
                     fullWidth
-                    onChange={(e) => {
-                        setRole(e.target.value);
+                    sx={{
+                        marginTop: "16px",
+                        paddingBottom: "8px",
                     }}
-                >
-                    {roles &&
-                        roles.map((item) => (
-                            <MenuItem value={item} key={item.id}>
-                                {item.name}
-                            </MenuItem>
-                        ))}
-                </Select>
+                    inputRef={usernameRef}
+                    disabled={true}
+                    value={"Faculty"}
+                />
                 <TextField
                     label="Tên tài khoản"
                     variant="outlined"
@@ -162,8 +174,6 @@ UserDialog.displayName = "UserDialog";
 UserDialog.propTypes = {
     userDialog: PropTypes.object.isRequired,
     setUserDialog: PropTypes.func.isRequired,
-    notify: PropTypes.object.isRequired,
-    setNotify: PropTypes.func.isRequired,
 };
 
 export default UserDialog;

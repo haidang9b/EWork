@@ -7,12 +7,14 @@ import { BrowserRouter } from "react-router-dom";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import Navbar from "./layouts/Navbar";
+import { Notification } from "./components";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <Provider store={store}>
         <BrowserRouter>
             <Navbar />
             <App />
+            <Notification />
         </BrowserRouter>
     </Provider>
 );

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { getPageName } from "../../common/nameApp";
 import { Hero } from "../../components";
 
-function Unauthorized() {
+const Unauthorized = () => {
     useEffect(() => {
         document.title = getPageName("Không có quyền");
     }, []);
@@ -15,7 +15,7 @@ function Unauthorized() {
             <Button variant="primary">Quay về trang chủ</Button>
         </Hero>
     );
-}
+};
 
 Unauthorized.displayName = "Unauthorized";
 

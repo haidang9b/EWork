@@ -24,8 +24,8 @@ const RichTextEditor = ({ editor, setEditor, initialHTML }) => {
 RichTextEditor.displayName = "RichTextEditor";
 
 RichTextEditor.propTypes = {
-    editor: PropTypes.object.isRequired,
-    setEditor: PropTypes.func.isRequired,
+    editor: PropTypes.object,
+    setEditor: PropTypes.func,
     initialHTML: PropTypes.string,
 };
 

@@ -32,8 +32,6 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
             </DialogTitle>
 
             <DialogContent>
-                {/* <div id="quill-editor"></div> */}
-
                 <RichTextEditor
                     editor={editor}
                     setEditor={setEditor}

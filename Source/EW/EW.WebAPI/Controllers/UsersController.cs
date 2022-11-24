@@ -2,6 +2,7 @@
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.Models.Users;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -43,30 +44,53 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("add-account-faculty")]
+        [Authorize(Roles = "Faculty")]
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            return "value";
-        }
-
-        // POST api/<UsersController>
-        [HttpPost]
-        public IActionResult Post([FromBody] string value)
-        {
-            return Ok(value);
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var result = new ApiResult();
+            try
+            {
+                var exit = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                if (exit != null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Tài khoản này đã tồn tại";
+                }
+                else
+                {
+                    result.IsSuccess = await _userService.Register(new User
+                    {
+                        Email = model.Email,
+                        Username = model.Username,
+                        Password = model.Password,
+                        PhoneNumber = model.NumberPhone,
+                        FullName = model.FullName,
+                    });
+                    if (result.IsSuccess)
+                    {
+                        result.Message = "Thêm tài khoản thành công";
+                        result.Data = await _userService.GetUser(new User
+                        {
+                            Email = model.Email,
+                            Username = model.Username,
+                            Password = model.Password,
+                            PhoneNumber = model.NumberPhone,
+                            FullName = model.FullName,
+                        });
+                    }
+                    else
+                    {
+                        result.Message = "Không thể thêm tài khoản này";
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                _logger.LogError(error.Message);
+                result.InternalError();
+            }
+            return Ok(result);
         }
 
         [HttpGet("roles")]
