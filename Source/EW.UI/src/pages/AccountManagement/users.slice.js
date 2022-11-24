@@ -50,7 +50,6 @@ const usersSlice = createSlice({
                     );
                     currentUser.isActive = action.payload?.data?.isActive;
                 }
-                console.log(action.payload);
             })
             .addCase(setActiveThunk.rejected, (state, action) => {
                 state.status = Status.failed;
