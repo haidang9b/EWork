@@ -40,8 +40,8 @@ const Notification = ({ notify, setNotify }) => {
 Notification.displayName = "Notification";
 
 Notification.propTypes = {
-    notify: PropTypes.object,
-    setNotify: PropTypes.func,
+    notify: PropTypes.object.isRequired,
+    setNotify: PropTypes.func.isRequired,
 };
 
 Notification.defaultProps = {

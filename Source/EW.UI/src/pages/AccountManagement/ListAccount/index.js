@@ -146,8 +146,8 @@ const ListAccount = ({ notify, setNotify }) => {
 };
 
 ListAccount.propTypes = {
-    notify: PropTypes.object,
-    setNotify: PropTypes.func,
+    notify: PropTypes.object.isRequired,
+    setNotify: PropTypes.func.isRequired,
 };
 
 export default ListAccount;

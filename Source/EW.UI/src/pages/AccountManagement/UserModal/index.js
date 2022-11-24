@@ -13,7 +13,7 @@ import {
 import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import PropTypes from "prop-types";
 
-const UserDialog = ({ userDialog, setUserDialog }) => {
+const UserDialog = ({ userDialog, setUserDialog, notify, setNotify }) => {
     const roles = userDialog.roles;
     const [role, setRole] = useState("");
     const usernameRef = useRef(null);
@@ -24,44 +24,44 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
 
     const handleSubmit = () => {
         if (!role) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 title: "Thêm tài khoản",
                 message: "Vui lòng chọn quyền tài khoản",
             });
         } else if (usernameRef.current.value?.length === 0) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 message: "Vui lòng nhập Tên người dùng",
             });
         } else if (passwordRef.current.value?.length === 0) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 message: "Vui lòng nhập mật khẩu",
             });
         } else if (!ValidatePhoneNumber(phoneNumberRef.current.value)) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 message: "Vui lòng nhập số điện thoại hợp lệ",
             });
         } else if (!ValidateEmail(emailRef.current.value)) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 message: "Vui lòng nhập email hợp lệ",
             });
         } else if (fullnameRef.current.value?.length === 0) {
-            userDialog.setNotify({
-                ...userDialog.notify,
+            setNotify({
+                ...notify,
                 isOpen: true,
                 type: "error",
                 message: "Vui lòng nhập tên",
@@ -160,8 +160,10 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
 UserDialog.displayName = "UserDialog";
 
 UserDialog.propTypes = {
-    userDialog: PropTypes.object,
-    setUserDialog: PropTypes.func,
+    userDialog: PropTypes.object.isRequired,
+    setUserDialog: PropTypes.func.isRequired,
+    notify: PropTypes.object.isRequired,
+    setNotify: PropTypes.func.isRequired,
 };
 
 export default UserDialog;

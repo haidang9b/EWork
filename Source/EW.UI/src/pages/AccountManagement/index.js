@@ -37,8 +37,6 @@ const AccountManagement = () => {
             isOpen: true,
             roles: users?.roles,
             title: "Thêm tài khoản",
-            notify: notify,
-            setNotify: setNotify,
         });
     };
 
@@ -54,7 +52,12 @@ const AccountManagement = () => {
             </Button>
 
             <ListAccount notify={notify} setNotify={setNotify} />
-            <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
+            <UserDialog
+                userDialog={userDialog}
+                setUserDialog={setUserDialog}
+                notify={notify}
+                setNotify={setNotify}
+            />
         </Container>
     );
 };

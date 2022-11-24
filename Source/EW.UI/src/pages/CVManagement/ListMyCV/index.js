@@ -117,8 +117,8 @@ const ListMyCV = ({ notify, setNotify }) => {
 ListMyCV.displayName = "ListMyCV";
 
 ListMyCV.propTypes = {
-    notify: PropTypes.object,
-    setNotify: PropTypes.func,
+    notify: PropTypes.object.isRequired,
+    setNotify: PropTypes.func.isRequired,
 };
 
 export default ListMyCV;

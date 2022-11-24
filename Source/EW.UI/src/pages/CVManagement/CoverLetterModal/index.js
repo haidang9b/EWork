@@ -58,8 +58,8 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
 CoverLetterModal.displayName = "CoverLetterModal";
 
 CoverLetterModal.propTypes = {
-    coverLetterDialog: PropTypes.object,
-    setCoverLetterDialog: PropTypes.func,
+    coverLetterDialog: PropTypes.object.isRequired,
+    setCoverLetterDialog: PropTypes.func.isRequired,
 };
 
 export default CoverLetterModal;

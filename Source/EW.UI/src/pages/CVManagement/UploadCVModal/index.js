@@ -67,8 +67,8 @@ const UploadCVModal = ({ uploadCVDialog, setUploadCVDialog }) => {
 UploadCVModal.displayName = "UploadCVModal";
 
 UploadCVModal.propTypes = {
-    uploadCVDialog: PropTypes.object,
-    setUploadCVDialog: PropTypes.func,
+    uploadCVDialog: PropTypes.object.isRequired,
+    setUploadCVDialog: PropTypes.func.isRequired,
 };
 
 export default UploadCVModal;
