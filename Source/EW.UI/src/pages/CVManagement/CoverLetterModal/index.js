@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { profileSelector } from "../profile.slice";
-import RichTextEditor from "../../../components/RichTextEditor";
+import { RichTextEditor } from "../../../components";
 import PropTypes from "prop-types";
 
 const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {

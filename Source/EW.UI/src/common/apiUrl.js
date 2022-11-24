@@ -11,6 +11,7 @@ export const RECRUITER_REGISTER_URL = "/recruiters/register";
 // users controller
 export const GET_USERS_URL = "/users";
 export const GET_ROLES_URL = "/users/roles";
+export const EDIT_ACTIVE_URL = "/users/set-active";
 
 // profile controller
 export const GET_PROFILE_URL = "/profile/get-profile";

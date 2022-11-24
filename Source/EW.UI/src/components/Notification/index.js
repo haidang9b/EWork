@@ -17,7 +17,7 @@ const Notification = ({ notify, setNotify }) => {
         <>
             <Snackbar
                 open={notify.isOpen}
-                autoHideDuration={6000}
+                autoHideDuration={5000}
                 onClose={handleClose}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
@@ -25,8 +25,11 @@ const Notification = ({ notify, setNotify }) => {
                     onClose={handleClose}
                     severity={notify.type}
                     sx={{ width: "100%" }}
+                    color={notify.type}
                 >
-                    <AlertTitle>{notify.title}</AlertTitle>
+                    <AlertTitle sx={{ fontWeight: "bolder" }}>
+                        {notify.title}
+                    </AlertTitle>
                     {notify.message}
                 </Alert>
             </Snackbar>

@@ -1,16 +1,18 @@
 import "./App.css";
-import Login from "./pages/Login";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import RequireAuth from "./components/RequireAuth";
-import Missing from "./pages/Missing";
-import Unauthorized from "./pages/Unauthorized";
-import CreateRecruiter from "./pages/CreateRecruiter";
-import AccoutnManagement from "./pages/AccountManagement";
-import RecruiterManagement from "./pages/RecruiterManagement";
-import Profile from "./pages/Profile";
-import CVManagement from "./pages/CVManagement";
+import { RequireAuth } from "./components";
+import {
+    Login,
+    Home,
+    Dashboard,
+    Missing,
+    Unauthorized,
+    CreateRecruiter,
+    AccountManagement,
+    RecruiterManagement,
+    Profile,
+    CVManagement,
+} from "./pages";
 function App() {
     return (
         <Routes>
@@ -23,7 +25,7 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route
                     path="account-management"
-                    element={<AccoutnManagement />}
+                    element={<AccountManagement />}
                 />
                 <Route
                     path="recruiter-management"

@@ -6,8 +6,8 @@ import {
     DialogActions,
 } from "@mui/material";
 import React, { useState } from "react";
-import "./upload.css";
 import PropTypes from "prop-types";
+import "./uploadcvmodal.css";
 
 const UploadCVModal = ({ uploadCVDialog, setUploadCVDialog }) => {
     const [cv, setCV] = useState(null);

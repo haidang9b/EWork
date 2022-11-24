@@ -53,6 +53,7 @@ namespace EW.Services.Business
                 CreatedDate = DateTimeOffset.Now,
                 UpdatedDate = DateTimeOffset.Now,
                 RoleId = (long)ERole.ID_Faculty,
+                IsActive = true,
                 ImageUrl = ""
             });
 
@@ -77,6 +78,7 @@ namespace EW.Services.Business
                 CreatedDate = DateTimeOffset.Now,
                 UpdatedDate = DateTimeOffset.Now,
                 RoleId = (long)ERole.ID_Student,
+                IsActive = true,
                 ImageUrl = user.ImageUrl
             });
             return await _unitOfWork.SaveChangeAsync();

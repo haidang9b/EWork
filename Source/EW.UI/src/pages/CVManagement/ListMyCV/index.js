@@ -4,8 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
-import ConfirmDialog from "../../../components/ConfirmDialog";
-import SkeletonTable from "../../../components/SkeletonTable";
+import { ConfirmDialog, SkeletonTable } from "../../../components";
 import { profileSelector, removeCVThunk } from "../profile.slice";
 import PropTypes from "prop-types";
 
