@@ -1,7 +1,7 @@
 import { Container } from "@mui/system";
 import React, { useEffect } from "react";
 import { getPageName } from "../../common/nameApp";
-import SearchBar from "../../components/SearchBar";
+import { SearchBar } from "../../components";
 import Benifit from "./Benifit";
 import ListCompanySponsor from "./ListCompanySponsor";
 

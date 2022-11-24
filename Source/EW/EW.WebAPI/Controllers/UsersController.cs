@@ -2,6 +2,7 @@
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models;
+using EW.WebAPI.Models.Models.Users;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -83,6 +84,48 @@ namespace EW.WebAPI.Controllers
             {
 
                 _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("set-active")]
+        [Authorize(Roles = "Faculty")]
+        public async Task<IActionResult> SetActive(UserActiveModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var userExist = await _userService.GetUser(new User { Id = model.Id, Username = model.Username });
+                if(userExist == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Tài khoản này không tồn tại";
+                }
+                else if(userExist.IsActive == model.IsActive)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không thể thay đổi trạng thái giống như trạng thái cũ";
+                }
+                else
+                {
+                    userExist.IsActive = model.IsActive;
+                    result.IsSuccess = await _userService.UpdateUser(userExist);
+                    if (result.IsSuccess)
+                    {
+                        result.Message = "Cập nhật trạng thái tài khoản thành công";
+                        result.Data = userExist;
+                    }
+                    else
+                    {
+                        result.Message = "Cập nhật trạng thái tài khoản thất bại";
+                    }
+                }
+                
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
                 result.InternalError();
             }
             return Ok(result);

@@ -24,8 +24,16 @@ const ConfirmDialog = ({ confirm, setConfirm }) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={confirm.onConfirm}>OK</Button>
                 <Button
+                    color="success"
+                    variant="contained"
+                    onClick={confirm.onConfirm}
+                >
+                    OK
+                </Button>
+                <Button
+                    color="warning"
+                    variant="outlined"
                     onClick={() => setConfirm({ ...confirm, isOpen: false })}
                 >
                     Hủy

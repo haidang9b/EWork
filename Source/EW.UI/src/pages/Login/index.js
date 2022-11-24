@@ -22,9 +22,8 @@ import {
     authSelector,
 } from "../../redux/auth.slice";
 import { Navigate } from "react-router-dom";
-import Loading from "../../components/Loading";
+import { Loading, Notification } from "../../components";
 import { Status } from "../../common/constants";
-import Notification from "../../components/Notification";
 import { getPageName } from "../../common/nameApp";
 
 const Login = () => {

@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
-import { GET_ROLES_URL, GET_USERS_URL } from "../../common/apiUrl";
+import {
+    EDIT_ACTIVE_URL,
+    GET_ROLES_URL,
+    GET_USERS_URL,
+} from "../../common/apiUrl";
 import { Status } from "../../common/constants";
 const initialState = {
     users: [],
@@ -33,6 +37,22 @@ const usersSlice = createSlice({
             })
             .addCase(getRolesThunk.rejected, (state, action) => {
                 state.roles = [];
+            })
+            .addCase(setActiveThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(setActiveThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentUser = state.users.find(
+                        (item) => item.id === action.payload?.data?.id
+                    );
+                    currentUser.isActive = action.payload?.data?.isActive;
+                }
+                console.log(action.payload);
+            })
+            .addCase(setActiveThunk.rejected, (state, action) => {
+                state.status = Status.failed;
             });
     },
 });
@@ -46,6 +66,14 @@ export const getRolesThunk = createAsyncThunk("users/getRoles", async () => {
     const response = await httpClient.get(GET_ROLES_URL);
     return response.data;
 });
+
+export const setActiveThunk = createAsyncThunk(
+    "users/setActive",
+    async (obj) => {
+        const response = await httpClient.put(EDIT_ACTIVE_URL, obj);
+        return response.data;
+    }
+);
 
 export default usersSlice;
 export const usersSelector = (state) => state.users;

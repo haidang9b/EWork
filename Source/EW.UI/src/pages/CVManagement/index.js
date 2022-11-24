@@ -4,7 +4,7 @@ import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
-import Notification from "../../components/Notification";
+import { Notification } from "../../components";
 import CoverLetterModal from "./CoverLetterModal";
 import ListMyCV from "./ListMyCV";
 import {

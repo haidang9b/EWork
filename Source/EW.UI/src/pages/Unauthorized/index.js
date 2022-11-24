@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useEffect } from "react";
 import { getPageName } from "../../common/nameApp";
-import Hero from "../../components/Hero";
+import { Hero } from "../../components";
 
 function Unauthorized() {
     useEffect(() => {

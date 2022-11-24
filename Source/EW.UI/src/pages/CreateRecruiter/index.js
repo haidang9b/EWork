@@ -8,10 +8,9 @@ import {
 } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { useState, useRef, useEffect } from "react";
-import "./create-recruiter.css";
 import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
 import { Send } from "@mui/icons-material";
-import Notification from "../../components/Notification";
+import { Notification, Loading } from "../../components";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,8 +18,8 @@ import {
     recruiterSelector,
 } from "../RecruiterManagement/recruiter.slice";
 import { Status } from "../../common/constants";
-import Loading from "../../components/Loading";
 import { getPageName } from "../../common/nameApp";
+import "./createrecruiter.css";
 
 const CreateRecruiter = () => {
     const dispatch = useDispatch();
