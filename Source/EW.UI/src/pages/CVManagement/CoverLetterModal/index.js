@@ -32,8 +32,6 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
             </DialogTitle>
 
             <DialogContent>
-                {/* <div id="quill-editor"></div> */}
-
                 <RichTextEditor
                     editor={editor}
                     setEditor={setEditor}
@@ -58,8 +56,8 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
 CoverLetterModal.displayName = "CoverLetterModal";
 
 CoverLetterModal.propTypes = {
-    coverLetterDialog: PropTypes.object,
-    setCoverLetterDialog: PropTypes.func,
+    coverLetterDialog: PropTypes.object.isRequired,
+    setCoverLetterDialog: PropTypes.func.isRequired,
 };
 
 export default CoverLetterModal;

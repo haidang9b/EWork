@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { GoogleLogin } from "react-google-login";
@@ -22,37 +22,36 @@ import {
     authSelector,
 } from "../../redux/auth.slice";
 import { Navigate } from "react-router-dom";
-import { Loading, Notification } from "../../components";
+import { Loading } from "../../components";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
+import { notificationActions } from "../../components/Notification/notification.slice";
 
 const Login = () => {
     const auth = useSelector(authSelector);
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
     const clientId = process.env.REACT_APP_CLIENT_ID;
-    const [notify, setNotify] = useState({
-        isOpen: false,
-        message: "",
-        type: "error",
-    });
     const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const handleSubmit = async () => {
         if (usernameRef.current?.value?.length === 0) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 message: "Vui lòng nhập tài khoản",
                 type: "error",
+                title: "Đăng nhập",
             });
             usernameRef.current.focus();
             return;
         } else if (passwordRef.current?.value?.length === 0) {
             setNotify({
-                ...notify,
                 isOpen: true,
                 message: "Vui lòng nhập mật khẩu",
                 type: "error",
+                title: "Đăng nhập",
             });
             passwordRef.current.focus();
             return;
@@ -63,10 +62,10 @@ const Login = () => {
         };
         let res = await dispatch(handleLoginThunk(obj)).unwrap();
         setNotify({
-            ...notify,
             isOpen: true,
             message: res.message,
             type: res.isSuccess ? "success" : "error",
+            title: "Đăng nhập",
         });
     };
 
@@ -81,10 +80,10 @@ const Login = () => {
             };
             let res = await dispatch(handleLoginGoogleThunk(obj)).unwrap();
             setNotify({
-                ...notify,
                 isOpen: true,
                 message: res.message,
                 type: res.isSuccess ? "success" : "error",
+                title: "Đăng nhập",
             });
         }
     };
@@ -174,7 +173,6 @@ const Login = () => {
                             </CardActions>
                         </Card>
                     </Grid>
-                    <Notification notify={notify} setNotify={setNotify} />
                 </Container>
             )}
         </>

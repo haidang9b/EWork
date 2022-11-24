@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getRolesThunk, getUsersThunk, usersSelector } from "./users.slice";
 import { getPageName } from "../../common/nameApp";
-import { Notification } from "../../components";
 import ListAccount from "./ListAccount";
 import UserDialog from "./UserModal";
 
@@ -27,8 +26,6 @@ const AccountManagement = () => {
         isOpen: false,
         title: "",
         roles: users?.roles,
-        notify: notify,
-        setNotify: setNotify,
     });
 
     const addNewAccount = () => {
@@ -37,8 +34,6 @@ const AccountManagement = () => {
             isOpen: true,
             roles: users?.roles,
             title: "Thêm tài khoản",
-            notify: notify,
-            setNotify: setNotify,
         });
     };
 
@@ -48,7 +43,6 @@ const AccountManagement = () => {
                 marginTop: "2%",
             }}
         >
-            <Notification notify={notify} setNotify={setNotify} />
             <Button variant="contained" onClick={addNewAccount}>
                 Thêm tài khoản
             </Button>

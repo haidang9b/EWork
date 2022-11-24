@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { Box, Button, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveThunk, usersSelector } from "../users.slice";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
+import { notificationActions } from "../../../components/Notification/notification.slice";
 
-const ListAccount = ({ notify, setNotify }) => {
+const ListAccount = () => {
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -15,6 +15,9 @@ const ListAccount = ({ notify, setNotify }) => {
     });
     const dispatch = useDispatch();
     const users = useSelector(usersSelector);
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },
@@ -59,9 +62,7 @@ const ListAccount = ({ notify, setNotify }) => {
                             id: cellValues.row?.id,
                         })
                     ).unwrap();
-
                     setNotify({
-                        ...notify,
                         isOpen: true,
                         message: resultDispatch.message,
                         title: "Chỉnh sửa trạng thái tài khoản",
@@ -143,11 +144,6 @@ const ListAccount = ({ notify, setNotify }) => {
             />
         </Box>
     );
-};
-
-ListAccount.propTypes = {
-    notify: PropTypes.object,
-    setNotify: PropTypes.func,
 };
 
 export default ListAccount;

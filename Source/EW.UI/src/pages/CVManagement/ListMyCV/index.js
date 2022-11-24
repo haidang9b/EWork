@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
 import { profileSelector, removeCVThunk } from "../profile.slice";
-import PropTypes from "prop-types";
+import { notificationActions } from "../../../components/Notification/notification.slice";
 
-const ListMyCV = ({ notify, setNotify }) => {
+const ListMyCV = () => {
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -16,6 +16,9 @@ const ListMyCV = ({ notify, setNotify }) => {
     });
     const dispatch = useDispatch();
     const profile = useSelector(profileSelector);
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
     const columns = [
         {
             field: "id",
@@ -42,7 +45,6 @@ const ListMyCV = ({ notify, setNotify }) => {
                             ).unwrap();
                             if (resultDispatch.isSuccess) {
                                 setNotify({
-                                    ...notify,
                                     isOpen: true,
                                     title: "Xóa CV",
                                     message: resultDispatch.message,
@@ -115,10 +117,5 @@ const ListMyCV = ({ notify, setNotify }) => {
 };
 
 ListMyCV.displayName = "ListMyCV";
-
-ListMyCV.propTypes = {
-    notify: PropTypes.object,
-    setNotify: PropTypes.func,
-};
 
 export default ListMyCV;

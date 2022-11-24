@@ -7,10 +7,10 @@ import {
     Divider,
 } from "@mui/material";
 import { Container, Stack } from "@mui/system";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
 import { Send } from "@mui/icons-material";
-import { Notification, Loading } from "../../components";
+import { Loading } from "../../components";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,6 +20,7 @@ import {
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import "./createrecruiter.css";
+import { notificationActions } from "../../components/Notification/notification.slice";
 
 const CreateRecruiter = () => {
     const dispatch = useDispatch();
@@ -30,13 +31,9 @@ const CreateRecruiter = () => {
     const companyNameRef = useRef(null);
     const phoneNumberRef = useRef(null);
     const addressRef = useRef(null);
-
-    const [notify, setNotify] = useState({
-        isOpen: false,
-        message: "",
-        type: "error",
-    });
-
+    const setNotify = (obj) => {
+        dispatch(notificationActions.setNotify(obj));
+    };
     useEffect(() => {
         document.title = getPageName("Nhà tuyển dụng");
     }, []);
@@ -47,6 +44,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập họ và tên",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             fullnameRef.current.focus();
             return;
@@ -55,6 +53,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập chức vụ",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             positionRef.current.focus();
             return;
@@ -65,6 +64,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập số điện thoại hợp lệ",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             phoneNumberRef.current.focus();
             return;
@@ -73,6 +73,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập email công ti hợp lệ",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             emailRef.current.focus();
             return;
@@ -81,6 +82,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập tên công ty hợp lệ",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             companyNameRef.current.focus();
             return;
@@ -89,6 +91,7 @@ const CreateRecruiter = () => {
                 isOpen: true,
                 message: "Vui lòng nhập địa chỉ công ty hợp lệ",
                 type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
             });
             addressRef.current.focus();
             return;
@@ -107,6 +110,7 @@ const CreateRecruiter = () => {
             isOpen: true,
             message: result.message,
             type: result.isSuccess ? "success" : "error",
+            title: "Tạo tài khoản doanh nghiệp",
         });
     };
     return (
@@ -262,8 +266,6 @@ const CreateRecruiter = () => {
                     </Stack>
                 </Card>
             )}
-
-            <Notification notify={notify} setNotify={setNotify} />
         </Container>
     );
 };

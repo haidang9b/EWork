@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
+    ADD_ACCOUNT_FACULTY_URL,
     EDIT_ACTIVE_URL,
     GET_ROLES_URL,
     GET_USERS_URL,
@@ -49,9 +50,20 @@ const usersSlice = createSlice({
                     );
                     currentUser.isActive = action.payload?.data?.isActive;
                 }
-                console.log(action.payload);
             })
             .addCase(setActiveThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(addNewAccountAdminThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(addNewAccountAdminThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.users.push(action.payload?.data);
+                }
+            })
+            .addCase(addNewAccountAdminThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             });
     },
@@ -71,6 +83,14 @@ export const setActiveThunk = createAsyncThunk(
     "users/setActive",
     async (obj) => {
         const response = await httpClient.put(EDIT_ACTIVE_URL, obj);
+        return response.data;
+    }
+);
+
+export const addNewAccountAdminThunk = createAsyncThunk(
+    "users/addNewAccountAdmin",
+    async (obj) => {
+        const response = await httpClient.post(ADD_ACCOUNT_FACULTY_URL, obj);
         return response.data;
     }
 );
