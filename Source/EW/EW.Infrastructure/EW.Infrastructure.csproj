@@ -29,4 +29,8 @@
     <ProjectReference Include="..\EW.Repository\EW.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

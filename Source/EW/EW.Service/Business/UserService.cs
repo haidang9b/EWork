@@ -52,7 +52,7 @@ namespace EW.Services.Business
                 FullName = user.FullName,
                 CreatedDate = DateTimeOffset.Now,
                 UpdatedDate = DateTimeOffset.Now,
-                RoleId = (long)ERole.ID_Faculty,
+                RoleId = user.RoleId,
                 IsActive = true,
                 ImageUrl = "",
                 CoverLetter = ""

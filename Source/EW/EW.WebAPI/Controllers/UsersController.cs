@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models;
@@ -66,6 +67,7 @@ namespace EW.WebAPI.Controllers
                         Password = model.Password,
                         PhoneNumber = model.NumberPhone,
                         FullName = model.FullName,
+                        RoleId = (long)ERole.ID_Faculty,
                     });
                     if (result.IsSuccess)
                     {
