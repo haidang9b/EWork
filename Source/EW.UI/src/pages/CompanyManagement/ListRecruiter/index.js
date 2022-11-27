@@ -1,7 +1,8 @@
+import { Box } from "@mui/system";
 import React from "react";
 
 const ListRecruiter = () => {
-    return <div>ListRecruiter</div>;
+    return <Box></Box>;
 };
 
 export default ListRecruiter;
