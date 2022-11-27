@@ -9,6 +9,7 @@ namespace EW.Domain.ViewModels
 {
     public class RecruiterViewModel
     {
+        public long Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }

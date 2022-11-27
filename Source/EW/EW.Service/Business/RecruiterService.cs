@@ -117,6 +117,7 @@ namespace EW.Services.Business
             var data = await _unitOfWork.Repository<Recruiter>().GetAllAsync("User,Company");
             return data.Select(item => new RecruiterViewModel
             {
+                Id = item.UserId,
                 Username = item.User.Username,
                 FullName = item.User.FullName,
                 PhoneNumber = item.User.PhoneNumber,

@@ -59,6 +59,5 @@ export const getRecruitersThunk = createAsyncThunk(
         return response.data;
     }
 );
-export const recruiterActions = recruiterSlice.actions;
 export const recruiterSelector = (state) => state.recruiter;
 export default recruiterSlice;

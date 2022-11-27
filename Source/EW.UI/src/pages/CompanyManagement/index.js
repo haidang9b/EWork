@@ -1,22 +1,24 @@
 import { Container, Tab, Tabs } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
 import { TabPanel } from "../../components";
 import ListCompany from "./ListCompany";
 import ListRecruiter from "./ListRecruiter";
 import useTab from "../../hook/useTab";
+import { useDispatch } from "react-redux";
+import { getCompaniesThunk, getRecruitersThunk } from "./recruiter.slice";
 
 const CompanyManagement = () => {
     const { value, handleChange, a11yProps } = useTab(0);
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getCompaniesThunk());
+        dispatch(getRecruitersThunk());
+    }, [dispatch]);
     return (
         <Container>
-            <Box>
-                <Box
-                    sx={{
-                        bgcolor: "background.paper",
-                    }}
-                >
+            <Box sx={{ width: "100%" }}>
+                <Box sx={{ borderBottom: 1 }}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -27,10 +29,10 @@ const CompanyManagement = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <ListCompany />
+                    <ListRecruiter />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ListRecruiter />
+                    <ListCompany />
                 </TabPanel>
             </Box>
         </Container>
