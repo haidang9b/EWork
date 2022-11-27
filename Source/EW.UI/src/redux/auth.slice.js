@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../common/apis/httpClient";
-import { LOGIN_GOOGLE_URL, LOGIN_URL } from "../common/apiUrl";
+import {
+    LOGIN_GOOGLE_URL,
+    LOGIN_URL,
+    RECRUITER_REGISTER_URL,
+} from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
 import { Status } from "../common/constants";
 
@@ -74,6 +78,19 @@ const authSlice = createSlice({
             .addCase(handleLoginGoogleThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
+            .addCase(recruiterRegisterThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(recruiterRegisterThunk.fulfilled, (state, action) => {
+                if (action.payload.isSuccess) {
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(recruiterRegisterThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
             .addCase(handleLogout.pending, logoutAccount)
             .addCase(handleLogout.fulfilled, logoutAccount)
             .addCase(handleLogout.rejected, logoutAccount);
@@ -112,5 +129,14 @@ export const handleLoginGoogleThunk = createAsyncThunk(
         return response.data;
     }
 );
+
+export const recruiterRegisterThunk = createAsyncThunk(
+    "recruiter",
+    async (obj) => {
+        const response = await httpClient.post(RECRUITER_REGISTER_URL, obj);
+        return response.data;
+    }
+);
+
 export default authSlice;
 export const authSelector = (state) => state.auth;

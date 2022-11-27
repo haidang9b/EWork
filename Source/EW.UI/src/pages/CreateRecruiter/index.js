@@ -13,24 +13,26 @@ import { Send } from "@mui/icons-material";
 import { Loading } from "../../components";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    recruiterRegisterThunk,
-    recruiterSelector,
-} from "../RecruiterManagement/recruiter.slice";
+
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import "./createrecruiter.css";
 import { notificationActions } from "../../components/Notification/notification.slice";
+import { usersSelector } from "../AccountManagement/users.slice";
+import { recruiterRegisterThunk } from "../../redux/auth.slice";
 
 const CreateRecruiter = () => {
     const dispatch = useDispatch();
-    const recruiter = useSelector(recruiterSelector);
+    const recruiter = useSelector(usersSelector);
     const fullnameRef = useRef(null);
     const positionRef = useRef(null);
     const emailRef = useRef(null);
     const companyNameRef = useRef(null);
     const phoneNumberRef = useRef(null);
     const addressRef = useRef(null);
+    const usernameRef = useRef(null);
+    const passwordRef = useRef(null);
+    const confirmPasswordRef = useRef(null);
     const setNotify = (obj) => {
         dispatch(notificationActions.setNotify(obj));
     };
@@ -57,9 +59,7 @@ const CreateRecruiter = () => {
             });
             positionRef.current.focus();
             return;
-        } else if (
-            ValidatePhoneNumber(phoneNumberRef.current.value) === false
-        ) {
+        } else if (!ValidatePhoneNumber(phoneNumberRef.current.value)) {
             setNotify({
                 isOpen: true,
                 message: "Vui lòng nhập số điện thoại hợp lệ",
@@ -68,7 +68,7 @@ const CreateRecruiter = () => {
             });
             phoneNumberRef.current.focus();
             return;
-        } else if (ValidateEmail(emailRef.current?.value) === false) {
+        } else if (!ValidateEmail(emailRef.current?.value)) {
             setNotify({
                 isOpen: true,
                 message: "Vui lòng nhập email công ti hợp lệ",
@@ -95,6 +95,44 @@ const CreateRecruiter = () => {
             });
             addressRef.current.focus();
             return;
+        } else if (usernameRef.current.value?.length < 2) {
+            setNotify({
+                isOpen: true,
+                message: "Vui lòng nhập tên đăng nhập hợp lệ",
+                type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
+            });
+            usernameRef.current.focus();
+            return;
+        } else if (passwordRef.current.value?.length < 6) {
+            setNotify({
+                isOpen: true,
+                message: "Vui lòng nhập mật khẩu hợp lệ",
+                type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
+            });
+            passwordRef.current.focus();
+            return;
+        } else if (confirmPasswordRef.current.value?.length < 6) {
+            setNotify({
+                isOpen: true,
+                message: "Vui lòng nhập xác nhận nhập mật khẩu hợp lệ",
+                type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
+            });
+            confirmPasswordRef.current.focus();
+            return;
+        } else if (
+            confirmPasswordRef.current.value !== passwordRef.current.value
+        ) {
+            setNotify({
+                isOpen: true,
+                message: "Mật khẩu và xác minh mật khẩu không khớp",
+                type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
+            });
+            confirmPasswordRef.current.focus();
+            return;
         }
         let data = {
             fullName: fullnameRef.current.value,
@@ -103,6 +141,8 @@ const CreateRecruiter = () => {
             email: emailRef.current.value,
             companyName: companyNameRef.current.value,
             address: addressRef.current.value,
+            username: usernameRef.current.value,
+            password: passwordRef.current.value,
         };
         let result = await dispatch(recruiterRegisterThunk(data)).unwrap();
 
@@ -174,7 +214,7 @@ const CreateRecruiter = () => {
                         >
                             <form>
                                 <Typography variant="h5">
-                                    Doanh nghiệp
+                                    Thông tin doanh nghiệp
                                 </Typography>
                                 <TextField
                                     label="Họ và tên"
@@ -228,6 +268,7 @@ const CreateRecruiter = () => {
                                                 md: "60%",
                                             },
                                         }}
+                                        type="email"
                                     />
                                 </Stack>
 
@@ -249,6 +290,35 @@ const CreateRecruiter = () => {
                                     inputRef={addressRef}
                                 />
 
+                                <TextField
+                                    label="Tài khoản"
+                                    variant="standard"
+                                    placeholder="Tài khoản đăng nhập"
+                                    fullWidth
+                                    required
+                                    inputRef={usernameRef}
+                                />
+
+                                <TextField
+                                    label="Mật khẩu"
+                                    variant="standard"
+                                    placeholder="Mật khẩu đăng nhập"
+                                    fullWidth
+                                    required
+                                    inputRef={passwordRef}
+                                    type="password"
+                                />
+
+                                <TextField
+                                    label="Nhập lại mật khẩu"
+                                    variant="standard"
+                                    placeholder="Nhập lại mật khẩu đăng nhập"
+                                    fullWidth
+                                    required
+                                    inputRef={confirmPasswordRef}
+                                    type="password"
+                                />
+
                                 <Button
                                     type="submit"
                                     variant="contained"
@@ -259,7 +329,7 @@ const CreateRecruiter = () => {
                                         marginTop: "10px",
                                     }}
                                 >
-                                    Gửi thông tin liên hệ
+                                    Gửi thông tin đăng ký
                                 </Button>
                             </form>
                         </Grid>

@@ -12,6 +12,7 @@ import {
     RecruiterManagement,
     Profile,
     CVManagement,
+    CompanyManagement,
 } from "./pages";
 function App() {
     return (
@@ -30,6 +31,10 @@ function App() {
                 <Route
                     path="recruiter-management"
                     element={<RecruiterManagement />}
+                />
+                <Route
+                    path="company-management"
+                    element={<CompanyManagement />}
                 />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>

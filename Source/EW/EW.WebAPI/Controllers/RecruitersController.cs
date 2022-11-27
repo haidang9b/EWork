@@ -1,4 +1,5 @@
 ﻿using EW.Domain.Entities;
+using EW.Domain.Models;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Auths;
@@ -20,28 +21,20 @@ namespace EW.WebAPI.Controllers
             _logger = logger;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RecruiterRegisterModel model)
+        public async Task<IActionResult> Register(RegisterRecruiterModel model)
         {
             var result = new ApiResult();
 
             try
             {
-                var exist = await _recruiterService.Find(new Recruiter
+                var exist = await _recruiterService.Find(new Company
                 {
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                 });
                 if (exist == null)
                 {
-                    result.IsSuccess = await _recruiterService.AddNewRecruiter(new Recruiter
-                    {
-                        PhoneNumber = model.PhoneNumber,
-                        Email = model.Email,
-                        FullName = model.FullName,
-                        Position = model.Position,
-                        CompanyName = model.CompanyName,
-                        Address = model.Address,
-                    });
+                    result.IsSuccess = await _recruiterService.AddNewRecruiter(model);
                     result.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
                 }
                 else

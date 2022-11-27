@@ -21,8 +21,9 @@ namespace EW.Infrastructure
         }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Recruiter> Recruiters { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<UserCV> UserCvs { get; set; }
         public DbSet<UserExperience> UserExperiences { get; set; }
+        public DbSet<Recruiter> Recruiters { get; set; }
     }
 }

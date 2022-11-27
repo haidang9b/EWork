@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Auths;
@@ -14,11 +15,13 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
+        private readonly IRecruiterService _recruiterService;
         private readonly ILogger<AuthController> _logger;
-        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger)
+        public AuthController(IUserService userService, ITokenService tokenService, IRecruiterService recruiterService, ILogger<AuthController> logger)
         {
             _userService = userService;
             _tokenService = tokenService;
+            _recruiterService = recruiterService;
             _logger = logger;
         }
 
@@ -65,6 +68,31 @@ namespace EW.WebAPI.Controllers
                 var exit = await _userService.GetUser(new User { Username = model.Username });
                 if (exit != null && BCrypt.Net.BCrypt.Verify(model.Password, exit.Password))
                 {
+
+                    if(exit.RoleId == (long)ERole.ID_Business)
+                    {
+                        var company = await _recruiterService.GetCompanyByUser(new User { Id = exit.Id });
+                        if (company != null && company.Status == EStatusRecruiter.Pending)
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét";
+                            return Ok(result);
+                        }
+
+                        if (company != null && company.Status == EStatusRecruiter.Disabled)
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại";
+                            return Ok(result);
+                        }
+
+                        if (company == null)
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Tài khoản đang không gắn với công ti nào";
+                            return Ok(result);
+                        }
+                    }
                     result.Message = "Đăng nhập thành công";
                     var rfToken = _tokenService.CreateRefreshToken(exit);
                     var data = new LoginViewModel
