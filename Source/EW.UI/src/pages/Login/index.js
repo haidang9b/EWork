@@ -25,13 +25,11 @@ import { Navigate } from "react-router-dom";
 import { Loading } from "../../components";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
-import { notificationActions } from "../../components/Notification/notification.slice";
+import useNotify from "../../hook/useNotify";
 
 const Login = () => {
     const auth = useSelector(authSelector);
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
+    const { setNotify } = useNotify();
     const clientId = process.env.REACT_APP_CLIENT_ID;
     const dispatch = useDispatch();
     const usernameRef = useRef(null);

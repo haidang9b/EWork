@@ -7,3 +7,4 @@ export { default as SearchBar } from "./SearchBar";
 export { default as SkeletonTable } from "./SkeletonTable";
 export { default as RequireAuth } from "./RequireAuth";
 export { default as TabPanel } from "./TabPanel";
+export { default as NonAuth } from "./NonAuth";

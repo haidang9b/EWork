@@ -1,3 +1,4 @@
+import { number } from "prop-types";
 import { useState } from "react";
 
 const useTab = (indexDefault) => {
@@ -19,6 +20,10 @@ const useTab = (indexDefault) => {
         handleChange,
         a11yProps,
     };
+};
+
+useTab.propsTypes = {
+    indexDefault: number.isRequired,
 };
 
 export default useTab;

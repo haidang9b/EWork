@@ -17,11 +17,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import "./createrecruiter.css";
-import { notificationActions } from "../../components/Notification/notification.slice";
 import { usersSelector } from "../AccountManagement/users.slice";
 import { recruiterRegisterThunk } from "../../redux/auth.slice";
+import useNotify from "../../hook/useNotify";
 
 const CreateRecruiter = () => {
+    const { setNotify } = useNotify();
     const dispatch = useDispatch();
     const recruiter = useSelector(usersSelector);
     const fullnameRef = useRef(null);
@@ -33,9 +34,7 @@ const CreateRecruiter = () => {
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
+
     useEffect(() => {
         document.title = getPageName("Nhà tuyển dụng");
     }, []);

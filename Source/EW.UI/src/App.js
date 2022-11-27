@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { RequireAuth } from "./components";
+import { NonAuth, RequireAuth } from "./components";
 import {
     Login,
     Home,
@@ -19,8 +19,10 @@ function App() {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="home" element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
+            <Route element={<NonAuth />}>
+                <Route path="login" element={<Login />} />
+                <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
+            </Route>
             <Route path="profile" element={<Profile />} />
             <Route element={<RequireAuth allowedRoles={["Faculty"]} />}>
                 <Route path="dashboard" element={<Dashboard />} />
