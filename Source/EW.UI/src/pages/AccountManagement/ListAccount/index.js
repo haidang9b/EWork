@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveThunk, usersSelector } from "../users.slice";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
-import { notificationActions } from "../../../components/Notification/notification.slice";
+import useNotify from "../../../hook/useNotify";
 
 const ListAccount = () => {
+    const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -15,9 +16,6 @@ const ListAccount = () => {
     });
     const dispatch = useDispatch();
     const users = useSelector(usersSelector);
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },

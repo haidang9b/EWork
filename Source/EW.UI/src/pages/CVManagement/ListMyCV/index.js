@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
 import { profileSelector, removeCVThunk } from "../profile.slice";
-import { notificationActions } from "../../../components/Notification/notification.slice";
+import useNotify from "../../../hook/useNotify";
 
 const ListMyCV = () => {
+    const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -16,9 +17,7 @@ const ListMyCV = () => {
     });
     const dispatch = useDispatch();
     const profile = useSelector(profileSelector);
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
+
     const columns = [
         {
             field: "id",

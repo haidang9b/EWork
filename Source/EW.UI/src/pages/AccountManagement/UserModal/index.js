@@ -12,18 +12,17 @@ import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { addNewAccountAdminThunk } from "../users.slice";
-import { notificationActions } from "../../../components/Notification/notification.slice";
+import useNotify from "../../../hook/useNotify";
 
 const UserDialog = ({ userDialog, setUserDialog }) => {
+    const { setNotify } = useNotify();
     const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const fullnameRef = useRef(null);
     const phoneNumberRef = useRef(null);
     const emailRef = useRef(null);
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
+
     const handleSubmit = async () => {
         if (usernameRef.current.value?.length === 0) {
             setNotify({

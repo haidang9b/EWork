@@ -10,13 +10,6 @@ import UserDialog from "./UserModal";
 const AccountManagement = () => {
     const dispatch = useDispatch();
     const users = useSelector(usersSelector);
-
-    const [notify, setNotify] = useState({
-        isOpen: false,
-        type: "error",
-        message: "",
-        title: "",
-    });
     useEffect(() => {
         document.title = getPageName("Quản lý tài khoản");
         dispatch(getUsersThunk());
@@ -47,7 +40,7 @@ const AccountManagement = () => {
                 Thêm tài khoản
             </Button>
 
-            <ListAccount notify={notify} setNotify={setNotify} />
+            <ListAccount />
             <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
         </Container>
     );

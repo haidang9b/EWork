@@ -13,13 +13,11 @@ import {
 } from "./profile.slice";
 import UploadCVModal from "./UploadCVModal";
 import "./CVManagement.css";
-import { notificationActions } from "../../components/Notification/notification.slice";
+import useNotify from "../../hook/useNotify";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
-    const setNotify = (obj) => {
-        dispatch(notificationActions.setNotify(obj));
-    };
+    const { setNotify } = useNotify();
     const [coverLetterDialog, setCoverLetterDialog] = useState({
         isOpen: false,
         onOK: async (text) => {

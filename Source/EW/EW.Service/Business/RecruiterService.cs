@@ -1,6 +1,7 @@
 ﻿using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Domain.ViewModels;
 using EW.Repository;
 using EW.Services.Constracts;
 using System;
@@ -99,11 +100,35 @@ namespace EW.Services.Business
             return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Email == company.Email || company.PhoneNumber == item.PhoneNumber || company.Id == item.Id);
         }
 
+        public async Task<IEnumerable<Company>> GetCompanies()
+        {
+            return await _unitOfWork.Repository<Company>().GetAllAsync();
+        }
+
         public async Task<Company> GetCompanyByUser(User model)
         {
             var user = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(u => u.Id == model.Id);
             var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == user.Id, includeProperties: "Company");
             return companyRecruiter.Company;
+        }
+
+        public async Task<IEnumerable<RecruiterViewModel>> GetRecruiters()
+        {
+            var data = await _unitOfWork.Repository<Recruiter>().GetAllAsync("User,Company");
+            return data.Select(item => new RecruiterViewModel
+            {
+                Id = item.UserId,
+                Username = item.User.Username,
+                FullName = item.User.FullName,
+                PhoneNumber = item.User.PhoneNumber,
+                Company = item.Company,
+                Position = item.Position,
+                Email = item.User.Email,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                IsActive = item.User.IsActive
+
+            }).OrderByDescending(r => r.Company.Id).ToList();
         }
     }
 }
