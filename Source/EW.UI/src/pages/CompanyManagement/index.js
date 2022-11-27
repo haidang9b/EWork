@@ -29,10 +29,10 @@ const CompanyManagement = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <ListRecruiter />
+                    <ListCompany />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ListCompany />
+                    <ListRecruiter />
                 </TabPanel>
             </Box>
         </Container>
