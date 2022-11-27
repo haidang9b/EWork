@@ -20,6 +20,41 @@ namespace EW.WebAPI.Controllers
             _recruiterService = recruiterService;
             _logger = logger;
         }
+
+        [HttpGet("get-companies")]
+        public async Task<IActionResult> GetCompanies()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Message = "Lấy dữ liệu thành công";
+                result.Data = await _recruiterService.GetCompanies();
+            }
+            catch(Exception e)
+            {
+                result.InternalError();
+                _logger.LogError(e.Message);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("get-recruiters")]
+        public async Task<IActionResult> GetRecruiters()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Message = "Lấy dữ liệu thành công";
+                result.Data = await _recruiterService.GetRecruiters();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRecruiterModel model)
         {
