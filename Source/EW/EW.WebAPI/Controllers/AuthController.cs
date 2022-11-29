@@ -32,8 +32,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var exit = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exit != null)
+                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                if (exist != null)
                 {
                     result.IsSuccess = false;
                     result.Message = "User is exist in System";
@@ -65,13 +65,13 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var exit = await _userService.GetUser(new User { Username = model.Username });
-                if (exit != null && BCrypt.Net.BCrypt.Verify(model.Password, exit.Password))
+                var exist = await _userService.GetUser(new User { Username = model.Username });
+                if (exist != null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
                 {
 
-                    if(exit.RoleId == (long)ERole.ID_Business)
+                    if(exist.RoleId == (long)ERole.ID_Business)
                     {
-                        var company = await _recruiterService.GetCompanyByUser(new User { Id = exit.Id });
+                        var company = await _recruiterService.GetCompanyByUser(new User { Id = exist.Id });
                         if (company != null && company.Status == EStatusRecruiter.Pending)
                         {
                             result.IsSuccess = false;
@@ -94,10 +94,10 @@ namespace EW.WebAPI.Controllers
                         }
                     }
                     result.Message = "Đăng nhập thành công";
-                    var rfToken = _tokenService.CreateRefreshToken(exit);
+                    var rfToken = _tokenService.CreateRefreshToken(exist);
                     var data = new LoginViewModel
                     {
-                        AccessToken = _tokenService.CreateToken(exit),
+                        AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
                     };
                     result.Data = data;
@@ -139,10 +139,10 @@ namespace EW.WebAPI.Controllers
                 };
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 return Forbid();
             }
             return Ok(result);
@@ -157,10 +157,10 @@ namespace EW.WebAPI.Controllers
             {
                 result.Data = await _userService.GetUsers();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }
@@ -173,10 +173,10 @@ namespace EW.WebAPI.Controllers
             {
                 result.Data = await _userService.GetUser(new User { Id = id });
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
             }
 
             return Ok(result);
@@ -203,11 +203,11 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    var exit = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
-                    var rfToken = _tokenService.CreateRefreshToken(exit);
+                    var exist = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
+                    var rfToken = _tokenService.CreateRefreshToken(exist);
                     var data = new LoginViewModel
                     {
-                        AccessToken = _tokenService.CreateToken(exit),
+                        AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
                     };
                     result.Data = data;
@@ -215,10 +215,10 @@ namespace EW.WebAPI.Controllers
                 }
                 
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }

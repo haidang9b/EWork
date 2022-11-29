@@ -7,6 +7,7 @@ import {
     CardContent,
     Divider,
     Grid,
+    LinearProgress,
     TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -22,12 +23,13 @@ import {
     authSelector,
 } from "../../redux/auth.slice";
 import { Navigate } from "react-router-dom";
-import { Loading } from "../../components";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import useNotify from "../../hook/useNotify";
+import useAuth from "../../hook/useAuth";
 
 const Login = () => {
+    const { user } = useAuth();
     const auth = useSelector(authSelector);
     const { setNotify } = useNotify();
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -98,10 +100,8 @@ const Login = () => {
 
     return (
         <>
-            {auth && auth.status === Status.succeeded ? (
+            {auth && auth.status === Status.succeeded && user ? (
                 <Navigate to="/dashboard" replace />
-            ) : auth.status === Status.loading ? (
-                <Loading />
             ) : (
                 <Container>
                     <Grid
@@ -154,9 +154,20 @@ const Login = () => {
                                         sx={{
                                             minWidth: "100%",
                                         }}
+                                        disabled={
+                                            auth.status === Status.loading
+                                        }
                                     >
                                         Đăng nhập
                                     </Button>
+                                    <LinearProgress
+                                        sx={{
+                                            display:
+                                                auth.status === Status.loading
+                                                    ? "block"
+                                                    : "none",
+                                        }}
+                                    />
                                     <br />
                                     <Divider>Hoặc</Divider>
                                     <br />

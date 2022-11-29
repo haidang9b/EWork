@@ -9,6 +9,7 @@ export const LOGIN_GOOGLE_URL = "/auth/login-google";
 export const RECRUITER_REGISTER_URL = "/recruiters/register";
 export const GET_COMPANIES_URL = "/recruiters/get-companies";
 export const GET_RECRUITERS_URL = "/recruiters/get-recruiters";
+export const EDIT_COMPANY_INFORMATION_URL = "/recruiters/update-company-info";
 
 // users controller
 export const GET_USERS_URL = "/users";

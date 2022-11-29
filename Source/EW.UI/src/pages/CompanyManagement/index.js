@@ -24,7 +24,7 @@ const CompanyManagement = () => {
                         onChange={handleChange}
                         aria-label="basic tabs"
                     >
-                        <Tab label="Quản lý công ti" {...a11yProps(0)} />
+                        <Tab label="Quản lý công ty" {...a11yProps(0)} />
                         <Tab label="Quản lý nhà tuyển dụng" {...a11yProps(1)} />
                     </Tabs>
                 </Box>

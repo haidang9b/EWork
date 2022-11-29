@@ -3,6 +3,7 @@ using EW.Domain.Models;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Auths;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +31,10 @@ namespace EW.WebAPI.Controllers
                 result.Message = "Lấy dữ liệu thành công";
                 result.Data = await _recruiterService.GetCompanies();
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }
@@ -47,15 +48,16 @@ namespace EW.WebAPI.Controllers
                 result.Message = "Lấy dữ liệu thành công";
                 result.Data = await _recruiterService.GetRecruiters();
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 result.InternalError();
             }
             return Ok(result);
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterRecruiterModel model)
         {
             var result = new ApiResult();
@@ -78,9 +80,45 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Email hoặc số điện thoại này đã được đăng ký";
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("update-company-info")]
+        [Authorize(Roles = "Faculty")]
+        public async Task<IActionResult> UpdateCompanyInfo(UpdateCompanyModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var existCompany = await _recruiterService.GetCompany(new Company { Id = model.Id });
+                if(existCompany == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không tồn tại công ty này";
+                }
+                else
+                {
+                    if(await _recruiterService.UpdateInformationCompany(model))
+                    {
+                        result.IsSuccess = true;
+                        result.Message = "Cập nhật thông tin thành công";
+                        result.Data = await _recruiterService.GetCompany(new Company { Id = model.Id });
+                    }
+                    else
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "Cập nhật thông tin thất bại";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
                 result.InternalError();
             }
             return Ok(result);

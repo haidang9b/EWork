@@ -20,7 +20,7 @@ const SearchBar = () => {
                 <Box textAlign="center" justifyContent="flex-end">
                     <TextField
                         id="TextSearch"
-                        label="Tìm kiếm kỹ năng, chức vụ, công ti,..."
+                        label="Tìm kiếm kỹ năng, chức vụ, công ty,..."
                         variant="outlined"
                         sx={{
                             padding: "6px",
