@@ -6,6 +6,7 @@ using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
 {
@@ -17,6 +18,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ILogger<ProfileController> _logger;
         private readonly IUserCVService _userCVService;
+        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public ProfileController(IUserService userService, ILogger<ProfileController> logger, IUserCVService userCVService)
         {
@@ -32,7 +34,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var user = await _userService.GetUser(new User { Username = User.Identity.Name });
+                var user = await _userService.GetUser(new User { Username = _username });
                 result.Data = new UserProfileViewModel
                 {
                     Experiences = user.Experences,
@@ -55,7 +57,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var user = await _userService.GetUser(new User { Username = User.Identity.Name });
+                var user = await _userService.GetUser(new User { Username = _username });
                 if(user == null)
                 {
                     result.IsSuccess = false;

@@ -15,7 +15,6 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IRecruiterService _recruiterService;
         private readonly ILogger<RecruitersController> _logger;
-
         public RecruitersController(IRecruiterService recruiterService, ILogger<RecruitersController> logger)
         {
             _recruiterService = recruiterService;

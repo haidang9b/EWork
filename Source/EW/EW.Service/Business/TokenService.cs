@@ -32,9 +32,10 @@ namespace EW.Services.Business
         {
             var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.Email),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Username),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.FullName),
                 new Claim(ClaimTypes.Thumbprint, user.ImageUrl),
             };

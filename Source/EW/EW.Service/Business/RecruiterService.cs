@@ -147,5 +147,11 @@ namespace EW.Services.Business
         {
             return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
         }
+
+        public async Task<bool> AddCompany(Company model)
+        {
+            await _unitOfWork.Repository<Company>().AddAsync(model);
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

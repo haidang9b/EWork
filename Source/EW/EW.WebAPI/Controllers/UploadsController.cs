@@ -7,6 +7,7 @@ using EW.WebAPI.Models.Models.Uploads;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
 {
@@ -18,6 +19,8 @@ namespace EW.WebAPI.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUserService _userService;
         private readonly IUserCVService _userCVService;
+        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService)
         {
             _logger = logger;
@@ -53,7 +56,7 @@ namespace EW.WebAPI.Controllers
 
                 var uploadModel = new ImportFileModel { File = model.File, Type = Commons.Enums.EFileType.CV };
                 var resultUpload = await WriteFile(uploadModel);
-                var user = await _userService.GetUser(new User { Username = User.Identity.Name });
+                var user = await _userService.GetUser(new User { Username = _username });
 
                 if (resultUpload.IsSuccess)
                 {

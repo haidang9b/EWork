@@ -42,9 +42,8 @@ const ListCompany = () => {
                     case 0:
                         return (
                             <Typography
-                                color="secondary"
                                 align="justify"
-                                sx={{ fontWeight: "bolder" }}
+                                sx={{ fontWeight: "bolder", color: "blue" }}
                             >
                                 Chờ xét
                             </Typography>
@@ -52,9 +51,8 @@ const ListCompany = () => {
                     case 1:
                         return (
                             <Typography
-                                color="success"
                                 align="justify"
-                                sx={{ fontWeight: "bolder" }}
+                                sx={{ fontWeight: "bolder", color: "green" }}
                             >
                                 Hoạt động
                             </Typography>
