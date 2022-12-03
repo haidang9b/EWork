@@ -1,5 +1,6 @@
 ﻿using EW.Commons.Enums;
 using EW.Domain.Entities;
+using EW.Domain.Models;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Auths;
@@ -16,12 +17,14 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
         private readonly IRecruiterService _recruiterService;
+        private readonly IEmailService _emailService;
         private readonly ILogger<AuthController> _logger;
-        public AuthController(IUserService userService, ITokenService tokenService, IRecruiterService recruiterService, ILogger<AuthController> logger)
+        public AuthController(IUserService userService, ITokenService tokenService, IRecruiterService recruiterService, ILogger<AuthController> logger, IEmailService emailService)
         {
             _userService = userService;
             _tokenService = tokenService;
             _recruiterService = recruiterService;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -129,7 +132,6 @@ namespace EW.WebAPI.Controllers
                     Email = validate.Issuer,
                     Username = validate.Issuer,
                 });
-
                 var token = _tokenService.CreateToken(exist);
                 var rfToken = _tokenService.CreateRefreshToken(exist);
                 result.Data = new LoginViewModel
@@ -223,6 +225,94 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-       
+        [HttpPost("recovery")]
+        public async Task<IActionResult> RecoveryPassword(RecoveryPasswordModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                if (exist == null || exist.Email != model.Email || exist.Username != model.Username)  
+                {
+                    result.Message = "Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại";
+                    result.IsSuccess = false;
+                    return Ok(result);
+                }
+                var body = string.Empty;
+                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
+                {
+
+                    body = reader.ReadToEnd();
+
+                }
+                var key = await _userService.GenKeyResetPassword(exist);
+                var bodyBuilder = new System.Text.StringBuilder(body);
+                bodyBuilder.Replace("{username}", exist.FullName);
+                bodyBuilder.Replace("{url}", $"http://localhost:3000/confirm-recover?code={key}&username={exist.Username}");
+                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
+                await _emailService.SendEmail(data);
+                result.IsSuccess = true;
+                result.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
+            }
+            catch(Exception ex)
+            {
+                result.InternalError();
+                result.Message = ex.Message;
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("is-valid-code-recover")]
+        public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var exist = await _userService.GetUser(new User { Username = model.Username });
+                if(exist == null || (exist!= null && exist.TokenResetPassword != model.Code))
+                {
+                    result.Message = "Không tồn tại mã này";
+                    result.IsSuccess = false;
+                }
+                else
+                {
+                    result.Message = "OK";
+                    result.IsSuccess = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var exist = await _userService.GetUser(new User { Username = model.Username });
+                if (exist == null || (exist != null && exist.TokenResetPassword != model.Code))
+                {
+                    result.Message = "Không tồn tại mã này";
+                    result.IsSuccess = false;
+                }
+                else
+                {
+                    exist.Password = model.Password;
+                    result.Message = "Khôi phục tài khoản thành công";
+                    result.IsSuccess = await _userService.ResetPassword(exist);
+                }
+            }
+            catch(Exception ex)
+            {
+                result.InternalError();
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }

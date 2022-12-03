@@ -22,12 +22,16 @@ import {
     handleLoginGoogleThunk,
     authSelector,
 } from "../../redux/auth.slice";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import useNotify from "../../hook/useNotify";
 import useAuth from "../../hook/useAuth";
-
+const linkStyle = {
+    margin: "auto",
+    textDecoration: "none",
+    color: "#007cc0",
+};
 const Login = () => {
     const { user } = useAuth();
     const auth = useSelector(authSelector);
@@ -143,6 +147,9 @@ const Login = () => {
                                         inputRef={passwordRef}
                                     />
                                 </Box>
+                                <Link to={"/recover"} style={linkStyle}>
+                                    Quên mật khẩu?
+                                </Link>
                             </CardContent>
                             <CardActions>
                                 <Stack minWidth="100%">

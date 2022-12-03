@@ -1,6 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../common/apis/httpClient";
-import { LOGIN_GOOGLE_URL, LOGIN_URL } from "../common/apiUrl";
+import {
+    LOGIN_GOOGLE_URL,
+    LOGIN_URL,
+    RECOVER_ACCOUNT_URL,
+    RESET_PASSWORD_URL,
+    VALIDATE_CODE_RECOVER_URL,
+} from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
 import { Status } from "../common/constants";
 
@@ -74,6 +80,42 @@ const authSlice = createSlice({
             .addCase(handleLoginGoogleThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
+            .addCase(handleRecoverAccountThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(handleRecoverAccountThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+            })
+            .addCase(handleRecoverAccountThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(
+                handleValidateCodeRecoverThunk.pending,
+                (state, action) => {
+                    state.status = Status.loading;
+                }
+            )
+            .addCase(
+                handleValidateCodeRecoverThunk.fulfilled,
+                (state, action) => {
+                    state.status = Status.succeeded;
+                }
+            )
+            .addCase(
+                handleValidateCodeRecoverThunk.rejected,
+                (state, action) => {
+                    state.status = Status.failed;
+                }
+            )
+            .addCase(handleResetPasswordThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(handleResetPasswordThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+            })
+            .addCase(handleResetPasswordThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
             .addCase(handleLogout.pending, logoutAccount)
             .addCase(handleLogout.fulfilled, logoutAccount)
             .addCase(handleLogout.rejected, logoutAccount);
@@ -109,6 +151,30 @@ export const handleLoginGoogleThunk = createAsyncThunk(
             email: profileObj.email,
             imageUrl: profileObj.imageUrl,
         });
+        return response.data;
+    }
+);
+
+export const handleRecoverAccountThunk = createAsyncThunk(
+    "auth/recoverAccount",
+    async (obj) => {
+        const response = await httpClient.post(RECOVER_ACCOUNT_URL, obj);
+        return response.data;
+    }
+);
+
+export const handleValidateCodeRecoverThunk = createAsyncThunk(
+    "auth/validateCodeRecover",
+    async (obj) => {
+        const response = await httpClient.post(VALIDATE_CODE_RECOVER_URL, obj);
+        return response.data;
+    }
+);
+
+export const handleResetPasswordThunk = createAsyncThunk(
+    "auth/resetPassword",
+    async (obj) => {
+        const response = await httpClient.post(RESET_PASSWORD_URL, obj);
         return response.data;
     }
 );

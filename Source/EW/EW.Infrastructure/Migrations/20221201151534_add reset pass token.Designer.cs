@@ -3,6 +3,7 @@ using System;
 using EW.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EW.Infrastructure.Migrations
 {
     [DbContext(typeof(EWContext))]
-    partial class EWContextModelSnapshot : ModelSnapshot
+    [Migration("20221201151534_add reset pass token")]
+    partial class addresetpasstoken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,26 +116,26 @@ namespace EW.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1069), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2124), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Faculty",
                             Name = "Faculty",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1090), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2141), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1093), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2142), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Business",
                             Name = "Business",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1094), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2143), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1095), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2144), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Student",
                             Name = "Student",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 20, 11, 705, DateTimeKind.Unspecified).AddTicks(1096), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 22, 15, 34, 77, DateTimeKind.Unspecified).AddTicks(2145), new TimeSpan(0, 7, 0, 0, 0))
                         });
                 });
 
@@ -170,6 +172,10 @@ namespace EW.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("longtext");
 
