@@ -1,17 +1,22 @@
-import { Button, Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { getPageName } from "../../../common/nameApp";
 import { SkeletonTable } from "../../../components";
+import CompanyDetailModal from "../CompanyDetailModel";
 import { recruiterSelector } from "../recruiter.slice";
 
 const ListCompany = () => {
+    const [companyDetailModal, setCompanyDetailModal] = useState({
+        isOpen: false,
+        data: null,
+    });
     const recruiter = useSelector(recruiterSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
-        { field: "companyName", headerName: "Tên công ti", width: 200 },
+        { field: "companyName", headerName: "Tên công ty", width: 200 },
         { field: "phoneNumber", headerName: "Số điện thoại", width: 160 },
         {
             field: "email",
@@ -36,29 +41,52 @@ const ListCompany = () => {
                 switch (cellValues.row?.status) {
                     case 0:
                         return (
-                            <Button variant="contained" color="secondary">
+                            <Typography
+                                color="secondary"
+                                align="justify"
+                                sx={{ fontWeight: "bolder" }}
+                            >
                                 Chờ xét
-                            </Button>
+                            </Typography>
                         );
-                    case 2:
+                    case 1:
                         return (
-                            <Button variant="contained" color="success">
+                            <Typography
+                                color="success"
+                                align="justify"
+                                sx={{ fontWeight: "bolder" }}
+                            >
                                 Hoạt động
-                            </Button>
+                            </Typography>
                         );
                     default:
                         return (
-                            <Button variant="contained" color="error">
+                            <Typography
+                                color="error"
+                                align="justify"
+                                sx={{ fontWeight: "bolder" }}
+                            >
                                 Vô hiệu hóa
-                            </Button>
+                            </Typography>
                         );
                 }
             },
         },
     ];
+
+    const handleChangeStatus = (params) => {
+        const { row } = params;
+        setCompanyDetailModal({
+            ...companyDetailModal,
+            isOpen: true,
+            data: row,
+        });
+    };
+
     useEffect(() => {
-        document.title = getPageName("Công ti");
+        document.title = getPageName("công ty");
     }, []);
+
     return (
         <>
             {recruiter.status === Status.loading ? (
@@ -66,6 +94,7 @@ const ListCompany = () => {
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
+                        onRowClick={handleChangeStatus}
                         rows={recruiter.companies}
                         columns={columns}
                         pageSize={10}
@@ -75,6 +104,10 @@ const ListCompany = () => {
                     />
                 </Paper>
             )}
+            <CompanyDetailModal
+                companyDetailModal={companyDetailModal}
+                setCompanyDetailModal={setCompanyDetailModal}
+            />
         </>
     );
 };

@@ -89,6 +89,11 @@ const sidebarFacultyData = [
         icon: <FaIcons.FaCartPlus />,
     },
     {
+        title: "Công ty",
+        path: "/company-management",
+        icon: <IoIcons.IoMdPeople />,
+    },
+    {
         title: "Nhà tuyển dụng",
         path: "/recruiter-management",
         icon: <IoIcons.IoMdPeople />,

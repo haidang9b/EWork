@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
-import { GET_COMPANIES_URL, GET_RECRUITERS_URL } from "../../common/apiUrl";
+import {
+    EDIT_COMPANY_INFORMATION_URL,
+    GET_COMPANIES_URL,
+    GET_RECRUITERS_URL,
+} from "../../common/apiUrl";
 import { Status } from "../../common/constants";
 
 const initialState = {
@@ -41,6 +45,26 @@ const recruiterSlice = createSlice({
             })
             .addCase(getRecruitersThunk.rejected, (state, action) => {
                 state.status = Status.failed;
+            })
+            .addCase(editCompanyInformationThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(editCompanyInformationThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.status = Status.succeeded;
+                    let currentCompany = state.companies.find(
+                        (item) => item.id === action.payload?.data?.id
+                    );
+                    currentCompany.status = action.payload?.data?.status;
+                    currentCompany.companyName =
+                        action.payload?.data?.companyName;
+                    currentCompany.address = action.payload?.data?.address;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(editCompanyInformationThunk, (state, action) => {
+                state.status = Status.failed;
             }),
 });
 
@@ -56,6 +80,17 @@ export const getRecruitersThunk = createAsyncThunk(
     "recruiter/getRecruiters",
     async () => {
         const response = await httpClient.get(GET_RECRUITERS_URL);
+        return response.data;
+    }
+);
+
+export const editCompanyInformationThunk = createAsyncThunk(
+    "recruiter/editCompanyInformation",
+    async (obj) => {
+        const response = await httpClient.put(
+            EDIT_COMPANY_INFORMATION_URL,
+            obj
+        );
         return response.data;
     }
 );

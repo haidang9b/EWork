@@ -37,10 +37,10 @@ namespace EW.WebAPI.Controllers
             {
                 result.Data = await _userService.GetUsers();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 result.InternalError();
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }
@@ -52,8 +52,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var exit = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exit != null)
+                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                if (exist != null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này đã tồn tại";
@@ -149,9 +149,9 @@ namespace EW.WebAPI.Controllers
                 }
                 
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 result.InternalError();
             }
             return Ok(result);
@@ -166,9 +166,9 @@ namespace EW.WebAPI.Controllers
             {
 
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 result.InternalError();
             }
 

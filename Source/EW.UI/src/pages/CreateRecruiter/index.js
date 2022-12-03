@@ -5,26 +5,27 @@ import {
     Typography,
     Card,
     Divider,
+    LinearProgress,
 } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { useRef, useEffect } from "react";
 import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
 import { Send } from "@mui/icons-material";
-import { Loading } from "../../components";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import "./createrecruiter.css";
-import { usersSelector } from "../AccountManagement/users.slice";
-import { recruiterRegisterThunk } from "../../redux/auth.slice";
 import useNotify from "../../hook/useNotify";
+import {
+    recruiterRegisterSelector,
+    recruiterRegisterThunk,
+} from "./recruiterRegister.slice";
 
 const CreateRecruiter = () => {
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
-    const recruiter = useSelector(usersSelector);
+    const recruiterRegister = useSelector(recruiterRegisterSelector);
     const fullnameRef = useRef(null);
     const positionRef = useRef(null);
     const emailRef = useRef(null);
@@ -70,7 +71,7 @@ const CreateRecruiter = () => {
         } else if (!ValidateEmail(emailRef.current?.value)) {
             setNotify({
                 isOpen: true,
-                message: "Vui lòng nhập email công ti hợp lệ",
+                message: "Vui lòng nhập email công ty hợp lệ",
                 type: "error",
                 title: "Tạo tài khoản doanh nghiệp",
             });
@@ -154,187 +155,197 @@ const CreateRecruiter = () => {
     };
     return (
         <Container>
-            {recruiter.status === Status.loading && <Loading />}
-            {recruiter.status !== Status.loading && (
-                <Card
-                    sx={{
-                        marginTop: "10px",
-                        paddingTop: "10px",
-                        paddingBottom: "10px",
-                    }}
-                >
-                    <Stack
-                        direction="row"
-                        divider={
-                            <Divider
-                                orientation="vertical"
-                                flexItem
-                                sx={{
-                                    display: {
-                                        xs: "none",
-                                        md: "block",
-                                    },
-                                }}
-                            />
-                        }
-                        spacing={1}
-                    >
-                        <Grid
+            <Card
+                sx={{
+                    marginTop: "10px",
+                    paddingTop: "10px",
+                    paddingBottom: "10px",
+                }}
+            >
+                <Stack
+                    direction="row"
+                    divider={
+                        <Divider
+                            orientation="vertical"
+                            flexItem
                             sx={{
-                                minWidth: {
-                                    xs: "0%",
-                                    md: "50%",
-                                },
                                 display: {
                                     xs: "none",
                                     md: "block",
                                 },
                             }}
-                            className="recruitment-img"
-                        >
-                            <img
-                                src={RecruitmentImgDefault}
-                                alt="EWork is the best recruitment place"
+                        />
+                    }
+                    spacing={1}
+                >
+                    <Grid
+                        sx={{
+                            minWidth: {
+                                xs: "0%",
+                                md: "50%",
+                            },
+                            display: {
+                                xs: "none",
+                                md: "block",
+                            },
+                        }}
+                        className="recruitment-img"
+                    >
+                        <img
+                            src={RecruitmentImgDefault}
+                            alt="EWork is the best recruitment place"
+                            loading="lazy"
+                        />
+                    </Grid>
+                    <Grid
+                        sx={{
+                            minWidth: {
+                                xs: "100%",
+                                md: "50%",
+                            },
+                            display: {
+                                xs: "block",
+                                md: "block",
+                            },
+                            paddingLeft: "2%",
+                            paddingRight: "2%",
+                        }}
+                    >
+                        <form>
+                            <Typography variant="h5">
+                                Thông tin doanh nghiệp
+                            </Typography>
+                            <TextField
+                                label="Họ và tên"
+                                variant="standard"
+                                placeholder="Họ và tên"
+                                fullWidth
+                                required
+                                inputRef={fullnameRef}
                             />
-                        </Grid>
-                        <Grid
-                            sx={{
-                                minWidth: {
-                                    xs: "100%",
-                                    md: "50%",
-                                },
-                                display: {
-                                    xs: "block",
-                                    md: "block",
-                                },
-                                paddingLeft: "2%",
-                                paddingRight: "2%",
-                            }}
-                        >
-                            <form>
-                                <Typography variant="h5">
-                                    Thông tin doanh nghiệp
-                                </Typography>
+                            <TextField
+                                label="Chức vụ"
+                                variant="standard"
+                                placeholder="Chức vụ"
+                                fullWidth
+                                required
+                                inputRef={positionRef}
+                            />
+                            <Stack
+                                sx={{
+                                    flexDirection: {
+                                        xs: "column",
+                                        md: "row",
+                                    },
+                                }}
+                            >
                                 <TextField
-                                    label="Họ và tên"
+                                    label="Số điện thoại"
                                     variant="standard"
-                                    placeholder="Họ và tên"
-                                    fullWidth
+                                    placeholder="Số điện thoại"
                                     required
-                                    inputRef={fullnameRef}
-                                />
-                                <TextField
-                                    label="Chức vụ"
-                                    variant="standard"
-                                    placeholder="Chức vụ"
-                                    fullWidth
-                                    required
-                                    inputRef={positionRef}
-                                />
-                                <Stack
+                                    inputRef={phoneNumberRef}
                                     sx={{
-                                        flexDirection: {
-                                            xs: "column",
-                                            md: "row",
+                                        minWidth: {
+                                            xs: "100%",
+                                            md: "40%",
+                                        },
+                                        paddingRight: {
+                                            md: "6px",
                                         },
                                     }}
-                                >
-                                    <TextField
-                                        label="Số điện thoại"
-                                        variant="standard"
-                                        placeholder="Số điện thoại"
-                                        required
-                                        inputRef={phoneNumberRef}
-                                        sx={{
-                                            minWidth: {
-                                                xs: "100%",
-                                                md: "40%",
-                                            },
-                                            paddingRight: {
-                                                md: "6px",
-                                            },
-                                        }}
-                                    />
-                                    <TextField
-                                        label="Email"
-                                        variant="standard"
-                                        placeholder="Email công ty"
-                                        required
-                                        inputRef={emailRef}
-                                        sx={{
-                                            minWidth: {
-                                                xs: "100%",
-                                                md: "60%",
-                                            },
-                                        }}
-                                        type="email"
-                                    />
-                                </Stack>
-
-                                <TextField
-                                    label="Tên công ty"
-                                    variant="standard"
-                                    placeholder="Tên công ty"
-                                    fullWidth
-                                    required
-                                    inputRef={companyNameRef}
                                 />
-
                                 <TextField
-                                    label="Địa chỉ công ty"
+                                    label="Email"
                                     variant="standard"
-                                    placeholder="Địa chỉ công ty"
-                                    fullWidth
+                                    placeholder="Email công ty"
                                     required
-                                    inputRef={addressRef}
-                                />
-
-                                <TextField
-                                    label="Tài khoản"
-                                    variant="standard"
-                                    placeholder="Tài khoản đăng nhập"
-                                    fullWidth
-                                    required
-                                    inputRef={usernameRef}
-                                />
-
-                                <TextField
-                                    label="Mật khẩu"
-                                    variant="standard"
-                                    placeholder="Mật khẩu đăng nhập"
-                                    fullWidth
-                                    required
-                                    inputRef={passwordRef}
-                                    type="password"
-                                />
-
-                                <TextField
-                                    label="Nhập lại mật khẩu"
-                                    variant="standard"
-                                    placeholder="Nhập lại mật khẩu đăng nhập"
-                                    fullWidth
-                                    required
-                                    inputRef={confirmPasswordRef}
-                                    type="password"
-                                />
-
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    startIcon={<Send />}
-                                    onClick={handleSubmit}
+                                    inputRef={emailRef}
                                     sx={{
-                                        minWidth: "100%",
-                                        marginTop: "10px",
+                                        minWidth: {
+                                            xs: "100%",
+                                            md: "60%",
+                                        },
                                     }}
-                                >
-                                    Gửi thông tin đăng ký
-                                </Button>
-                            </form>
-                        </Grid>
-                    </Stack>
-                </Card>
-            )}
+                                    type="email"
+                                />
+                            </Stack>
+
+                            <TextField
+                                label="Tên công ty"
+                                variant="standard"
+                                placeholder="Tên công ty"
+                                fullWidth
+                                required
+                                inputRef={companyNameRef}
+                            />
+
+                            <TextField
+                                label="Địa chỉ công ty"
+                                variant="standard"
+                                placeholder="Địa chỉ công ty"
+                                fullWidth
+                                required
+                                inputRef={addressRef}
+                            />
+
+                            <TextField
+                                label="Tài khoản"
+                                variant="standard"
+                                placeholder="Tài khoản đăng nhập"
+                                fullWidth
+                                required
+                                inputRef={usernameRef}
+                            />
+
+                            <TextField
+                                label="Mật khẩu"
+                                variant="standard"
+                                placeholder="Mật khẩu đăng nhập"
+                                fullWidth
+                                required
+                                inputRef={passwordRef}
+                                type="password"
+                            />
+
+                            <TextField
+                                label="Nhập lại mật khẩu"
+                                variant="standard"
+                                placeholder="Nhập lại mật khẩu đăng nhập"
+                                fullWidth
+                                required
+                                inputRef={confirmPasswordRef}
+                                type="password"
+                            />
+
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                startIcon={<Send />}
+                                onClick={handleSubmit}
+                                sx={{
+                                    minWidth: "100%",
+                                    marginTop: "10px",
+                                }}
+                                disabled={
+                                    recruiterRegister.status === Status.loading
+                                }
+                            >
+                                Gửi thông tin đăng ký
+                            </Button>
+                            <LinearProgress
+                                sx={{
+                                    display:
+                                        recruiterRegister.status ===
+                                        Status.loading
+                                            ? "block"
+                                            : "none",
+                                }}
+                            />
+                        </form>
+                    </Grid>
+                </Stack>
+            </Card>
         </Container>
     );
 };

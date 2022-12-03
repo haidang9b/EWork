@@ -111,9 +111,9 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Không thể xóa CV này";
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 result.InternalError();
             }
             return Ok(result);

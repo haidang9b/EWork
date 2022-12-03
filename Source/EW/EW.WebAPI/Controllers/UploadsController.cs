@@ -86,9 +86,9 @@ namespace EW.WebAPI.Controllers
 
                 
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
 
             }
 
@@ -120,15 +120,13 @@ namespace EW.WebAPI.Controllers
                     result.Path = filePath;
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(ex.Message);
                 result.IsSuccess = false;
             }
             return result;
             
         }
-
-
     }
 }

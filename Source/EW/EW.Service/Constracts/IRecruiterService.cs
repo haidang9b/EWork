@@ -16,5 +16,7 @@ namespace EW.Services.Constracts
         Task<Company> GetCompanyByUser(User user);
         Task<IEnumerable<Company>> GetCompanies();
         Task<IEnumerable<RecruiterViewModel>> GetRecruiters();
+        Task<bool> UpdateInformationCompany(UpdateCompanyModel model);
+        Task<Company> GetCompany(Company model);
     }
 }

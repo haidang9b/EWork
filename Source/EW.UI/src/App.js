@@ -13,6 +13,8 @@ import {
     Profile,
     CVManagement,
     CompanyManagement,
+    RecoveryAccount,
+    ConfirmRecover,
 } from "./pages";
 function App() {
     return (
@@ -22,6 +24,8 @@ function App() {
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
+                <Route path="recover" element={<RecoveryAccount />} />
+                <Route path="confirm-recover" element={<ConfirmRecover />} />
             </Route>
             <Route path="profile" element={<Profile />} />
             <Route element={<RequireAuth allowedRoles={["Faculty"]} />}>

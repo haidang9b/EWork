@@ -7,6 +7,7 @@ import {
     CardContent,
     Divider,
     Grid,
+    LinearProgress,
     TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -21,13 +22,18 @@ import {
     handleLoginGoogleThunk,
     authSelector,
 } from "../../redux/auth.slice";
-import { Navigate } from "react-router-dom";
-import { Loading } from "../../components";
+import { Link, Navigate } from "react-router-dom";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import useNotify from "../../hook/useNotify";
-
+import useAuth from "../../hook/useAuth";
+const linkStyle = {
+    margin: "auto",
+    textDecoration: "none",
+    color: "#007cc0",
+};
 const Login = () => {
+    const { user } = useAuth();
     const auth = useSelector(authSelector);
     const { setNotify } = useNotify();
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -98,10 +104,8 @@ const Login = () => {
 
     return (
         <>
-            {auth && auth.status === Status.succeeded ? (
+            {auth && auth.status === Status.succeeded && user ? (
                 <Navigate to="/dashboard" replace />
-            ) : auth.status === Status.loading ? (
-                <Loading />
             ) : (
                 <Container>
                     <Grid
@@ -143,6 +147,9 @@ const Login = () => {
                                         inputRef={passwordRef}
                                     />
                                 </Box>
+                                <Link to={"/recover"} style={linkStyle}>
+                                    Quên mật khẩu?
+                                </Link>
                             </CardContent>
                             <CardActions>
                                 <Stack minWidth="100%">
@@ -154,9 +161,20 @@ const Login = () => {
                                         sx={{
                                             minWidth: "100%",
                                         }}
+                                        disabled={
+                                            auth.status === Status.loading
+                                        }
                                     >
                                         Đăng nhập
                                     </Button>
+                                    <LinearProgress
+                                        sx={{
+                                            display:
+                                                auth.status === Status.loading
+                                                    ? "block"
+                                                    : "none",
+                                        }}
+                                    />
                                     <br />
                                     <Divider>Hoặc</Divider>
                                     <br />

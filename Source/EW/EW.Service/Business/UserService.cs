@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Enums;
+using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Constracts;
@@ -55,7 +56,8 @@ namespace EW.Services.Business
                 RoleId = user.RoleId,
                 IsActive = true,
                 ImageUrl = "",
-                CoverLetter = ""
+                CoverLetter = "",
+                TokenResetPassword = MyRandom.RandomString(30),
             });
 
             return await _unitOfWork.SaveChangeAsync();
@@ -80,14 +82,33 @@ namespace EW.Services.Business
                 UpdatedDate = DateTimeOffset.Now,
                 RoleId = (long)ERole.ID_Student,
                 IsActive = true,
-                ImageUrl = user.ImageUrl
+                ImageUrl = user.ImageUrl,
+                TokenResetPassword = MyRandom.RandomString(30),
             });
             return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<string> GenKeyResetPassword(User user)
+        {
+            var key = MyRandom.RandomString(16);
+            var userCurrent = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id && item.Email == user.Email && item.Username == user.Username);
+            userCurrent.TokenResetPassword = key;
+            await _unitOfWork.SaveChangeAsync();
+            return key;
         }
 
         public async Task<bool> UpdateUser(User user)
         {
             _unitOfWork.Repository<User>().Update(user);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> ResetPassword(User user)
+        {
+            var hashed = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
+            var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username && item.Email == user.Email);
+            exist.Password = hashed;
+            exist.TokenResetPassword = MyRandom.RandomString(30);
             return await _unitOfWork.SaveChangeAsync();
         }
     }

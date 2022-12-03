@@ -12,6 +12,7 @@ namespace EW.Domain.Entities
         public string PhoneNumber { get; set; }
         public string ImageUrl { get; set; }
         public string CoverLetter { get; set; }
+        public string TokenResetPassword { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("Role")]
         public long RoleId { get; set; }

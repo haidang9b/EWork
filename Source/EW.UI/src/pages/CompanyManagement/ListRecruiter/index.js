@@ -30,7 +30,7 @@ const ListRecruiter = () => {
         },
         {
             field: "company.Name",
-            headerName: "Tên công ti",
+            headerName: "Tên công ty",
             width: 160,
             renderCell: (cellValues) => {
                 return cellValues.row?.company?.companyName;

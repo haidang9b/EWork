@@ -130,5 +130,22 @@ namespace EW.Services.Business
 
             }).OrderByDescending(r => r.Company.Id).ToList();
         }
+
+        public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
+        {
+            var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
+            if (existCompany == null)
+                return false;
+            existCompany.CompanyName = model.CompanyName;
+            existCompany.Address = model.Address;
+            existCompany.Status = model.Status;
+            _unitOfWork.Repository<Company>().Update(existCompany);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<Company> GetCompany(Company model)
+        {
+            return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
+        }
     }
 }

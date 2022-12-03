@@ -3,7 +3,9 @@ import httpClient from "../common/apis/httpClient";
 import {
     LOGIN_GOOGLE_URL,
     LOGIN_URL,
-    RECRUITER_REGISTER_URL,
+    RECOVER_ACCOUNT_URL,
+    RESET_PASSWORD_URL,
+    VALIDATE_CODE_RECOVER_URL,
 } from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
 import { Status } from "../common/constants";
@@ -78,17 +80,40 @@ const authSlice = createSlice({
             .addCase(handleLoginGoogleThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(recruiterRegisterThunk.pending, (state, action) => {
+            .addCase(handleRecoverAccountThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(recruiterRegisterThunk.fulfilled, (state, action) => {
-                if (action.payload.isSuccess) {
+            .addCase(handleRecoverAccountThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+            })
+            .addCase(handleRecoverAccountThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(
+                handleValidateCodeRecoverThunk.pending,
+                (state, action) => {
+                    state.status = Status.loading;
+                }
+            )
+            .addCase(
+                handleValidateCodeRecoverThunk.fulfilled,
+                (state, action) => {
                     state.status = Status.succeeded;
-                } else {
+                }
+            )
+            .addCase(
+                handleValidateCodeRecoverThunk.rejected,
+                (state, action) => {
                     state.status = Status.failed;
                 }
+            )
+            .addCase(handleResetPasswordThunk.pending, (state, action) => {
+                state.status = Status.loading;
             })
-            .addCase(recruiterRegisterThunk.rejected, (state, action) => {
+            .addCase(handleResetPasswordThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+            })
+            .addCase(handleResetPasswordThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
             .addCase(handleLogout.pending, logoutAccount)
@@ -130,10 +155,26 @@ export const handleLoginGoogleThunk = createAsyncThunk(
     }
 );
 
-export const recruiterRegisterThunk = createAsyncThunk(
-    "recruiter",
+export const handleRecoverAccountThunk = createAsyncThunk(
+    "auth/recoverAccount",
     async (obj) => {
-        const response = await httpClient.post(RECRUITER_REGISTER_URL, obj);
+        const response = await httpClient.post(RECOVER_ACCOUNT_URL, obj);
+        return response.data;
+    }
+);
+
+export const handleValidateCodeRecoverThunk = createAsyncThunk(
+    "auth/validateCodeRecover",
+    async (obj) => {
+        const response = await httpClient.post(VALIDATE_CODE_RECOVER_URL, obj);
+        return response.data;
+    }
+);
+
+export const handleResetPasswordThunk = createAsyncThunk(
+    "auth/resetPassword",
+    async (obj) => {
+        const response = await httpClient.post(RESET_PASSWORD_URL, obj);
         return response.data;
     }
 );

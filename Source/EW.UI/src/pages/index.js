@@ -9,3 +9,5 @@ export { default as Profile } from "./Profile";
 export { default as RecruiterManagement } from "./RecruiterManagement";
 export { default as Unauthorized } from "./Unauthorized";
 export { default as CompanyManagement } from "./CompanyManagement";
+export { default as RecoveryAccount } from "./RecoveryAccount";
+export { default as ConfirmRecover } from "./ConfirmRecover";

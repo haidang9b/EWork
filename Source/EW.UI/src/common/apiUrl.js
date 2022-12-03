@@ -4,11 +4,15 @@ export const BASE_URL = "https://localhost:7096/api";
 export const REFRESH_TOKEN_URL = "/auth/RefreshToken";
 export const LOGIN_URL = "/auth/login";
 export const LOGIN_GOOGLE_URL = "/auth/login-google";
+export const RECOVER_ACCOUNT_URL = "/auth/recovery";
+export const VALIDATE_CODE_RECOVER_URL = "/auth/is-valid-code-recover";
+export const RESET_PASSWORD_URL = "/auth/reset-password";
 
 // recruiters controller
 export const RECRUITER_REGISTER_URL = "/recruiters/register";
 export const GET_COMPANIES_URL = "/recruiters/get-companies";
 export const GET_RECRUITERS_URL = "/recruiters/get-recruiters";
+export const EDIT_COMPANY_INFORMATION_URL = "/recruiters/update-company-info";
 
 // users controller
 export const GET_USERS_URL = "/users";

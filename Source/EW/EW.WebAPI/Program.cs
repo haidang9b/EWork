@@ -1,4 +1,5 @@
 using EW.Commons.Constaints;
+using EW.Domain.Models;
 using EW.Infrastructure;
 using EW.Repository;
 using EW.Services.Business;
@@ -22,6 +23,7 @@ builder.Services.AddCors(options =>
 });
 
 RegisterService(builder.Services);
+builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddCors();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -85,5 +87,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<IRecruiterService, RecruiterService>();
     services.AddScoped<IUserCVService, UserCVService>();
+    services.AddScoped<IEmailService, EmailService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
