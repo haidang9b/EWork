@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Enums;
+using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Domain.ViewModels;
@@ -53,7 +54,8 @@ namespace EW.Services.Business
                     PhoneNumber = model.PhoneNumber,
                     RoleId = (long)ERole.ID_Business,
                     IsActive = false,
-                    Email = model.Email
+                    Email = model.Email,
+                    TokenResetPassword = MyRandom.RandomString(30)
                 };
 
                 if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) != null) 
@@ -145,13 +147,75 @@ namespace EW.Services.Business
 
         public async Task<Company> GetCompany(Company model)
         {
-            return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
+            return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id || model.Email == item.Email);
         }
 
         public async Task<bool> AddCompany(Company model)
         {
-            await _unitOfWork.Repository<Company>().AddAsync(model);
+            var newCompany = new Company
+            {
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CompanyName = model.CompanyName,
+                Address = model.Address,
+                Status = EStatusRecruiter.Pending,
+                UpdatedDate = DateTimeOffset.Now,
+                CreatedDate = DateTimeOffset.Now,
+            };
+            await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model)
+        {
+            var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username || item.Email == model.Email || item.PhoneNumber == model.PhoneNumber);
+            if (exist != null)
+                return false;
+            _unitOfWork.BeginTransaction();
+            var newRecruiter = new User
+            {
+                FullName = model.FullName,
+                Username = model.Username,
+                Password = model.Password,
+                CoverLetter = "",
+                UpdatedDate = DateTimeOffset.Now,
+                CreatedDate = DateTimeOffset.Now,
+                ImageUrl = "",
+                PhoneNumber = model.PhoneNumber,
+                RoleId = (long)ERole.ID_Business,
+                IsActive = false,
+                Email = model.Email,
+                TokenResetPassword = MyRandom.RandomString(30)
+            };
+            var resultAdded = await _userService.Register(newRecruiter);
+            if(resultAdded == false)
+            {
+                _unitOfWork.RollBack();
+                return false;
+            }
+            var userAdded = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username && item.Email == model.Email && item.PhoneNumber == model.PhoneNumber);
+            var companyCurrent = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.CompanyId);
+            if (userAdded == null || companyCurrent == null)
+            {
+                _unitOfWork.RollBack();
+                return false;
+            }
+            var newAsign = new Recruiter
+            {
+                UserId = userAdded.Id,
+                CompanyId = companyCurrent.Id,
+                Position = model.Position
+            };
+            await _unitOfWork.Repository<Recruiter>().AddAsync(newAsign);
+            var resultAssign = await _unitOfWork.SaveChangeAsync();
+
+            if(resultAdded == false)
+            {
+                _unitOfWork.RollBack();
+                return false;
+            }
+            _unitOfWork.Commit();
+            return true;
         }
     }
 }
