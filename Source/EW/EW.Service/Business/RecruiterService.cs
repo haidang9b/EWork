@@ -205,7 +205,9 @@ namespace EW.Services.Business
             {
                 UserId = userAdded.Id,
                 CompanyId = companyCurrent.Id,
-                Position = model.Position
+                Position = model.Position,
+                UpdatedDate = DateTimeOffset.Now,
+                CreatedDate = DateTimeOffset.Now,
             };
             await _unitOfWork.Repository<Recruiter>().AddAsync(newAsign);
             var resultAssign = await _unitOfWork.SaveChangeAsync();
@@ -217,6 +219,24 @@ namespace EW.Services.Business
             }
             _unitOfWork.Commit();
             return true;
+        }
+
+        public async Task<RecruiterViewModel> GetRecruiterByUser(User model)
+        {
+            var data = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username && item.User.Email == model.Email,"User,Company");
+            return new RecruiterViewModel
+            {
+                Id = data.UserId,
+                Username = data.User.Username,
+                FullName = data.User.FullName,
+                PhoneNumber = data.User.PhoneNumber,
+                Company = data.Company,
+                Position = data.Position,
+                Email = data.User.Email,
+                CreatedDate = data.CreatedDate,
+                UpdatedDate = data.UpdatedDate,
+                IsActive = data.User.IsActive
+            };
         }
     }
 }

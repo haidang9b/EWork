@@ -196,7 +196,7 @@ namespace EW.WebAPI.Controllers
                 result.Message = result.IsSuccess ? "Thêm tài khoản nhân sự thành công" : "Thêm tài khoản nhân sự thất bại";
                 if(result.IsSuccess)
                 {
-                    result.Data = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                    result.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
                 }
             }
             catch(Exception ex)

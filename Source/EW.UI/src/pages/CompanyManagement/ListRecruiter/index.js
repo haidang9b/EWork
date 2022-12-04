@@ -1,13 +1,17 @@
 import { Button, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { getPageName } from "../../../common/nameApp";
 import { SkeletonTable } from "../../../components";
+import AddRecruiterModal from "../AddRecruiterModal";
 import { recruiterSelector } from "../recruiter.slice";
 
 const ListRecruiter = () => {
+    const [addRecruiterModal, setAddRecruiterModal] = useState({
+        isOpen: false,
+    });
     const recruiter = useSelector(recruiterSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
@@ -44,11 +48,21 @@ const ListRecruiter = () => {
         },
     ];
     useEffect(() => {
-        document.title = getPageName("Nhà tuyển dụng");
+        document.title = getPageName("Quản lý nhà tuyển dụng");
     }, []);
     return (
         <>
-            <Button variant="contained">Thêm nhà tuyển dụng</Button>
+            <Button
+                variant="contained"
+                onClick={() => {
+                    setAddRecruiterModal({
+                        ...addRecruiterModal,
+                        isOpen: true,
+                    });
+                }}
+            >
+                Thêm nhà tuyển dụng
+            </Button>
             {recruiter.status === Status.loading ? (
                 <SkeletonTable />
             ) : (
@@ -63,6 +77,10 @@ const ListRecruiter = () => {
                     />
                 </Paper>
             )}
+            <AddRecruiterModal
+                addRecruiterModal={addRecruiterModal}
+                setAddRecruiterModal={setAddRecruiterModal}
+            />
         </>
     );
 };
