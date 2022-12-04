@@ -99,6 +99,7 @@ namespace EW.Services.Business
 
         public async Task<bool> UpdateUser(User user)
         {
+            user.UpdatedDate = DateTimeOffset.Now;
             _unitOfWork.Repository<User>().Update(user);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -108,6 +109,7 @@ namespace EW.Services.Business
             var hashed = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username && item.Email == user.Email);
             exist.Password = hashed;
+            exist.UpdatedDate = DateTimeOffset.Now;
             exist.TokenResetPassword = MyRandom.RandomString(30);
             return await _unitOfWork.SaveChangeAsync();
         }

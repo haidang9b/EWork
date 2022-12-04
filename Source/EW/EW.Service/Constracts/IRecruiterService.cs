@@ -19,5 +19,7 @@ namespace EW.Services.Constracts
         Task<bool> UpdateInformationCompany(UpdateCompanyModel model);
         Task<Company> GetCompany(Company model);
         Task<bool> AddCompany(Company model);
+        Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model);
+        Task<RecruiterViewModel> GetRecruiterByUser(User model);
     }
 }

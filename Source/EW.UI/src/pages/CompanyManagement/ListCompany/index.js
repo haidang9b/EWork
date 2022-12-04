@@ -1,14 +1,18 @@
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { getPageName } from "../../../common/nameApp";
 import { SkeletonTable } from "../../../components";
-import CompanyDetailModal from "../CompanyDetailModel";
+import AddCompanyModal from "../AddCompanyModal";
+import CompanyDetailModal from "../CompanyDetailModal";
 import { recruiterSelector } from "../recruiter.slice";
 
 const ListCompany = () => {
+    const [addCompanyModal, setAddCompanyModal] = useState({
+        isOpen: false,
+    });
     const [companyDetailModal, setCompanyDetailModal] = useState({
         isOpen: false,
         data: null,
@@ -82,11 +86,22 @@ const ListCompany = () => {
     };
 
     useEffect(() => {
-        document.title = getPageName("công ty");
+        document.title = getPageName("Quản lý công ty");
     }, []);
 
     return (
         <>
+            <Button
+                variant="contained"
+                onClick={() => {
+                    setAddCompanyModal({
+                        ...addCompanyModal,
+                        isOpen: true,
+                    });
+                }}
+            >
+                Thêm công ty
+            </Button>
             {recruiter.status === Status.loading ? (
                 <SkeletonTable />
             ) : (
@@ -105,6 +120,10 @@ const ListCompany = () => {
             <CompanyDetailModal
                 companyDetailModal={companyDetailModal}
                 setCompanyDetailModal={setCompanyDetailModal}
+            />
+            <AddCompanyModal
+                addCompanyModal={addCompanyModal}
+                setAddCompanyModal={setAddCompanyModal}
             />
         </>
     );
