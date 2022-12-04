@@ -13,6 +13,8 @@ export const RECRUITER_REGISTER_URL = "/recruiters/register";
 export const GET_COMPANIES_URL = "/recruiters/get-companies";
 export const GET_RECRUITERS_URL = "/recruiters/get-recruiters";
 export const EDIT_COMPANY_INFORMATION_URL = "/recruiters/update-company-info";
+export const ADD_COMPANY_URL = "/recruiters/add-new-company";
+export const ASSIGN_RECRUITER_URL = "/recruiters/add-new-recruiter";
 
 // users controller
 export const GET_USERS_URL = "/users";

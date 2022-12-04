@@ -170,7 +170,7 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("add-new-recruiter-by-faculty")]
+        [HttpPost("add-new-recruiter")]
         [Authorize(Roles = "Faculty")]
         public async  Task<IActionResult> AddNewRecruiterByFaculty(AddNewRecruiterAccountModel model)
         {

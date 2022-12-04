@@ -141,6 +141,7 @@ namespace EW.Services.Business
             existCompany.CompanyName = model.CompanyName;
             existCompany.Address = model.Address;
             existCompany.Status = model.Status;
+            existCompany.UpdatedDate = DateTimeOffset.Now;
             _unitOfWork.Repository<Company>().Update(existCompany);
             return await _unitOfWork.SaveChangeAsync();
         }

@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
+    ADD_COMPANY_URL,
+    ASSIGN_RECRUITER_URL,
     EDIT_COMPANY_INFORMATION_URL,
     GET_COMPANIES_URL,
     GET_RECRUITERS_URL,
@@ -63,7 +65,35 @@ const recruiterSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(editCompanyInformationThunk, (state, action) => {
+            .addCase(editCompanyInformationThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(addCompanyThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(addCompanyThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.companies.push(action.payload?.data);
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(addCompanyThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            })
+            .addCase(assignRecruiterThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(assignRecruiterThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.recruiters.push(action.payload?.data);
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(assignRecruiterThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             }),
 });
@@ -91,6 +121,22 @@ export const editCompanyInformationThunk = createAsyncThunk(
             EDIT_COMPANY_INFORMATION_URL,
             obj
         );
+        return response.data;
+    }
+);
+
+export const addCompanyThunk = createAsyncThunk(
+    "recruiter/addCompany",
+    async (obj) => {
+        const response = await httpClient.post(ADD_COMPANY_URL, obj);
+        return response.data;
+    }
+);
+
+export const assignRecruiterThunk = createAsyncThunk(
+    "recruiter/assignRecruiter",
+    async (obj) => {
+        const response = await httpClient.post(ASSIGN_RECRUITER_URL, obj);
         return response.data;
     }
 );

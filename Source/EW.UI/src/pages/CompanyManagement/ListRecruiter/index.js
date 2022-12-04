@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -48,6 +48,7 @@ const ListRecruiter = () => {
     }, []);
     return (
         <>
+            <Button variant="contained">Thêm nhà tuyển dụng</Button>
             {recruiter.status === Status.loading ? (
                 <SkeletonTable />
             ) : (
