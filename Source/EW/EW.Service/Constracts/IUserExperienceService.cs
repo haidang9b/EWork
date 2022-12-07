@@ -9,6 +9,6 @@ namespace EW.Services.Constracts
 {
     public interface IUserExperienceService
     {
-        public Task<IEnumerable<UserExperience>> GetUserExperiencesByUser(User model);
+        Task<IEnumerable<UserExperience>> GetUserExperiencesByUser(User model);
     }
 }

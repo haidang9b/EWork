@@ -15,6 +15,7 @@ import {
     CompanyManagement,
     RecoveryAccount,
     ConfirmRecover,
+    RecruitmentPost,
 } from "./pages";
 function App() {
     return (
@@ -42,6 +43,9 @@ function App() {
                     path="company-management"
                     element={<CompanyManagement />}
                 />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={["Business"]} />}>
+                <Route path="recruitment-posts" element={<RecruitmentPost />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
                 <Route path="my-cv" element={<CVManagement />} />
