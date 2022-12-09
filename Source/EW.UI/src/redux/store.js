@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
     notification: notificationSlice.reducer,
     recruiter: recruiterSlice.reducer,
     recruiterRegister: recruiterRegisterSlice.reducer,
-    recruitmentPostSlice: recruitmentPostSlice.reducer,
+    recruitmentPost: recruitmentPostSlice.reducer,
 });
 
 export const store = configureStore({

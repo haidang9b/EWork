@@ -33,7 +33,11 @@ namespace EW.Services.Business
 
         public async Task<RecruitmentPost> GetRecruitment(RecruitmentPost model)
         {
-            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id, "Company,User");
+            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id 
+                            || item.JobTitle == model.JobTitle
+                            || item.JobDescription == model.JobDescription 
+                            || item.CreatedDate == model.CreatedDate 
+                            || item.UpdatedBy == model.UpdatedBy, "Company,User");
         }
 
         public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user)

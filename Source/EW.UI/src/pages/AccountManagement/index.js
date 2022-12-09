@@ -39,7 +39,6 @@ const AccountManagement = () => {
             <Button variant="contained" onClick={addNewAccount}>
                 Thêm tài khoản
             </Button>
-
             <ListAccount />
             <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
         </Container>

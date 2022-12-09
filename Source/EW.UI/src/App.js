@@ -44,7 +44,9 @@ function App() {
                     element={<CompanyManagement />}
                 />
             </Route>
-            <Route element={<RequireAuth allowedRoles={["Business"]} />}>
+            <Route
+                element={<RequireAuth allowedRoles={["Business", "Faculty"]} />}
+            >
                 <Route path="recruitment-posts" element={<RecruitmentPost />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
