@@ -1,4 +1,4 @@
-import { Button, Paper, Typography } from "@mui/material";
+import { Button, Chip, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -44,33 +44,11 @@ const ListCompany = () => {
             renderCell: (cellValues) => {
                 switch (cellValues.row?.status) {
                     case 0:
-                        return (
-                            <Typography
-                                align="justify"
-                                sx={{ fontWeight: "bolder", color: "blue" }}
-                            >
-                                Chờ xét
-                            </Typography>
-                        );
+                        return <Chip label="Chờ xét" color="warning" />;
                     case 1:
-                        return (
-                            <Typography
-                                align="justify"
-                                sx={{ fontWeight: "bolder", color: "green" }}
-                            >
-                                Hoạt động
-                            </Typography>
-                        );
+                        return <Chip label="Hoạt động" color="success" />;
                     default:
-                        return (
-                            <Typography
-                                color="error"
-                                align="justify"
-                                sx={{ fontWeight: "bolder" }}
-                            >
-                                Vô hiệu hóa
-                            </Typography>
-                        );
+                        return <Chip label="Vô hiệu hóa" color="error" />;
                 }
             },
         },

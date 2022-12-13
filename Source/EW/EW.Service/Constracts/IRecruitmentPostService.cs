@@ -12,7 +12,8 @@ namespace EW.Services.Constracts
         Task<bool> Add(RecruitmentPost model);
         Task<bool> Update(RecruitmentPost model);
         Task<IEnumerable<RecruitmentPost>> GetAll();
-        Task<RecruitmentPost> GetRecruitment(RecruitmentPost model);
+        Task<RecruitmentPost> GetRecruitmentPost(RecruitmentPost model);
+        Task<RecruitmentPost> GetRecruitmentSpecific(RecruitmentPost model);
         Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user);
     }
 }

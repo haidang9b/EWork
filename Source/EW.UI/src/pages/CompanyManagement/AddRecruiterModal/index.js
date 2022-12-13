@@ -17,10 +17,14 @@ import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import useNotify from "../../../hook/useNotify";
 import { assignRecruiterThunk, recruiterSelector } from "../recruiter.slice";
 
+const DEFAULT_VALUE_COMPANY = -1;
+
 const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
     const dispatch = useDispatch();
     const recruiter = useSelector(recruiterSelector);
-    const [companySelected, setCompanySelected] = useState(-1);
+    const [companySelected, setCompanySelected] = useState(
+        DEFAULT_VALUE_COMPANY
+    );
     const { setNotify } = useNotify();
     const fullnameRef = useRef(null);
     const positionRef = useRef(null);
@@ -111,7 +115,7 @@ const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
             });
             confirmPasswordRef.current.focus();
             return;
-        } else if (companySelected === -1) {
+        } else if (companySelected === DEFAULT_VALUE_COMPANY) {
             setNotify({
                 isOpen: true,
                 message: "Vui lòng chọn công ty làm việc",
@@ -270,7 +274,7 @@ const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
                             setCompanySelected(e.target.value);
                         }}
                     >
-                        <MenuItem value={-1}>
+                        <MenuItem value={DEFAULT_VALUE_COMPANY}>
                             <em>Chọn công ty</em>
                         </MenuItem>
                         {recruiter?.companies?.map((item) => (

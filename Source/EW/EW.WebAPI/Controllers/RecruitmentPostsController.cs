@@ -48,54 +48,91 @@ namespace EW.WebAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Business,Faculty")]
-        public async Task<IActionResult> Post(AddRecruitmentPostModel model)
+        public async Task<IActionResult> Post(RecruitmentPostModel model)
         {
             var result = new ApiResult();
             try
             {
-                // if user is Business, company Id get from request, else get from user and company (table recruiter)
                 var currentUser = await _userService.GetUser(new User { Username = _username });
-                var postAdd = new RecruitmentPost { 
-                    JobTitle = model.JobTitle, 
-                    JobDescription = model.JobDescription, 
-                    Salary = model.Salary,
-                    Deadline = model.Deadline,
-                    CreatedDate = DateTimeOffset.Now,
-                    UpdatedDate = DateTimeOffset.Now,
-                };
-                postAdd.UpdatedBy = currentUser.Id;
-                if (currentUser.RoleId == (long)ERole.ID_Business)
+                if (model.Id == 0)
                 {
-                    var recruiter = await _recruiterService.GetRecruiterByUser(currentUser);
-                    if(recruiter == null)
+                    // if user is Business, company Id get from request, else get from user and company (table recruiter)
+                    var postAdd = new RecruitmentPost
                     {
-                        result.IsSuccess = false;
-                        result.Message = "Bạn không có quyền viết bài cho công ty";
-                        return Ok(result);
-                    }
-                    postAdd.CompanyId = recruiter.Company.Id;
-                }
-                else
-                {
-                    var company = await _recruiterService.GetCompany(new Company { Id = model.CompanyId ?? default(long) });
-                    if(company == null)
+                        JobTitle = model.JobTitle,
+                        JobDescription = model.JobDescription,
+                        SalaryFrom = model.SalaryFrom,
+                        SalaryTo = model.SalaryTo,
+                        Currency = model.Currency,
+                        Deadline = model.Deadline,
+                        CreatedDate = DateTimeOffset.Now,
+                        UpdatedDate = DateTimeOffset.Now,
+                        SalaryType = model.SalaryType,
+                        IsActive = true
+                    };
+                    postAdd.UpdatedBy = currentUser.Id;
+                    if (currentUser.RoleId == (long)ERole.ID_Business)
                     {
-                        result.IsSuccess = false;
-                        result.Message = "Không có công ty này, vui lòng kiểm tra lại";
-                        return Ok(result);
+                        var recruiter = await _recruiterService.GetRecruiterByUser(currentUser);
+                        if (recruiter == null)
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Bạn không có quyền viết bài cho công ty";
+                            return Ok(result);
+                        }
+                        postAdd.CompanyId = recruiter.Company.Id;
                     }
-                    postAdd.CompanyId = company.Id;
-                }
+                    else
+                    {
+                        var company = await _recruiterService.GetCompany(new Company { Id = model.CompanyId ?? default(long) });
+                        if (company == null)
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Không có công ty này, vui lòng kiểm tra lại";
+                            return Ok(result);
+                        }
+                        postAdd.CompanyId = company.Id;
+                    }
 
-                result.IsSuccess = await _recruitmentPostService.Add(postAdd);
-                if(result.IsSuccess)
-                {
-                    result.Message = "Thêm bài tuyển dụng thành công";
-                    result.Data = await _recruitmentPostService.GetRecruitment(postAdd);
+                    result.IsSuccess = await _recruitmentPostService.Add(postAdd);
+                    if (result.IsSuccess)
+                    {
+                        result.Message = "Thêm bài tuyển dụng thành công";
+                        result.Data = await _recruitmentPostService.GetRecruitmentSpecific(postAdd);
+                    }
+                    else
+                    {
+                        result.Message = "Không thể thêm bài tuyển dụng này";
+                    }
                 }
                 else
                 {
-                    result.Message = "Không thể thêm bài tuyển dụng này";
+                    var existPost = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.Id });
+                    if(existPost == null)
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "Không có bài viết nào từ yêu cầu này, vui lòng thử lại";
+                        return Ok(result);
+                    }
+                    existPost.JobTitle = model.JobTitle;
+                    existPost.JobDescription = model.JobDescription;
+                    existPost.Currency = model.Currency;
+                    existPost.Deadline = model.Deadline;
+                    existPost.SalaryType = model.SalaryType;
+                    existPost.SalaryFrom = model.SalaryFrom;
+                    existPost.SalaryTo = model.SalaryTo;
+                    existPost.UpdatedBy = currentUser.Id;
+
+                    result.IsSuccess = await _recruitmentPostService.Update(existPost);
+                    if (result.IsSuccess)
+                    {
+                        result.Message = "Cập nhật bài tuyển dụng thành công";
+                        result.Data = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.Id });
+                    }
+                    else
+                    {
+                        result.Message = "Không thể cập nhật bài tuyển dụng này";
+                    }
                 }
             }
             catch(Exception ex)

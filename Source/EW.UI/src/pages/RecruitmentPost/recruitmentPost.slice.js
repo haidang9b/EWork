@@ -26,18 +26,32 @@ const recruitmentPostSlice = createSlice({
             .addCase(getRecruitmentPostsThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             })
-            .addCase(addRecruitmentPostThunk.pending, (state, action) => {
+            .addCase(saveRecruitmentPostThunk.pending, (state, action) => {
                 state.status = Status.loading;
             })
-            .addCase(addRecruitmentPostThunk.fulfilled, (state, action) => {
+            .addCase(saveRecruitmentPostThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
-                    state.posts.push(action.payload.data);
+                    let { data } = action.payload;
+                    let exist = state.posts.find((item) => item.id === data.id);
+                    if (exist) {
+                        exist.jobTitle = data.jobTitle;
+                        exist.jobDescription = data.jobDescription;
+                        exist.currency = data.currency;
+                        exist.deadline = data.deadline;
+                        exist.salaryType = data.salaryType;
+                        exist.salaryFrom = data.salaryFrom;
+                        exist.salaryTo = data.salaryTo;
+                        exist.updatedBy = data.updatedBy;
+                        exist.UpdatedByUser = data.updatedByUser;
+                    } else {
+                        state.posts.push(action.payload.data);
+                    }
                 } else {
                     state.status = Status.failed;
                 }
             })
-            .addCase(addRecruitmentPostThunk.failed, (state, action) => {
+            .addCase(saveRecruitmentPostThunk.rejected, (state, action) => {
                 state.status = Status.failed;
             }),
 });
@@ -50,7 +64,7 @@ export const getRecruitmentPostsThunk = createAsyncThunk(
     }
 );
 
-export const addRecruitmentPostThunk = createAsyncThunk(
+export const saveRecruitmentPostThunk = createAsyncThunk(
     "recruitmentPost/addPost",
     async (obj) => {
         const response = await httpClient.post(GET_RECRUITMENT_POST_URL, obj);
