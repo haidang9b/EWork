@@ -141,4 +141,5 @@ export const assignRecruiterThunk = createAsyncThunk(
     }
 );
 export const recruiterSelector = (state) => state.recruiter;
+export const listCompanySelector = (state) => state.recruiter.companies;
 export default recruiterSlice;

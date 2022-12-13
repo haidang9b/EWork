@@ -179,6 +179,9 @@ const Login = () => {
                                     <Divider>Hoặc</Divider>
                                     <br />
                                     <GoogleLogin
+                                        disabled={
+                                            auth.status === Status.loading
+                                        }
                                         clientId={clientId}
                                         buttonText="Đăng nhập Google"
                                         onSuccess={responseGoogle}

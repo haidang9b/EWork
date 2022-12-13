@@ -2,6 +2,11 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../../hook/useAuth";
 import PropTypes from "prop-types";
 
+/**
+ * Check user can access to route if user login and user have allowed roles
+ * @param allowedRoles list of role for accept access to route
+ * @returns redirect or access to route
+ */
 const RequireAuth = ({ allowedRoles }) => {
     const { user } = useAuth();
     const location = useLocation();

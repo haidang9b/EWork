@@ -3,6 +3,7 @@ using System;
 using EW.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EW.Infrastructure.Migrations
 {
     [DbContext(typeof(EWContext))]
-    partial class EWContextModelSnapshot : ModelSnapshot
+    [Migration("20221212131148_add salaryType to table post")]
+    partial class addsalaryTypetotablepost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +129,9 @@ namespace EW.Infrastructure.Migrations
                     b.Property<long>("UpdatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("UpdatedByUserId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
 
@@ -134,7 +139,7 @@ namespace EW.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("UpdatedBy");
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("RecruitmentPosts");
                 });
@@ -167,26 +172,26 @@ namespace EW.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4727), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2552), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Faculty",
                             Name = "Faculty",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4749), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2571), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4753), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2572), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Business",
                             Name = "Business",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4754), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2573), new TimeSpan(0, 7, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4756), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2575), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Student",
                             Name = "Student",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 23, 34, 23, 833, DateTimeKind.Unspecified).AddTicks(4757), new TimeSpan(0, 7, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 20, 11, 47, 868, DateTimeKind.Unspecified).AddTicks(2576), new TimeSpan(0, 7, 0, 0, 0))
                         });
                 });
 
@@ -338,7 +343,7 @@ namespace EW.Infrastructure.Migrations
 
                     b.HasOne("EW.Domain.Entities.User", "UpdatedByUser")
                         .WithMany()
-                        .HasForeignKey("UpdatedBy")
+                        .HasForeignKey("UpdatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

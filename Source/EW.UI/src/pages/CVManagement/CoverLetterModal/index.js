@@ -24,6 +24,8 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
             }
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            fullWidth
+            maxWidth="md"
         >
             <DialogTitle>
                 <Typography variant="h6" component={"div"}>

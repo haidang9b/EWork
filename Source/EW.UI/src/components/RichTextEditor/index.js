@@ -2,7 +2,14 @@ import React, { useCallback } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
-
+import "./richtexteditor.css";
+/**
+ * Create new Rich Text Editor, using text html easy
+ * @param editor object to set editor, get data from RichTextEditor
+ * @param setEditor setter of editor, to set object when initial quill js
+ * @param initialHTML value html for quill, if you dont fill, default is ""
+ * @returns Component RichTextEditor
+ */
 const RichTextEditor = ({ editor, setEditor, initialHTML }) => {
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;

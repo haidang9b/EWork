@@ -1,6 +1,9 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../../hook/useAuth";
-
+/**
+ * Check user can access to route if user is not login
+ * @returns redirect or access to route
+ */
 const NonAuth = () => {
     const { user } = useAuth();
     const location = useLocation();

@@ -9,6 +9,13 @@ import {
 import React from "react";
 import PropTypes from "prop-types";
 
+/**
+ * Dialog support for confirm and execute function if user confirm
+ * @param confirm is data confirm include : isOpen: bool, title: string, subtitle: string, onConfirm: function
+ * @param setConfirm is setter data for confirm
+ * @returns ConfirmDialogComponent
+ */
+
 const ConfirmDialog = ({ confirm, setConfirm }) => {
     return (
         <Dialog

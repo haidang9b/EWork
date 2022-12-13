@@ -11,3 +11,4 @@ export { default as Unauthorized } from "./Unauthorized";
 export { default as CompanyManagement } from "./CompanyManagement";
 export { default as RecoveryAccount } from "./RecoveryAccount";
 export { default as ConfirmRecover } from "./ConfirmRecover";
+export { default as RecruitmentPost } from "./RecruitmentPost";

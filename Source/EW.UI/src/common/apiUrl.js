@@ -29,3 +29,6 @@ export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 
 //upload controller
 export const UPLOAD_NEW_CV_URL = "/uploads/upload-new-cv";
+
+// recruitment posts controller
+export const GET_RECRUITMENT_POST_URL = "/recruitmentposts";

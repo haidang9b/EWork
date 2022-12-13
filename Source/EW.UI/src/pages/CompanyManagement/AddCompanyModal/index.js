@@ -17,10 +17,12 @@ import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import useNotify from "../../../hook/useNotify";
 import { addCompanyThunk } from "../recruiter.slice";
 
+const DEFAULT_VALUE_STATUS = 0;
+
 const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
     const dispatch = useDispatch();
     const { setNotify } = useNotify();
-    const [currentStatus, setCurrentStatus] = useState(0);
+    const [currentStatus, setCurrentStatus] = useState(DEFAULT_VALUE_STATUS);
     const companyNameRef = useRef();
     const phoneNumberRef = useRef();
     const emailRef = useRef();
