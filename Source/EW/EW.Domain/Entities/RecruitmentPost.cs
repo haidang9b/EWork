@@ -1,6 +1,7 @@
 ﻿using EW.Commons.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace EW.Domain.Entities
 {
     public class RecruitmentPost : BaseEntity
     {
+        [StringLength(300)]
         public string JobTitle { get; set; }
         public string JobDescription { get; set; }
         public ESalaryType SalaryType { get; set; }
