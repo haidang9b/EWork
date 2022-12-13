@@ -6,6 +6,7 @@ import { setActiveThunk, usersSelector } from "../users.slice";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
 import useNotify from "../../../hook/useNotify";
+import moment from "moment";
 
 const ListAccount = () => {
     const { setNotify } = useNotify();
@@ -43,6 +44,11 @@ const ListAccount = () => {
             headerName: "Ngày cập nhật",
             sortable: false,
             width: 160,
+            renderCell: (cellValues) => {
+                return moment(cellValues.row?.updatedDate).format(
+                    "DD/MM/yyyy HH:mm"
+                );
+            },
         },
         {
             field: "action",

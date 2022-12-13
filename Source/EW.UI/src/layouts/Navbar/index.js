@@ -69,15 +69,11 @@ const Navbar = () => {
                         >
                             <MenuIcon />
                         </IconButton>
-
-                        <Typography
-                            variant="h6"
-                            component="div"
-                            sx={{ flexGrow: 1 }}
-                            onClick={() => navigate("/")}
-                        >
+                        <Typography variant="h6" onClick={() => navigate("/")}>
                             Ework
                         </Typography>
+                        <Box sx={{ flexGrow: 1 }}></Box>
+
                         {user ? (
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
