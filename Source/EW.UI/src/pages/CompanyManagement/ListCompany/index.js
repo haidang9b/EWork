@@ -1,5 +1,6 @@
 import { Button, Chip, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
@@ -36,6 +37,11 @@ const ListCompany = () => {
             field: "updatedDate",
             headerName: "Lần cuối cập nhật",
             width: 160,
+            renderCell: (cellValues) => {
+                return moment(cellValues.row?.updatedDate).format(
+                    "DD/MM/yyyy HH:mm"
+                );
+            },
         },
         {
             field: "status",
