@@ -103,7 +103,11 @@ const ListRecruitmentPost = ({
                         rowsPerPageOptions={[10]}
                         autoHeight={true}
                         disableSelectionOnClick
-                        onCellClick={handleChangeRecruitmentPost}
+                        onRowClick={(params, event) => {
+                            if (!event.ignore) {
+                                handleChangeRecruitmentPost(params);
+                            }
+                        }}
                     />
                 </Paper>
             )}

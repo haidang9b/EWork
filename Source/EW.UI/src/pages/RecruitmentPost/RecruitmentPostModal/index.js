@@ -13,7 +13,7 @@ import { func, object } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Currency, Role, SalaryType } from "../../../common/constants";
-import { RichTextEditor } from "../../../components";
+import { ConfirmDialog, RichTextEditor } from "../../../components";
 import useAuth from "../../../hook/useAuth";
 import useNotify from "../../../hook/useNotify";
 import { listCompanySelector } from "../../CompanyManagement/recruiter.slice";
@@ -21,7 +21,10 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
-import { saveRecruitmentPostThunk } from "../recruitmentPost.slice";
+import {
+    deleteRecruitmentPostThunk,
+    saveRecruitmentPostThunk,
+} from "../recruitmentPost.slice";
 const DEFAULT_VALUE_CURRENCY = -1;
 const DEFAULT_VALUE_SALARY_TYPE = 1;
 const DEFAULT_VALUE_COMPANY = 0;
@@ -40,6 +43,11 @@ const RecruitmentPostModal = ({
     const listCompanies = useSelector(listCompanySelector);
     const { setNotify } = useNotify();
     const { user } = useAuth();
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "",
+        subtitle: "",
+    });
     const [salaryType, setSalaryType] = useState(DEFAULT_VALUE_SALARY_TYPE);
     const [jobTitle, setJobTitle] = useState("");
     const [salaryFrom, setSalaryFrom] = useState(0);
@@ -171,160 +179,236 @@ const RecruitmentPostModal = ({
             isOpen: false,
         });
     };
+    const handleDelete = () => {
+        if (
+            !recruitmentPostModal.isUpdate ||
+            (recruitmentPostModal.isUpdate && !recruitmentPostModal.data?.id)
+        ) {
+            setNotify({
+                isOpen: true,
+                title: "Xóa bài viết tuyển dụng",
+                message: "Bạn không thể xóa bài viết này",
+                type: "error",
+            });
+            return;
+        }
+
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: true,
+            title: "Xác nhận xóa bài tuyển dụng",
+            subtitle: `Bạn có muốn xóa bài viết ${recruitmentPostModal.data?.jobTitle} không?`,
+            onConfirm: async () => {
+                let resultDispatch = await dispatch(
+                    deleteRecruitmentPostThunk(recruitmentPostModal.data?.id)
+                ).unwrap();
+
+                if (resultDispatch.isSuccess) {
+                    setNotify({
+                        isOpen: true,
+                        title: "Xóa bài viết tuyển dụng",
+                        message: resultDispatch.message,
+                        type: resultDispatch.isSuccess ? "success" : "error",
+                    });
+                }
+                setConfirmDialog({
+                    ...confirmDialog,
+                    isOpen: false,
+                });
+                setRecruitmentPostModal({
+                    ...recruitmentPostModal,
+                    isOpen: false,
+                });
+            },
+        });
+    };
     return (
-        <Dialog
-            open={recruitmentPostModal.isOpen}
-            onClose={handleClose}
-            fullWidth
-            maxWidth="lg"
-        >
-            <DialogTitle>
-                {recruitmentPostModal.isUpdate
-                    ? "Cập nhật bài tuyển dụng"
-                    : "Thêm bài tuyển dụng"}
-            </DialogTitle>
-            <DialogContent>
-                {user?.role === Role.Faculty && (
-                    <>
-                        <InputLabel
-                            id="company-post-selected-item"
-                            sx={{
-                                marginTop: "16px",
-                            }}
-                        >
-                            Công ty
-                        </InputLabel>
-
-                        <Select
-                            label="Chọn công ty"
-                            labelId="company-post-selected-item"
-                            value={companySelected}
-                            onChange={(e) => setCompanySelected(e.target.value)}
-                            fullWidth
-                            disabled={recruitmentPostModal.isUpdate}
-                        >
-                            <MenuItem value={DEFAULT_VALUE_COMPANY}>
-                                <em>Chọn công ty</em>
-                            </MenuItem>
-                            {listCompanies.map((item) => (
-                                <MenuItem
-                                    value={item.id}
-                                    key={JSON.stringify(item)}
-                                >
-                                    {item.companyName}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </>
-                )}
-                <TextField
-                    label="Tiêu đề bài tuyển dụng"
-                    variant="outlined"
-                    placeholder="Tiêu đề bài tuyển dụng"
-                    fullWidth
-                    required
-                    sx={{
-                        marginTop: "16px",
-                        paddingBottom: "8px",
-                    }}
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                />
-                <InputLabel id="type-salary-selected-item">Lương</InputLabel>
-                <Select
-                    labelId="type-salary-selected-item"
-                    label="Đơn vị tiền tệ"
-                    value={salaryType}
-                    onChange={(e) => {
-                        setSalaryType(e.target.value);
-                    }}
-                    fullWidth
-                >
-                    {SalaryType.map((item) => (
-                        <MenuItem key={JSON.stringify(item)} value={item.value}>
-                            {item.label}
-                        </MenuItem>
-                    ))}
-                </Select>
-
-                <TextField
-                    label="Mức lương tối thiểu"
-                    variant="outlined"
-                    placeholder="Mức lương tối thiểu"
-                    fullWidth
-                    required
-                    sx={{
-                        marginTop: "16px",
-                        paddingBottom: "8px",
-                    }}
-                    value={salaryFrom}
-                    onChange={(e) => setSalaryFrom(e.target.value)}
-                    disabled={[1, 3].includes(salaryType)}
-                    type="number"
-                />
-                <TextField
-                    label="Mức lương tối đa"
-                    variant="outlined"
-                    placeholder="Mức lương tối đa"
-                    fullWidth
-                    required
-                    sx={{
-                        paddingBottom: "16px",
-                    }}
-                    value={salaryTo}
-                    onChange={(e) => setSalaryTo(e.target.value)}
-                    disabled={[1, 4].includes(salaryType)}
-                    type="number"
-                />
-
-                <InputLabel id="currency-selected-item">
-                    Đơn vị tiền tệ
-                </InputLabel>
-                <Select
-                    labelId="currency-selected-item"
-                    label="Đơn vị tiền tệ"
-                    value={currentCurrency}
-                    onChange={(e) => {
-                        setCurrentCurrency(e.target.value);
-                    }}
-                    fullWidth
-                    sx={{
-                        marginBottom: "16px",
-                    }}
-                >
-                    <MenuItem value={DEFAULT_VALUE_CURRENCY}>
-                        <em>Chọn đơn vị tiền tệ</em>
-                    </MenuItem>
-                    {Currency.map((item) => (
-                        <MenuItem value={item.value} key={JSON.stringify(item)}>
-                            {item.label}
-                        </MenuItem>
-                    ))}
-                </Select>
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DesktopDatePicker
-                        minDate={moment()}
-                        label="Deadline"
-                        inputFormat="DD/MM/YYYY"
-                        value={deadline}
-                        onChange={(value) => setDeadline(value)}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
-                <RichTextEditor
-                    initialHTML={initialHTML}
-                    editor={editor}
-                    setEditor={setEditor}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button fullWidth onClick={handleSubmit} variant="contained">
+        <>
+            <Dialog
+                open={recruitmentPostModal.isOpen}
+                onClose={handleClose}
+                fullWidth
+                maxWidth="lg"
+            >
+                <DialogTitle>
                     {recruitmentPostModal.isUpdate
-                        ? "Cập nhật bài viết"
-                        : "Thêm bài viết"}
-                </Button>
-            </DialogActions>
-        </Dialog>
+                        ? "Cập nhật bài tuyển dụng"
+                        : "Thêm bài tuyển dụng"}
+                </DialogTitle>
+                <DialogContent>
+                    {user?.role === Role.Faculty && (
+                        <>
+                            <InputLabel
+                                id="company-post-selected-item"
+                                sx={{
+                                    marginTop: "16px",
+                                }}
+                            >
+                                Công ty
+                            </InputLabel>
+
+                            <Select
+                                label="Chọn công ty"
+                                labelId="company-post-selected-item"
+                                value={companySelected}
+                                onChange={(e) =>
+                                    setCompanySelected(e.target.value)
+                                }
+                                fullWidth
+                                disabled={recruitmentPostModal.isUpdate}
+                            >
+                                <MenuItem value={DEFAULT_VALUE_COMPANY}>
+                                    <em>Chọn công ty</em>
+                                </MenuItem>
+                                {listCompanies.map((item) => (
+                                    <MenuItem
+                                        value={item.id}
+                                        key={JSON.stringify(item)}
+                                    >
+                                        {item.companyName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </>
+                    )}
+                    <TextField
+                        label="Tiêu đề bài tuyển dụng"
+                        variant="outlined"
+                        placeholder="Tiêu đề bài tuyển dụng"
+                        fullWidth
+                        required
+                        sx={{
+                            marginTop: "16px",
+                            paddingBottom: "8px",
+                        }}
+                        value={jobTitle}
+                        onChange={(e) => setJobTitle(e.target.value)}
+                    />
+                    <InputLabel id="type-salary-selected-item">
+                        Lương
+                    </InputLabel>
+                    <Select
+                        labelId="type-salary-selected-item"
+                        label="Đơn vị tiền tệ"
+                        value={salaryType}
+                        onChange={(e) => {
+                            setSalaryType(e.target.value);
+                        }}
+                        fullWidth
+                    >
+                        {SalaryType.map((item) => (
+                            <MenuItem
+                                key={JSON.stringify(item)}
+                                value={item.value}
+                            >
+                                {item.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+
+                    <TextField
+                        label="Mức lương tối thiểu"
+                        variant="outlined"
+                        placeholder="Mức lương tối thiểu"
+                        fullWidth
+                        required
+                        sx={{
+                            marginTop: "16px",
+                            paddingBottom: "8px",
+                        }}
+                        value={salaryFrom}
+                        onChange={(e) => setSalaryFrom(e.target.value)}
+                        disabled={[1, 3].includes(salaryType)}
+                        type="number"
+                    />
+                    <TextField
+                        label="Mức lương tối đa"
+                        variant="outlined"
+                        placeholder="Mức lương tối đa"
+                        fullWidth
+                        required
+                        sx={{
+                            paddingBottom: "16px",
+                        }}
+                        value={salaryTo}
+                        onChange={(e) => setSalaryTo(e.target.value)}
+                        disabled={[1, 4].includes(salaryType)}
+                        type="number"
+                    />
+
+                    <InputLabel id="currency-selected-item">
+                        Đơn vị tiền tệ
+                    </InputLabel>
+                    <Select
+                        labelId="currency-selected-item"
+                        label="Đơn vị tiền tệ"
+                        value={currentCurrency}
+                        onChange={(e) => {
+                            setCurrentCurrency(e.target.value);
+                        }}
+                        fullWidth
+                        sx={{
+                            marginBottom: "16px",
+                        }}
+                    >
+                        <MenuItem value={DEFAULT_VALUE_CURRENCY}>
+                            <em>Chọn đơn vị tiền tệ</em>
+                        </MenuItem>
+                        {Currency.map((item) => (
+                            <MenuItem
+                                value={item.value}
+                                key={JSON.stringify(item)}
+                            >
+                                {item.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DesktopDatePicker
+                            minDate={moment()}
+                            label="Deadline"
+                            inputFormat="DD/MM/YYYY"
+                            value={deadline}
+                            onChange={(value) => setDeadline(value)}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                    <RichTextEditor
+                        initialHTML={initialHTML}
+                        editor={editor}
+                        setEditor={setEditor}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        fullWidth
+                        onClick={handleSubmit}
+                        variant="contained"
+                    >
+                        {recruitmentPostModal.isUpdate
+                            ? "Cập nhật bài viết"
+                            : "Thêm bài viết"}
+                    </Button>
+                    <Button
+                        fullWidth
+                        onClick={handleDelete}
+                        variant="contained"
+                        sx={{
+                            display: recruitmentPostModal.isUpdate
+                                ? "block"
+                                : "none",
+                        }}
+                        color="error"
+                    >
+                        Xóa bài viết
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <ConfirmDialog
+                confirm={confirmDialog}
+                setConfirm={setConfirmDialog}
+            />
+        </>
     );
 };
 
