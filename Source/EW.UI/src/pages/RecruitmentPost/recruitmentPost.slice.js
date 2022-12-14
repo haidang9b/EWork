@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
-import { GET_RECRUITMENT_POST_URL } from "../../common/apiUrl";
+import { RECRUITMENT_POST_URL } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
 const initialState = {
     posts: [],
@@ -53,13 +53,30 @@ const recruitmentPostSlice = createSlice({
             })
             .addCase(saveRecruitmentPostThunk.rejected, (state, action) => {
                 state.status = Status.failed;
+            })
+            .addCase(deleteRecruitmentPostThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(deleteRecruitmentPostThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let newData = state.posts.filter(
+                        (item) => item.id !== action.payload?.data?.id
+                    );
+                    state.posts = newData;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(deleteRecruitmentPostThunk.rejected, (state, action) => {
+                state.status = Status.failed;
             }),
 });
 
 export const getRecruitmentPostsThunk = createAsyncThunk(
     "recruitmentPost/getRecruitmentPost",
     async () => {
-        const response = await httpClient.get(GET_RECRUITMENT_POST_URL);
+        const response = await httpClient.get(RECRUITMENT_POST_URL);
         return response.data;
     }
 );
@@ -67,7 +84,17 @@ export const getRecruitmentPostsThunk = createAsyncThunk(
 export const saveRecruitmentPostThunk = createAsyncThunk(
     "recruitmentPost/addPost",
     async (obj) => {
-        const response = await httpClient.post(GET_RECRUITMENT_POST_URL, obj);
+        const response = await httpClient.post(RECRUITMENT_POST_URL, obj);
+        return response.data;
+    }
+);
+
+export const deleteRecruitmentPostThunk = createAsyncThunk(
+    "recruitmentPost/deletePost",
+    async (id) => {
+        const response = await httpClient.delete(
+            `${RECRUITMENT_POST_URL}/${id}`
+        );
         return response.data;
     }
 );

@@ -142,5 +142,34 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Business,Faculty")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var exist = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = id });
+                if(exist == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không có bài viết từ ID này";
+                }
+                else
+                {
+                    result.IsSuccess = await _recruitmentPostService.Delete(exist);
+                    result.Message = result.IsSuccess ? "Xóa bài viết thành công" : "Xóa bài viết thất bại";
+                    result.Data = result.IsSuccess ? exist : null;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                result.InternalError();
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }

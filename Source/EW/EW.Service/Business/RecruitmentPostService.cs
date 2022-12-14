@@ -26,6 +26,13 @@ namespace EW.Services.Business
             return await _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task<bool> Delete(RecruitmentPost model)
+        {
+            var exist = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id);
+            _unitOfWork.Repository<RecruitmentPost>().Delete(exist);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
         public async Task<IEnumerable<RecruitmentPost>> GetAll()
         {
             return await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync("Company,UpdatedByUser");
