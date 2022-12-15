@@ -16,6 +16,7 @@ import {
     RecoveryAccount,
     ConfirmRecover,
     RecruitmentPost,
+    CompanyInformation,
 } from "./pages";
 function App() {
     return (
@@ -48,6 +49,12 @@ function App() {
                 element={<RequireAuth allowedRoles={["Business", "Faculty"]} />}
             >
                 <Route path="recruitment-posts" element={<RecruitmentPost />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={["Business"]} />}>
+                <Route
+                    path="company-information"
+                    element={<CompanyInformation />}
+                />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
                 <Route path="my-cv" element={<CVManagement />} />

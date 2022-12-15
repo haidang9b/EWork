@@ -15,6 +15,8 @@ export const GET_RECRUITERS_URL = "/recruiters/get-recruiters";
 export const EDIT_COMPANY_INFORMATION_URL = "/recruiters/update-company-info";
 export const ADD_COMPANY_URL = "/recruiters/add-new-company";
 export const ASSIGN_RECRUITER_URL = "/recruiters/add-new-recruiter";
+export const GET_MY_COMPANY_INFORMATION_URL =
+    "/recruiters/get-my-company-information";
 
 // users controller
 export const GET_USERS_URL = "/users";

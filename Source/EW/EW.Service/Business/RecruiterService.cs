@@ -35,6 +35,7 @@ namespace EW.Services.Business
                     PhoneNumber = model.PhoneNumber,
                     CompanyName = model.CompanyName,
                     Address = model.Address,
+                    TaxNumber = model.TaxNumber,
                     Status = EStatusRecruiter.Pending,
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
@@ -142,6 +143,7 @@ namespace EW.Services.Business
             existCompany.Address = model.Address;
             existCompany.Status = model.Status;
             existCompany.UpdatedDate = DateTimeOffset.Now;
+            existCompany.TaxNumber = model.TaxNumber;
             _unitOfWork.Repository<Company>().Update(existCompany);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -162,6 +164,7 @@ namespace EW.Services.Business
                 Status = EStatusRecruiter.Pending,
                 UpdatedDate = DateTimeOffset.Now,
                 CreatedDate = DateTimeOffset.Now,
+                TaxNumber = model.TaxNumber,
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             return await _unitOfWork.SaveChangeAsync();

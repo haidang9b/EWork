@@ -61,6 +61,7 @@ const recruiterSlice = createSlice({
                     currentCompany.companyName =
                         action.payload?.data?.companyName;
                     currentCompany.address = action.payload?.data?.address;
+                    currentCompany.taxNumber = action.payload?.data?.taxNumber;
                 } else {
                     state.status = Status.failed;
                 }
