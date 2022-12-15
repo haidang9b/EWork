@@ -6,6 +6,7 @@ import notificationSlice from "../components/Notification/notification.slice";
 import recruiterSlice from "../pages/CompanyManagement/recruiter.slice";
 import recruiterRegisterSlice from "../pages/CreateRecruiter/recruiterRegister.slice";
 import recruitmentPostSlice from "../pages/RecruitmentPost/recruitmentPost.slice";
+import companyInformationSlice from "../pages/CompanyInformation/companyInformation.slice";
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
     users: usersSlice.reducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     recruiter: recruiterSlice.reducer,
     recruiterRegister: recruiterRegisterSlice.reducer,
     recruitmentPost: recruitmentPostSlice.reducer,
+    companyInformation: companyInformationSlice.reducer,
 });
 
 export const store = configureStore({

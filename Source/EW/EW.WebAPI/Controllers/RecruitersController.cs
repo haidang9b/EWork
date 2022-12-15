@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
@@ -7,6 +8,7 @@ using EW.WebAPI.Models.Models.Recruiters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
 {
@@ -17,6 +19,7 @@ namespace EW.WebAPI.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly IUserService _userService;
         private readonly ILogger<RecruitersController> _logger;
+        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         public RecruitersController(IRecruiterService recruiterService, IUserService userService, ILogger<RecruitersController> logger)
         {
             _recruiterService = recruiterService;
@@ -91,14 +94,14 @@ namespace EW.WebAPI.Controllers
         }
 
         [HttpPut("update-company-info")]
-        [Authorize(Roles = "Faculty")]
+        [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> UpdateCompanyInfo(UpdateCompanyModel model)
         {
             var result = new ApiResult();
             try
-            {
+            {                
                 var existCompany = await _recruiterService.GetCompany(new Company { Id = model.Id });
-                if(existCompany == null)
+                if (existCompany == null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không tồn tại công ty này";
@@ -143,23 +146,19 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Email này đã được sử dụng";
                     return Ok(result);
                 }
-                result.IsSuccess = await _recruiterService.AddCompany(new Company
+                var newCompany = new Company
                 {
                     CompanyName = model.CompanyName,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
-                });
+                    TaxNumber = model.TaxNumber,
+                };
+                result.IsSuccess = await _recruiterService.AddCompany(newCompany);
                 result.Message = result.IsSuccess ? "Thêm công ty thành công " : "Thêm công ty thất bại";
                 if (result.IsSuccess)
                 {
-                    result.Data = await _recruiterService.GetCompany(new Company
-                    {
-                        CompanyName = model.CompanyName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        Address = model.Address,
-                    });
+                    result.Data = await _recruiterService.GetCompany(newCompany);
                 }
             }
             catch(Exception ex)
@@ -198,6 +197,25 @@ namespace EW.WebAPI.Controllers
                 {
                     result.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
                 }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("get-my-company-information")]
+        [Authorize(Roles = "Business")]
+        public async Task<IActionResult> GetCompanyInformation()
+        {
+            var result = new ApiResult();
+            try
+            {
+                var existUser = await _userService.GetUser(new User { Username = _username });
+                result.Data = await _recruiterService.GetCompanyByUser(existUser);
+                result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
             {

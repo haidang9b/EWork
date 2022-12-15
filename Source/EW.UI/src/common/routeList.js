@@ -61,6 +61,11 @@ const sidebarRecruiterData = [
         icon: <AiIcons.AiFillHome />,
     },
     {
+        title: "Thông tin công ty",
+        path: "/company-information",
+        icon: <IoIcons.IoMdPeople />,
+    },
+    {
         title: "Tìm kiếm sinh viên",
         path: "/search-student",
         icon: <IoIcons.IoMdPerson />,

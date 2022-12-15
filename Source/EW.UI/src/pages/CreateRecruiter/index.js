@@ -32,6 +32,7 @@ const CreateRecruiter = () => {
     const companyNameRef = useRef(null);
     const phoneNumberRef = useRef(null);
     const addressRef = useRef(null);
+    const taxNumberRef = useRef(null);
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
@@ -95,6 +96,15 @@ const CreateRecruiter = () => {
             });
             addressRef.current.focus();
             return;
+        } else if (taxNumberRef.current.value?.length < 6) {
+            setNotify({
+                isOpen: true,
+                message: "Vui lòng nhập mã số thuế công ty hợp lệ",
+                type: "error",
+                title: "Tạo tài khoản doanh nghiệp",
+            });
+            addressRef.current.focus();
+            return;
         } else if (usernameRef.current.value?.length < 2) {
             setNotify({
                 isOpen: true,
@@ -141,6 +151,7 @@ const CreateRecruiter = () => {
             email: emailRef.current.value,
             companyName: companyNameRef.current.value,
             address: addressRef.current.value,
+            taxNumber: taxNumberRef.current.value,
             username: usernameRef.current.value,
             password: passwordRef.current.value,
         };
@@ -288,7 +299,14 @@ const CreateRecruiter = () => {
                                 required
                                 inputRef={addressRef}
                             />
-
+                            <TextField
+                                label="Mã số thuế công ty"
+                                variant="standard"
+                                placeholder="Mã số thuế công ty"
+                                fullWidth
+                                required
+                                inputRef={taxNumberRef}
+                            />
                             <TextField
                                 label="Tài khoản"
                                 variant="standard"
@@ -325,7 +343,7 @@ const CreateRecruiter = () => {
                                 onClick={handleSubmit}
                                 sx={{
                                     minWidth: "100%",
-                                    marginTop: "10px",
+                                    margin: "auto",
                                 }}
                                 disabled={
                                     recruiterRegister.status === Status.loading

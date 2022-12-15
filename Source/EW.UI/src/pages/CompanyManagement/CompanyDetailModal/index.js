@@ -21,6 +21,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
     const [currentStatus, setCurrentStatus] = useState(DEFAULT_VALUE_STATUS);
     const companyNameRef = useRef();
     const addressRef = useRef();
+    const taxNumberRef = useRef();
     const { data } = companyDetailModal;
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
@@ -51,12 +52,21 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
                 type: "error",
             });
             return;
+        } else if (taxNumberRef?.current.value.length < 6) {
+            setNotify({
+                isOpen: true,
+                title: "Cập nhật công ty",
+                message: "Vui lòng nhập mã số thuê hợp lệ",
+                type: "error",
+            });
+            return;
         }
         let obj = {
             id: data?.id,
             status: currentStatus,
             companyName: companyNameRef?.current.value,
             address: addressRef?.current.value,
+            taxNumber: taxNumberRef?.current.value,
         };
 
         var resultDispatch = await dispatch(
@@ -127,6 +137,17 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
                     }}
                     defaultValue={data?.address}
                     inputRef={addressRef}
+                />
+                <TextField
+                    label="Mã số thuế"
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                        marginTop: "16px",
+                        paddingBottom: "8px",
+                    }}
+                    defaultValue={data?.taxNumber}
+                    inputRef={taxNumberRef}
                 />
                 <InputLabel id="demo-simple-select-required-label">
                     Trạng thái

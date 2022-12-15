@@ -27,6 +27,7 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
     const phoneNumberRef = useRef();
     const emailRef = useRef();
     const addressRef = useRef();
+    const taxNumberRef = useRef();
     const handleClose = () => {
         setAddCompanyModal({
             ...addCompanyModal,
@@ -77,6 +78,16 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
             addressRef.current.focus();
             return;
         }
+        if (taxNumberRef.current.value?.length < 6) {
+            setNotify({
+                isOpen: true,
+                title: "Thêm công ty mới",
+                message: "Vui lòng nhập mã số thuê công ty",
+                type: "error",
+            });
+            taxNumberRef.current.focus();
+            return;
+        }
         let resultDispatch = await dispatch(
             addCompanyThunk({
                 CompanyName: companyNameRef.current.value,
@@ -84,6 +95,7 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
                 Email: emailRef.current.value,
                 Address: addressRef.current.value,
                 Status: currentStatus,
+                TaxNumber: taxNumberRef.current.value,
             })
         ).unwrap();
 
@@ -153,7 +165,18 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
                     inputRef={addressRef}
                     required
                 />
-
+                <TextField
+                    label="Mã số thuế"
+                    placeholder="Nhập mã số thuê công ty"
+                    fullWidth
+                    variant="outlined"
+                    sx={{
+                        marginTop: "16px",
+                        paddingBottom: "8px",
+                    }}
+                    inputRef={taxNumberRef}
+                    required
+                />
                 <InputLabel id="status-add-company">Trạng thái</InputLabel>
                 <Select
                     labelId="status-add-company"

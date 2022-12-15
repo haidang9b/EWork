@@ -1,6 +1,7 @@
 ﻿using EW.Commons.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,9 @@ namespace EW.Domain.Entities
         public string Email { get; set; }
         [StringLength(300)]
         public string Address { get; set; }
+        [StringLength(50)]
+        [DefaultValue("")]
+        public string TaxNumber { get; set; }
         public EStatusRecruiter Status { get; set; }
     }
 }

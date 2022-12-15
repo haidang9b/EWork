@@ -12,6 +12,7 @@ namespace EW.Domain.Models
         public long Id { get; set; }
         public string CompanyName { get; set; }
         public string Address { get; set; }
+        public string TaxNumber { get; set; }
         public EStatusRecruiter Status { get; set; }
     }
 }
