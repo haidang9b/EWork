@@ -99,7 +99,7 @@ namespace EW.WebAPI.Controllers
         {
             var result = new ApiResult();
             try
-            {                
+            {
                 var existCompany = await _recruiterService.GetCompany(new Company { Id = model.Id });
                 if (existCompany == null)
                 {
