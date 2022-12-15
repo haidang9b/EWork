@@ -5,7 +5,6 @@ import {
     GET_MY_COMPANY_INFORMATION_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
-import { editCompanyInformationThunk } from "../CompanyManagement/recruiter.slice";
 
 const initialState = {
     information: null,
