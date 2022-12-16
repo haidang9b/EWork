@@ -16,7 +16,6 @@ import { Currency, Role, SalaryType } from "../../../common/constants";
 import { ConfirmDialog, RichTextEditor } from "../../../components";
 import useAuth from "../../../hook/useAuth";
 import useNotify from "../../../hook/useNotify";
-import { listCompanySelector } from "../../CompanyManagement/recruiter.slice";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -25,6 +24,7 @@ import {
     deleteRecruitmentPostThunk,
     saveRecruitmentPostThunk,
 } from "../recruitmentPost.slice";
+import { companySelector } from "../../CompanyManagement/company.slice";
 const DEFAULT_VALUE_CURRENCY = -1;
 const DEFAULT_VALUE_SALARY_TYPE = 1;
 const DEFAULT_VALUE_COMPANY = 0;
@@ -40,7 +40,7 @@ const RecruitmentPostModal = ({
     setRecruitmentPostModal,
 }) => {
     const dispatch = useDispatch();
-    const listCompanies = useSelector(listCompanySelector);
+    const listCompanies = useSelector(companySelector);
     const { setNotify } = useNotify();
     const { user } = useAuth();
     const [confirmDialog, setConfirmDialog] = useState({

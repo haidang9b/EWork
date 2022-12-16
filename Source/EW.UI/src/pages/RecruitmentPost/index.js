@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Status, Currency } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import { SkeletonTable } from "../../components";
-import { getCompaniesThunk } from "../CompanyManagement/recruiter.slice";
+import { getCompaniesThunk } from "../CompanyManagement/company.slice";
 import {
     getRecruitmentPostsThunk,
     recruitmentPostSelector,

@@ -3,11 +3,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Status } from "../../../common/constants";
-import { getPageName } from "../../../common/nameApp";
-import { SkeletonTable } from "../../../components";
+import { Status } from "../../common/constants";
+import { getPageName } from "../../common/nameApp";
 import AddRecruiterModal from "../AddRecruiterModal";
-import { recruiterSelector } from "../recruiter.slice";
+import { recruiterSelector } from "../../pages/CompanyManagement/recruiter.slice";
+import SkeletonTable from "../SkeletonTable";
 
 const ListRecruiter = () => {
     const [addRecruiterModal, setAddRecruiterModal] = useState({

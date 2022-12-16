@@ -13,15 +13,16 @@ import { Stack } from "@mui/system";
 import { func, object } from "prop-types";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
-import useNotify from "../../../hook/useNotify";
-import { assignRecruiterThunk, recruiterSelector } from "../recruiter.slice";
+import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
+import useNotify from "../../hook/useNotify";
+import { companySelector } from "../../pages/CompanyManagement/company.slice";
+import { assignRecruiterThunk } from "../../pages/CompanyManagement/recruiter.slice";
 
 const DEFAULT_VALUE_COMPANY = -1;
 
 const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
     const dispatch = useDispatch();
-    const recruiter = useSelector(recruiterSelector);
+    const company = useSelector(companySelector);
     const [companySelected, setCompanySelected] = useState(
         DEFAULT_VALUE_COMPANY
     );
@@ -277,7 +278,7 @@ const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
                         <MenuItem value={DEFAULT_VALUE_COMPANY}>
                             <em>Chọn công ty</em>
                         </MenuItem>
-                        {recruiter?.companies?.map((item) => (
+                        {company?.companies?.map((item) => (
                             <MenuItem
                                 value={item.id}
                                 key={JSON.stringify(item)}

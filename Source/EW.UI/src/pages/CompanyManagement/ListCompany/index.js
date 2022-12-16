@@ -7,8 +7,8 @@ import { Status } from "../../../common/constants";
 import { getPageName } from "../../../common/nameApp";
 import { SkeletonTable } from "../../../components";
 import AddCompanyModal from "../AddCompanyModal";
+import { companySelector } from "../company.slice";
 import CompanyDetailModal from "../CompanyDetailModal";
-import { recruiterSelector } from "../recruiter.slice";
 
 const ListCompany = () => {
     const [addCompanyModal, setAddCompanyModal] = useState({
@@ -18,7 +18,7 @@ const ListCompany = () => {
         isOpen: false,
         data: null,
     });
-    const recruiter = useSelector(recruiterSelector);
+    const company = useSelector(companySelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "companyName", headerName: "Tên công ty", width: 200 },
@@ -86,13 +86,13 @@ const ListCompany = () => {
             >
                 Thêm công ty
             </Button>
-            {recruiter.status === Status.loading ? (
+            {company.status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
                         onRowClick={handleChangeStatus}
-                        rows={recruiter.companies}
+                        rows={company.companies}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}
