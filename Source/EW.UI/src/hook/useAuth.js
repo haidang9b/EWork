@@ -1,4 +1,5 @@
 import TokenService from "../common/apis/token.service";
+import { Role } from "../common/constants";
 
 /**
  * Hook support for translate access token to object
@@ -6,8 +7,12 @@ import TokenService from "../common/apis/token.service";
  */
 const useAuth = () => {
     let token = TokenService.getAccessToken();
+    let user = TokenService.getUserFromToken(token);
     return {
-        user: TokenService.getUserFromToken(token),
+        user: user,
+        isFaculty: user?.role === Role.Faculty,
+        isBusiness: user?.role === Role.Business,
+        isStudent: user?.role === Role.Student,
     };
 };
 

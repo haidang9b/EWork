@@ -9,7 +9,6 @@ import {
     Unauthorized,
     CreateRecruiter,
     AccountManagement,
-    RecruiterManagement,
     Profile,
     CVManagement,
     CompanyManagement,
@@ -17,6 +16,7 @@ import {
     ConfirmRecover,
     RecruitmentPost,
     CompanyInformation,
+    HRManagement,
 } from "./pages";
 function App() {
     return (
@@ -37,10 +37,6 @@ function App() {
                     element={<AccountManagement />}
                 />
                 <Route
-                    path="recruiter-management"
-                    element={<RecruiterManagement />}
-                />
-                <Route
                     path="company-management"
                     element={<CompanyManagement />}
                 />
@@ -55,6 +51,7 @@ function App() {
                     path="company-information"
                     element={<CompanyInformation />}
                 />
+                <Route path="hr-management" element={<HRManagement />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
                 <Route path="my-cv" element={<CVManagement />} />

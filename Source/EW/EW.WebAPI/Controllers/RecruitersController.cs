@@ -45,13 +45,26 @@ namespace EW.WebAPI.Controllers
         }
 
         [HttpGet("get-recruiters")]
+        [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> GetRecruiters()
         {
             var result = new ApiResult();
             try
             {
+                // when user request, system check role is Faculty or business
+                // if business, get recruiters from compay of account request
+                // if falcuty, get all recruiters
+                var currentUser = await _userService.GetUser(new User { Username = _username });
+                if (currentUser.RoleId == (long)ERole.ID_Business)
+                {
+                    var currentCompany = await _recruiterService.GetCompanyByUser(currentUser);
+                    result.Data = await _recruiterService.GetRecruitersByCompany(currentCompany);
+                }
+                else
+                {
+                    result.Data = await _recruiterService.GetRecruiters();
+                }
                 result.Message = "Lấy dữ liệu thành công";
-                result.Data = await _recruiterService.GetRecruiters();
             }
             catch(Exception ex)
             {
@@ -66,7 +79,6 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> Register(RegisterRecruiterModel model)
         {
             var result = new ApiResult();
-
             try
             {
                 var exist = await _recruiterService.Find(new Company
@@ -170,19 +182,38 @@ namespace EW.WebAPI.Controllers
         }
 
         [HttpPost("add-new-recruiter")]
-        [Authorize(Roles = "Faculty")]
-        public async  Task<IActionResult> AddNewRecruiterByFaculty(AddNewRecruiterAccountModel model)
+        [Authorize(Roles = "Faculty,Business")]
+        public async  Task<IActionResult> AddNewRecruiter(AddNewRecruiterAccountModel model)
         {
             var result = new ApiResult();
             try
             {
+                // when user request, system check role is Faculty or business
+                // if business, get company from account request
+                // if falcuty, check company from model request and add to model
+                var currentUser = await _userService.GetUser(new User { Username = _username });
                 var existUser = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                var existCompany = await _recruiterService.GetCompany(new Company { Id = model.CompanyId });
-                if(existCompany == null)
+
+                if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
-                    result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
-                    result.IsSuccess = false;
-                    return Ok(result);
+                    var currentCompany = await _recruiterService.GetCompanyByUser(currentUser);
+                    if (currentCompany == null)
+                    {
+                        result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
+                        result.IsSuccess = false;
+                        return Ok(result);
+                    }
+                    model.CompanyId = currentCompany.Id;
+                }
+                else
+                {
+                    var existCompany = await _recruiterService.GetCompany(new Company { Id = model.CompanyId });
+                    if (existCompany == null)
+                    {
+                        result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
+                        result.IsSuccess = false;
+                        return Ok(result);
+                    }
                 }
                 if (existUser != null)
                 {

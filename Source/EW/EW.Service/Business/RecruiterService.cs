@@ -241,5 +241,24 @@ namespace EW.Services.Business
                 IsActive = data.User.IsActive
             };
         }
+
+        public async Task<IEnumerable<RecruiterViewModel>> GetRecruitersByCompany(Company company)
+        {
+            var data = await _unitOfWork.Repository<Recruiter>().GetAsync(item => item.CompanyId == company.Id,"User,Company");
+            return data.Select(item => new RecruiterViewModel
+            {
+                Id = item.UserId,
+                Username = item.User.Username,
+                FullName = item.User.FullName,
+                PhoneNumber = item.User.PhoneNumber,
+                Company = item.Company,
+                Position = item.Position,
+                Email = item.User.Email,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                IsActive = item.User.IsActive
+
+            }).OrderByDescending(r => r.Company.Id).ToList();
+        }
     }
 }

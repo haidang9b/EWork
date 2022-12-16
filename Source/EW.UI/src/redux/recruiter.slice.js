@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import httpClient from "../../common/apis/httpClient";
-import { ASSIGN_RECRUITER_URL, GET_RECRUITERS_URL } from "../../common/apiUrl";
+import httpClient from "../common/apis/httpClient";
+import { ASSIGN_RECRUITER_URL, GET_RECRUITERS_URL } from "../common/apiUrl";
 
-import { Status } from "../../common/constants";
+import { Status } from "../common/constants";
 
 const initialState = {
     recruiters: [],

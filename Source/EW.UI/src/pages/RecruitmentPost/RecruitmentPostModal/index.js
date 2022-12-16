@@ -12,7 +12,7 @@ import {
 import { func, object } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Currency, Role, SalaryType } from "../../../common/constants";
+import { Currency, SalaryType } from "../../../common/constants";
 import { ConfirmDialog, RichTextEditor } from "../../../components";
 import useAuth from "../../../hook/useAuth";
 import useNotify from "../../../hook/useNotify";
@@ -42,7 +42,7 @@ const RecruitmentPostModal = ({
     const dispatch = useDispatch();
     const company = useSelector(companySelector);
     const { setNotify } = useNotify();
-    const { user } = useAuth();
+    const { isFaculty } = useAuth();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: "",
@@ -88,10 +88,7 @@ const RecruitmentPostModal = ({
         }
     }, [recruitmentPostModal]);
     const handleSubmit = async () => {
-        if (
-            user?.role === Role.Faculty &&
-            companySelected === DEFAULT_VALUE_COMPANY
-        ) {
+        if (isFaculty && companySelected === DEFAULT_VALUE_COMPANY) {
             setNotify({
                 isOpen: true,
                 title: "Thông tin bài tuyển dụng",
@@ -236,7 +233,7 @@ const RecruitmentPostModal = ({
                         : "Thêm bài tuyển dụng"}
                 </DialogTitle>
                 <DialogContent>
-                    {user?.role === Role.Faculty && (
+                    {isFaculty && (
                         <>
                             <InputLabel
                                 id="company-post-selected-item"

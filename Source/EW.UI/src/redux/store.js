@@ -3,7 +3,7 @@ import authSlice from "./auth.slice";
 import usersSlice from "../pages/AccountManagement/users.slice";
 import profileSlice from "../pages/CVManagement/profile.slice";
 import notificationSlice from "../components/Notification/notification.slice";
-import recruiterSlice from "../pages/CompanyManagement/recruiter.slice";
+import recruiterSlice from "./recruiter.slice";
 import companySlice from "../pages/CompanyManagement/company.slice";
 import recruiterRegisterSlice from "../pages/CreateRecruiter/recruiterRegister.slice";
 import recruitmentPostSlice from "../pages/RecruitmentPost/recruitmentPost.slice";
