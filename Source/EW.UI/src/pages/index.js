@@ -6,7 +6,7 @@ export { default as Home } from "./Home";
 export { default as Login } from "./Login";
 export { default as Missing } from "./Missing";
 export { default as Profile } from "./Profile";
-export { default as RecruiterManagement } from "./RecruiterManagement";
+export { default as HRManagement } from "./HRManagement";
 export { default as Unauthorized } from "./Unauthorized";
 export { default as CompanyManagement } from "./CompanyManagement";
 export { default as RecoveryAccount } from "./RecoveryAccount";

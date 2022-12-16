@@ -66,6 +66,11 @@ const sidebarRecruiterData = [
         icon: <IoIcons.IoMdPeople />,
     },
     {
+        title: "Nhà tuyển dụng",
+        path: "/hr-management",
+        icon: <IoIcons.IoMdPeople />,
+    },
+    {
         title: "Tìm kiếm sinh viên",
         path: "/search-student",
         icon: <IoIcons.IoMdPerson />,
@@ -103,11 +108,7 @@ const sidebarFacultyData = [
         path: "/recruitment-posts",
         icon: <IoIcons.IoMdPaperPlane />,
     },
-    {
-        title: "Nhà tuyển dụng",
-        path: "/recruiter-management",
-        icon: <IoIcons.IoMdPeople />,
-    },
+
     {
         title: "Blogs",
         path: "/blog-management",

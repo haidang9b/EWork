@@ -9,5 +9,5 @@ export { default as RequireAuth } from "./RequireAuth";
 export { default as TabPanel } from "./TabPanel";
 export { default as NonAuth } from "./NonAuth";
 export { default as SkeletonProfile } from "./SkeletonProfile";
-export { default as ListRecruiter } from "./ListRecruiter";
+export { default as TableRecruiter } from "./TableRecruiter";
 export { default as AddRecruiterModal } from "./AddRecruiterModal";

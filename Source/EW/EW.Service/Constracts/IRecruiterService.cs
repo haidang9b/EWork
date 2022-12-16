@@ -21,5 +21,6 @@ namespace EW.Services.Constracts
         Task<bool> AddCompany(Company model);
         Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model);
         Task<RecruiterViewModel> GetRecruiterByUser(User model);
+        Task<IEnumerable<RecruiterViewModel>> GetRecruitersByCompany(Company company);
     }
 }

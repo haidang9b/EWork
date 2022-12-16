@@ -6,10 +6,10 @@ import { useSelector } from "react-redux";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import AddRecruiterModal from "../AddRecruiterModal";
-import { recruiterSelector } from "../../pages/CompanyManagement/recruiter.slice";
+import { recruiterSelector } from "../../redux/recruiter.slice";
 import SkeletonTable from "../SkeletonTable";
 
-const ListRecruiter = () => {
+const TableRecruiter = () => {
     const [addRecruiterModal, setAddRecruiterModal] = useState({
         isOpen: false,
     });
@@ -91,4 +91,4 @@ const ListRecruiter = () => {
     );
 };
 
-export default ListRecruiter;
+export default TableRecruiter;

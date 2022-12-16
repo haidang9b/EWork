@@ -10,7 +10,7 @@ import AddCompanyModal from "../AddCompanyModal";
 import { companySelector } from "../company.slice";
 import CompanyDetailModal from "../CompanyDetailModal";
 
-const ListCompany = () => {
+const TableCompany = () => {
     const [addCompanyModal, setAddCompanyModal] = useState({
         isOpen: false,
     });
@@ -113,4 +113,4 @@ const ListCompany = () => {
     );
 };
 
-export default ListCompany;
+export default TableCompany;

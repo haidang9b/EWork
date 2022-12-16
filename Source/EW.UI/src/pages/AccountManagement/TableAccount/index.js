@@ -8,7 +8,7 @@ import { ConfirmDialog, SkeletonTable } from "../../../components";
 import useNotify from "../../../hook/useNotify";
 import moment from "moment";
 
-const ListAccount = () => {
+const TableAccount = () => {
     const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
@@ -150,4 +150,4 @@ const ListAccount = () => {
     );
 };
 
-export default ListAccount;
+export default TableAccount;

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
 import CoverLetterModal from "./CoverLetterModal";
-import ListMyCV from "./ListMyCV";
+import TableMyCV from "./TableMyCV";
 import {
     editCoverLetterThunk,
     getProfileThunk,
@@ -123,7 +123,7 @@ const CVManagement = () => {
                         </div>
                     </div>
                 </Box>
-                <ListMyCV />
+                <TableMyCV />
             </Container>
         </>
     );

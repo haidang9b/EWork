@@ -32,16 +32,15 @@ import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
 
 const Navbar = () => {
-    const { user } = useAuth();
+    const { user, isBusiness, isFaculty, isStudent } = useAuth();
     const dispatch = useDispatch();
-    let navbarItemsList =
-        user?.role === "Faculty"
-            ? sidebarFacultyData
-            : user?.role === "Student"
-            ? sidebarStudentData
-            : user?.role === "Business"
-            ? sidebarRecruiterData
-            : sidebarNonLoginData;
+    let navbarItemsList = isFaculty
+        ? sidebarFacultyData
+        : isStudent
+        ? sidebarStudentData
+        : isBusiness
+        ? sidebarRecruiterData
+        : sidebarNonLoginData;
     const navigate = useNavigate();
     const [openSideBar, setOpenSideBar] = React.useState(false);
     const [anchorElUser, setAnchorElUser] = React.useState(null);

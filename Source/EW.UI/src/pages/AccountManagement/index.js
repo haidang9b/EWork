@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getRolesThunk, getUsersThunk, usersSelector } from "./users.slice";
 import { getPageName } from "../../common/nameApp";
-import ListAccount from "./ListAccount";
+import TableAccount from "./TableAccount";
 import UserDialog from "./UserModal";
 
 const AccountManagement = () => {
@@ -39,7 +39,7 @@ const AccountManagement = () => {
             <Button variant="contained" onClick={addNewAccount}>
                 Thêm tài khoản
             </Button>
-            <ListAccount />
+            <TableAccount />
             <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
         </Container>
     );
