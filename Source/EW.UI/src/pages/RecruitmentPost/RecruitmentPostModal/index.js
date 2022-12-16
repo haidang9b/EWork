@@ -40,7 +40,7 @@ const RecruitmentPostModal = ({
     setRecruitmentPostModal,
 }) => {
     const dispatch = useDispatch();
-    const listCompanies = useSelector(companySelector);
+    const company = useSelector(companySelector);
     const { setNotify } = useNotify();
     const { user } = useAuth();
     const [confirmDialog, setConfirmDialog] = useState({
@@ -260,7 +260,7 @@ const RecruitmentPostModal = ({
                                 <MenuItem value={DEFAULT_VALUE_COMPANY}>
                                     <em>Chọn công ty</em>
                                 </MenuItem>
-                                {listCompanies.map((item) => (
+                                {company.companies.map((item) => (
                                     <MenuItem
                                         value={item.id}
                                         key={JSON.stringify(item)}
