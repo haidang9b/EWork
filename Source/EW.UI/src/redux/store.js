@@ -4,6 +4,7 @@ import usersSlice from "../pages/AccountManagement/users.slice";
 import profileSlice from "../pages/CVManagement/profile.slice";
 import notificationSlice from "../components/Notification/notification.slice";
 import recruiterSlice from "../pages/CompanyManagement/recruiter.slice";
+import companySlice from "../pages/CompanyManagement/company.slice";
 import recruiterRegisterSlice from "../pages/CreateRecruiter/recruiterRegister.slice";
 import recruitmentPostSlice from "../pages/RecruitmentPost/recruitmentPost.slice";
 import companyInformationSlice from "../pages/CompanyInformation/companyInformation.slice";
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     users: usersSlice.reducer,
     profile: profileSlice.reducer,
     notification: notificationSlice.reducer,
+    company: companySlice.reducer,
     recruiter: recruiterSlice.reducer,
     recruiterRegister: recruiterRegisterSlice.reducer,
     recruitmentPost: recruitmentPostSlice.reducer,

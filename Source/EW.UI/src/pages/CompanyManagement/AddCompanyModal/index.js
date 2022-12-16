@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { CompanyStatus } from "../../../common/constants";
 import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import useNotify from "../../../hook/useNotify";
-import { addCompanyThunk } from "../recruiter.slice";
+import { addCompanyThunk } from "../company.slice";
 
 const DEFAULT_VALUE_STATUS = 0;
 

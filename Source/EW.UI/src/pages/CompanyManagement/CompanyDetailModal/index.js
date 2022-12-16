@@ -14,7 +14,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { CompanyStatus } from "../../../common/constants";
 import useNotify from "../../../hook/useNotify";
-import { editCompanyInformationThunk } from "../recruiter.slice";
+import { editCompanyInformationThunk } from "../company.slice";
 const DEFAULT_VALUE_STATUS = 0;
 
 const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {

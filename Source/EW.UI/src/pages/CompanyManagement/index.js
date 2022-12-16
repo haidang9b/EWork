@@ -1,19 +1,19 @@
 import { Container, Tab, Tabs } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
-import { TabPanel } from "../../components";
+import { ListRecruiter, TabPanel } from "../../components";
 import ListCompany from "./ListCompany";
-import ListRecruiter from "./ListRecruiter";
 import useTab from "../../hook/useTab";
 import { useDispatch } from "react-redux";
-import { getCompaniesThunk, getRecruitersThunk } from "./recruiter.slice";
+import { getRecruitersThunk } from "./recruiter.slice";
+import { getCompaniesThunk } from "./company.slice";
 
 const CompanyManagement = () => {
     const { value, handleChange, a11yProps } = useTab(0);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getCompaniesThunk());
         dispatch(getRecruitersThunk());
+        dispatch(getCompaniesThunk());
     }, [dispatch]);
     return (
         <Container>
