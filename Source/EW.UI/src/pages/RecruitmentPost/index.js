@@ -14,7 +14,7 @@ import {
 } from "./recruitmentPost.slice";
 import RecruitmentPostModal from "./RecruitmentPostModal";
 
-const ListRecruitmentPost = ({
+const TableRecruitmentPost = ({
     recruitmentPostModal,
     setRecruitmentPostModal,
 }) => {
@@ -115,8 +115,8 @@ const ListRecruitmentPost = ({
     );
 };
 
-ListRecruitmentPost.displayName = "ListRecruitmentPost";
-ListRecruitmentPost.propTypes = {
+TableRecruitmentPost.displayName = "TableRecruitmentPost";
+TableRecruitmentPost.propTypes = {
     recruitmentPostModal: object.isRequired,
     setRecruitmentPostModal: func.isRequired,
 };
@@ -147,7 +147,7 @@ const RecruitmentPost = () => {
             >
                 Thêm bài viết mới
             </Button>
-            <ListRecruitmentPost
+            <TableRecruitmentPost
                 recruitmentPostModal={recruitmentPostModal}
                 setRecruitmentPostModal={setRecruitmentPostModal}
             />

@@ -2,7 +2,7 @@ import { Container, Tab, Tabs } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { ListRecruiter, TabPanel } from "../../components";
-import ListCompany from "./ListCompany";
+import TableCompany from "./TableCompany";
 import useTab from "../../hook/useTab";
 import { useDispatch } from "react-redux";
 import { getRecruitersThunk } from "./recruiter.slice";
@@ -29,7 +29,7 @@ const CompanyManagement = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <ListCompany />
+                    <TableCompany />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <ListRecruiter />

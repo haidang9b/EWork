@@ -8,7 +8,7 @@ import { ConfirmDialog, SkeletonTable } from "../../../components";
 import { profileSelector, removeCVThunk } from "../profile.slice";
 import useNotify from "../../../hook/useNotify";
 
-const ListMyCV = () => {
+const TableMyCV = () => {
     const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
@@ -115,6 +115,6 @@ const ListMyCV = () => {
     );
 };
 
-ListMyCV.displayName = "ListMyCV";
+TableMyCV.displayName = "TableMyCV";
 
-export default ListMyCV;
+export default TableMyCV;
