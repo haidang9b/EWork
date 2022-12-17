@@ -32,6 +32,7 @@ export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 
 //upload controller
 export const UPLOAD_NEW_CV_URL = "/uploads/upload-new-cv";
+export const UPLOAD_AVATAR_COMPANY_URL = "/uploads/upload-avatar-company";
 
 // recruitment posts controller
 export const RECRUITMENT_POST_URL = "/recruitmentposts";

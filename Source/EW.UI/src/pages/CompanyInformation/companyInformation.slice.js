@@ -3,6 +3,7 @@ import httpClient from "../../common/apis/httpClient";
 import {
     EDIT_COMPANY_INFORMATION_URL,
     GET_MY_COMPANY_INFORMATION_URL,
+    UPLOAD_AVATAR_COMPANY_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
 
@@ -58,7 +59,21 @@ const companyInformationSlice = createSlice({
                 (state, action) => {
                     state.status = Status.failed;
                 }
-            ),
+            )
+            .addCase(uploadAvatarCompanyThunk.pending, (state, action) => {
+                state.status = Status.loading;
+            })
+            .addCase(uploadAvatarCompanyThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.avatarUrl = action.payload?.data.avatarUrl;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(uploadAvatarCompanyThunk.rejected, (state, action) => {
+                state.status = Status.failed;
+            }),
 });
 
 export const getCompanyInformationThunk = createAsyncThunk(
@@ -75,6 +90,24 @@ export const editProfileCompanyInformationThunk = createAsyncThunk(
         const response = await httpClient.put(
             EDIT_COMPANY_INFORMATION_URL,
             obj
+        );
+        return response.data;
+    }
+);
+
+export const uploadAvatarCompanyThunk = createAsyncThunk(
+    "companyInformation/uploadAvatarCompany",
+    async (file) => {
+        const formData = new FormData();
+        formData.append("File", file);
+        const response = await httpClient.post(
+            UPLOAD_AVATAR_COMPANY_URL,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
         );
         return response.data;
     }

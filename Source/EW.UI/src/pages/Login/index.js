@@ -40,7 +40,8 @@ const Login = () => {
     const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (usernameRef.current?.value?.length === 0) {
             setNotify({
                 isOpen: true,
@@ -120,76 +121,84 @@ const Login = () => {
                     >
                         <Card
                             sx={{
-                                width: { sx: "100%", sm: "100%", md: "50%" },
+                                width: {
+                                    sx: "100%",
+                                    sm: "100%",
+                                    md: "50%",
+                                },
                             }}
                             style={{
                                 padding: "8px",
                             }}
                         >
-                            <CardContent>
-                                <Typography variant="h3" gutterBottom>
-                                    Thông tin đăng nhập
-                                </Typography>
-                                <Box pb={2}>
-                                    <TextField
-                                        label="Tài khoản"
-                                        variant="standard"
-                                        fullWidth
-                                        required
-                                        inputRef={usernameRef}
-                                    />
-                                    <TextField
-                                        label="Mật khẩu"
-                                        variant="standard"
-                                        fullWidth
-                                        required
-                                        type="password"
-                                        inputRef={passwordRef}
-                                    />
-                                </Box>
-                                <Link to={"/recover"} style={linkStyle}>
-                                    Quên mật khẩu?
-                                </Link>
-                            </CardContent>
-                            <CardActions>
-                                <Stack minWidth="100%">
-                                    <Button
-                                        type="button"
-                                        variant="contained"
-                                        startIcon={<SendSharp />}
-                                        onClick={handleSubmit}
-                                        sx={{
-                                            minWidth: "100%",
-                                        }}
-                                        disabled={
-                                            auth.status === Status.loading
-                                        }
-                                    >
-                                        Đăng nhập
-                                    </Button>
-                                    <LinearProgress
-                                        sx={{
-                                            display:
+                            <form>
+                                <CardContent>
+                                    <Typography variant="h3" gutterBottom>
+                                        Thông tin đăng nhập
+                                    </Typography>
+                                    <Box pb={2}>
+                                        <TextField
+                                            label="Tài khoản"
+                                            variant="standard"
+                                            fullWidth
+                                            required
+                                            inputRef={usernameRef}
+                                        />
+                                        <TextField
+                                            label="Mật khẩu"
+                                            variant="standard"
+                                            fullWidth
+                                            required
+                                            type="password"
+                                            inputRef={passwordRef}
+                                            autoComplete={"on"}
+                                        />
+                                    </Box>
+                                    <Link to={"/recover"} style={linkStyle}>
+                                        Quên mật khẩu?
+                                    </Link>
+                                </CardContent>
+                                <CardActions>
+                                    <Stack minWidth="100%">
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            startIcon={<SendSharp />}
+                                            onClick={handleSubmit}
+                                            sx={{
+                                                minWidth: "100%",
+                                            }}
+                                            disabled={
                                                 auth.status === Status.loading
-                                                    ? "block"
-                                                    : "none",
-                                        }}
-                                    />
-                                    <br />
-                                    <Divider>Hoặc</Divider>
-                                    <br />
-                                    <GoogleLogin
-                                        disabled={
-                                            auth.status === Status.loading
-                                        }
-                                        clientId={clientId}
-                                        buttonText="Đăng nhập Google"
-                                        onSuccess={responseGoogle}
-                                        onFailure={responseGoogle}
-                                        cookiePolicy={"single_host_origin"}
-                                    />
-                                </Stack>
-                            </CardActions>
+                                            }
+                                        >
+                                            Đăng nhập
+                                        </Button>
+                                        <LinearProgress
+                                            sx={{
+                                                display:
+                                                    auth.status ===
+                                                    Status.loading
+                                                        ? "block"
+                                                        : "none",
+                                            }}
+                                        />
+                                        <br />
+                                        <Divider>Hoặc</Divider>
+                                        <br />
+                                        <GoogleLogin
+                                            disabled={
+                                                auth.status === Status.loading
+                                            }
+                                            clientId={clientId}
+                                            buttonText="Đăng nhập Google"
+                                            onSuccess={responseGoogle}
+                                            onFailure={responseGoogle}
+                                            cookiePolicy={"single_host_origin"}
+                                        />
+                                    </Stack>
+                                </CardActions>
+                            </form>
                         </Card>
                     </Grid>
                 </Container>

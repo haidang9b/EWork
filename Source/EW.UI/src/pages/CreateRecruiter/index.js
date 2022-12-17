@@ -324,6 +324,7 @@ const CreateRecruiter = () => {
                                 required
                                 inputRef={passwordRef}
                                 type="password"
+                                autoComplete={"on"}
                             />
 
                             <TextField
@@ -334,6 +335,7 @@ const CreateRecruiter = () => {
                                 required
                                 inputRef={confirmPasswordRef}
                                 type="password"
+                                autoComplete={"on"}
                             />
 
                             <Button

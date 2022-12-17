@@ -3,7 +3,7 @@ import { Role } from "../common/constants";
 
 /**
  * Hook support for translate access token to object
- * @returns user logged in app
+ * @returns {user, isFaculty, isBusiness, isStudent} user logged in app
  */
 const useAuth = () => {
     let token = TokenService.getAccessToken();
