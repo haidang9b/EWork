@@ -13,7 +13,9 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { addNewAccountAdminThunk, editAccountThunk } from "../users.slice";
 import useNotify from "../../../hook/useNotify";
+
 const PASSWORD_DEFAULT = "************";
+
 const UserDialog = ({ userDialog, setUserDialog }) => {
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
