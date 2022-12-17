@@ -22,6 +22,8 @@ namespace EW.Domain.Entities
         [StringLength(50)]
         [DefaultValue("")]
         public string TaxNumber { get; set; }
+        [StringLength(350)]
+        public string AvatarUrl { get; set; }
         public EStatusRecruiter Status { get; set; }
     }
 }

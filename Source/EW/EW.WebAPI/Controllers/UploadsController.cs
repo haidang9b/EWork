@@ -1,8 +1,8 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Domain.Entities;
 using EW.Domain.ViewModels;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models.Profiles;
 using EW.WebAPI.Models.Models.Uploads;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,14 +19,16 @@ namespace EW.WebAPI.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUserService _userService;
         private readonly IUserCVService _userCVService;
+        private readonly IRecruiterService _recruiterService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService)
+        public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService, IRecruiterService recruiterService)
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _userService = userService;
             _userCVService = userCVService;
+            _recruiterService = recruiterService;
         }
 
         [Authorize(Roles= "Student")]
@@ -54,7 +56,7 @@ namespace EW.WebAPI.Controllers
                     return Ok(result);
                 }
 
-                var uploadModel = new ImportFileModel { File = model.File, Type = Commons.Enums.EFileType.CV };
+                var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CV };
                 var resultUpload = await WriteFile(uploadModel);
                 var user = await _userService.GetUser(new User { Username = _username });
 
@@ -98,6 +100,44 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Business")]
+        [HttpPost("upload-avatar-company")]
+        public async Task<IActionResult> UploadAvatarCompany([FromForm] UploadAvatarModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var user = await _userService.GetUser(new User { Username = _username });
+                var companyByUser = await _recruiterService.GetCompanyByUser(user);
+                var fileExtension = Path.GetExtension(model.File.FileName);
+                var acceptExtensionFiles = new string[] { ".jpg", ".jpeg", ".apng", ".png", ".svg", ".webp" };
+                var fileNameRequest = model.File.FileName;
+                var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CompanyAvatar };
+                var resultUpload = await WriteFile(uploadModel);
+                if (resultUpload.IsSuccess)
+                {
+                    companyByUser.AvatarUrl = resultUpload.Path;
+                    result.IsSuccess = await _recruiterService.UploadAvatarCompany(companyByUser);
+                    result.Message = result.IsSuccess ? "Upload hình ảnh thành công" : "Không thể upload hình ảnh này lên";
+                    if (resultUpload.IsSuccess)
+                    {
+                        result.Data = companyByUser;
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không thể upload hình ảnh này lên";
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
         [NonAction]
         private async Task<ResponseWriteFile> WriteFile(ImportFileModel model)
         {
@@ -120,7 +160,7 @@ namespace EW.WebAPI.Controllers
                         await model.File.CopyToAsync(stream);
                     }
                     result.IsSuccess = true;
-                    result.Path = filePath;
+                    result.Path = fileName;
                 }
             }
             catch(Exception ex)

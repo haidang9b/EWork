@@ -39,6 +39,7 @@ namespace EW.Services.Business
                     Status = EStatusRecruiter.Pending,
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
+                    AvatarUrl = ""
                 };
                 _unitOfWork.Repository<Company>().Add(newCompany);
                 var resultAddCompany = await _unitOfWork.SaveChangeAsync();
@@ -165,6 +166,7 @@ namespace EW.Services.Business
                 UpdatedDate = DateTimeOffset.Now,
                 CreatedDate = DateTimeOffset.Now,
                 TaxNumber = model.TaxNumber,
+                AvatarUrl = "",
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             return await _unitOfWork.SaveChangeAsync();
@@ -259,6 +261,15 @@ namespace EW.Services.Business
                 IsActive = item.User.IsActive
 
             }).OrderByDescending(r => r.Company.Id).ToList();
+        }
+
+        public async Task<bool> UploadAvatarCompany(Company company)
+        {
+            var exist = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == company.Id);
+            exist.AvatarUrl = company.AvatarUrl;
+            exist.UpdatedDate = DateTimeOffset.Now;
+            _unitOfWork.Repository<Company>().Update(exist);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }

@@ -7,24 +7,44 @@ import {
     CardHeader,
     Typography,
 } from "@mui/material";
-import useAuth from "../../../hook/useAuth";
-import { useSelector } from "react-redux";
-import { companyInformationSelector } from "../companyInformation.slice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    companyInformationSelector,
+    uploadAvatarCompanyThunk,
+} from "../companyInformation.slice";
 import { Status } from "../../../common/constants";
 import { UploadFileDialog } from "../../../components";
+import useNotify from "../../../hook/useNotify";
+import useFileUpload from "../../../hook/useFileUpload";
 
 const HeaderCard = () => {
+    const { getFilePathUpload } = useFileUpload();
+    const { setNotify } = useNotify();
+    const dispatch = useDispatch();
     const [uploadDialog, setUploadDialog] = useState({
         isOpen: false,
         title: "Thay đổi ảnh đại diện",
+        mutliple: false,
         acceptExtensionFiles: ["jpg", "jpeg", "apng", "png", "svg", "webp"],
-        onUpload: (file) => {
-            console.log(file);
+        onUpload: async (files) => {
+            const resultDispatch = await dispatch(
+                uploadAvatarCompanyThunk(files[0])
+            ).unwrap();
+            setNotify({
+                isOpen: true,
+                message: resultDispatch.message,
+                title: "Đăng tải CV mới",
+                type: resultDispatch.isSuccess ? "success" : "error",
+            });
+            if (resultDispatch.isSuccess) {
+                setUploadDialog({
+                    ...uploadDialog,
+                    isOpen: false,
+                });
+            }
         },
     });
-    const { user } = useAuth();
     const companyInformation = useSelector(companyInformationSelector);
-
     const handleChangeAvatar = () => {
         setUploadDialog({
             ...uploadDialog,
@@ -47,10 +67,13 @@ const HeaderCard = () => {
                 <Avatar
                     alt="Avatar"
                     src={
-                        user?.certthumbprint
-                            ? user?.certthumbprint
+                        companyInformation?.information?.avatarUrl
+                            ? `${getFilePathUpload(
+                                  companyInformation?.information?.avatarUrl
+                              )}`
                             : "/static/images/avatar/2.jpg"
                     }
+                    loading="lazy"
                     sx={{
                         border: "solid 1px #f0f2f5",
                         height: {
