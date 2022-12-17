@@ -13,5 +13,6 @@ namespace EW.Services.Constracts
         Task<bool> UpdateUser(User user);
         Task<string> GenKeyResetPassword(User user);
         Task<bool> ResetPassword(User user);
+        Task<bool> Update(User user);
     }
 }

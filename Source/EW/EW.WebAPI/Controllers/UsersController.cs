@@ -157,6 +157,46 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPut("update-account/{id}")]
+        [Authorize(Roles = "Faculty")]
+        public async Task<IActionResult> Update(long id, UpdateAccount model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var exist = await _userService.GetUser(new User { Id = id });
+                if (exist == null || (exist != null && (exist.Username != model.Username || exist.Email != model.Email)))
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Tài khoản này không tồn tại";
+                }
+                else
+                {
+                    exist.FullName = model.FullName;
+                    exist.PhoneNumber = model.NumberPhone;
+                    exist.UpdatedDate = DateTimeOffset.Now;
+                    result.IsSuccess = await _userService.UpdateUser(exist);
+                    if(result.IsSuccess)
+                    {
+                        result.Message = "Cập nhật tài khoản thành công";
+                        result.IsSuccess = true;
+                        result.Data = exist;
+                    }
+                    else
+                    {
+                        result.Message = "Cập nhật tài khoản thất bại";
+                        result.IsSuccess = false;
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                _logger.LogError(error.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
         /*[HttpPut("update-password")]
         [Authorize]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)

@@ -96,6 +96,12 @@ namespace EW.WebAPI.Controllers
                             return Ok(result);
                         }
                     }
+                    if (!exist.IsActive)
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại";
+                        return Ok(result);
+                    }
                     result.Message = "Đăng nhập thành công";
                     var rfToken = _tokenService.CreateRefreshToken(exist);
                     var data = new LoginViewModel

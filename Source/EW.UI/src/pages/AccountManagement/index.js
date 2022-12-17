@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "@mui/system";
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { getRolesThunk, getUsersThunk, usersSelector } from "./users.slice";
+import { useDispatch } from "react-redux";
+import { getRolesThunk, getUsersThunk } from "./users.slice";
 import { getPageName } from "../../common/nameApp";
 import TableAccount from "./TableAccount";
 import UserDialog from "./UserModal";
 
 const AccountManagement = () => {
     const dispatch = useDispatch();
-    const users = useSelector(usersSelector);
     useEffect(() => {
         document.title = getPageName("Quản lý tài khoản");
         dispatch(getUsersThunk());
@@ -18,15 +17,16 @@ const AccountManagement = () => {
     const [userDialog, setUserDialog] = useState({
         isOpen: false,
         title: "",
-        roles: users?.roles,
+        data: null,
+        isUpdate: false,
     });
 
     const addNewAccount = () => {
         setUserDialog({
             ...userDialog,
             isOpen: true,
-            roles: users?.roles,
-            title: "Thêm tài khoản",
+            isUpdate: false,
+            data: null,
         });
     };
 
@@ -39,7 +39,10 @@ const AccountManagement = () => {
             <Button variant="contained" onClick={addNewAccount}>
                 Thêm tài khoản
             </Button>
-            <TableAccount />
+            <TableAccount
+                userDialog={userDialog}
+                setUserDialog={setUserDialog}
+            />
             <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
         </Container>
     );

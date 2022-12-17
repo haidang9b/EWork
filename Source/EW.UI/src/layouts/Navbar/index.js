@@ -173,7 +173,7 @@ const Navbar = () => {
                 onClose={() => setOpenSideBar(false)}
             >
                 <Box
-                    sx={{ width: 250 }}
+                    sx={{ width: 280 }}
                     role="presentation"
                     onClick={() => setOpenSideBar(false)}
                 >

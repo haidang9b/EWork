@@ -113,5 +113,11 @@ namespace EW.Services.Business
             exist.TokenResetPassword = MyRandom.RandomString(30);
             return await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<bool> Update(User user)
+        {
+            _unitOfWork.Repository<User>().Update(user);
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

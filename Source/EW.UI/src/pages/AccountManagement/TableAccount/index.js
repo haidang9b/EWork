@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Paper } from "@mui/material";
+import { Box, Chip, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveThunk, usersSelector } from "../users.slice";
@@ -7,8 +7,9 @@ import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
 import useNotify from "../../../hook/useNotify";
 import moment from "moment";
+import { Edit } from "@mui/icons-material";
 
-const TableAccount = () => {
+const TableAccount = ({ userDialog, setUserDialog }) => {
     const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
@@ -36,7 +37,16 @@ const TableAccount = () => {
             headerName: "Quyền",
             width: 160,
             renderCell: (cellValues) => {
-                return cellValues.row?.role?.name;
+                switch (cellValues.row?.roleId) {
+                    case 1:
+                        return "Khoa";
+                    case 2:
+                        return "Doanh nghiệp";
+                    case 3:
+                        return "Sinh viên";
+                    default:
+                        return "Sinh viên";
+                }
             },
         },
         {
@@ -57,7 +67,14 @@ const TableAccount = () => {
             sortable: false,
             width: 240,
             renderCell: (cellValues) => {
-                const onClick = (e) => {};
+                const onUpdate = () => {
+                    setUserDialog({
+                        ...userDialog,
+                        isOpen: true,
+                        isUpdate: true,
+                        data: cellValues?.row,
+                    });
+                };
                 const handleRequest = async () => {
                     const resultDispatch = await dispatch(
                         setActiveThunk({
@@ -101,25 +118,35 @@ const TableAccount = () => {
 
                 return (
                     <>
-                        <Button onClick={onClick} variant="contained">
-                            Update
-                        </Button>
+                        <Chip
+                            label="Chỉnh sửa"
+                            onClick={onUpdate}
+                            color="primary"
+                            size="small"
+                            sx={{
+                                mr: 1,
+                            }}
+                        />
                         {cellValues.row?.isActive ? (
-                            <Button
-                                onClick={onDeactive}
-                                color="error"
-                                variant="contained"
-                            >
-                                Deactive
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={onActive}
+                            <Chip
+                                label="Hoạt động"
+                                clickable
                                 color="success"
-                                variant="contained"
-                            >
-                                Active
-                            </Button>
+                                size="small"
+                                deleteIcon={<Edit />}
+                                onClick={onDeactive}
+                                onDelete={onDeactive}
+                            />
+                        ) : (
+                            <Chip
+                                label="Vô hiệu hóa"
+                                clickable
+                                color="warning"
+                                size="small"
+                                onClick={onActive}
+                                deleteIcon={<Edit />}
+                                onDelete={onActive}
+                            />
                         )}
                     </>
                 );

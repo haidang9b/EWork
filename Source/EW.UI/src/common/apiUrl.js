@@ -23,7 +23,7 @@ export const GET_USERS_URL = "/users";
 export const GET_ROLES_URL = "/users/roles";
 export const EDIT_ACTIVE_URL = "/users/set-active";
 export const ADD_ACCOUNT_FACULTY_URL = "/users/add-account-faculty";
-
+export const EDIT_ACCOUNT_URL = "/users/update-account";
 // profile controller
 export const GET_PROFILE_URL = "/profile/get-profile";
 export const EDIT_COVER_LETTER_URL = "/profile/update-cover-letter";
