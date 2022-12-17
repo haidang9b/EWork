@@ -11,8 +11,10 @@ import {
 import { ValidateEmail, ValidatePhoneNumber } from "../../../common/validator";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { addNewAccountAdminThunk } from "../users.slice";
+import { addNewAccountAdminThunk, editAccountThunk } from "../users.slice";
 import useNotify from "../../../hook/useNotify";
+
+const PASSWORD_DEFAULT = "************";
 
 const UserDialog = ({ userDialog, setUserDialog }) => {
     const { setNotify } = useNotify();
@@ -31,7 +33,10 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                 title: "Thêm tài khoản cấp khoa",
                 message: "Vui lòng nhập Tên người dùng",
             });
-        } else if (passwordRef.current.value?.length === 0) {
+        } else if (
+            passwordRef.current.value?.length === 0 &&
+            !userDialog.isUpdate
+        ) {
             setNotify({
                 isOpen: true,
                 type: "error",
@@ -61,22 +66,41 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
             });
         } else {
             let obj = {
-                Username: usernameRef.current.value,
-                Password: passwordRef.current.value,
-                NumberPhone: phoneNumberRef.current.value,
-                Email: emailRef.current.value,
-                FullName: fullnameRef.current.value,
+                username: usernameRef.current.value,
+                password: !userDialog.isUpdate
+                    ? passwordRef.current.value
+                    : PASSWORD_DEFAULT,
+                numberPhone: phoneNumberRef.current.value,
+                email: emailRef.current.value,
+                fullName: fullnameRef.current.value,
             };
 
-            const resultDispatch = await dispatch(
-                addNewAccountAdminThunk(obj)
-            ).unwrap();
-            setNotify({
-                isOpen: true,
-                title: "Thêm tài khoản cấp khoa",
-                message: resultDispatch.message,
-                type: resultDispatch.isSuccess ? "success" : "error",
-            });
+            if (userDialog.isUpdate) {
+                let data = {
+                    id: userDialog?.data.id,
+                    obj: obj,
+                };
+                const resultDispatch = await dispatch(
+                    editAccountThunk(data)
+                ).unwrap();
+                setNotify({
+                    isOpen: true,
+                    title: "Cập nhật tài khoản",
+                    message: resultDispatch.message,
+                    type: resultDispatch.isSuccess ? "success" : "error",
+                });
+            } else {
+                const resultDispatch = await dispatch(
+                    addNewAccountAdminThunk(obj)
+                ).unwrap();
+                setNotify({
+                    isOpen: true,
+                    title: "Thêm tài khoản cấp khoa",
+                    message: resultDispatch.message,
+                    type: resultDispatch.isSuccess ? "success" : "error",
+                });
+            }
+
             setUserDialog({
                 ...userDialog,
                 isOpen: false,
@@ -90,7 +114,9 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle>{userDialog.title}</DialogTitle>
+            <DialogTitle>
+                {userDialog?.isUpdate ? "Cập nhật tài khoản" : "Thêm tài khoản"}
+            </DialogTitle>
             <DialogContent>
                 <InputLabel id="select-role">Quyền</InputLabel>
                 <TextField
@@ -101,9 +127,12 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         marginTop: "16px",
                         paddingBottom: "8px",
                     }}
-                    inputRef={usernameRef}
                     disabled={true}
-                    value={"Faculty"}
+                    value={
+                        userDialog.isUpdate
+                            ? userDialog?.data?.role?.name
+                            : "Faculty"
+                    }
                 />
                 <TextField
                     label="Tên tài khoản"
@@ -114,6 +143,8 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         paddingBottom: "8px",
                     }}
                     inputRef={usernameRef}
+                    defaultValue={userDialog?.data?.username}
+                    disabled={userDialog?.isUpdate}
                     required
                 />
                 <TextField
@@ -125,6 +156,7 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         paddingBottom: "8px",
                     }}
                     inputRef={passwordRef}
+                    disabled={userDialog?.isUpdate}
                     required
                 />
                 <TextField
@@ -135,6 +167,7 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         paddingBottom: "8px",
                     }}
                     inputRef={phoneNumberRef}
+                    defaultValue={userDialog?.data?.phoneNumber}
                     required
                 />
                 <TextField
@@ -146,6 +179,8 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         paddingBottom: "8px",
                     }}
                     inputRef={emailRef}
+                    defaultValue={userDialog?.data?.email}
+                    disabled={userDialog?.isUpdate}
                     required
                 />
                 <TextField
@@ -156,12 +191,13 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                         paddingBottom: "8px",
                     }}
                     inputRef={fullnameRef}
+                    defaultValue={userDialog?.data?.fullName}
                     required
                 />
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" fullWidth onClick={handleSubmit}>
-                    Thêm
+                    {userDialog?.isUpdate ? "Cập nhật" : "Thêm"}
                 </Button>
             </DialogActions>
         </Dialog>

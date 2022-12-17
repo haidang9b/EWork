@@ -2,6 +2,7 @@ import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg";
+import * as MdIcons from "react-icons/md";
 
 const sidebarNonLoginData = [
     { title: "Trang chủ", path: "/", icon: <AiIcons.AiFillHome /> },
@@ -63,7 +64,7 @@ const sidebarRecruiterData = [
     {
         title: "Thông tin công ty",
         path: "/company-information",
-        icon: <IoIcons.IoMdPeople />,
+        icon: <AiIcons.AiOutlineIdcard />,
     },
     {
         title: "Nhà tuyển dụng",
@@ -73,12 +74,12 @@ const sidebarRecruiterData = [
     {
         title: "Tìm kiếm sinh viên",
         path: "/search-student",
-        icon: <IoIcons.IoMdPerson />,
+        icon: <MdIcons.MdOutlineFindReplace />,
     },
     {
         title: "Bài tuyển dụng",
         path: "/recruitment-posts",
-        icon: <IoIcons.IoMdPaperPlane />,
+        icon: <MdIcons.MdOutlinePostAdd />,
     },
 ];
 
@@ -94,23 +95,23 @@ const sidebarFacultyData = [
         icon: <IoIcons.IoIosPaper />,
     },
     {
-        title: "Tài khoản",
+        title: "Quản lý tài khoản",
         path: "/account-management",
-        icon: <FaIcons.FaCartPlus />,
+        icon: <MdIcons.MdManageAccounts />,
     },
     {
-        title: "Công ty",
+        title: "Quản lý công ty",
         path: "/company-management",
-        icon: <IoIcons.IoMdPeople />,
+        icon: <MdIcons.MdBusiness />,
     },
     {
-        title: "Bài tuyển dụng",
+        title: "Quản lý bài tuyển dụng",
         path: "/recruitment-posts",
-        icon: <IoIcons.IoMdPaperPlane />,
+        icon: <MdIcons.MdOutlinePostAdd />,
     },
 
     {
-        title: "Blogs",
+        title: "Quản lý blogs",
         path: "/blog-management",
         icon: <FaIcons.FaNewspaper />,
     },
