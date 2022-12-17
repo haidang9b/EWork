@@ -11,9 +11,9 @@ import {
     getProfileThunk,
     uploadNewCVThunk,
 } from "./profile.slice";
-import UploadCVModal from "./UploadCVModal";
 import "./CVManagement.css";
 import useNotify from "../../hook/useNotify";
+import { UploadFileDialog } from "../../components";
 
 const CVManagement = () => {
     const dispatch = useDispatch();
@@ -42,9 +42,12 @@ const CVManagement = () => {
 
     const [uploadCVDialog, setUploadCVDialog] = useState({
         isOpen: false,
+        title: "Đăng tải CV mới",
+        acceptExtensionFiles: ["docx", "doc", "pdf"],
+        multiple: false,
         onUpload: async (file) => {
             const resultDispatch = await dispatch(
-                uploadNewCVThunk(file)
+                uploadNewCVThunk(file[0])
             ).unwrap();
             setNotify({
                 isOpen: true,
@@ -77,14 +80,6 @@ const CVManagement = () => {
                     marginTop: "2%",
                 }}
             >
-                <CoverLetterModal
-                    coverLetterDialog={coverLetterDialog}
-                    setCoverLetterDialog={setCoverLetterDialog}
-                />
-                <UploadCVModal
-                    uploadCVDialog={uploadCVDialog}
-                    setUploadCVDialog={setUploadCVDialog}
-                />
                 <Box sx={{ width: "100%" }}>
                     <div className="d-flex space-btw">
                         <div className="d-flex ">
@@ -124,6 +119,14 @@ const CVManagement = () => {
                     </div>
                 </Box>
                 <TableMyCV />
+                <CoverLetterModal
+                    coverLetterDialog={coverLetterDialog}
+                    setCoverLetterDialog={setCoverLetterDialog}
+                />
+                <UploadFileDialog
+                    uploadDialog={uploadCVDialog}
+                    setUploadDialog={setUploadCVDialog}
+                />
             </Container>
         </>
     );

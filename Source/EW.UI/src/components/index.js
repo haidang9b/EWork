@@ -11,3 +11,4 @@ export { default as NonAuth } from "./NonAuth";
 export { default as SkeletonProfile } from "./SkeletonProfile";
 export { default as TableRecruiter } from "./TableRecruiter";
 export { default as AddRecruiterModal } from "./AddRecruiterModal";
+export { default as UploadFileDialog } from "./UploadFileDialog";
