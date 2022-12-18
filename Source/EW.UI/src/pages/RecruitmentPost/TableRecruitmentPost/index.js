@@ -12,7 +12,7 @@ const TableRecruitmentPost = ({
     recruitmentPostModal,
     setRecruitmentPostModal,
 }) => {
-    const recruitmentPosts = useSelector(recruitmentPostSelector);
+    const { status, posts } = useSelector(recruitmentPostSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 40 },
         { field: "jobTitle", headerName: "Tiêu đề bài viết", width: 240 },
@@ -86,12 +86,12 @@ const TableRecruitmentPost = ({
     };
     return (
         <>
-            {recruitmentPosts.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
-                        rows={recruitmentPosts.posts}
+                        rows={posts}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}

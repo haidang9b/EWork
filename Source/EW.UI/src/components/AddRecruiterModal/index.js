@@ -23,7 +23,7 @@ const DEFAULT_VALUE_COMPANY = -1;
 
 const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
     const dispatch = useDispatch();
-    const company = useSelector(companySelector);
+    const { companies } = useSelector(companySelector);
     const { isFaculty } = useAuth();
     const [companySelected, setCompanySelected] = useState(
         DEFAULT_VALUE_COMPANY
@@ -282,7 +282,7 @@ const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
                                 <MenuItem value={DEFAULT_VALUE_COMPANY}>
                                     <em>Chọn công ty</em>
                                 </MenuItem>
-                                {company?.companies?.map((item) => (
+                                {companies?.map((item) => (
                                     <MenuItem
                                         value={item.id}
                                         key={JSON.stringify(item)}

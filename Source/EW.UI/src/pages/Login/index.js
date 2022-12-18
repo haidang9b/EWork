@@ -33,10 +33,10 @@ const linkStyle = {
     color: "#007cc0",
 };
 const Login = () => {
-    const { user } = useAuth();
-    const auth = useSelector(authSelector);
-    const { setNotify } = useNotify();
     const clientId = process.env.REACT_APP_CLIENT_ID;
+    const { user } = useAuth();
+    const { status } = useSelector(authSelector);
+    const { setNotify } = useNotify();
     const dispatch = useDispatch();
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
@@ -101,11 +101,11 @@ const Login = () => {
             });
         };
         gapi.load("client:auth2", initClient);
-    }, [clientId, auth]);
+    }, [clientId]);
 
     return (
         <>
-            {auth && auth.status === Status.succeeded && user ? (
+            {status === Status.succeeded && user ? (
                 <Navigate to="/dashboard" replace />
             ) : (
                 <Container>
@@ -168,17 +168,14 @@ const Login = () => {
                                             sx={{
                                                 minWidth: "100%",
                                             }}
-                                            disabled={
-                                                auth.status === Status.loading
-                                            }
+                                            disabled={status === Status.loading}
                                         >
                                             Đăng nhập
                                         </Button>
                                         <LinearProgress
                                             sx={{
                                                 display:
-                                                    auth.status ===
-                                                    Status.loading
+                                                    status === Status.loading
                                                         ? "block"
                                                         : "none",
                                             }}
@@ -187,9 +184,7 @@ const Login = () => {
                                         <Divider>Hoặc</Divider>
                                         <br />
                                         <GoogleLogin
-                                            disabled={
-                                                auth.status === Status.loading
-                                            }
+                                            disabled={status === Status.loading}
                                             clientId={clientId}
                                             buttonText="Đăng nhập Google"
                                             onSuccess={responseGoogle}

@@ -18,7 +18,7 @@ const TableCompany = () => {
         isOpen: false,
         data: null,
     });
-    const company = useSelector(companySelector);
+    const { status, companies } = useSelector(companySelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "companyName", headerName: "Tên công ty", width: 200 },
@@ -86,13 +86,13 @@ const TableCompany = () => {
             >
                 Thêm công ty
             </Button>
-            {company.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
                         onRowClick={handleChangeStatus}
-                        rows={company.companies}
+                        rows={companies}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}

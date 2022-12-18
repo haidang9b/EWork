@@ -44,7 +44,7 @@ const HeaderCard = () => {
             }
         },
     });
-    const companyInformation = useSelector(companyInformationSelector);
+    const { status, information } = useSelector(companyInformationSelector);
     const handleChangeAvatar = () => {
         setUploadDialog({
             ...uploadDialog,
@@ -67,10 +67,8 @@ const HeaderCard = () => {
                 <Avatar
                     alt="Avatar"
                     src={
-                        companyInformation?.information?.avatarUrl
-                            ? `${getFilePathUpload(
-                                  companyInformation?.information?.avatarUrl
-                              )}`
+                        information?.avatarUrl
+                            ? `${getFilePathUpload(information?.avatarUrl)}`
                             : "/static/images/avatar/2.jpg"
                     }
                     loading="lazy"
@@ -88,9 +86,9 @@ const HeaderCard = () => {
                     }}
                 />
                 <Typography variant="h6">
-                    {companyInformation.status === Status.loading
+                    {status === Status.loading
                         ? "Loading"
-                        : companyInformation?.information?.companyName}
+                        : information?.companyName}
                 </Typography>
                 <Button variant="outlined" onClick={handleChangeAvatar}>
                     Chỉnh sửa ảnh đại diện

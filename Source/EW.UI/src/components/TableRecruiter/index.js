@@ -13,7 +13,7 @@ const TableRecruiter = () => {
     const [addRecruiterModal, setAddRecruiterModal] = useState({
         isOpen: false,
     });
-    const recruiter = useSelector(recruiterSelector);
+    const { status, recruiters } = useSelector(recruiterSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },
@@ -69,12 +69,12 @@ const TableRecruiter = () => {
             >
                 Thêm nhà tuyển dụng
             </Button>
-            {recruiter.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
-                        rows={recruiter.recruiters}
+                        rows={recruiters}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}

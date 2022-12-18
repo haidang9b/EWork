@@ -25,7 +25,7 @@ import {
 const CreateRecruiter = () => {
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
-    const recruiterRegister = useSelector(recruiterRegisterSelector);
+    const { status } = useSelector(recruiterRegisterSelector);
     const fullnameRef = useRef(null);
     const positionRef = useRef(null);
     const emailRef = useRef(null);
@@ -347,17 +347,14 @@ const CreateRecruiter = () => {
                                     minWidth: "100%",
                                     margin: "auto",
                                 }}
-                                disabled={
-                                    recruiterRegister.status === Status.loading
-                                }
+                                disabled={status === Status.loading}
                             >
                                 Gửi thông tin đăng ký
                             </Button>
                             <LinearProgress
                                 sx={{
                                     display:
-                                        recruiterRegister.status ===
-                                        Status.loading
+                                        status === Status.loading
                                             ? "block"
                                             : "none",
                                 }}
