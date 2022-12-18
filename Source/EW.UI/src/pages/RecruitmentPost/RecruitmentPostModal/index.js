@@ -13,7 +13,11 @@ import { func, object } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Currency, SalaryType, WorkingType } from "../../../common/constants";
-import { ConfirmDialog, RichTextEditor } from "../../../components";
+import {
+    ConfirmDialog,
+    RichTextEditor,
+    TechStackSelector,
+} from "../../../components";
 import useAuth from "../../../hook/useAuth";
 import useNotify from "../../../hook/useNotify";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -25,7 +29,6 @@ import {
     saveRecruitmentPostThunk,
 } from "../recruitmentPost.slice";
 import { companySelector } from "../../CompanyManagement/company.slice";
-import TechStackSelector from "../../../components/TechStackSeletor";
 const DEFAULT_VALUE_CURRENCY = -1;
 const DEFAULT_VALUE_SALARY_TYPE = 1;
 const DEFAULT_VALUE_COMPANY = 0;
