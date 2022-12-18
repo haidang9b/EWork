@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
@@ -19,12 +19,14 @@ const RichTextEditor = ({ editor, setEditor, initialHTML }) => {
         const q = new Quill(editorTag, {
             theme: "snow",
         });
-        if (initialHTML) {
-            q.root.innerHTML = initialHTML;
-        }
         setEditor(q);
         // eslint-disable-next-line
     }, []);
+    useEffect(() => {
+        if (editor) {
+            editor.root.innerHTML = initialHTML;
+        }
+    }, [initialHTML, editor]);
     return <div id="quill-editor" ref={wrapperRef}></div>;
 };
 
