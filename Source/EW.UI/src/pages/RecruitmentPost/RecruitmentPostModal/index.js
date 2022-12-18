@@ -12,7 +12,7 @@ import {
 import { func, object } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Currency, SalaryType } from "../../../common/constants";
+import { Currency, SalaryType, WorkingType } from "../../../common/constants";
 import { ConfirmDialog, RichTextEditor } from "../../../components";
 import useAuth from "../../../hook/useAuth";
 import useNotify from "../../../hook/useNotify";
@@ -25,10 +25,13 @@ import {
     saveRecruitmentPostThunk,
 } from "../recruitmentPost.slice";
 import { companySelector } from "../../CompanyManagement/company.slice";
+import TechStackSelector from "../../../components/TechStackSeletor";
 const DEFAULT_VALUE_CURRENCY = -1;
 const DEFAULT_VALUE_SALARY_TYPE = 1;
 const DEFAULT_VALUE_COMPANY = 0;
 const DEFAULT_VALUE_ID_POST = 0;
+const DEFAULT_VALUE_WORKING_TYPE = 1;
+const DEFAULT_VALUE_YEAR_EXPERIENCE = 0;
 /**
  * Recruitment Post can add or update data for post
  * @param recruitmentPostModal object data for recruitment post modal
@@ -60,6 +63,13 @@ const RecruitmentPostModal = ({
     const [companySelected, setCompanySelected] = useState(
         DEFAULT_VALUE_COMPANY
     );
+    const [currentWorkingType, setCurrentWorkingType] = useState(
+        DEFAULT_VALUE_WORKING_TYPE
+    );
+    const [yearExperience, setYearExperience] = useState(
+        DEFAULT_VALUE_YEAR_EXPERIENCE
+    );
+    const [techStacks, setTechStacks] = useState([]);
     const [editor, setEditor] = useState();
     const handleClose = () => {
         setRecruitmentPostModal({ ...recruitmentPostModal, isOpen: false });
@@ -79,15 +89,24 @@ const RecruitmentPostModal = ({
             if (data?.deadline) {
                 setDeadline(data.deadline);
             }
+            if (data?.workingType) {
+                setCurrentWorkingType(data.workingType);
+            }
+            if (data?.techStacks) {
+                console.log(data.techStacks.split(","));
+            }
             if (data?.jobDescription) {
                 setInitialHTML(data.jobDescription);
             }
+            setYearExperience(data.yearExperience);
+            setTechStacks(data.techStacks.split(","));
             setCurrentCurrency(data.currency);
             setSalaryFrom(data.salaryFrom);
             setSalaryTo(data.salaryTo);
         }
     }, [recruitmentPostModal]);
     const handleSubmit = async () => {
+        let currentTechStack = techStacks.filter((item) => item !== "");
         if (isFaculty && companySelected === DEFAULT_VALUE_COMPANY) {
             setNotify({
                 isOpen: true,
@@ -148,18 +167,41 @@ const RecruitmentPostModal = ({
             return;
         }
 
+        if (Number(yearExperience) < 0 || Number(yearExperience) > 50) {
+            setNotify({
+                isOpen: true,
+                title: "Thông tin bài tuyển dụng",
+                message: "Vui lòng nhập số năm kinh nghiệm yêu cầu hợp lệ",
+                type: "error",
+            });
+            return;
+        }
+
+        if (currentTechStack.length === 0) {
+            setNotify({
+                isOpen: true,
+                title: "Thông tin bài tuyển dụng",
+                message: "Vui lòng chọn các yêu cầu kỹ thuật",
+                type: "error",
+            });
+            return;
+        }
+
         let obj = {
+            jobTitle,
+            salaryFrom,
+            salaryTo,
+            salaryType,
+            yearExperience,
             id: recruitmentPostModal.isUpdate
                 ? recruitmentPostModal.data.id
                 : DEFAULT_VALUE_ID_POST,
-            jobTitle: jobTitle,
             jobDescription: editor?.root?.innerHTML,
-            salaryFrom: salaryFrom,
-            salaryTo: salaryTo,
             currency: currentCurrency,
             deadline: moment(deadline).format(),
-            salaryType: salaryType,
             companyId: companySelected,
+            techStacks: currentTechStack.join(","),
+            workingType: currentWorkingType,
         };
         let resultDispatch = await dispatch(
             saveRecruitmentPostThunk(obj)
@@ -370,6 +412,48 @@ const RecruitmentPostModal = ({
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
+                    <TextField
+                        label="Số năm kinh nghiệm"
+                        variant="outlined"
+                        placeholder="Số năm kinh nghiệm"
+                        fullWidth
+                        required
+                        sx={{
+                            marginTop: "16px",
+                            paddingBottom: "8px",
+                        }}
+                        type="number"
+                        value={yearExperience}
+                        onChange={(e) => setYearExperience(e.target.value)}
+                    />
+                    <InputLabel id="currency-selected-item">
+                        Hình thức làm việc
+                    </InputLabel>
+                    <Select
+                        labelId="currency-selected-item"
+                        label="Hình thức làm việc"
+                        value={currentWorkingType}
+                        onChange={(e) => {
+                            setCurrentWorkingType(e.target.value);
+                        }}
+                        fullWidth
+                        sx={{
+                            marginBottom: "16px",
+                        }}
+                    >
+                        {WorkingType.map((item) => (
+                            <MenuItem
+                                value={item.value}
+                                key={JSON.stringify(item)}
+                            >
+                                {item.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <TechStackSelector
+                        techStacks={techStacks}
+                        setTechStacks={setTechStacks}
+                    />
                     <RichTextEditor
                         initialHTML={initialHTML}
                         editor={editor}

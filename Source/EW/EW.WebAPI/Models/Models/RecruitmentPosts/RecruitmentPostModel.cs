@@ -13,5 +13,8 @@ namespace EW.WebAPI.Models.Models.RecruitmentPosts
         public DateTimeOffset Deadline { get; set; }
         public long? CompanyId { get; set; }
         public ESalaryType SalaryType { get; set; }
+        public EWorkingType WorkingType { get; set; }
+        public string TechStacks { get; set; }
+        public double YearExperience { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EW.Commons.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,6 +20,10 @@ namespace EW.Domain.Entities
         public int SalaryTo { get; set; }
         public ECurrency Currency { get; set; }
         public DateTimeOffset Deadline { get; set; }
+        [DefaultValue(EWorkingType.AtOffice)]
+        public EWorkingType WorkingType { get; set; }
+        public string TechStacks { get; set; }
+        public double YearExperience { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("Company")]
         public long CompanyId { get; set; }

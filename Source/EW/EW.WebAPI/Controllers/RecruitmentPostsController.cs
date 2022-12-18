@@ -68,6 +68,9 @@ namespace EW.WebAPI.Controllers
                         CreatedDate = DateTimeOffset.Now,
                         UpdatedDate = DateTimeOffset.Now,
                         SalaryType = model.SalaryType,
+                        TechStacks = model.TechStacks,
+                        YearExperience = model.YearExperience,
+                        WorkingType = model.WorkingType,
                         IsActive = true
                     };
                     postAdd.UpdatedBy = currentUser.Id;
@@ -122,6 +125,9 @@ namespace EW.WebAPI.Controllers
                     existPost.SalaryFrom = model.SalaryFrom;
                     existPost.SalaryTo = model.SalaryTo;
                     existPost.UpdatedBy = currentUser.Id;
+                    existPost.TechStacks = model.TechStacks;
+                    existPost.YearExperience = model.YearExperience;
+                    existPost.WorkingType = model.WorkingType;
 
                     result.IsSuccess = await _recruitmentPostService.Update(existPost);
                     if (result.IsSuccess)

@@ -28,6 +28,7 @@ const RecruitmentPost = () => {
                         ...recruitmentPostModal,
                         isOpen: true,
                         isUpdate: false,
+                        data: null,
                     });
                 }}
             >

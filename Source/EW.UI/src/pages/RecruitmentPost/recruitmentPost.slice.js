@@ -44,6 +44,9 @@ const recruitmentPostSlice = createSlice({
                         exist.salaryTo = data.salaryTo;
                         exist.updatedBy = data.updatedBy;
                         exist.UpdatedByUser = data.updatedByUser;
+                        exist.yearExperience = data.yearExperience;
+                        exist.techStacks = data.techStacks;
+                        exist.workingType = data.workingType;
                     } else {
                         state.posts.push(action.payload.data);
                     }
