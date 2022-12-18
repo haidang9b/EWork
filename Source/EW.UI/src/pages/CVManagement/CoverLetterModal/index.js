@@ -5,15 +5,18 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    LinearProgress,
     Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { profileSelector } from "../profile.slice";
 import { RichTextEditor } from "../../../components";
 import PropTypes from "prop-types";
+import { Status } from "../../../common/constants";
+import { Stack } from "@mui/system";
 
 const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
-    const profile = useSelector(profileSelector);
+    const { status, coverLetter } = useSelector(profileSelector);
     const [editor, setEditor] = useState();
 
     return (
@@ -37,19 +40,31 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
                 <RichTextEditor
                     editor={editor}
                     setEditor={setEditor}
-                    initialHTML={profile?.coverLetter}
+                    initialHTML={coverLetter}
                 />
             </DialogContent>
             <DialogActions>
-                <Button
-                    variant="outlined"
-                    onClick={async () => {
-                        const text = editor?.root?.innerHTML;
-                        return await coverLetterDialog.onOK(text);
-                    }}
-                >
-                    OK
-                </Button>
+                <Stack minWidth="100%">
+                    <Button
+                        disabled={status === Status.loading}
+                        variant="contained"
+                        onClick={async () => {
+                            const text = editor?.root?.innerHTML;
+                            return await coverLetterDialog.onOK(text);
+                        }}
+                        fullWidth
+                        color="success"
+                    >
+                        Cập nhật
+                    </Button>
+                    <LinearProgress
+                        fullWidth
+                        sx={{
+                            display:
+                                status === Status.loading ? "block" : "none",
+                        }}
+                    />
+                </Stack>
             </DialogActions>
         </Dialog>
     );

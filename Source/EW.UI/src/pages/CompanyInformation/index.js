@@ -13,14 +13,14 @@ import HeaderCard from "./HeaderCard";
 
 const CompanyInformation = () => {
     const dispatch = useDispatch();
-    const companyInformation = useSelector(companyInformationSelector);
+    const { status } = useSelector(companyInformationSelector);
     useEffect(() => {
         dispatch(getCompanyInformationThunk());
     }, [dispatch]);
 
     return (
         <>
-            {companyInformation.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonProfile />
             ) : (
                 <Container>

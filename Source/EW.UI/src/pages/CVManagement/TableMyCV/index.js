@@ -16,7 +16,7 @@ const TableMyCV = () => {
         subtitle: "",
     });
     const dispatch = useDispatch();
-    const profile = useSelector(profileSelector);
+    const { status, cvs } = useSelector(profileSelector);
 
     const columns = [
         {
@@ -90,14 +90,14 @@ const TableMyCV = () => {
 
     return (
         <>
-            {profile.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper
                     sx={{ width: "100%", overflow: "hidden", marginTop: "8px" }}
                 >
                     <DataGrid
-                        rows={profile?.cvs}
+                        rows={cvs}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}

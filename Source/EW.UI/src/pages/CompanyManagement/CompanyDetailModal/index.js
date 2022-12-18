@@ -69,7 +69,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             taxNumber: taxNumberRef?.current.value,
         };
 
-        var resultDispatch = await dispatch(
+        const resultDispatch = await dispatch(
             editCompanyInformationThunk(obj)
         ).unwrap();
 

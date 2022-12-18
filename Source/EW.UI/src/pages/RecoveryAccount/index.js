@@ -27,7 +27,7 @@ import {
 const RecoveryAccount = () => {
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
-    const auth = useSelector(authSelector);
+    const { status } = useSelector(authSelector);
     const usernameRef = useRef();
     const emailRef = useRef();
     useEffect(() => {
@@ -133,14 +133,14 @@ const RecoveryAccount = () => {
                                 fullWidth={true}
                                 onClick={handleRecover}
                                 startIcon={<SendSharp />}
-                                disabled={auth.status === Status.loading}
+                                disabled={status === Status.loading}
                             >
                                 Khôi phục
                             </Button>
                             <LinearProgress
                                 sx={{
                                     display:
-                                        auth.status === Status.loading
+                                        status === Status.loading
                                             ? "block"
                                             : "none",
                                 }}

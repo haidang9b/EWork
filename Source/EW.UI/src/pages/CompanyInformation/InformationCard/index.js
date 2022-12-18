@@ -13,7 +13,7 @@ const InformationCard = () => {
     const dispatch = useDispatch();
     const { setNotify } = useNotify();
     const [isEditing, setIsEditing] = useState(false);
-    const companyInformation = useSelector(companyInformationSelector);
+    const { information } = useSelector(companyInformationSelector);
     const companyNameRef = useRef();
     const addressRef = useRef();
     const taxNumberRef = useRef();
@@ -53,8 +53,8 @@ const InformationCard = () => {
             return;
         }
         let obj = {
-            id: companyInformation?.information?.id,
-            status: companyInformation?.information?.status,
+            id: information?.id,
+            status: information?.status,
             companyName: companyNameRef?.current.value,
             address: addressRef?.current.value,
             taxNumber: taxNumberRef?.current.value,
@@ -94,15 +94,12 @@ const InformationCard = () => {
                                         marginTop: "16px",
                                         paddingBottom: "8px",
                                     }}
-                                    defaultValue={
-                                        companyInformation?.information
-                                            ?.companyName
-                                    }
+                                    defaultValue={information?.companyName}
                                     inputRef={companyNameRef}
                                     required
                                 />
                             ) : (
-                                companyInformation?.information?.companyName
+                                information?.companyName
                             )}
                         </td>
                         <td>
@@ -132,13 +129,11 @@ const InformationCard = () => {
                                         marginTop: "16px",
                                         paddingBottom: "8px",
                                     }}
-                                    defaultValue={
-                                        companyInformation?.information?.email
-                                    }
+                                    defaultValue={information?.email}
                                     disabled={true}
                                 />
                             ) : (
-                                companyInformation?.information?.email
+                                information?.email
                             )}
                         </td>
                     </tr>
@@ -158,14 +153,11 @@ const InformationCard = () => {
                                         marginTop: "16px",
                                         paddingBottom: "8px",
                                     }}
-                                    defaultValue={
-                                        companyInformation?.information
-                                            ?.phoneNumber
-                                    }
+                                    defaultValue={information?.phoneNumber}
                                     disabled={true}
                                 />
                             ) : (
-                                companyInformation?.information?.phoneNumber
+                                information?.phoneNumber
                             )}
                         </td>
                         <td></td>
@@ -186,14 +178,12 @@ const InformationCard = () => {
                                         marginTop: "16px",
                                         paddingBottom: "8px",
                                     }}
-                                    defaultValue={
-                                        companyInformation?.information?.address
-                                    }
+                                    defaultValue={information?.address}
                                     inputRef={addressRef}
                                     required
                                 />
                             ) : (
-                                companyInformation?.information?.address
+                                information?.address
                             )}
                         </td>
                         <td></td>
@@ -214,15 +204,12 @@ const InformationCard = () => {
                                         marginTop: "16px",
                                         paddingBottom: "8px",
                                     }}
-                                    defaultValue={
-                                        companyInformation?.information
-                                            ?.taxNumber
-                                    }
+                                    defaultValue={information?.taxNumber}
                                     inputRef={taxNumberRef}
                                     required
                                 />
                             ) : (
-                                companyInformation?.information?.taxNumber
+                                information?.taxNumber
                             )}
                         </td>
                         <td></td>

@@ -33,7 +33,7 @@ const ConfirmRecover = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [username, setUsername] = useState("");
     const [code, setCode] = useState("");
-    const auth = useSelector(authSelector);
+    const { status } = useSelector(authSelector);
     const passwordRef = useRef();
     const navigate = useNavigate();
     useEffect(() => {
@@ -84,7 +84,7 @@ const ConfirmRecover = () => {
     };
     return (
         <>
-            {auth.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonRecover />
             ) : data?.isSuccess ? (
                 <Container>
@@ -132,16 +132,14 @@ const ConfirmRecover = () => {
                                         fullWidth={true}
                                         onClick={handleRecover}
                                         startIcon={<SendSharp />}
-                                        disabled={
-                                            auth.status === Status.loading
-                                        }
+                                        disabled={status === Status.loading}
                                     >
                                         Khôi phục
                                     </Button>
                                     <LinearProgress
                                         sx={{
                                             display:
-                                                auth.status === Status.loading
+                                                status === Status.loading
                                                     ? "block"
                                                     : "none",
                                         }}

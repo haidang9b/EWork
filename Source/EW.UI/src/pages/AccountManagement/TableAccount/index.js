@@ -17,7 +17,7 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
         subtitle: "",
     });
     const dispatch = useDispatch();
-    const users = useSelector(usersSelector);
+    const { status, users } = useSelector(usersSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
         { field: "username", headerName: "Tên tài khoản", width: 200 },
@@ -155,12 +155,12 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
     ];
     return (
         <Box textAlign="center">
-            {users?.status === Status.loading ? (
+            {status === Status.loading ? (
                 <SkeletonTable />
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
-                        rows={users.users}
+                        rows={users}
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}
