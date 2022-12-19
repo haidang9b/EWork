@@ -27,23 +27,13 @@ namespace EW.WebAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet("get-companies")]
-        public async Task<IActionResult> GetCompanies()
-        {
-            var result = new ApiResult();
-            try
-            {
-                result.Message = "Lấy dữ liệu thành công";
-                result.Data = await _recruiterService.GetCompanies();
-            }
-            catch(Exception ex)
-            {
-                result.InternalError();
-                _logger.LogError(ex.Message);
-            }
-            return Ok(result);
-        }
-
+        /// <summary>
+        /// Get recruters by role user request
+        /// when user request, system check role is Faculty or business.
+        /// if business, get recruiters from compay of account request.
+        /// if falcuty, get all recruiters/
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("get-recruiters")]
         [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> GetRecruiters()
@@ -51,9 +41,6 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                // when user request, system check role is Faculty or business
-                // if business, get recruiters from compay of account request
-                // if falcuty, get all recruiters
                 var currentUser = await _userService.GetUser(new User { Username = _username });
                 if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
@@ -105,82 +92,14 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut("update-company-info")]
-        [Authorize(Roles = "Faculty,Business")]
-        public async Task<IActionResult> UpdateCompanyInfo(UpdateCompanyModel model)
-        {
-            var result = new ApiResult();
-            try
-            {
-                var existCompany = await _recruiterService.GetCompany(new Company { Id = model.Id });
-                if (existCompany == null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không tồn tại công ty này";
-                }
-                else
-                {
-                    if(await _recruiterService.UpdateInformationCompany(model))
-                    {
-                        result.IsSuccess = true;
-                        result.Message = "Cập nhật thông tin thành công";
-                        result.Data = await _recruiterService.GetCompany(new Company { Id = model.Id });
-                    }
-                    else
-                    {
-                        result.IsSuccess = false;
-                        result.Message = "Cập nhật thông tin thất bại";
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
-        }
-
-        [HttpPost("add-new-company")]
-        [Authorize(Roles = "Faculty")]
-        public async Task<IActionResult> AddNewCompanyByFaculty(AddCompanyModel model)
-        {
-            var result = new ApiResult();
-            try
-            {
-                var exist = await _recruiterService.GetCompany(new Company
-                {
-                    Email = model.Email,
-                });
-                if(exist != null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Email này đã được sử dụng";
-                    return Ok(result);
-                }
-                var newCompany = new Company
-                {
-                    CompanyName = model.CompanyName,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    Address = model.Address,
-                    TaxNumber = model.TaxNumber,
-                };
-                result.IsSuccess = await _recruiterService.AddCompany(newCompany);
-                result.Message = result.IsSuccess ? "Thêm công ty thành công " : "Thêm công ty thất bại";
-                if (result.IsSuccess)
-                {
-                    result.Data = await _recruiterService.GetCompany(newCompany);
-                }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
-        }
-
+        /// <summary>
+        /// Add new recruiter by Faculty or Business
+        /// when user request, system check role is Faculty or business.
+        /// if business, get company from account request.
+        /// if falcuty, check company from model request and add to model.
+        /// </summary>
+        /// <param name="AddNewRecruiterAccountModel"></param>
+        /// <returns>Data recruiter added</returns>
         [HttpPost("add-new-recruiter")]
         [Authorize(Roles = "Faculty,Business")]
         public async  Task<IActionResult> AddNewRecruiter(AddNewRecruiterAccountModel model)
@@ -188,9 +107,6 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                // when user request, system check role is Faculty or business
-                // if business, get company from account request
-                // if falcuty, check company from model request and add to model
                 var currentUser = await _userService.GetUser(new User { Username = _username });
                 var existUser = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
 
@@ -228,25 +144,6 @@ namespace EW.WebAPI.Controllers
                 {
                     result.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
                 }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
-        }
-
-        [HttpGet("get-my-company-information")]
-        [Authorize(Roles = "Business")]
-        public async Task<IActionResult> GetCompanyInformation()
-        {
-            var result = new ApiResult();
-            try
-            {
-                var existUser = await _userService.GetUser(new User { Username = _username });
-                result.Data = await _recruiterService.GetCompanyByUser(existUser);
-                result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
             {
