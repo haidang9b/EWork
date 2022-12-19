@@ -1,6 +1,6 @@
 ﻿using EW.Commons.Enums;
 
-namespace EW.WebAPI.Models.Models.Recruiters
+namespace EW.WebAPI.Models.Models.Companies
 {
     public class AddCompanyModel
     {

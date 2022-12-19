@@ -13,3 +13,4 @@ export { default as TableRecruiter } from "./TableRecruiter";
 export { default as AddRecruiterModal } from "./AddRecruiterModal";
 export { default as UploadFileDialog } from "./UploadFileDialog";
 export { default as TechStackSelector } from "./TechStackSelector";
+export { default as CountrySelector } from "./CountrySelector";

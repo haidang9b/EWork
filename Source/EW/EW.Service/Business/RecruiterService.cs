@@ -39,7 +39,7 @@ namespace EW.Services.Business
                     Status = EStatusRecruiter.Pending,
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
-                    AvatarUrl = ""
+                    AvatarUrl = "",
                 };
                 _unitOfWork.Repository<Company>().Add(newCompany);
                 var resultAddCompany = await _unitOfWork.SaveChangeAsync();
@@ -145,6 +145,9 @@ namespace EW.Services.Business
             existCompany.Status = model.Status;
             existCompany.UpdatedDate = DateTimeOffset.Now;
             existCompany.TaxNumber = model.TaxNumber;
+            existCompany.CompanyType = model.CompanyType;
+            existCompany.TeamSize = model.TeamSize;
+            existCompany.Country = model.Country;
             _unitOfWork.Repository<Company>().Update(existCompany);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -167,6 +170,9 @@ namespace EW.Services.Business
                 CreatedDate = DateTimeOffset.Now,
                 TaxNumber = model.TaxNumber,
                 AvatarUrl = "",
+                Country = "VN",
+                TeamSize = ETeamSize.ZeroTo50,
+                CompanyType = ECompanyType.Product
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             return await _unitOfWork.SaveChangeAsync();

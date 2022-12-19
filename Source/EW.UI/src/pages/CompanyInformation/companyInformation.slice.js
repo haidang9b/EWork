@@ -48,6 +48,12 @@ const companyInformationSlice = createSlice({
                             action.payload?.data?.address;
                         state.information.taxNumber =
                             action.payload?.data?.taxNumber;
+                        state.information.teamSize =
+                            action.payload?.data?.teamSize;
+                        state.information.country =
+                            action.payload?.data?.country;
+                        state.information.companyType =
+                            action.payload?.data?.companyType;
                         state.status = Status.succeeded;
                     } else {
                         state.status = Status.failed;

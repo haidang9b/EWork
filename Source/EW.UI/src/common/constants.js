@@ -52,6 +52,24 @@ export const WorkingType = [
     { value: 3, label: "Flexible" },
 ];
 
+export const CompanyType = [
+    { value: 0, label: "Product" },
+    { value: 1, label: "Outsourcing" },
+];
+
+export const TeamSizeType = [
+    { value: 0, label: "1 - 50" },
+    { value: 1, label: "50 - 100" },
+    { value: 2, label: "100 - 200" },
+    { value: 3, label: "200 - 300" },
+    { value: 4, label: "300-500" },
+    { value: 5, label: "500-1000" },
+    { value: 6, label: "1000+" },
+    { value: 7, label: "2000+" },
+    { value: 8, label: "3000+" },
+    { value: 9, label: "5000+" },
+];
+
 export const JobSkill = [
     "Agile",
     "Android",

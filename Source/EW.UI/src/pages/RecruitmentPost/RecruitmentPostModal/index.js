@@ -498,7 +498,7 @@ const RecruitmentPostModal = ({
 
 RecruitmentPostModal.displayName = "AddRecruitmentPostModel";
 
-RecruitmentPostModal.propsType = {
+RecruitmentPostModal.propTypes = {
     recruitmentPostModal: object.isRequired,
     setRecruitmentPostModal: func.isRequired,
 };

@@ -67,6 +67,9 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             companyName: companyNameRef?.current.value,
             address: addressRef?.current.value,
             taxNumber: taxNumberRef?.current.value,
+            teamSize: data.teamSize,
+            companyType: data?.companyType,
+            country: data?.country,
         };
 
         const resultDispatch = await dispatch(
