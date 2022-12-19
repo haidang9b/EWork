@@ -10,13 +10,8 @@ export const RESET_PASSWORD_URL = "/auth/reset-password";
 
 // recruiters controller
 export const RECRUITER_REGISTER_URL = "/recruiters/register";
-export const GET_COMPANIES_URL = "/recruiters/get-companies";
 export const GET_RECRUITERS_URL = "/recruiters/get-recruiters";
-export const EDIT_COMPANY_INFORMATION_URL = "/recruiters/update-company-info";
-export const ADD_COMPANY_URL = "/recruiters/add-new-company";
 export const ASSIGN_RECRUITER_URL = "/recruiters/add-new-recruiter";
-export const GET_MY_COMPANY_INFORMATION_URL =
-    "/recruiters/get-my-company-information";
 
 // users controller
 export const GET_USERS_URL = "/users";
@@ -36,3 +31,10 @@ export const UPLOAD_AVATAR_COMPANY_URL = "/uploads/upload-avatar-company";
 
 // recruitment posts controller
 export const RECRUITMENT_POST_URL = "/recruitmentposts";
+
+// companies controller
+export const GET_COMPANIES_URL = "/companies";
+export const EDIT_COMPANY_INFORMATION_URL = "/companies";
+export const ADD_COMPANY_URL = "/companies";
+export const GET_MY_COMPANY_INFORMATION_URL =
+    "/companies/get-my-company-information";

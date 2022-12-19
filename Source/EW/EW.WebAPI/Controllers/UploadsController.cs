@@ -31,6 +31,11 @@ namespace EW.WebAPI.Controllers
             _recruiterService = recruiterService;
         }
 
+        /// <summary>
+        /// Student upload new cv to CV collection
+        /// </summary>
+        /// <param name="UploadNewCVModel"></param>
+        /// <returns>Data cv newest upload of user</returns>
         [Authorize(Roles= "Student")]
         [HttpPost("upload-new-cv")]
         public async Task<IActionResult> UploadNewCV([FromForm]UploadNewCVModel model)
@@ -100,6 +105,11 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// upload new avatar for company by business role
+        /// </summary>
+        /// <param name="UploadAvatarModel"></param>
+        /// <returns>Information data user updated</returns>
         [Authorize(Roles = "Business")]
         [HttpPost("upload-avatar-company")]
         public async Task<IActionResult> UploadAvatarCompany([FromForm] UploadAvatarModel model)
@@ -138,6 +148,12 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+
+        /// <summary>
+        /// Write file to folder /Uploads. File name have information like: type upload, Date time upload, filename
+        /// </summary>
+        /// <param name="ImportFileModel">model</param>
+        /// <returns>ResponseWriteFile { IsSuccess: bool, Path: string}</returns>
         [NonAction]
         private async Task<ResponseWriteFile> WriteFile(ImportFileModel model)
         {

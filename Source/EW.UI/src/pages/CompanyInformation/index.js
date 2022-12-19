@@ -10,14 +10,19 @@ import {
 import "./companyinformation.css";
 import InformationCard from "./InformationCard";
 import HeaderCard from "./HeaderCard";
+import { getPageName } from "../../common/nameApp";
 
 const CompanyInformation = () => {
     const dispatch = useDispatch();
-    const { status } = useSelector(companyInformationSelector);
+    const { status, information } = useSelector(companyInformationSelector);
     useEffect(() => {
         dispatch(getCompanyInformationThunk());
     }, [dispatch]);
 
+    useEffect(() => {
+        if (information?.companyName)
+            document.title = getPageName(information.companyName);
+    }, [information]);
     return (
         <>
             {status === Status.loading ? (
