@@ -1,6 +1,14 @@
 import { Edit, Email, Phone, Place, Work } from "@mui/icons-material";
-import { Button, Card, IconButton, TextField } from "@mui/material";
-import React, { useRef, useState } from "react";
+import {
+    Button,
+    Card,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     companyInformationSelector,
@@ -8,6 +16,11 @@ import {
 } from "../companyInformation.slice";
 import useNotify from "../../../hook/useNotify";
 import "../companyinformation.css";
+import { CountrySelector } from "../../../components";
+import { CompanyType, TeamSizeType } from "../../../common/constants";
+import countryList from "../../../common/countryList";
+
+const DEFAULT_VALUE_COUNTRY = "VN";
 
 const InformationCard = () => {
     const dispatch = useDispatch();
@@ -17,6 +30,9 @@ const InformationCard = () => {
     const companyNameRef = useRef();
     const addressRef = useRef();
     const taxNumberRef = useRef();
+    const teamSizeRef = useRef();
+    const companyTypeRef = useRef();
+    const [country, setCountry] = useState(DEFAULT_VALUE_COUNTRY);
     const handleEdit = () => {
         if (isEditing) {
             return;
@@ -34,6 +50,7 @@ const InformationCard = () => {
                 message: "Vui lòng nhập tên công ty hợp lệ",
                 type: "error",
             });
+            companyNameRef.current.focus();
             return;
         } else if (addressRef?.current.value.length < 6) {
             setNotify({
@@ -42,6 +59,7 @@ const InformationCard = () => {
                 message: "Vui lòng nhập địa chỉ công ty hợp lệ",
                 type: "error",
             });
+            addressRef.current.focus();
             return;
         } else if (taxNumberRef?.current.value.length < 6) {
             setNotify({
@@ -50,14 +68,26 @@ const InformationCard = () => {
                 message: "Vui lòng nhập mã số thuê hợp lệ",
                 type: "error",
             });
+            taxNumberRef.current.focus();
+            return;
+        } else if (country.length === 0) {
+            setNotify({
+                isOpen: true,
+                title: "Cập nhật công ty",
+                message: "Vui lòng chọn quốc gia hợp lệ",
+                type: "error",
+            });
             return;
         }
         let obj = {
+            country,
             id: information?.id,
             status: information?.status,
             companyName: companyNameRef?.current.value,
             address: addressRef?.current.value,
             taxNumber: taxNumberRef?.current.value,
+            teamSize: teamSizeRef?.current.value,
+            companyType: companyTypeRef?.current.value,
         };
         let resultDispatch = await dispatch(
             editProfileCompanyInformationThunk(obj)
@@ -70,6 +100,9 @@ const InformationCard = () => {
         });
         setIsEditing(false);
     };
+    useEffect(() => {
+        setCountry(information?.country);
+    }, [information]);
     return (
         <Card
             sx={{
@@ -210,6 +243,103 @@ const InformationCard = () => {
                                 />
                             ) : (
                                 information?.taxNumber
+                            )}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <Place color="action" />
+                        </td>
+                        <td className="header-row">Quốc gia</td>
+                        <td>
+                            {isEditing ? (
+                                <CountrySelector
+                                    country={country}
+                                    setCountry={setCountry}
+                                />
+                            ) : (
+                                countryList().getLabel(information?.country)
+                            )}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <Place color="action" />
+                        </td>
+                        <td className="header-row">Số nhân viên</td>
+                        <td>
+                            {isEditing ? (
+                                <>
+                                    <InputLabel id="company-size-selected-item">
+                                        Số nhân viên
+                                    </InputLabel>
+                                    <Select
+                                        labelId="company-size-selected-item"
+                                        label="Số nhân viên"
+                                        defaultValue={information?.teamSize}
+                                        fullWidth
+                                        sx={{
+                                            marginBottom: "16px",
+                                        }}
+                                        inputRef={teamSizeRef}
+                                    >
+                                        {TeamSizeType.map((item) => (
+                                            <MenuItem
+                                                key={JSON.stringify(item)}
+                                                value={item.value}
+                                            >
+                                                {item.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </>
+                            ) : (
+                                TeamSizeType.find(
+                                    (item) =>
+                                        item.value === information?.teamSize
+                                )?.label
+                            )}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <Place color="action" />
+                        </td>
+                        <td className="header-row">Loại hình công ty</td>
+                        <td>
+                            {isEditing ? (
+                                <>
+                                    <InputLabel id="company-type-selected-item">
+                                        Loại hình công ty
+                                    </InputLabel>
+                                    <Select
+                                        labelId="company-type-selected-item"
+                                        label="Loại hình công ty"
+                                        defaultValue={information?.companyType}
+                                        inputRef={companyTypeRef}
+                                        fullWidth
+                                        sx={{
+                                            marginBottom: "16px",
+                                        }}
+                                    >
+                                        {CompanyType.map((item) => (
+                                            <MenuItem
+                                                key={JSON.stringify(item)}
+                                                value={item.value}
+                                            >
+                                                {item.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </>
+                            ) : (
+                                CompanyType.find(
+                                    (item) =>
+                                        item.value === information?.companyType
+                                )?.label
                             )}
                         </td>
                         <td></td>

@@ -25,5 +25,12 @@ namespace EW.Domain.Entities
         [StringLength(350)]
         public string AvatarUrl { get; set; }
         public EStatusRecruiter Status { get; set; }
+        [StringLength(10)]
+        [DefaultValue("VN")]
+        public string Country { get; set; }
+        [DefaultValue(ETeamSize.ZeroTo50)]
+        public ETeamSize TeamSize { get; set; }
+        [DefaultValue(ECompanyType.Product)]
+        public ECompanyType CompanyType { get; set; }
     }
 }

@@ -79,7 +79,7 @@ const TechStackSelector = ({ techStacks, setTechStacks }) => {
 
 TechStackSelector.displayName = "TechStackSelector";
 
-TechStackSelector.propsType = {
+TechStackSelector.propTypes = {
     techStacks: array.isRequired,
     setTechStacks: func.isRequired,
 };

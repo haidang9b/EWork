@@ -114,7 +114,7 @@ const UploadFileDialog = ({ uploadDialog, setUploadDialog }) => {
 
 UploadFileDialog.displayName = "UploadFileDialog";
 
-UploadFileDialog.propsType = {
+UploadFileDialog.propTypes = {
     uploadDialog: object.isRequired,
     setUploadDialog: func.isRequired,
 };

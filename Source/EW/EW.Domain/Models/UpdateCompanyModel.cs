@@ -14,5 +14,8 @@ namespace EW.Domain.Models
         public string Address { get; set; }
         public string TaxNumber { get; set; }
         public EStatusRecruiter Status { get; set; }
+        public ECompanyType CompanyType { get; set; }
+        public string Country { get; set; }
+        public ETeamSize TeamSize { get; set; }
     }
 }
