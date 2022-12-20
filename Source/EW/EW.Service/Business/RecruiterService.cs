@@ -1,4 +1,5 @@
-﻿using EW.Commons.Enums;
+﻿using EW.Commons.Constaints;
+using EW.Commons.Enums;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
@@ -36,10 +37,14 @@ namespace EW.Services.Business
                     CompanyName = model.CompanyName,
                     Address = model.Address,
                     TaxNumber = model.TaxNumber,
+                    Country = Constaints.COUNTRY_DEFAULT,
+                    Description = Constaints.STRING_BLANK,
+                    CompanyType = ECompanyType.Product,
+                    TeamSize = ETeamSize.ZeroTo50,
                     Status = EStatusRecruiter.Pending,
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
-                    AvatarUrl = "",
+                    AvatarUrl = Constaints.STRING_BLANK,
                 };
                 _unitOfWork.Repository<Company>().Add(newCompany);
                 var resultAddCompany = await _unitOfWork.SaveChangeAsync();
@@ -49,10 +54,10 @@ namespace EW.Services.Business
                     FullName = model.FullName,
                     Username = model.Username,
                     Password = model.Password,
-                    CoverLetter = "",
+                    CoverLetter = Constaints.STRING_BLANK,
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
-                    ImageUrl = "",
+                    ImageUrl = Constaints.STRING_BLANK,
                     PhoneNumber = model.PhoneNumber,
                     RoleId = (long)ERole.ID_Business,
                     IsActive = false,
@@ -148,6 +153,7 @@ namespace EW.Services.Business
             existCompany.CompanyType = model.CompanyType;
             existCompany.TeamSize = model.TeamSize;
             existCompany.Country = model.Country;
+            existCompany.Description = model.Description;
             _unitOfWork.Repository<Company>().Update(existCompany);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -169,11 +175,12 @@ namespace EW.Services.Business
                 UpdatedDate = DateTimeOffset.Now,
                 CreatedDate = DateTimeOffset.Now,
                 TaxNumber = model.TaxNumber,
-                AvatarUrl = "",
-                Country = "VN",
+                AvatarUrl = Constaints.STRING_BLANK,
+                Country = Constaints.COUNTRY_DEFAULT,
                 TeamSize = ETeamSize.ZeroTo50,
-                CompanyType = ECompanyType.Product
-            };
+                CompanyType = ECompanyType.Product,
+                Description = Constaints.COUNTRY_DEFAULT
+        };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             return await _unitOfWork.SaveChangeAsync();
         }

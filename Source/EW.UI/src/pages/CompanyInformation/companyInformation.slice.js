@@ -54,6 +54,8 @@ const companyInformationSlice = createSlice({
                             action.payload?.data?.country;
                         state.information.companyType =
                             action.payload?.data?.companyType;
+                        state.information.description =
+                            action.payload?.data?.description;
                         state.status = Status.succeeded;
                     } else {
                         state.status = Status.failed;

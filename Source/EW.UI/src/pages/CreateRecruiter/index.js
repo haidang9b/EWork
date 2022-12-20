@@ -163,6 +163,9 @@ const CreateRecruiter = () => {
             type: result.isSuccess ? "success" : "error",
             title: "Tạo tài khoản doanh nghiệp",
         });
+        if (result?.isSuccess) {
+            document.getElementById("form-sign-up-register").reset();
+        }
     };
     return (
         <Container>
@@ -222,7 +225,7 @@ const CreateRecruiter = () => {
                             paddingRight: "2%",
                         }}
                     >
-                        <form>
+                        <form id="form-sign-up-register">
                             <Typography variant="h5">
                                 Thông tin doanh nghiệp
                             </Typography>
