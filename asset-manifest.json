@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.e5529d55.css",
-    "main.js": "/static/js/main.bc5b3d50.js",
-    "static/js/229.859b5bc3.chunk.js": "/static/js/229.859b5bc3.chunk.js",
-    "static/js/843.c44d3cfb.chunk.js": "/static/js/843.c44d3cfb.chunk.js",
-    "static/js/787.601ba34f.chunk.js": "/static/js/787.601ba34f.chunk.js",
-    "static/media/recruitment-img.jpg": "/static/media/recruitment-img.adc9dbe6481c20081ecc.jpg",
-    "static/media/text.png": "/static/media/text.f3e0f5c2609a14feba75.png",
-    "index.html": "/index.html",
-    "main.e5529d55.css.map": "/static/css/main.e5529d55.css.map",
-    "main.bc5b3d50.js.map": "/static/js/main.bc5b3d50.js.map",
-    "229.859b5bc3.chunk.js.map": "/static/js/229.859b5bc3.chunk.js.map",
-    "843.c44d3cfb.chunk.js.map": "/static/js/843.c44d3cfb.chunk.js.map",
-    "787.601ba34f.chunk.js.map": "/static/js/787.601ba34f.chunk.js.map"
+    "main.css": "/EWork/static/css/main.b59651a4.css",
+    "main.js": "/EWork/static/js/main.320e976a.js",
+    "static/js/229.859b5bc3.chunk.js": "/EWork/static/js/229.859b5bc3.chunk.js",
+    "static/js/843.2e3f4b69.chunk.js": "/EWork/static/js/843.2e3f4b69.chunk.js",
+    "static/js/787.601ba34f.chunk.js": "/EWork/static/js/787.601ba34f.chunk.js",
+    "static/media/recruitment-img.jpg": "/EWork/static/media/recruitment-img.adc9dbe6481c20081ecc.jpg",
+    "static/media/text.png": "/EWork/static/media/text.f3e0f5c2609a14feba75.png",
+    "index.html": "/EWork/index.html",
+    "main.b59651a4.css.map": "/EWork/static/css/main.b59651a4.css.map",
+    "main.320e976a.js.map": "/EWork/static/js/main.320e976a.js.map",
+    "229.859b5bc3.chunk.js.map": "/EWork/static/js/229.859b5bc3.chunk.js.map",
+    "843.2e3f4b69.chunk.js.map": "/EWork/static/js/843.2e3f4b69.chunk.js.map",
+    "787.601ba34f.chunk.js.map": "/EWork/static/js/787.601ba34f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e5529d55.css",
-    "static/js/main.bc5b3d50.js"
+    "static/css/main.b59651a4.css",
+    "static/js/main.320e976a.js"
   ]
 }
