@@ -1,4 +1,4 @@
-on
+on:
   push:
     branch:
       - Dang_test_CI
