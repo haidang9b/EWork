@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: production-files
-          path: ./build
+          path: Source/EW.UI/build
 
   # deploy job
   deploy:
@@ -56,7 +56,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_ACCESS_TOKEN }}
-          publish_dir: ./build
+          publish_dir: Source/EW.UI/build
         
 
   
