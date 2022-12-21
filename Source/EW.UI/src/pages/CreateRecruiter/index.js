@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { useRef, useEffect } from "react";
-import RecruitmentImgDefault from "../../assets/images/create-recruiter__img.jpg";
+import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
 import { Send } from "@mui/icons-material";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";

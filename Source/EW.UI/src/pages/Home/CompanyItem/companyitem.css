@@ -2,3 +2,13 @@
     margin-top: 8px;
     font-size: 20px;
 }
+.top-company {
+    transition: box-shadow 0.3s;
+    height: 100%;
+    padding-top: 5;
+    background-color: "#fff";
+}
+
+.top-company:hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}

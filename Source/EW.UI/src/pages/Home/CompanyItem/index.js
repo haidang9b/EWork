@@ -5,16 +5,12 @@ import ImageDefault from "../../../assets/images/company-default.webp";
 import { CompanyType } from "../../../common/constants";
 import useFileUpload from "../../../hook/useFileUpload";
 import "./companyitem.css";
-const section = {
-    height: "100%",
-    paddingTop: 5,
-    backgroundColor: "#fff",
-};
+
 const CompanyItem = ({ name, avatarUrl, companyType }) => {
     const { getFilePathUpload } = useFileUpload();
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} padding={1}>
-            <Card style={section}>
+            <Card className="top-company">
                 <CardContent>
                     <Box textAlign="center">
                         <img

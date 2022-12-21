@@ -14,7 +14,6 @@ const SkeletonCompanyItem = () => {
                             height={150}
                             animation="wave"
                         />
-
                         <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
                     </Box>
                 </CardContent>
