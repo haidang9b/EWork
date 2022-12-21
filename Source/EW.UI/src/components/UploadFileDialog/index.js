@@ -44,7 +44,7 @@ const UploadFileDialog = ({ uploadDialog, setUploadDialog }) => {
     const files = useCallback(
         (acceptedFiles) =>
             acceptedFiles.map((file) => (
-                <li key={file.path} className="acceptant">
+                <li key={file.path} className="upload-file-dialog__acceptant">
                     {file.path} - {file.size} bytes
                 </li>
             )),
@@ -53,9 +53,9 @@ const UploadFileDialog = ({ uploadDialog, setUploadDialog }) => {
     const fileRejectionItems = useCallback(
         (fileRejections) =>
             fileRejections.map(({ file, errors }) => (
-                <li key={file.path} className="reject-file-item">
+                <li key={file.path} className="upload-file-dialog__reject">
                     {file.path} - {file.size} bytes
-                    <ul className="error file-error-description">
+                    <ul className="error upload-file-dialog__error-description">
                         {errors.map((e) => (
                             <li key={e.code}>{e.message}</li>
                         ))}

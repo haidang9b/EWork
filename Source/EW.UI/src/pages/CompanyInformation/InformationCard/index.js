@@ -122,13 +122,15 @@ const InformationCard = () => {
                 marginTop: "20px",
             }}
         >
-            <table className="table-content">
+            <table className="infor-company__table">
                 <tbody>
                     <tr>
                         <td>
                             <Work color="action" />
                         </td>
-                        <td className="header-row">Tên doanh nghiệp</td>
+                        <td className="infor-company__header">
+                            Tên doanh nghiệp
+                        </td>
                         <td>
                             {isEditing ? (
                                 <TextField
@@ -163,7 +165,7 @@ const InformationCard = () => {
                         <td>
                             <Email color="action" />
                         </td>
-                        <td className="header-row">Email công ty</td>
+                        <td className="infor-company__header">Email công ty</td>
                         <td>
                             {isEditing ? (
                                 <TextField
@@ -187,7 +189,9 @@ const InformationCard = () => {
                         <td>
                             <Phone color="action" />
                         </td>
-                        <td className="header-row">Số điện thoại công ty</td>
+                        <td className="infor-company__header">
+                            Số điện thoại công ty
+                        </td>
                         <td>
                             {isEditing ? (
                                 <TextField
@@ -212,7 +216,7 @@ const InformationCard = () => {
                         <td>
                             <Place color="action" />
                         </td>
-                        <td className="header-row">Địa chỉ</td>
+                        <td className="infor-company__header">Địa chỉ</td>
                         <td>
                             {isEditing ? (
                                 <TextField
@@ -238,7 +242,7 @@ const InformationCard = () => {
                         <td>
                             <AttachMoney color="action" />
                         </td>
-                        <td className="header-row">Mã số thuế</td>
+                        <td className="infor-company__header">Mã số thuế</td>
                         <td>
                             {isEditing ? (
                                 <TextField
@@ -264,7 +268,7 @@ const InformationCard = () => {
                         <td>
                             <Language color="action" />
                         </td>
-                        <td className="header-row">Quốc gia</td>
+                        <td className="infor-company__header">Quốc gia</td>
                         <td>
                             {isEditing ? (
                                 <CountrySelector
@@ -281,7 +285,7 @@ const InformationCard = () => {
                         <td>
                             <Group color="action" />
                         </td>
-                        <td className="header-row">Số nhân viên</td>
+                        <td className="infor-company__header">Số nhân viên</td>
                         <td>
                             {isEditing ? (
                                 <>
@@ -321,7 +325,9 @@ const InformationCard = () => {
                         <td>
                             <Settings color="action" />
                         </td>
-                        <td className="header-row">Loại hình công ty</td>
+                        <td className="infor-company__header">
+                            Loại hình công ty
+                        </td>
                         <td>
                             {isEditing ? (
                                 <>
@@ -361,7 +367,7 @@ const InformationCard = () => {
                         <td>
                             <Info color="action" />
                         </td>
-                        <td className="header-row">Mô tả</td>
+                        <td className="infor-company__header">Mô tả</td>
                         <td>
                             {isEditing ? (
                                 <>

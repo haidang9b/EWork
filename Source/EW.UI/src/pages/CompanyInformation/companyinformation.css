@@ -1,14 +1,14 @@
-.table-content {
+.infor-company__table {
     padding: 16px 24px 16px 24px;
     width: fit-content;
 }
 
-.header-row {
+.infor-company__header {
     padding-left: 16px;
     padding-right: 16px;
     font-weight: bolder;
 }
 
-td.header-row {
+td.infor-company__header {
     white-space: nowrap;
 }
