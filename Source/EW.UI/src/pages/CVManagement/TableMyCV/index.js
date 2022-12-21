@@ -7,8 +7,11 @@ import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
 import { profileSelector, removeCVThunk } from "../profile.slice";
 import useNotify from "../../../hook/useNotify";
+import useFileUpload from "../../../hook/useFileUpload";
+import moment from "moment";
 
 const TableMyCV = () => {
+    const { getFilePathUpload } = useFileUpload();
     const { setNotify } = useNotify();
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
@@ -25,7 +28,13 @@ const TableMyCV = () => {
             width: 80,
         },
         { field: "cvName", headerName: "Tên CV", width: 280 },
-        { field: "updatedDate", headerName: "Ngày đăng", width: 280 },
+        {
+            field: "updatedDate",
+            headerName: "Ngày đăng",
+            width: 280,
+            renderCell: (cellValues) =>
+                moment(cellValues.row?.updatedDate).format("DD/MM/yyyy HH:mm"),
+        },
         {
             field: "action",
             headerName: "Action",
@@ -64,13 +73,21 @@ const TableMyCV = () => {
                         <IconButton
                             onClick={onClick}
                             variant="contained"
-                            href={cellValues.row?.cvUrl}
+                            href={
+                                cellValues.row?.cvUrl
+                                    ? getFilePathUpload(cellValues.row?.cvUrl)
+                                    : ""
+                            }
                         >
                             <RemoveRedEyeOutlined />
                         </IconButton>
                         <IconButton
                             variant="contained"
-                            href={cellValues.row?.cvUrl}
+                            href={
+                                cellValues.row?.cvUrl
+                                    ? getFilePathUpload(cellValues.row?.cvUrl)
+                                    : ""
+                            }
                             target="_blank"
                             download
                         >

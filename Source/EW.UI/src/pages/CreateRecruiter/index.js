@@ -203,7 +203,7 @@ const CreateRecruiter = () => {
                                 md: "block",
                             },
                         }}
-                        className="recruitment-img"
+                        className="create-recruiter__img"
                     >
                         <img
                             src={RecruitmentImgDefault}

@@ -1,0 +1,14 @@
+.item-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.text-center {
+    text-align: center !important;
+}
+.d-flex {
+    display: flex;
+}
+.space-btw {
+    justify-content: space-between;
+}

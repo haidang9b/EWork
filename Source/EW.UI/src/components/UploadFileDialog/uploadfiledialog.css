@@ -22,7 +22,7 @@
     font-weight: bolder;
 }
 
-.file-error-description {
+.upload-file-dialog__error-description {
     font-style: italic;
 }
 
@@ -33,7 +33,7 @@ ul {
 li {
     list-style: none;
 }
-li.reject-file-item:before {
+li.upload-file-dialog__reject:before {
     content: "\f00d"; /* FontAwesome Unicode */
     font-family: FontAwesome;
     display: inline-block;
@@ -42,7 +42,7 @@ li.reject-file-item:before {
     color: rgb(242, 70, 70);
 }
 
-li.acceptant:before {
+li.upload-file-dialog__acceptant:before {
     content: "\f00c"; /* FontAwesome Unicode */
     font-family: FontAwesome;
     display: inline-block;
