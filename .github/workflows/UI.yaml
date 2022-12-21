@@ -1,0 +1,60 @@
+on:
+  push:
+    branch:
+      - master
+  pull_request:
+    branch:
+      - master
+
+# Function
+jobs:
+  build:
+    # Name of job
+    name: Build
+    
+    # the OS job run on
+    runs-on: ubuntu-latest
+    # setup default dir run job
+    defaults:
+      run:
+        working-directory: Source/EW.UI
+    #step
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install node 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Install NPM Dependencies
+        run: npm i
+      - name: Build Project
+        run: npm run build
+      - name: Upload artifact in order to deploy
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: Source/EW.UI/build
+
+  # deploy job
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: Source/EW.UI
+   
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with: 
+          name: production-files
+          path: Source/EW.UI/build
+      - name: Deploy to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_ACCESS_TOKEN }}
+          publish_dir: Source/EW.UI/build
+        
