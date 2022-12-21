@@ -22,7 +22,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install node 16
-      uses: actions/setup-node
+      uses: actions/setup-node@v1
       with:
         node-version: 16.x
     - name: Install NPM Dependencies
