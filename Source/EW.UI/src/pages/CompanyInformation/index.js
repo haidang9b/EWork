@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
 import { SkeletonProfile } from "../../components";
@@ -8,9 +8,9 @@ import {
     getCompanyInformationThunk,
 } from "./companyInformation.slice";
 import "./companyinformation.css";
-import InformationCard from "./InformationCard";
-import HeaderCard from "./HeaderCard";
 import { getPageName } from "../../common/nameApp";
+const InformationCard = React.lazy(() => import("./InformationCard"));
+const HeaderCard = React.lazy(() => import("./HeaderCard"));
 
 const CompanyInformation = () => {
     const dispatch = useDispatch();
@@ -28,14 +28,16 @@ const CompanyInformation = () => {
             {status === Status.loading ? (
                 <SkeletonProfile />
             ) : (
-                <Container>
-                    <Box width="100%">
-                        <Box>
-                            <HeaderCard />
-                            <InformationCard />
+                <Suspense fallback={<SkeletonProfile />}>
+                    <Container>
+                        <Box width="100%">
+                            <Box>
+                                <HeaderCard />
+                                <InformationCard />
+                            </Box>
                         </Box>
-                    </Box>
-                </Container>
+                    </Container>
+                </Suspense>
             )}
         </>
     );

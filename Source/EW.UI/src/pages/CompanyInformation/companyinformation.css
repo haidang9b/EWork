@@ -8,3 +8,7 @@
     padding-right: 16px;
     font-weight: bolder;
 }
+
+td.header-row {
+    white-space: nowrap;
+}

@@ -32,5 +32,7 @@ namespace EW.Domain.Entities
         public ETeamSize TeamSize { get; set; }
         [DefaultValue(ECompanyType.Product)]
         public ECompanyType CompanyType { get; set; }
+        [DefaultValue("")]
+        public string Description { get; set; }
     }
 }

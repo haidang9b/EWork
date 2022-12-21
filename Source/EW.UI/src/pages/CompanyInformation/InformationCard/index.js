@@ -1,4 +1,15 @@
-import { Edit, Email, Phone, Place, Work } from "@mui/icons-material";
+import {
+    AttachMoney,
+    Edit,
+    Email,
+    Group,
+    Info,
+    Language,
+    Phone,
+    Place,
+    Settings,
+    Work,
+} from "@mui/icons-material";
 import {
     Button,
     Card,
@@ -16,7 +27,7 @@ import {
 } from "../companyInformation.slice";
 import useNotify from "../../../hook/useNotify";
 import "../companyinformation.css";
-import { CountrySelector } from "../../../components";
+import { CountrySelector, RichTextEditor } from "../../../components";
 import { CompanyType, TeamSizeType } from "../../../common/constants";
 import countryList from "../../../common/countryList";
 
@@ -33,6 +44,7 @@ const InformationCard = () => {
     const teamSizeRef = useRef();
     const companyTypeRef = useRef();
     const [country, setCountry] = useState(DEFAULT_VALUE_COUNTRY);
+    const [editor, setEditor] = useState(null);
     const handleEdit = () => {
         if (isEditing) {
             return;
@@ -88,6 +100,7 @@ const InformationCard = () => {
             taxNumber: taxNumberRef?.current.value,
             teamSize: teamSizeRef?.current.value,
             companyType: companyTypeRef?.current.value,
+            description: editor?.root.innerHTML,
         };
         let resultDispatch = await dispatch(
             editProfileCompanyInformationThunk(obj)
@@ -223,7 +236,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Place color="action" />
+                            <AttachMoney color="action" />
                         </td>
                         <td className="header-row">Mã số thuế</td>
                         <td>
@@ -249,7 +262,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Place color="action" />
+                            <Language color="action" />
                         </td>
                         <td className="header-row">Quốc gia</td>
                         <td>
@@ -266,7 +279,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Place color="action" />
+                            <Group color="action" />
                         </td>
                         <td className="header-row">Số nhân viên</td>
                         <td>
@@ -306,7 +319,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Place color="action" />
+                            <Settings color="action" />
                         </td>
                         <td className="header-row">Loại hình công ty</td>
                         <td>
@@ -340,6 +353,30 @@ const InformationCard = () => {
                                     (item) =>
                                         item.value === information?.companyType
                                 )?.label
+                            )}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <Info color="action" />
+                        </td>
+                        <td className="header-row">Mô tả</td>
+                        <td>
+                            {isEditing ? (
+                                <>
+                                    <RichTextEditor
+                                        editor={editor}
+                                        setEditor={setEditor}
+                                        initialHTML={information?.description}
+                                    />
+                                </>
+                            ) : (
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: information?.description,
+                                    }}
+                                ></div>
                             )}
                         </td>
                         <td></td>

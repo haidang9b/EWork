@@ -70,6 +70,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             teamSize: data.teamSize,
             companyType: data?.companyType,
             country: data?.country,
+            description: data?.description,
         };
 
         const resultDispatch = await dispatch(

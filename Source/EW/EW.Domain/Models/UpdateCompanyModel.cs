@@ -17,5 +17,6 @@ namespace EW.Domain.Models
         public ECompanyType CompanyType { get; set; }
         public string Country { get; set; }
         public ETeamSize TeamSize { get; set; }
+        public string Description { get; set; }
     }
 }
