@@ -86,6 +86,7 @@ namespace EW.WebAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
+                result.Message = ex.Message;
             }
             return Ok(result);
         }
@@ -171,6 +172,24 @@ namespace EW.WebAPI.Controllers
             try
             {
                 result.Data = await _companyService.GetTopCompanies();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _companyService.GetCompany(new Company { Id = id });
+                result.IsSuccess = true;
+                result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
             {

@@ -36,7 +36,7 @@ const CompanyItem = ({ name, avatarUrl, companyType, jobsHiring }) => {
                         />
                         <div className="top-company__item text-center">
                             <Link
-                                to={"/"}
+                                to={"/company-detail"}
                                 className="text-link top-company__name"
                             >
                                 {name}

@@ -37,7 +37,7 @@ namespace EW.Services.Business
         {
             var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (existCompany == null)
-                return false;
+                throw new Exception("Công ty này không tồn tại, vui lòng kiểm tra lại");
             existCompany.CompanyName = model.CompanyName;
             existCompany.Address = model.Address;
             existCompany.Status = model.Status;

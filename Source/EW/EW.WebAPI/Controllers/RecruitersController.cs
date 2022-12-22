@@ -74,21 +74,14 @@ namespace EW.WebAPI.Controllers
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                 });
-                if (exist == null)
-                {
-                    result.IsSuccess = await _recruiterService.AddNewRecruiter(model);
-                    result.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
-                }
-                else
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Email hoặc số điện thoại này đã được đăng ký";
-                }
+                result.IsSuccess = await _recruiterService.AddNewRecruiter(model);
+                result.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
+                result.Message = ex.Message;
             }
             return Ok(result);
         }
@@ -150,6 +143,7 @@ namespace EW.WebAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
+                result.Message = ex.Message;
             }
             return Ok(result);
         }
