@@ -11,11 +11,11 @@ import PropTypes from "prop-types";
 
 /**
  * Dialog support for confirm and execute function if user confirm
- * @param confirm is data confirm include : isOpen: bool, title: string, subtitle: string, onConfirm: function
- * @param setConfirm is setter data for confirm
- * @returns ConfirmDialogComponent
+ * @param {Object} confirm is data confirm include : isOpen: bool, title: string, subtitle: string, onConfirm: function
+ * @param {Function} setConfirm is setter data for confirm
+ * @example
+ * <ConfirmDialog confirm={confirm} setConfirm={setConfirm}/>
  */
-
 const ConfirmDialog = ({ confirm, setConfirm }) => {
     return (
         <Dialog

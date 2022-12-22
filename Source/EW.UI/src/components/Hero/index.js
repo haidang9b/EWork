@@ -4,12 +4,14 @@ import PropTypes from "prop-types";
 
 /**
  * Return component Hero with data
- * @param children is component or html element
- * @param title is string, title of Hero
- * @param subtitle is string, subtitle of Hero
+ * @param {Object} object
+ * @param {Node} object.children is component or html element
+ * @param {String} object.title is string, title of Hero
+ * @param {String} object.subtitle is string, subtitle of Hero
  * @returns component Hero with data
+ * @example
+ * <Hero children title subtitle/>
  */
-
 const Hero = ({ children, title, subtitle }) => {
     return (
         <div id="notfound">

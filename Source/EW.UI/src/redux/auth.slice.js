@@ -9,6 +9,7 @@ import {
 } from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
 import { Status } from "../common/constants";
+import { failureReducer, loadingReducer } from "../common/utils";
 
 const initialState = {
     user: TokenService.getUserFromToken(TokenService.getAccessToken()) | null,
@@ -20,9 +21,7 @@ const authSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(handleLoginThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(handleLoginThunk.pending, loadingReducer)
             .addCase(handleLoginThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     TokenService.setAccessToken(
@@ -36,12 +35,8 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleLoginThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(handleRefreshTokenThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(handleLoginThunk.rejected, failureReducer)
+            .addCase(handleRefreshTokenThunk.pending, loadingReducer)
             .addCase(handleRefreshTokenThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     TokenService.setAccessToken(
@@ -55,12 +50,8 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleRefreshTokenThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(handleLoginGoogleThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(handleRefreshTokenThunk.rejected, failureReducer)
+            .addCase(handleLoginGoogleThunk.pending, loadingReducer)
             .addCase(handleLoginGoogleThunk.fulfilled, (state, action) => {
                 if (
                     action.payload.data?.accessToken &&
@@ -77,45 +68,25 @@ const authSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(handleLoginGoogleThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(handleRecoverAccountThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(handleLoginGoogleThunk.rejected, failureReducer)
+            .addCase(handleRecoverAccountThunk.pending, loadingReducer)
             .addCase(handleRecoverAccountThunk.fulfilled, (state, action) => {
                 state.status = Status.succeeded;
             })
-            .addCase(handleRecoverAccountThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(
-                handleValidateCodeRecoverThunk.pending,
-                (state, action) => {
-                    state.status = Status.loading;
-                }
-            )
+            .addCase(handleRecoverAccountThunk.rejected, failureReducer)
+            .addCase(handleValidateCodeRecoverThunk.pending, loadingReducer)
             .addCase(
                 handleValidateCodeRecoverThunk.fulfilled,
                 (state, action) => {
                     state.status = Status.succeeded;
                 }
             )
-            .addCase(
-                handleValidateCodeRecoverThunk.rejected,
-                (state, action) => {
-                    state.status = Status.failed;
-                }
-            )
-            .addCase(handleResetPasswordThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(handleValidateCodeRecoverThunk.rejected, failureReducer)
+            .addCase(handleResetPasswordThunk.pending, loadingReducer)
             .addCase(handleResetPasswordThunk.fulfilled, (state, action) => {
                 state.status = Status.succeeded;
             })
-            .addCase(handleResetPasswordThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
+            .addCase(handleResetPasswordThunk.rejected, failureReducer)
             .addCase(handleLogout.pending, logoutAccount)
             .addCase(handleLogout.fulfilled, logoutAccount)
             .addCase(handleLogout.rejected, logoutAccount);
