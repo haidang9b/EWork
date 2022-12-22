@@ -113,14 +113,7 @@ const RecoveryAccount = () => {
                                 inputRef={emailRef}
                             />
                         </Box>
-                        <Link
-                            to={"/login"}
-                            style={{
-                                margin: "auto",
-                                textDecoration: "none",
-                                color: "#007cc0",
-                            }}
-                        >
+                        <Link to={"/login"} className="text-link">
                             Quay lại đăng nhập
                         </Link>
                     </CardContent>

@@ -4,8 +4,10 @@ import PropTypes from "prop-types";
 
 /**
  * Check user can access to route if user login and user have allowed roles
- * @param allowedRoles list of role for accept access to route
+ * @param {Array} allowedRoles list of role for accept access to route
  * @returns redirect or access to route
+ * @example
+ * <RequireAuth allowedRoles/>
  */
 const RequireAuth = ({ allowedRoles }) => {
     const { user } = useAuth();
