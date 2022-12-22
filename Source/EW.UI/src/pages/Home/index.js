@@ -3,15 +3,15 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
 import { SearchBar } from "../../components";
-import { getCompaniesThunk } from "../CompanyManagement/company.slice";
 import Benifit from "./Benifit";
 import ListCompany from "./ListCompany";
+import { getTopCompaniesThunk } from "./ListCompany/topCompany.slice";
 
 const Home = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         document.title = getPageName("Trang chủ");
-        dispatch(getCompaniesThunk());
+        dispatch(getTopCompaniesThunk());
     }, [dispatch]);
     return (
         <Container>

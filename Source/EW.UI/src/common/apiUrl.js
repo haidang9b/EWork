@@ -38,3 +38,4 @@ export const EDIT_COMPANY_INFORMATION_URL = "/companies";
 export const ADD_COMPANY_URL = "/companies";
 export const GET_MY_COMPANY_INFORMATION_URL =
     "/companies/get-my-company-information";
+export const GET_TOP_COMPANIES_URL = "/companies/top-companies";

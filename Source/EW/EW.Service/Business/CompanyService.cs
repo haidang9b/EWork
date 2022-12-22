@@ -2,6 +2,7 @@
 using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Domain.ViewModels;
 using EW.Repository;
 using EW.Services.Constracts;
 
@@ -84,6 +85,26 @@ namespace EW.Services.Business
             exist.UpdatedDate = DateTimeOffset.Now;
             _unitOfWork.Repository<Company>().Update(exist);
             return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<IEnumerable<TopComapnyModel>> GetTopCompanies()
+        {
+            var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
+            var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
+            var result = new List<TopComapnyModel>();
+            foreach(var company in companies)
+            {
+                var JobsHiring = recruitmentPosts.Where(item => item.CompanyId == company.Id).ToList();
+                result.Add(new TopComapnyModel
+                {
+                    Id = company.Id,
+                    CompanyName = company.CompanyName,
+                    AvatarUrl = company.AvatarUrl,
+                    JobsHiring = JobsHiring.Count(),
+                    CompanyType = company.CompanyType,
+                });
+            }
+            return result;
         }
     }
 }

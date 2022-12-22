@@ -159,6 +159,10 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get top companies with number jobs hiring
+        /// </summary>
+        /// <returns>List companies have number jobs hiring...</returns>
         [HttpGet("top-companies")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTopCompanies()
@@ -166,7 +170,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-
+                result.Data = await _companyService.GetTopCompanies();
             }
             catch(Exception ex)
             {

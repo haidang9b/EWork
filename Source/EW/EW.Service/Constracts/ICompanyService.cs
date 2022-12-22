@@ -1,5 +1,6 @@
 ﻿using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace EW.Services.Constracts
         Task<Company> GetCompany(Company model);
         Task<bool> AddCompany(Company model);
         Task<bool> UploadAvatarCompany(Company company);
+        Task<IEnumerable<TopComapnyModel>> GetTopCompanies();
     }
 }
