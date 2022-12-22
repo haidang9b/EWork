@@ -15,8 +15,8 @@ class CountryList {
     }
     /**
      * Get value country by label
-     * @param label of country
-     * @returns return value by label, if null, return ""
+     * @param {string} label of country
+     * @returns {string} return value by label, if null, return ""
      */
     getValue(label) {
         if (label) {
@@ -26,8 +26,8 @@ class CountryList {
     }
     /**
      * Get label country by value
-     * @param value is value of country
-     * @returns return label by value, if null, return ""
+     * @param {string} value is value of country
+     * @returns {string} return label by value, if null, return ""
      */
     getLabel(value) {
         if (value) {
@@ -37,14 +37,14 @@ class CountryList {
     }
     /**
      * Get labels of all countries in data .json
-     * @returns List label of countries
+     * @returns {Array} List label of countries
      */
     getLabels() {
         return this.data.map((country) => country.label);
     }
     /**
      * Get values of all countries in data .json
-     * @returns List value of countries
+     * @returns {Array} List value of countries
      */
     getValues() {
         return this.data.map((country) => country.value);

@@ -8,6 +8,7 @@ import {
     GET_USERS_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
+import { failureReducer, loadingReducer } from "../../common/utils";
 const initialState = {
     users: [],
     roles: [],
@@ -18,18 +19,14 @@ const usersSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(getUsersThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getUsersThunk.pending, loadingReducer)
             .addCase(getUsersThunk.fulfilled, (state, action) => {
                 if (action.payload.data) {
                     state.users = action.payload.data;
                 }
                 state.status = Status.succeeded;
             })
-            .addCase(getUsersThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
+            .addCase(getUsersThunk.rejected, failureReducer)
             .addCase(getRolesThunk.fulfilled, (state, action) => {
                 if (action.payload?.data) {
                     state.roles = action.payload?.data;
@@ -40,9 +37,7 @@ const usersSlice = createSlice({
             .addCase(getRolesThunk.rejected, (state, action) => {
                 state.roles = [];
             })
-            .addCase(setActiveThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(setActiveThunk.pending, loadingReducer)
             .addCase(setActiveThunk.fulfilled, (state, action) => {
                 state.status = Status.succeeded;
                 if (action.payload?.isSuccess && action.payload?.data) {
@@ -52,24 +47,16 @@ const usersSlice = createSlice({
                     currentUser.isActive = action.payload?.data?.isActive;
                 }
             })
-            .addCase(setActiveThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(addNewAccountAdminThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(setActiveThunk.rejected, failureReducer)
+            .addCase(addNewAccountAdminThunk.pending, loadingReducer)
             .addCase(addNewAccountAdminThunk.fulfilled, (state, action) => {
                 state.status = Status.succeeded;
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.users.push(action.payload?.data);
                 }
             })
-            .addCase(addNewAccountAdminThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(editAccountThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(addNewAccountAdminThunk.rejected, failureReducer)
+            .addCase(editAccountThunk.pending, loadingReducer)
             .addCase(editAccountThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     let currentUser = state.users.find(
@@ -83,9 +70,7 @@ const usersSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(editAccountThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            });
+            .addCase(editAccountThunk.rejected, failureReducer);
     },
 });
 

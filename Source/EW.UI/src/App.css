@@ -12,3 +12,9 @@
 .space-btw {
     justify-content: space-between;
 }
+
+.text-link {
+    margin: auto;
+    text-decoration: none;
+    color: #007cc0;
+}

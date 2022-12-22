@@ -1,7 +1,7 @@
 /**
  * Check email valid or invalid
- * @param email for validate email
- * @returns false or true
+ * @param {String} email for validate email
+ * @returns {Boolean} false or true
  */
 export const ValidateEmail = (email) => {
     // eslint-disable-next-line
@@ -13,8 +13,8 @@ export const ValidateEmail = (email) => {
 
 /**
  * Check Vietnamese phone number valid or invalid
- * @param phoneNumber for validate Vietnamese Phone Number
- * @returns false or true
+ * @param {String} phoneNumber for validate Vietnamese Phone Number
+ * @returns {Boolean} false or true
  */
 export const ValidatePhoneNumber = (phoneNumber) => {
     const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;

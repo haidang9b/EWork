@@ -21,6 +21,13 @@ import { assignRecruiterThunk } from "../../redux/recruiter.slice";
 
 const DEFAULT_VALUE_COMPANY = -1;
 
+/**
+ * Add recruitment modal component
+ * @param {Object} addRecruiterModal
+ * @param {Function} setAddRecruiterModal
+ * @example
+ * <AddRecruiterModal addRecruiterModal={addRecruiterModal} setAddRecruiterModal={setAddRecruiterModal}/>
+ */
 const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
     const dispatch = useDispatch();
     const { companies } = useSelector(companySelector);

@@ -27,11 +27,7 @@ import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import useNotify from "../../hook/useNotify";
 import useAuth from "../../hook/useAuth";
-const linkStyle = {
-    margin: "auto",
-    textDecoration: "none",
-    color: "#007cc0",
-};
+
 const Login = () => {
     const clientId = process.env.REACT_APP_CLIENT_ID;
     const { user } = useAuth();
@@ -154,7 +150,10 @@ const Login = () => {
                                             autoComplete={"on"}
                                         />
                                     </Box>
-                                    <Link to={"/recover"} style={linkStyle}>
+                                    <Link
+                                        to={"/recover"}
+                                        className="text-link "
+                                    >
                                         Quên mật khẩu?
                                     </Link>
                                 </CardContent>

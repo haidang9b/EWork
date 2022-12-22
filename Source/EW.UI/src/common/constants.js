@@ -1,3 +1,8 @@
+/**
+ * States of the slice
+ * @readonly
+ * @enum {string}
+ */
 export const Status = {
     idle: "idle",
     loading: "loading",
@@ -5,6 +10,13 @@ export const Status = {
     failed: "failed",
 };
 
+/**
+ * Status of company
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ */
 export const CompanyStatus = [
     {
         value: 0,
@@ -20,6 +32,14 @@ export const CompanyStatus = [
     },
 ];
 
+/**
+ * List currrency
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ * @returns {rate} item.rate
+ */
 export const Currency = [
     {
         value: 0,
@@ -33,12 +53,24 @@ export const Currency = [
     },
 ];
 
+/**
+ * Roles in system
+ * @readonly
+ * @enum {string}
+ */
 export const Role = {
     Faculty: "Faculty",
     Business: "Business",
     Student: "Student",
 };
 
+/**
+ * List salary type
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ */
 export const SalaryType = [
     { value: 1, label: "Thương Lượng" },
     { value: 2, label: "Từ - đến" },
@@ -46,17 +78,38 @@ export const SalaryType = [
     { value: 4, label: "Tối thiểu" },
 ];
 
+/**
+ * List working type
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ */
 export const WorkingType = [
     { value: 1, label: "At office" },
     { value: 2, label: "Remote" },
     { value: 3, label: "Flexible" },
 ];
 
+/**
+ * List working type
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ */
 export const CompanyType = [
     { value: 0, label: "Product" },
     { value: 1, label: "Outsourcing" },
 ];
 
+/**
+ * List Team size
+ * @readonly
+ * @returns {object} item
+ * @returns {value} item.value
+ * @returns {label} item.value
+ */
 export const TeamSizeType = [
     { value: 0, label: "1 - 50" },
     { value: 1, label: "50 - 100" },
@@ -70,6 +123,11 @@ export const TeamSizeType = [
     { value: 9, label: "5000+" },
 ];
 
+/**
+ * List job skill
+ * @readonly
+ * @returns {string}
+ */
 export const JobSkill = [
     "Agile",
     "Android",

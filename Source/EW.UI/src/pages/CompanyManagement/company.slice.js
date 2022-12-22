@@ -6,6 +6,7 @@ import {
     EDIT_COMPANY_INFORMATION_URL,
     GET_COMPANIES_URL,
 } from "../../common/apiUrl";
+import { failureReducer, loadingReducer } from "../../common/utils";
 const initialState = {
     companies: [],
     status: Status.idle,
@@ -16,9 +17,7 @@ const companySlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getCompaniesThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getCompaniesThunk.pending, loadingReducer)
             .addCase(getCompaniesThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess) {
                     state.status = Status.succeeded;
@@ -27,12 +26,8 @@ const companySlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(getCompaniesThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(editCompanyInformationThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getCompaniesThunk.rejected, failureReducer)
+            .addCase(editCompanyInformationThunk.pending, loadingReducer)
             .addCase(editCompanyInformationThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
@@ -48,12 +43,8 @@ const companySlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(editCompanyInformationThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(addCompanyThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(editCompanyInformationThunk.rejected, failureReducer)
+            .addCase(addCompanyThunk.pending, loadingReducer)
             .addCase(addCompanyThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.companies.push(action.payload?.data);
@@ -62,9 +53,7 @@ const companySlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(addCompanyThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(addCompanyThunk.rejected, failureReducer),
 });
 
 export const getCompaniesThunk = createAsyncThunk(

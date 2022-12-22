@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import { RECRUITER_REGISTER_URL } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
+import { failureReducer, loadingReducer } from "../../common/utils";
 
 const initialState = {
     status: Status.idle,
@@ -12,9 +13,7 @@ const recruiterRegisterSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(recruiterRegisterThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(recruiterRegisterThunk.pending, loadingReducer)
             .addCase(recruiterRegisterThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
                     state.status = Status.succeeded;
@@ -22,9 +21,7 @@ const recruiterRegisterSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(recruiterRegisterThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(recruiterRegisterThunk.rejected, failureReducer),
 });
 
 export const recruiterRegisterThunk = createAsyncThunk(

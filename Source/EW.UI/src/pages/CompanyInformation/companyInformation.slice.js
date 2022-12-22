@@ -6,6 +6,7 @@ import {
     UPLOAD_AVATAR_COMPANY_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
+import { failureReducer, loadingReducer } from "../../common/utils";
 
 const initialState = {
     information: null,
@@ -17,9 +18,7 @@ const companyInformationSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getCompanyInformationThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getCompanyInformationThunk.pending, loadingReducer)
             .addCase(getCompanyInformationThunk.fulfilled, (state, action) => {
                 if (action.payload?.data && action.payload?.isSuccess) {
                     state.information = action.payload.data;
@@ -28,15 +27,8 @@ const companyInformationSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(getCompanyInformationThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(
-                editProfileCompanyInformationThunk.pending,
-                (state, action) => {
-                    state.status = Status.loading;
-                }
-            )
+            .addCase(getCompanyInformationThunk.rejected, failureReducer)
+            .addCase(editProfileCompanyInformationThunk.pending, loadingReducer)
             .addCase(
                 editProfileCompanyInformationThunk.fulfilled,
                 (state, action) => {
@@ -64,13 +56,9 @@ const companyInformationSlice = createSlice({
             )
             .addCase(
                 editProfileCompanyInformationThunk.rejected,
-                (state, action) => {
-                    state.status = Status.failed;
-                }
+                failureReducer
             )
-            .addCase(uploadAvatarCompanyThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(uploadAvatarCompanyThunk.pending, loadingReducer)
             .addCase(uploadAvatarCompanyThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.avatarUrl = action.payload?.data.avatarUrl;
@@ -79,9 +67,7 @@ const companyInformationSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(uploadAvatarCompanyThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(uploadAvatarCompanyThunk.rejected, failureReducer),
 });
 
 export const getCompanyInformationThunk = createAsyncThunk(

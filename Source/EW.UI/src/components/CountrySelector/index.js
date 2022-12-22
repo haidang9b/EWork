@@ -5,9 +5,12 @@ import PropTypes from "prop-types";
 
 /**
  * Component Country selector help user select country by data json
- * @param country is country, it will default value of country selector
- * @param setCountry setter of country
+ * @param {Object} object
+ * @param {String} object.country is country, it will default value of country selector
+ * @param {Function} object.setCountry setter of country
  * @returns UI CountrySelector component and data country selected
+ * @example
+ * <CountrySelector country={country} setCountry={setCountry}/>
  */
 const CountrySelector = ({ country, setCountry }) => {
     const options = useMemo(() => countryList().getData(), []);

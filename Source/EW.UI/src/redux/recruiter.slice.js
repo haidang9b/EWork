@@ -3,6 +3,7 @@ import httpClient from "../common/apis/httpClient";
 import { ASSIGN_RECRUITER_URL, GET_RECRUITERS_URL } from "../common/apiUrl";
 
 import { Status } from "../common/constants";
+import { failureReducer, loadingReducer } from "../common/utils";
 
 const initialState = {
     recruiters: [],
@@ -14,9 +15,7 @@ const recruiterSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getRecruitersThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getRecruitersThunk.pending, loadingReducer)
             .addCase(getRecruitersThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess) {
                     state.status = Status.succeeded;
@@ -25,13 +24,9 @@ const recruiterSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(getRecruitersThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
+            .addCase(getRecruitersThunk.rejected, failureReducer)
 
-            .addCase(assignRecruiterThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(assignRecruiterThunk.pending, loadingReducer)
             .addCase(assignRecruiterThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.recruiters.push(action.payload?.data);
@@ -40,9 +35,7 @@ const recruiterSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(assignRecruiterThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(assignRecruiterThunk.rejected, failureReducer),
 });
 
 export const getRecruitersThunk = createAsyncThunk(

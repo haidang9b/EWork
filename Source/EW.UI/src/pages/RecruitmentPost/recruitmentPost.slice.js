@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import { RECRUITMENT_POST_URL } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
+import { failureReducer, loadingReducer } from "../../common/utils";
 const initialState = {
     posts: [],
     status: Status.idle,
@@ -12,9 +13,7 @@ const recruitmentPostSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getRecruitmentPostsThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getRecruitmentPostsThunk.pending, loadingReducer)
             .addCase(getRecruitmentPostsThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
@@ -23,12 +22,8 @@ const recruitmentPostSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(getRecruitmentPostsThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(saveRecruitmentPostThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getRecruitmentPostsThunk.rejected, failureReducer)
+            .addCase(saveRecruitmentPostThunk.pending, loadingReducer)
             .addCase(saveRecruitmentPostThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
@@ -54,12 +49,8 @@ const recruitmentPostSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(saveRecruitmentPostThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(deleteRecruitmentPostThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(saveRecruitmentPostThunk.rejected, failureReducer)
+            .addCase(deleteRecruitmentPostThunk.pending, loadingReducer)
             .addCase(deleteRecruitmentPostThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     let newData = state.posts.filter(
@@ -71,9 +62,7 @@ const recruitmentPostSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(deleteRecruitmentPostThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(deleteRecruitmentPostThunk.rejected, failureReducer),
 });
 
 export const getRecruitmentPostsThunk = createAsyncThunk(

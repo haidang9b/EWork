@@ -3,6 +3,8 @@ import useAuth from "../../hook/useAuth";
 /**
  * Check user can access to route if user is not login
  * @returns redirect or access to route
+ * @example
+ * <NonAuth/>
  */
 const NonAuth = () => {
     const { user } = useAuth();

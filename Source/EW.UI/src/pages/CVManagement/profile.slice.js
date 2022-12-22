@@ -7,6 +7,7 @@ import {
     GET_PROFILE_URL,
     UPLOAD_NEW_CV_URL,
 } from "../../common/apiUrl";
+import { failureReducer, loadingReducer } from "../../common/utils";
 
 const initialState = {
     cvs: [],
@@ -20,21 +21,15 @@ const profileSlice = createSlice({
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getProfileThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getProfileThunk.pending, loadingReducer)
             .addCase(getProfileThunk.fulfilled, (state, action) => {
                 state.cvs = action.payload?.data?.cVs;
                 state.experiences = action.payload?.data?.experences;
                 state.coverLetter = action.payload?.data?.coverLetter;
                 state.status = Status.succeeded;
             })
-            .addCase(getProfileThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(editCoverLetterThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(getProfileThunk.rejected, failureReducer)
+            .addCase(editCoverLetterThunk.pending, loadingReducer)
             .addCase(editCoverLetterThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess) {
                     state.status = Status.succeeded;
@@ -43,12 +38,8 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(editCoverLetterThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(uploadNewCVThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(editCoverLetterThunk.rejected, failureReducer)
+            .addCase(uploadNewCVThunk.pending, loadingReducer)
             .addCase(uploadNewCVThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
@@ -57,12 +48,8 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(uploadNewCVThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            })
-            .addCase(removeCVThunk.pending, (state, action) => {
-                state.status = Status.loading;
-            })
+            .addCase(uploadNewCVThunk.rejected, failureReducer)
+            .addCase(removeCVThunk.pending, loadingReducer)
             .addCase(removeCVThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
@@ -74,9 +61,7 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(removeCVThunk.rejected, (state, action) => {
-                state.status = Status.failed;
-            }),
+            .addCase(removeCVThunk.rejected, failureReducer),
 });
 
 export const getProfileThunk = createAsyncThunk(

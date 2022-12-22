@@ -6,6 +6,11 @@ import {
     notificationSelector,
 } from "./notification.slice";
 
+/**
+ * Notification component
+ * @example
+ * <Notification/>
+ */
 const Notification = () => {
     const dispatch = useDispatch();
     const notify = useSelector(notificationSelector);
