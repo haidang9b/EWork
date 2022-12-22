@@ -1,0 +1,89 @@
+﻿using EW.Commons.Constaints;
+using EW.Commons.Enums;
+using EW.Domain.Entities;
+using EW.Domain.Models;
+using EW.Repository;
+using EW.Services.Constracts;
+
+
+namespace EW.Services.Business
+{
+    public class CompanyService: ICompanyService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
+        public CompanyService(IUnitOfWork unitOfWork, IUserService userService)
+        {
+            _unitOfWork = unitOfWork;
+            _userService = userService;
+        }
+        public async Task<Company> Find(Company company)
+        {
+            return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Email == company.Email || company.PhoneNumber == item.PhoneNumber || company.Id == item.Id);
+        }
+        public async Task<IEnumerable<Company>> GetCompanies()
+        {
+            return await _unitOfWork.Repository<Company>().GetAllAsync();
+        }
+
+        public async Task<Company> GetCompanyByUser(User model)
+        {
+            var user = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(u => u.Id == model.Id);
+            var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == user.Id, includeProperties: "Company");
+            return companyRecruiter.Company;
+        }
+        public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
+        {
+            var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
+            if (existCompany == null)
+                return false;
+            existCompany.CompanyName = model.CompanyName;
+            existCompany.Address = model.Address;
+            existCompany.Status = model.Status;
+            existCompany.UpdatedDate = DateTimeOffset.Now;
+            existCompany.TaxNumber = model.TaxNumber;
+            existCompany.CompanyType = model.CompanyType;
+            existCompany.TeamSize = model.TeamSize;
+            existCompany.Country = model.Country;
+            existCompany.Description = model.Description;
+            _unitOfWork.Repository<Company>().Update(existCompany);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<Company> GetCompany(Company model)
+        {
+            return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id || model.Email == item.Email);
+        }
+
+        public async Task<bool> AddCompany(Company model)
+        {
+            var newCompany = new Company
+            {
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CompanyName = model.CompanyName,
+                Address = model.Address,
+                Status = EStatusRecruiter.Pending,
+                UpdatedDate = DateTimeOffset.Now,
+                CreatedDate = DateTimeOffset.Now,
+                TaxNumber = model.TaxNumber,
+                AvatarUrl = Constaints.STRING_BLANK,
+                Country = Constaints.COUNTRY_DEFAULT,
+                TeamSize = ETeamSize.ZeroTo50,
+                CompanyType = ECompanyType.Product,
+                Description = Constaints.COUNTRY_DEFAULT
+            };
+            await _unitOfWork.Repository<Company>().AddAsync(newCompany);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> UploadAvatarCompany(Company company)
+        {
+            var exist = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == company.Id);
+            exist.AvatarUrl = company.AvatarUrl;
+            exist.UpdatedDate = DateTimeOffset.Now;
+            _unitOfWork.Repository<Company>().Update(exist);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+    }
+}

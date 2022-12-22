@@ -19,16 +19,18 @@ namespace EW.WebAPI.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUserService _userService;
         private readonly IUserCVService _userCVService;
+        private readonly ICompanyService _companyService;
         private readonly IRecruiterService _recruiterService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService, IRecruiterService recruiterService)
+        public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService, IRecruiterService recruiterService, ICompanyService companyService)
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _userService = userService;
             _userCVService = userCVService;
             _recruiterService = recruiterService;
+            _companyService = companyService;
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var user = await _userService.GetUser(new User { Username = _username });
-                var companyByUser = await _recruiterService.GetCompanyByUser(user);
+                var companyByUser = await _companyService.GetCompanyByUser(user);
                 var fileExtension = Path.GetExtension(model.File.FileName);
                 var acceptExtensionFiles = new string[] { ".jpg", ".jpeg", ".apng", ".png", ".svg", ".webp" };
                 var fileNameRequest = model.File.FileName;
@@ -127,7 +129,7 @@ namespace EW.WebAPI.Controllers
                 if (resultUpload.IsSuccess)
                 {
                     companyByUser.AvatarUrl = resultUpload.Path;
-                    result.IsSuccess = await _recruiterService.UploadAvatarCompany(companyByUser);
+                    result.IsSuccess = await _companyService.UploadAvatarCompany(companyByUser);
                     result.Message = result.IsSuccess ? "Upload hình ảnh thành công" : "Không thể upload hình ảnh này lên";
                     if (resultUpload.IsSuccess)
                     {

@@ -17,13 +17,15 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IRecruiterService _recruiterService;
         private readonly IUserService _userService;
+        private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitersController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public RecruitersController(IRecruiterService recruiterService, IUserService userService, ILogger<RecruitersController> logger)
+        public RecruitersController(IRecruiterService recruiterService, IUserService userService, ILogger<RecruitersController> logger, ICompanyService companyService)
         {
             _recruiterService = recruiterService;
             _userService = userService;
             _logger = logger;
+            _companyService = companyService;
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace EW.WebAPI.Controllers
                 var currentUser = await _userService.GetUser(new User { Username = _username });
                 if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
-                    var currentCompany = await _recruiterService.GetCompanyByUser(currentUser);
+                    var currentCompany = await _companyService.GetCompanyByUser(currentUser);
                     result.Data = await _recruiterService.GetRecruitersByCompany(currentCompany);
                 }
                 else
@@ -67,7 +69,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var exist = await _recruiterService.Find(new Company
+                var exist = await _companyService.Find(new Company
                 {
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
@@ -111,7 +113,7 @@ namespace EW.WebAPI.Controllers
 
                 if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
-                    var currentCompany = await _recruiterService.GetCompanyByUser(currentUser);
+                    var currentCompany = await _companyService.GetCompanyByUser(currentUser);
                     if (currentCompany == null)
                     {
                         result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
@@ -122,7 +124,7 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    var existCompany = await _recruiterService.GetCompany(new Company { Id = model.CompanyId });
+                    var existCompany = await _companyService.GetCompany(new Company { Id = model.CompanyId });
                     if (existCompany == null)
                     {
                         result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
