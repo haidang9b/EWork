@@ -16,14 +16,14 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly IRecruiterService _recruiterService;
         private readonly IEmailService _emailService;
+        private readonly ICompanyService _companyService;
         private readonly ILogger<AuthController> _logger;
-        public AuthController(IUserService userService, ITokenService tokenService, IRecruiterService recruiterService, ILogger<AuthController> logger, IEmailService emailService)
+        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService)
         {
             _userService = userService;
             _tokenService = tokenService;
-            _recruiterService = recruiterService;
+            _companyService = companyService;
             _emailService = emailService;
             _logger = logger;
         }
@@ -74,7 +74,7 @@ namespace EW.WebAPI.Controllers
 
                     if(exist.RoleId == (long)ERole.ID_Business)
                     {
-                        var company = await _recruiterService.GetCompanyByUser(new User { Id = exist.Id });
+                        var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
                         if (company != null && company.Status == EStatusRecruiter.Pending)
                         {
                             result.IsSuccess = false;

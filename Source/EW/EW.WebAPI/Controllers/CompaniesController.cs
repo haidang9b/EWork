@@ -16,12 +16,14 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IRecruiterService _recruiterService;
         private readonly IUserService _userService;
+        private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitersController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ILogger<RecruitersController> logger)
+        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger)
         {
             _recruiterService = recruiterService;
             _userService = userService;
+            _companyService = companyService;
             _logger = logger;
         }
 
@@ -36,7 +38,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 result.Message = "Lấy dữ liệu thành công";
-                result.Data = await _recruiterService.GetCompanies();
+                result.Data = await _companyService.GetCompanies();
             }
             catch (Exception ex)
             {
@@ -59,7 +61,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var existCompany = await _recruiterService.GetCompany(new Company { Id = model.Id });
+                var existCompany = await _companyService.GetCompany(new Company { Id = model.Id });
                 if (existCompany == null)
                 {
                     result.IsSuccess = false;
@@ -67,11 +69,11 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    if (await _recruiterService.UpdateInformationCompany(model))
+                    if (await _companyService.UpdateInformationCompany(model))
                     {
                         result.IsSuccess = true;
                         result.Message = "Cập nhật thông tin thành công";
-                        result.Data = await _recruiterService.GetCompany(new Company { Id = model.Id });
+                        result.Data = await _companyService.GetCompany(new Company { Id = model.Id });
                     }
                     else
                     {
@@ -100,7 +102,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var exist = await _recruiterService.GetCompany(new Company
+                var exist = await _companyService.GetCompany(new Company
                 {
                     Email = model.Email,
                 });
@@ -118,11 +120,11 @@ namespace EW.WebAPI.Controllers
                     Address = model.Address,
                     TaxNumber = model.TaxNumber,
                 };
-                result.IsSuccess = await _recruiterService.AddCompany(newCompany);
+                result.IsSuccess = await _companyService.AddCompany(newCompany);
                 result.Message = result.IsSuccess ? "Thêm công ty thành công " : "Thêm công ty thất bại";
                 if (result.IsSuccess)
                 {
-                    result.Data = await _recruiterService.GetCompany(newCompany);
+                    result.Data = await _companyService.GetCompany(newCompany);
                 }
             }
             catch (Exception ex)
@@ -146,10 +148,31 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var existUser = await _userService.GetUser(new User { Username = _username });
-                result.Data = await _recruiterService.GetCompanyByUser(existUser);
+                result.Data = await _companyService.GetCompanyByUser(existUser);
                 result.Message = "Lấy dữ liệu thành công";
             }
             catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get top companies with number jobs hiring
+        /// </summary>
+        /// <returns>List companies have number jobs hiring...</returns>
+        [HttpGet("top-companies")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTopCompanies()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _companyService.GetTopCompanies();
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();

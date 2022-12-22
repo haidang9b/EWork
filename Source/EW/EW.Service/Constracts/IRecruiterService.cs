@@ -12,16 +12,9 @@ namespace EW.Services.Constracts
     public interface IRecruiterService
     {
         Task<bool> AddNewRecruiter(RegisterRecruiterModel model);
-        Task<Company> Find(Company recruiter);
-        Task<Company> GetCompanyByUser(User user);
-        Task<IEnumerable<Company>> GetCompanies();
         Task<IEnumerable<RecruiterViewModel>> GetRecruiters();
-        Task<bool> UpdateInformationCompany(UpdateCompanyModel model);
-        Task<Company> GetCompany(Company model);
-        Task<bool> AddCompany(Company model);
         Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model);
         Task<RecruiterViewModel> GetRecruiterByUser(User model);
         Task<IEnumerable<RecruiterViewModel>> GetRecruitersByCompany(Company company);
-        Task<bool> UploadAvatarCompany(Company company);
     }
 }

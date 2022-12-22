@@ -93,5 +93,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IUserCVService, UserCVService>();
     services.AddScoped<IEmailService, EmailService>();
     services.AddScoped<IRecruitmentPostService, RecruitmentPostService>();
+    services.AddScoped<ICompanyService, CompanyService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

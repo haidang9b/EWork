@@ -17,14 +17,16 @@ namespace EW.WebAPI.Controllers
         private readonly IRecruitmentPostService _recruitmentPostService;
         private readonly IUserService _userService;
         private readonly IRecruiterService _recruiterService;
+        private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitmentPostsController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public RecruitmentPostsController(IRecruitmentPostService recruitmentPostService, IUserService userService, IRecruiterService recruiterService, ILogger<RecruitmentPostsController> logger)
+        public RecruitmentPostsController(IRecruitmentPostService recruitmentPostService, IUserService userService, IRecruiterService recruiterService, ILogger<RecruitmentPostsController> logger, ICompanyService companyService)
         {
             _recruitmentPostService = recruitmentPostService;
             _userService = userService;
             _recruiterService = recruiterService;
             _logger = logger;
+            _companyService = companyService;
         }
 
         [HttpGet]
@@ -87,7 +89,7 @@ namespace EW.WebAPI.Controllers
                     }
                     else
                     {
-                        var company = await _recruiterService.GetCompany(new Company { Id = model.CompanyId ?? default(long) });
+                        var company = await _companyService.GetCompany(new Company { Id = model.CompanyId ?? default(long) });
                         if (company == null)
                         {
                             result.IsSuccess = false;
