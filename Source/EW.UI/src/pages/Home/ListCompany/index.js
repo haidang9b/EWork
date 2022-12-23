@@ -24,6 +24,7 @@ const ListCompany = () => {
                     {companies.map((item) => (
                         <CompanyItem
                             key={JSON.stringify(item)}
+                            id={item.id}
                             name={item.companyName}
                             avatarUrl={item.avatarUrl}
                             companyType={item.companyType}
@@ -35,5 +36,7 @@ const ListCompany = () => {
         </Grid>
     );
 };
+
+ListCompany.displayName = "ListCompany";
 
 export default ListCompany;

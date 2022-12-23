@@ -107,6 +107,7 @@ namespace EW.WebAPI.Controllers
                     }
                     else
                     {
+                        result.IsSuccess = false;
                         result.Message = "Không thể thêm bài tuyển dụng này";
                     }
                 }
@@ -139,6 +140,7 @@ namespace EW.WebAPI.Controllers
                     }
                     else
                     {
+                        result.IsSuccess = false;
                         result.Message = "Không thể cập nhật bài tuyển dụng này";
                     }
                 }

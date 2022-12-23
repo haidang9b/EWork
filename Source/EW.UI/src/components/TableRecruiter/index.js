@@ -91,4 +91,6 @@ const TableRecruiter = () => {
     );
 };
 
+TableRecruiter.displayName = "TableRecruiter";
+
 export default TableRecruiter;

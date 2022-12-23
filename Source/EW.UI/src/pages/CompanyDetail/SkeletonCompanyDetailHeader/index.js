@@ -1,11 +1,11 @@
 import { Grid, Paper, Skeleton } from "@mui/material";
 import React from "react";
 
-const SkeletonGeneralInformation = () => {
+const SkeletonCompanyDetailHeader = () => {
     return (
-        <Paper className="company-detail-block">
+        <Paper className="company-detail-header">
             <Grid container>
-                <Grid item xs={12} sm={12} md={4} lg={4} padding={2}>
+                <Grid item={true} xs={12} sm={12} md={4} lg={4} padding={2}>
                     <Skeleton
                         variant="rounded"
                         width={"100%"}
@@ -13,7 +13,7 @@ const SkeletonGeneralInformation = () => {
                         animation="wave"
                     />
                 </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} padding={2}>
+                <Grid item={true} xs={12} sm={12} md={8} lg={8} padding={2}>
                     <Skeleton
                         variant="text"
                         animation="wave"
@@ -59,4 +59,6 @@ const SkeletonGeneralInformation = () => {
     );
 };
 
-export default SkeletonGeneralInformation;
+SkeletonCompanyDetailHeader.displayName = "SkeletonCompanyDetailHeader";
+
+export default SkeletonCompanyDetailHeader;

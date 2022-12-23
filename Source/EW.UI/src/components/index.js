@@ -15,3 +15,4 @@ export { default as UploadFileDialog } from "./UploadFileDialog";
 export { default as TechStackSelector } from "./TechStackSelector";
 export { default as CountrySelector } from "./CountrySelector";
 export { default as SkeletonCompanyItem } from "./SkeletonCompanyItem";
+export { default as JobItem } from "./JobItem";

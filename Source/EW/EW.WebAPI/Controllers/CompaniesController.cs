@@ -3,6 +3,7 @@ using EW.Domain.Models;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Companies;
+using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +18,16 @@ namespace EW.WebAPI.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
+        private readonly IRecruitmentPostService _recruitmentPostService;
         private readonly ILogger<RecruitersController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger)
+        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService)
         {
             _recruiterService = recruiterService;
             _userService = userService;
             _companyService = companyService;
             _logger = logger;
+            _recruitmentPostService = recruitmentPostService;
         }
 
         /// <summary>
@@ -181,13 +184,47 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get company by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Company or null</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
             var result = new ApiResult();
             try
             {
-                result.Data = await _companyService.GetCompany(new Company { Id = id });
+                var existCompany = await _companyService.GetCompany(new Company { Id = id });
+                if(existCompany == null)
+                {
+                    throw new Exception("Không tồn tại công ty này");
+                }
+                var recruitmentPosts = await _recruitmentPostService.GetRecruitmentPostsByCompany(existCompany);
+                result.Data = new CompanyDetailViewModel
+                {
+                    Id = existCompany.Id,
+                    CompanyName = existCompany.CompanyName,
+                    CompanyType = existCompany.CompanyType,
+                    PhoneNumber = existCompany.PhoneNumber,
+                    Email = existCompany.Email,
+                    Address = existCompany.Address,
+                    AvatarUrl = existCompany.AvatarUrl,
+                    Country = existCompany.Country,
+                    TeamSize = existCompany.TeamSize,
+                    Description = existCompany.Description,
+                    Posts = recruitmentPosts.OrderByDescending(item => item.CreatedDate).Select(post => new RecruitmentPostShortViewModel
+                    {
+                        Id = post.Id,
+                        JobTitle = post.JobTitle,
+                        SalaryType = post.SalaryType,
+                        SalaryFrom = post.SalaryFrom,
+                        SalaryTo = post.SalaryTo,
+                        Currency = post.Currency,
+                        TechStacks = post.TechStacks,
+                        YearExperience = post.YearExperience,
+                    }).ToList(),
+                };
                 result.IsSuccess = true;
                 result.Message = "Lấy dữ liệu thành công";
             }
@@ -195,6 +232,7 @@ namespace EW.WebAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
+                result.Message = ex.Message;
             }
             return Ok(result);
         }

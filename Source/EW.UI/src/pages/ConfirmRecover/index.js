@@ -82,85 +82,87 @@ const ConfirmRecover = () => {
             title: "Khôi phục tài khoản",
         });
     };
-    return (
-        <>
-            {status === Status.loading ? (
+    if (status === Status.loading) {
+        return (
+            <>
                 <SkeletonRecover />
-            ) : data?.isSuccess ? (
-                <Container>
-                    <Grid
-                        container
-                        spacing={0}
-                        direction="column"
-                        alignItems="center"
-                        justify="center"
+            </>
+        );
+    }
+    if (data?.isSuccess) {
+        return (
+            <Container>
+                <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
+                    sx={{
+                        padding: "2%",
+                    }}
+                >
+                    <Card
                         sx={{
-                            padding: "2%",
+                            width: {
+                                sx: "100%",
+                                sm: "100%",
+                                md: "60%",
+                            },
                         }}
                     >
-                        <Card
-                            sx={{
-                                width: {
-                                    sx: "100%",
-                                    sm: "100%",
-                                    md: "60%",
-                                },
-                            }}
-                        >
-                            <CardContent>
-                                <Box pb={2}>
-                                    <Typography variant="h3">
-                                        Khôi phục mật khẩu
-                                    </Typography>
-                                    <TextField
-                                        label="Mật khẩu mới"
-                                        variant="standard"
-                                        placeholder="Nhập mật khẩu mới"
-                                        fullWidth
-                                        required
-                                        inputRef={passwordRef}
-                                        type="password"
-                                    />
-                                </Box>
-                            </CardContent>
+                        <CardContent>
+                            <Box pb={2}>
+                                <Typography variant="h3">
+                                    Khôi phục mật khẩu
+                                </Typography>
+                                <TextField
+                                    label="Mật khẩu mới"
+                                    variant="standard"
+                                    placeholder="Nhập mật khẩu mới"
+                                    fullWidth
+                                    required
+                                    inputRef={passwordRef}
+                                    type="password"
+                                />
+                            </Box>
+                        </CardContent>
 
-                            <Divider />
-                            <CardActions>
-                                <Stack minWidth={"100%"}>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth={true}
-                                        onClick={handleRecover}
-                                        startIcon={<SendSharp />}
-                                        disabled={status === Status.loading}
-                                    >
-                                        Khôi phục
-                                    </Button>
-                                    <LinearProgress
-                                        sx={{
-                                            display:
-                                                status === Status.loading
-                                                    ? "block"
-                                                    : "none",
-                                        }}
-                                    />
-                                </Stack>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                </Container>
-            ) : (
-                <Hero
-                    title={"Mã này không tồn tại"}
-                    subtitle={
-                        "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
-                    }
-                    children={
-                        <Link to="/recover">Quay về trang khôi phục</Link>
-                    }
-                />
-            )}
-        </>
+                        <Divider />
+                        <CardActions>
+                            <Stack minWidth={"100%"}>
+                                <Button
+                                    variant="contained"
+                                    fullWidth={true}
+                                    onClick={handleRecover}
+                                    startIcon={<SendSharp />}
+                                    disabled={status === Status.loading}
+                                >
+                                    Khôi phục
+                                </Button>
+                                <LinearProgress
+                                    sx={{
+                                        display:
+                                            status === Status.loading
+                                                ? "block"
+                                                : "none",
+                                    }}
+                                />
+                            </Stack>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Container>
+        );
+    }
+    return (
+        <Hero
+            title={"Mã này không tồn tại"}
+            subtitle={
+                "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
+            }
+            children={<Link to="/recover">Quay về trang khôi phục</Link>}
+        />
     );
 };
 
