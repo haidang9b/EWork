@@ -47,6 +47,11 @@ namespace EW.Services.Business
                             || item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
         }
 
+        public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByCompany(Company company)
+        {
+            return await _unitOfWork.Repository<RecruitmentPost>().GetAsync(item => item.CompanyId == company.Id);
+        }
+
         public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user)
         {
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync("Company,UpdatedByUser");

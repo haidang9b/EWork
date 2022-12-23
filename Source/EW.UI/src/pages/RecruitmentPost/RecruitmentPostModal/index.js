@@ -95,9 +95,6 @@ const RecruitmentPostModal = ({
             if (data?.workingType) {
                 setCurrentWorkingType(data.workingType);
             }
-            if (data?.techStacks) {
-                console.log(data.techStacks.split(","));
-            }
             if (data?.jobDescription) {
                 setInitialHTML(data.jobDescription);
             }

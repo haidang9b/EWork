@@ -1,0 +1,45 @@
+.job-item__img {
+    max-width: 100%;
+}
+.job-item__area-img {
+    margin-right: 8px;
+}
+img.job-item__img {
+    border-radius: 8px;
+    margin: 12px;
+}
+.job-item {
+    padding: 8px;
+    margin: 8px;
+    min-width: 100%;
+}
+
+.job-item:hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
+
+.job-item__body {
+    padding: 16px;
+    margin: 20px;
+}
+
+.job-item__title {
+    font-size: 1.5rem;
+}
+.job-item__icon {
+    margin: auto;
+}
+.job-item__body-label {
+    margin-left: 4px;
+}
+.job-item__body-desc {
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.job-item__salary {
+    color: rgb(218, 33, 33);
+}

@@ -43,4 +43,6 @@ const CompanyInformation = () => {
     );
 };
 
+CompanyInformation.displayName = "CompanyInformation";
+
 export default CompanyInformation;

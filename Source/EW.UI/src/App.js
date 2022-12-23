@@ -17,12 +17,14 @@ import {
     RecruitmentPost,
     CompanyInformation,
     HRManagement,
+    CompanyDetail,
 } from "./pages";
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="home" element={<Home />} />
+            <Route path="company-detail/:id" element={<CompanyDetail />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />

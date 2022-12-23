@@ -19,7 +19,7 @@ namespace EW.Services.Business
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Email == user.Email || item.PhoneNumber == user.PhoneNumber);
             if (exist != null)
             {
-                return false;
+                throw new Exception("Tài khoản này đã tồn tại");
             }
             await _unitOfWork.Repository<User>().AddAsync(user);
             return await _unitOfWork.SaveChangeAsync();
@@ -68,7 +68,7 @@ namespace EW.Services.Business
             var isExist = await GetUser(user);
             if(isExist != null)
             {
-                return true;
+                throw new Exception("Tài khoản này đã tồn tại");
             }
             var hashed = BCrypt.Net.BCrypt.HashPassword(DateTimeOffset.Now.ToString(), BCrypt.Net.BCrypt.GenerateSalt(12));
             await _unitOfWork.Repository<User>().AddAsync(new User
