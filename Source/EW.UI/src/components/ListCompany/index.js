@@ -1,8 +1,7 @@
 import { Grid } from "@mui/material";
 import React from "react";
 import { Status } from "../../common/constants";
-import { SkeletonCompanyItem } from "..";
-import CompanyItem from "../../pages/Home/CompanyItem";
+import { SkeletonCompanyItem, CompanyItem } from "..";
 import { array, string } from "prop-types";
 
 /**

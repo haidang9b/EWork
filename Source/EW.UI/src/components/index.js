@@ -18,3 +18,4 @@ export { default as SkeletonCompanyItem } from "./SkeletonCompanyItem";
 export { default as JobItem } from "./JobItem";
 export { default as ListCompany } from "./ListCompany";
 export { default as FilterArea } from "./FilterArea";
+export { default as CompanyItem } from "./CompanyItem";
