@@ -2,7 +2,7 @@ import { Paper, Tab, Tabs, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useSelector } from "react-redux";
-import { TabPanel } from "../../../components";
+import { JobItem, TabPanel } from "../../../components";
 import { companyDetailSelector } from "../companyDetail.slice";
 import useTab from "../../../hook/useTab";
 
@@ -14,7 +14,7 @@ import useTab from "../../../hook/useTab";
  * @example
  * <CompanyDescription name description/>
  */
-const CompanyDescription = ({ name, description }) => {
+const CompanyDescriptionTab = ({ name, description }) => {
     return (
         <>
             <div>
@@ -25,6 +25,55 @@ const CompanyDescription = ({ name, description }) => {
                     __html: description,
                 }}
             ></div>
+        </>
+    );
+};
+
+/**
+ * @param {object} object
+ * @param {string} object.name
+ * @param {Array} object.posts
+ * @param {string} object.avatarUrl
+ * @returns
+ */
+const JobListTab = ({ name, posts, avatarUrl }) => {
+    console.log(posts);
+    return (
+        <>
+            <div>
+                <Typography variant="h5">
+                    Công việc đang tuyển tại {name}
+                </Typography>
+            </div>
+            <div>
+                {posts?.length === 0 ? (
+                    <Typography variant="h6">
+                        Hiện đang không tuyển dụng
+                    </Typography>
+                ) : (
+                    <>
+                        <Typography variant="h6">
+                            Hiện đang có {posts?.length} đang tuyển
+                        </Typography>
+                        <br />
+                        {posts?.map((item) => (
+                            <JobItem
+                                key={JSON.stringify(item)}
+                                id={item.id}
+                                jobTitle={item.jobTitle}
+                                salaryType={item.salaryType}
+                                salaryFrom={item.salaryFrom}
+                                salaryTo={item.salaryTo}
+                                currency={item.currency}
+                                techStacks={item.techStacks}
+                                avatarUrl={avatarUrl}
+                                jobDescription={item.jobDescription}
+                                updatedDate={item.updatedDate}
+                            />
+                        ))}
+                    </>
+                )}
+            </div>
         </>
     );
 };
@@ -51,13 +100,17 @@ const CompanyDetailBody = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <CompanyDescription
+                    <CompanyDescriptionTab
                         name={company?.companyName}
                         description={company?.description}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Danh sach viec lam
+                    <JobListTab
+                        name={company?.companyName}
+                        posts={company?.posts}
+                        avatarUrl={company?.avatarUrl}
+                    />
                 </TabPanel>
             </Box>
         </Paper>

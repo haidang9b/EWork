@@ -223,6 +223,8 @@ namespace EW.WebAPI.Controllers
                         Currency = post.Currency,
                         TechStacks = post.TechStacks,
                         YearExperience = post.YearExperience,
+                        JobDescription = post.JobDescription,
+                        UpdatedDate = post.UpdatedDate
                     }).ToList(),
                 };
                 result.IsSuccess = true;

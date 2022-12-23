@@ -12,5 +12,7 @@ namespace EW.WebAPI.Models.ViewModels
         public ECurrency Currency { get; set; }
         public string TechStacks { get; set; }
         public double YearExperience { get; set; }
+        public string JobDescription { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
     }
 }
