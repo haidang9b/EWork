@@ -37,7 +37,6 @@ const CompanyDescriptionTab = ({ name, description }) => {
  * @returns
  */
 const JobListTab = ({ name, posts, avatarUrl }) => {
-    console.log(posts);
     return (
         <>
             <div>
