@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import httpClient from "../../../common/apis/httpClient";
-import { GET_TOP_COMPANIES_URL } from "../../../common/apiUrl";
-import { Status } from "../../../common/constants";
-import { failureReducer, loadingReducer } from "../../../common/utils";
+import httpClient from "../common/apis/httpClient";
+import { GET_TOP_COMPANIES_URL } from "../common/apiUrl";
+import { Status } from "../common/constants";
+import { failureReducer, loadingReducer } from "../common/utils";
 
 const inititalState = {
     companies: [],

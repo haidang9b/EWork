@@ -1,13 +1,19 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
-import { Status } from "../../../common/constants";
-import { SkeletonCompanyItem } from "../../../components";
-import CompanyItem from "../CompanyItem";
-import { topCompanySelector } from "./topCompany.slice";
+import { Status } from "../../common/constants";
+import { SkeletonCompanyItem } from "..";
+import CompanyItem from "../../pages/Home/CompanyItem";
+import { array, string } from "prop-types";
 
-const ListCompany = () => {
-    const { companies, status } = useSelector(topCompanySelector);
+/**
+ * render List company
+ * @param {object} object
+ * @param {Array} object.companies
+ * @param {string} object.status
+ * @example
+ * <ListCompany/>
+ */
+const ListCompany = ({ companies, status }) => {
     const displayLoading = () => {
         const tags = [];
         for (let i = 0; i < 8; i++) {
@@ -39,4 +45,13 @@ const ListCompany = () => {
 
 ListCompany.displayName = "ListCompany";
 
+ListCompany.propTypes = {
+    companies: array,
+    status: string,
+};
+
+ListCompany.defaultProps = {
+    companies: [],
+    status: Status.idle,
+};
 export default ListCompany;

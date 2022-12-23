@@ -18,6 +18,7 @@ import {
     CompanyInformation,
     HRManagement,
     CompanyDetail,
+    Companies,
 } from "./pages";
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="company-detail/:id" element={<CompanyDetail />} />
+            <Route path="companies" element={<Companies />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />

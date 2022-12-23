@@ -15,6 +15,8 @@ import { Hero } from "../../components";
 import { Button } from "@mui/material";
 import SkeletonCompanyDetailBody from "./SkeletonCompanyDetailBody";
 import CompanyDetailBody from "./CompanyDetailBody";
+import SkeletonCompanyDetailFooter from "./SkeletonCompanyDetailFooter";
+import CompanyDetailFooter from "./CompanyDetailFooter";
 
 const CompanyDetail = () => {
     const { id } = useParams();
@@ -37,6 +39,7 @@ const CompanyDetail = () => {
                 <Container>
                     <SkeletonCompanyDetailHeader />
                     <SkeletonCompanyDetailBody />
+                    <SkeletonCompanyDetailFooter />
                 </Container>
             </>
         );
@@ -47,6 +50,7 @@ const CompanyDetail = () => {
                 <Container>
                     <CompanyDetailHeader />
                     <CompanyDetailBody />
+                    <CompanyDetailFooter />
                 </Container>
             </>
         );

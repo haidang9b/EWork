@@ -3,10 +3,11 @@
 }
 .job-item__area-img {
     margin-right: 8px;
+    padding: 8px;
 }
 img.job-item__img {
     border-radius: 8px;
-    margin: 12px;
+    margin: auto;
 }
 .job-item {
     padding: 8px;

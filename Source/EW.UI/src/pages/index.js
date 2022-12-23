@@ -14,3 +14,4 @@ export { default as ConfirmRecover } from "./ConfirmRecover";
 export { default as RecruitmentPost } from "./RecruitmentPost";
 export { default as CompanyInformation } from "./CompanyInformation";
 export { default as CompanyDetail } from "./CompanyDetail";
+export { default as Companies } from "./Companies";

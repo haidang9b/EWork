@@ -8,8 +8,9 @@ import companySlice from "../pages/CompanyManagement/company.slice";
 import recruiterRegisterSlice from "../pages/CreateRecruiter/recruiterRegister.slice";
 import recruitmentPostSlice from "../pages/RecruitmentPost/recruitmentPost.slice";
 import companyInformationSlice from "../pages/CompanyInformation/companyInformation.slice";
-import topCompanySlice from "../pages/Home/ListCompany/topCompany.slice";
+import topCompanySlice from "./topCompany.slice";
 import companyDetailSlice from "../pages/CompanyDetail/companyDetail.slice";
+import filterSlice from "../components/FilterArea/filter.slice";
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
     users: usersSlice.reducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     companyInformation: companyInformationSlice.reducer,
     topCompany: topCompanySlice.reducer,
     companyDetail: companyDetailSlice.reducer,
+    filter: filterSlice.reducer,
 });
 
 export const store = configureStore({
