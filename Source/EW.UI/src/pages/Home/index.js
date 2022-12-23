@@ -1,14 +1,17 @@
 import { Container } from "@mui/system";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getPageName } from "../../common/nameApp";
-import { SearchBar } from "../../components";
+import { ListCompany, SearchBar } from "../../components";
+import {
+    topCompanySelector,
+    getTopCompaniesThunk,
+} from "../../redux/topCompany.slice";
 import Benifit from "./Benifit";
-import ListCompany from "./ListCompany";
-import { getTopCompaniesThunk } from "./ListCompany/topCompany.slice";
 
 const Home = () => {
     const dispatch = useDispatch();
+    const { companies, status } = useSelector(topCompanySelector);
     useEffect(() => {
         document.title = getPageName("Trang chủ");
         dispatch(getTopCompaniesThunk());
@@ -17,7 +20,7 @@ const Home = () => {
         <Container>
             <SearchBar />
             <Benifit />
-            <ListCompany />
+            <ListCompany companies={companies} status={status} />
         </Container>
     );
 };

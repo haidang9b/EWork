@@ -80,7 +80,7 @@ const JobItem = ({
             </Grid>
             <Grid item sm={12} xs={12} md={9} lg={9} className="job-item__body">
                 <div className="job-item__title">
-                    <Link to={`job-detail/${id}`} className="text-link">
+                    <Link to={`/job-detail/${id}`} className="text-link">
                         {jobTitle}
                     </Link>
                 </div>

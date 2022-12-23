@@ -16,3 +16,12 @@ img.company-detail-header__img {
     margin: "4px 0 4px 0";
     padding-bottom: 6px;
 }
+
+.company-detail-footer {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.company-detail-footer__row {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}

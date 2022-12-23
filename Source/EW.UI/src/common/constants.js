@@ -96,7 +96,7 @@ export const WorkingType = [
  * @readonly
  * @returns {object} item
  * @returns {value} item.value
- * @returns {label} item.value
+ * @returns {label} item.label
  */
 export const CompanyType = [
     { value: 0, label: "Product" },
