@@ -19,7 +19,7 @@ const CountrySelector = ({ country, setCountry }) => {
     };
     return (
         <>
-            <InputLabel>Quốc gia</InputLabel>
+            <InputLabel id="currency-selected-item">Quốc gia</InputLabel>
             <Select
                 labelId="currency-selected-item"
                 label="Quốc gia"

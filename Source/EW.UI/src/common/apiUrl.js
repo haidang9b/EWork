@@ -31,6 +31,7 @@ export const UPLOAD_AVATAR_COMPANY_URL = "/uploads/upload-avatar-company";
 
 // recruitment posts controller
 export const RECRUITMENT_POST_URL = "/recruitmentposts";
+export const GET_JOBS_SHORT_URL = "/recruitmentposts/get-jobs";
 
 // companies controller
 export const GET_COMPANIES_URL = "/companies";

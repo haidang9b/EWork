@@ -2,7 +2,7 @@ import { Paper, Tab, Tabs, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useSelector } from "react-redux";
-import { JobItem, TabPanel } from "../../../components";
+import { ListJob, TabPanel } from "../../../components";
 import { companyDetailSelector } from "../companyDetail.slice";
 import useTab from "../../../hook/useTab";
 
@@ -33,10 +33,9 @@ const CompanyDescriptionTab = ({ name, description }) => {
  * @param {object} object
  * @param {string} object.name
  * @param {Array} object.posts
- * @param {string} object.avatarUrl
  * @returns
  */
-const JobListTab = ({ name, posts, avatarUrl }) => {
+const JobListTab = ({ name, posts }) => {
     return (
         <>
             <div>
@@ -44,35 +43,7 @@ const JobListTab = ({ name, posts, avatarUrl }) => {
                     Công việc đang tuyển tại {name}
                 </Typography>
             </div>
-            <div>
-                {posts?.length === 0 ? (
-                    <Typography variant="h6">
-                        Hiện đang không tuyển dụng
-                    </Typography>
-                ) : (
-                    <>
-                        <Typography variant="h6">
-                            Hiện đang có {posts?.length} đang tuyển
-                        </Typography>
-                        <br />
-                        {posts?.map((item) => (
-                            <JobItem
-                                key={JSON.stringify(item)}
-                                id={item.id}
-                                jobTitle={item.jobTitle}
-                                salaryType={item.salaryType}
-                                salaryFrom={item.salaryFrom}
-                                salaryTo={item.salaryTo}
-                                currency={item.currency}
-                                techStacks={item.techStacks}
-                                avatarUrl={avatarUrl}
-                                jobDescription={item.jobDescription}
-                                updatedDate={item.updatedDate}
-                            />
-                        ))}
-                    </>
-                )}
-            </div>
+            <ListJob posts={posts} />
         </>
     );
 };

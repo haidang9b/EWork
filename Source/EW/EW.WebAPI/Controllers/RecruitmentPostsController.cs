@@ -3,6 +3,7 @@ using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.RecruitmentPosts;
+using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -178,6 +179,43 @@ namespace EW.WebAPI.Controllers
             {
                 result.InternalError();
                 _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("get-jobs")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetJobs()
+        {
+            var result = new ApiResult();
+            try
+            {
+                var data = await _recruitmentPostService.GetAll();
+                data = data.OrderByDescending(item => item.UpdatedDate).ToList();
+                result.Data = data.Select(post => new RecruitmentPostShortViewModel
+                {
+                    Id = post.Id,
+                    JobTitle = post.JobTitle,
+                    SalaryType = post.SalaryType,
+                    SalaryFrom = post.SalaryFrom,
+                    SalaryTo = post.SalaryTo,
+                    Currency = post.Currency,
+                    TechStacks = post.TechStacks,
+                    YearExperience = post.YearExperience,
+                    JobDescription = post.JobDescription,
+                    UpdatedDate = post.UpdatedDate,
+                    AvatarUrl = post.Company.AvatarUrl,
+                    WorkingType = post.WorkingType,
+                    CompanyType = post.Company.CompanyType,
+                    CompanyName = post.Company.CompanyName
+                }).ToList();
+                result.Message = "Lấy dữ liệu thành công";
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+                result.Message = ex.Message;
             }
             return Ok(result);
         }

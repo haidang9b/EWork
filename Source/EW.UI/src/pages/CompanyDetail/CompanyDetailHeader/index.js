@@ -2,7 +2,7 @@ import { Group, Language, Place, Settings } from "@mui/icons-material";
 import { Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
-import { CompanyType, TeamSizeType } from "../../../common/constants";
+import { CompanyTypes, TeamSizeTypes } from "../../../common/constants";
 import countryList from "../../../common/countryList";
 import useFileUpload from "../../../hook/useFileUpload";
 import { companyDetailSelector } from "../companyDetail.slice";
@@ -17,14 +17,13 @@ const CompanyDetailHeader = () => {
                 <Grid item xs={12} sm={12} md={4} lg={4} padding={2}>
                     <img
                         className="company-detail-header__img"
+                        height="200px"
+                        width="100%"
                         src={
                             company?.avatarUrl
                                 ? getFilePathUpload(company?.avatarUrl)
                                 : ImageDefault
                         }
-                        style={{
-                            maxWidth: "100%",
-                        }}
                         alt={company?.companyName}
                     />
                 </Grid>
@@ -43,14 +42,14 @@ const CompanyDetailHeader = () => {
                     <Grid xs={12} sm={12} md={6} lg={6} item>
                         <Settings color="action" /> Loại hình công ty:{" "}
                         {
-                            CompanyType.find(
+                            CompanyTypes.find(
                                 (item) => item.value === company?.companyType
                             )?.label
                         }
                         <br />
                         <Group color="action" /> Số nhân viên:{" "}
                         {
-                            TeamSizeType.find(
+                            TeamSizeTypes.find(
                                 (item) => item.value === company?.teamSize
                             )?.label
                         }

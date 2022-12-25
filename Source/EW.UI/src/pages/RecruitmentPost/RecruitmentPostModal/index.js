@@ -12,7 +12,7 @@ import {
 import { func, object } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Currency, SalaryType, WorkingType } from "../../../common/constants";
+import { Currency, SalaryTypes, WorkingTypes } from "../../../common/constants";
 import {
     ConfirmDialog,
     RichTextEditor,
@@ -335,7 +335,7 @@ const RecruitmentPostModal = ({
                         }}
                         fullWidth
                     >
-                        {SalaryType.map((item) => (
+                        {SalaryTypes.map((item) => (
                             <MenuItem
                                 key={JSON.stringify(item)}
                                 value={item.value}
@@ -441,7 +441,7 @@ const RecruitmentPostModal = ({
                             marginBottom: "16px",
                         }}
                     >
-                        {WorkingType.map((item) => (
+                        {WorkingTypes.map((item) => (
                             <MenuItem
                                 value={item.value}
                                 key={JSON.stringify(item)}

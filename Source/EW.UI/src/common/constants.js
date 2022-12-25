@@ -71,7 +71,7 @@ export const Role = {
  * @returns {value} item.value
  * @returns {label} item.value
  */
-export const SalaryType = [
+export const SalaryTypes = [
     { value: 1, label: "Thương Lượng" },
     { value: 2, label: "Từ - đến" },
     { value: 3, label: "Lên tới" },
@@ -85,7 +85,7 @@ export const SalaryType = [
  * @returns {value} item.value
  * @returns {label} item.value
  */
-export const WorkingType = [
+export const WorkingTypes = [
     { value: 1, label: "At office" },
     { value: 2, label: "Remote" },
     { value: 3, label: "Flexible" },
@@ -98,7 +98,7 @@ export const WorkingType = [
  * @returns {value} item.value
  * @returns {label} item.label
  */
-export const CompanyType = [
+export const CompanyTypes = [
     { value: 0, label: "Product" },
     { value: 1, label: "Outsourcing" },
 ];
@@ -110,7 +110,7 @@ export const CompanyType = [
  * @returns {value} item.value
  * @returns {label} item.value
  */
-export const TeamSizeType = [
+export const TeamSizeTypes = [
     { value: 0, label: "1 - 50" },
     { value: 1, label: "50 - 100" },
     { value: 2, label: "100 - 200" },
@@ -128,7 +128,7 @@ export const TeamSizeType = [
  * @readonly
  * @returns {string}
  */
-export const JobSkill = [
+export const JobSkills = [
     "Agile",
     "Android",
     "Angular",

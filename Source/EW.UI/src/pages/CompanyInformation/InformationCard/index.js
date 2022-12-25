@@ -28,7 +28,7 @@ import {
 import useNotify from "../../../hook/useNotify";
 import "../companyinformation.css";
 import { CountrySelector, RichTextEditor } from "../../../components";
-import { CompanyType, TeamSizeType } from "../../../common/constants";
+import { CompanyTypes, TeamSizeTypes } from "../../../common/constants";
 import countryList from "../../../common/countryList";
 
 const DEFAULT_VALUE_COUNTRY = "VN";
@@ -302,7 +302,7 @@ const InformationCard = () => {
                                         }}
                                         inputRef={teamSizeRef}
                                     >
-                                        {TeamSizeType.map((item) => (
+                                        {TeamSizeTypes.map((item) => (
                                             <MenuItem
                                                 key={JSON.stringify(item)}
                                                 value={item.value}
@@ -313,7 +313,7 @@ const InformationCard = () => {
                                     </Select>
                                 </>
                             ) : (
-                                TeamSizeType.find(
+                                TeamSizeTypes.find(
                                     (item) =>
                                         item.value === information?.teamSize
                                 )?.label
@@ -344,7 +344,7 @@ const InformationCard = () => {
                                             marginBottom: "16px",
                                         }}
                                     >
-                                        {CompanyType.map((item) => (
+                                        {CompanyTypes.map((item) => (
                                             <MenuItem
                                                 key={JSON.stringify(item)}
                                                 value={item.value}
@@ -355,7 +355,7 @@ const InformationCard = () => {
                                     </Select>
                                 </>
                             ) : (
-                                CompanyType.find(
+                                CompanyTypes.find(
                                     (item) =>
                                         item.value === information?.companyType
                                 )?.label

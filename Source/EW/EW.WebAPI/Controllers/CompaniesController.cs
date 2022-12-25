@@ -224,7 +224,11 @@ namespace EW.WebAPI.Controllers
                         TechStacks = post.TechStacks,
                         YearExperience = post.YearExperience,
                         JobDescription = post.JobDescription,
-                        UpdatedDate = post.UpdatedDate
+                        UpdatedDate = post.UpdatedDate,
+                        AvatarUrl = existCompany.AvatarUrl,
+                        WorkingType = post.WorkingType,
+                        CompanyType = existCompany.CompanyType,
+                        CompanyName = existCompany.CompanyName
                     }).ToList(),
                 };
                 result.IsSuccess = true;
