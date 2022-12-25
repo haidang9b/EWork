@@ -1,5 +1,5 @@
 import { Email, Phone, Place } from "@mui/icons-material";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { companyDetailSelector } from "../companyDetail.slice";
@@ -9,6 +9,12 @@ const CompanyDetailFooter = () => {
     return (
         <Paper>
             <Grid padding={3} container>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <Typography variant="h5">
+                        Thông tin liên hệ của {company?.companyName}
+                    </Typography>
+                    <br />
+                </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                     <div className="d-flex company-detail-footer__row">
                         <div>
@@ -37,5 +43,5 @@ const CompanyDetailFooter = () => {
         </Paper>
     );
 };
-
+CompanyDetailFooter.displayName = "CompanyDetailFooter";
 export default CompanyDetailFooter;

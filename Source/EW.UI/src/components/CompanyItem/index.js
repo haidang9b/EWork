@@ -4,7 +4,7 @@ import { number, string } from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
 import ImageDefault from "../../assets/images/company-default.webp";
-import { CompanyType } from "../../common/constants";
+import { CompanyTypes } from "../../common/constants";
 import useFileUpload from "../../hook/useFileUpload";
 import "./companyitem.css";
 
@@ -48,7 +48,7 @@ const CompanyItem = ({ id, name, avatarUrl, companyType, jobsHiring }) => {
                         <p>
                             <Button>
                                 {
-                                    CompanyType.find(
+                                    CompanyTypes.find(
                                         (item) => item.value === companyType
                                     )?.label
                                 }

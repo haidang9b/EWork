@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material/styles";
 import { Box, Chip, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
-import { JobSkill } from "../../common/constants";
+import { JobSkills } from "../../common/constants";
 import { array, func } from "prop-types";
 
 const ITEM_HEIGHT = 48;
@@ -63,7 +63,7 @@ const TechStackSelector = ({ techStacks, setTechStacks }) => {
                 }}
                 MenuProps={MenuProps}
             >
-                {JobSkill.map((item) => (
+                {JobSkills.map((item) => (
                     <MenuItem
                         key={item}
                         value={item}

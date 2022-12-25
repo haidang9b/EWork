@@ -19,6 +19,7 @@ import {
     HRManagement,
     CompanyDetail,
     Companies,
+    Jobs,
 } from "./pages";
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="company-detail/:id" element={<CompanyDetail />} />
             <Route path="companies" element={<Companies />} />
+            <Route path="jobs" element={<Jobs />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />

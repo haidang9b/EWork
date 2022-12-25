@@ -11,6 +11,8 @@ import companyInformationSlice from "../pages/CompanyInformation/companyInformat
 import topCompanySlice from "./topCompany.slice";
 import companyDetailSlice from "../pages/CompanyDetail/companyDetail.slice";
 import filterSlice from "../components/FilterArea/filter.slice";
+import jobFilterSlice from "../components/SelectorJobsArea/jobFilter.slice";
+import jobsSlice from "../pages/Jobs/jobs.slice";
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
     users: usersSlice.reducer,
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
     topCompany: topCompanySlice.reducer,
     companyDetail: companyDetailSlice.reducer,
     filter: filterSlice.reducer,
+    jobFilter: jobFilterSlice.reducer,
+    jobs: jobsSlice.reducer,
 });
 
 export const store = configureStore({

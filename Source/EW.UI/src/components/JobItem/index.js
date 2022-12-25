@@ -74,6 +74,7 @@ const JobItem = ({
                     src={
                         avatarUrl ? getFilePathUpload(avatarUrl) : ImageDefault
                     }
+                    height="180px"
                     alt={jobTitle}
                     className="job-item__img"
                 />
