@@ -57,5 +57,5 @@ const JobDetail = () => {
         </>
     );
 };
-
+JobDetail.displayName = "JobDetail";
 export default JobDetail;

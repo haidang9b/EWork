@@ -133,4 +133,6 @@ const JobDetailBody = () => {
     );
 };
 
+JobDetailBody.displayName = "JobDetailBody";
+
 export default JobDetailBody;

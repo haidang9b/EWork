@@ -117,4 +117,6 @@ const JobDetailHeader = () => {
     );
 };
 
+JobDetailHeader.displayName = "JobDetailHeader";
+
 export default JobDetailHeader;
