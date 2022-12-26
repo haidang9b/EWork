@@ -56,4 +56,6 @@ const SkeletonJobDetailHeader = () => {
     );
 };
 
+SkeletonJobDetailHeader.displayName = "SkeletonJobDetailHeader";
+
 export default SkeletonJobDetailHeader;

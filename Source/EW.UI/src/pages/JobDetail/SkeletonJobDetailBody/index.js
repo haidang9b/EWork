@@ -48,4 +48,6 @@ const SkeletonJobDetailBody = () => {
     );
 };
 
+SkeletonJobDetailBody.displayName = "SkeletonJobDetailBody";
+
 export default SkeletonJobDetailBody;
