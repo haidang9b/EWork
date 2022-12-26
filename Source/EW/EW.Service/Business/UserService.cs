@@ -68,14 +68,14 @@ namespace EW.Services.Business
             var isExist = await GetUser(user);
             if(isExist != null)
             {
-                throw new Exception("Tài khoản này đã tồn tại");
+                return true;
             }
             var hashed = BCrypt.Net.BCrypt.HashPassword(DateTimeOffset.Now.ToString(), BCrypt.Net.BCrypt.GenerateSalt(12));
             await _unitOfWork.Repository<User>().AddAsync(new User
             {
                 Username = user.Username,
                 Password = hashed,
-                PhoneNumber = user.PhoneNumber ?? "",
+                PhoneNumber = user.PhoneNumber ?? MyRandom.RandomString(10),
                 Email = user.Email,
                 FullName = user.FullName,
                 CreatedDate = DateTimeOffset.Now,
@@ -83,6 +83,7 @@ namespace EW.Services.Business
                 RoleId = (long)ERole.ID_Student,
                 IsActive = true,
                 ImageUrl = user.ImageUrl,
+                CoverLetter = "",
                 TokenResetPassword = MyRandom.RandomString(30),
             });
             return await _unitOfWork.SaveChangeAsync();

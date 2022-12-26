@@ -1,4 +1,4 @@
-import { CloudUploadOutlined } from "@mui/icons-material";
+import { ArticleOutlined, CloudUploadOutlined } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
@@ -39,7 +39,6 @@ const CVManagement = () => {
             }
         },
     });
-
     const [uploadCVDialog, setUploadCVDialog] = useState({
         isOpen: false,
         title: "Đăng tải CV mới",
@@ -84,18 +83,9 @@ const CVManagement = () => {
                     <div className="d-flex space-btw">
                         <div className="d-flex ">
                             <Button
-                                variant="outlined"
-                                sx={{
-                                    marginRight: "4px",
-                                }}
-                            >
-                                Quản lý CV
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                sx={{
-                                    marginLeft: "4px",
-                                }}
+                                variant="contained"
+                                color="warning"
+                                startIcon={<ArticleOutlined />}
                                 onClick={handleOpenCoverLetterDialog}
                             >
                                 Thư giới thiệu

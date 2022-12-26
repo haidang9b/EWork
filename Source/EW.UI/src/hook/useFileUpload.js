@@ -5,6 +5,9 @@ const useFileUpload = () => {
      * @returns {string} path with API url
      */
     const getFilePathUpload = (url) => {
+        if (url.includes("googleusercontent")) {
+            return url;
+        }
         return `${process.env.REACT_APP_BACKEND_URL}/Uploads/${url}`;
     };
     return {

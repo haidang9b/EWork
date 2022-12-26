@@ -7,9 +7,10 @@ import { Link } from "react-router-dom";
 import { CompanyTypes, TeamSizeTypes } from "../../../common/constants";
 import countryList from "../../../common/countryList";
 import { jobDetailSelector } from "../jobDetail.slice";
-
+import useAuth from "../../../hook/useAuth";
 const JobDetailBody = () => {
     const { job } = useSelector(jobDetailSelector);
+    const { user, isStudent } = useAuth();
     return (
         <Grid container>
             <Grid item sm={12} xs={12} lg={8} md={8} padding={1}>
@@ -22,12 +23,14 @@ const JobDetailBody = () => {
                                 fullWidth
                                 disabled
                             >
-                                Việc làm đã Hết hạn
+                                Việc làm đã hết hạn nộp
                             </Button>
-                        ) : (
+                        ) : user && isStudent ? (
                             <Button variant="contained" fullWidth>
                                 Ứng tuyển
                             </Button>
+                        ) : (
+                            <></>
                         )}
                         <Grid container>
                             <Grid item padding={1}>
