@@ -58,7 +58,6 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
                         Cập nhật
                     </Button>
                     <LinearProgress
-                        fullWidth
                         sx={{
                             display:
                                 status === Status.loading ? "block" : "none",

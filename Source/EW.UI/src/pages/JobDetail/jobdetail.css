@@ -1,0 +1,28 @@
+.job-detail {
+    margin-top: 8px;
+}
+
+.job-detail-header__img {
+    min-width: 100%;
+    padding: 4px;
+}
+
+img.job-detail-header__img {
+    border-radius: 4%;
+    max-width: 100%;
+    height: 220px;
+}
+
+.job-detail-header__title {
+    font-size: 2.125rem;
+    font-weight: 400;
+}
+
+.job-detail-header__company {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.job-detail-body__salary {
+    color: rgb(218, 33, 33);
+    font-weight: bold;
+}

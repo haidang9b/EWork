@@ -7,17 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EmailTemplates\**" />
     <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="EmailTemplates\**" />
     <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="EmailTemplates\**" />
     <None Remove="Extensions\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EmailTemplates\" />
   </ItemGroup>
 
 </Project>

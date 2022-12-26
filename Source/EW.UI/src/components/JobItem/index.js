@@ -77,6 +77,7 @@ const JobItem = ({
                     height="180px"
                     alt={jobTitle}
                     className="job-item__img"
+                    loading="lazy"
                 />
             </Grid>
             <Grid item sm={12} xs={12} md={9} lg={9} className="job-item__body">
