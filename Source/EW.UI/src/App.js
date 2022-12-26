@@ -20,6 +20,7 @@ import {
     CompanyDetail,
     Companies,
     Jobs,
+    JobDetail,
 } from "./pages";
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="company-detail/:id" element={<CompanyDetail />} />
             <Route path="companies" element={<Companies />} />
             <Route path="jobs" element={<Jobs />} />
+            <Route path="job-detail/:id" element={<JobDetail />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />

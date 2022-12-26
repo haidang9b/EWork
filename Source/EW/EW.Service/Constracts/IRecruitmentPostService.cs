@@ -17,5 +17,6 @@ namespace EW.Services.Constracts
         Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user);
         Task<bool> Delete(RecruitmentPost model);
         Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByCompany(Company company);
+        Task<RecruitmentPost> GetRecruitmentPostForDetail(RecruitmentPost model);
     }
 }

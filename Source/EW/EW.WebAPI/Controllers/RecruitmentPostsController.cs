@@ -219,5 +219,29 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("detail/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDetail(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id });
+                if(post == null)
+                {
+                    throw new Exception("Không có dữ liệu từ id này");
+                }
+                result.Data = post;
+                result.Message = "Lấy dữ liệu thành công";
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError();
+                result.Message = ex.Message;
+            }
+            return Ok(result);
+        }
     }
 }
