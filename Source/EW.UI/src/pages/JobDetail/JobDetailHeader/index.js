@@ -1,18 +1,42 @@
-import { DataObjectOutlined, Place, Work } from "@mui/icons-material";
+import {
+    DataObjectOutlined,
+    MonetizationOnOutlined,
+    Work,
+} from "@mui/icons-material";
 import { Chip, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { WorkingTypes } from "../../../common/constants";
+import { Currency, WorkingTypes } from "../../../common/constants";
 import useFileUpload from "../../../hook/useFileUpload";
 import { jobDetailSelector } from "../jobDetail.slice";
-
+import ImageDefault from "../../../assets/images/company-default.webp";
 const JobDetailHeader = () => {
     const { job } = useSelector(jobDetailSelector);
     const { getFilePathUpload } = useFileUpload();
     const getTechStacks = () => {
         let arr = job?.techStacks.split(",");
         return arr.filter((item) => item !== "");
+    };
+
+    const getSalary = () => {
+        const { currency, salaryFrom, salaryTo, salaryType } = job;
+        let currencyLabel = Currency.find(
+            (item) => item.value === currency
+        )?.label;
+
+        switch (salaryType) {
+            case 1:
+                return "Thương Lượng";
+            case 2:
+                return `Từ ${salaryFrom} đến ${salaryTo} ${currencyLabel}`;
+            case 3:
+                return `Lên tới ${salaryTo} ${currencyLabel}`;
+            case 4:
+                return `Tối thiểu ${salaryFrom} ${currencyLabel}`;
+            default:
+                return "Thương lượng";
+        }
     };
     return (
         <Paper className="job-detail">
@@ -22,8 +46,9 @@ const JobDetailHeader = () => {
                         src={
                             job?.company?.avatarUrl
                                 ? getFilePathUpload(job?.company?.avatarUrl)
-                                : ""
+                                : ImageDefault
                         }
+                        loading="lazy"
                         alt={`${job?.jobTitle} - ${job?.company?.companyName}`}
                         width="100%"
                         height="200px"
@@ -44,11 +69,10 @@ const JobDetailHeader = () => {
                         <br />
                         <div className="d-flex">
                             <div>
-                                <Place color="action" />
+                                <MonetizationOnOutlined color="action" />
                             </div>
-                            <div>
-                                <strong>Địa chỉ:</strong>{" "}
-                                {job?.company?.address}
+                            <div className="job-detail-body__salary">
+                                {getSalary()}
                             </div>
                         </div>
                         <div className="d-flex">
