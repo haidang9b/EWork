@@ -8,13 +8,13 @@ const SkeletonCompanyDetailBody = () => {
                 <Grid item sm={6} xs={6} md={6} lg={6}>
                     <Skeleton
                         variant="text"
-                        sx={{ fontSize: "2rem", maxWidth: "30%" }}
+                        sx={{ fontSize: "2rem", maxWidth: "60%" }}
                     />
                 </Grid>
                 <Grid item sm={6} xs={6} md={6} lg={6}>
                     <Skeleton
                         variant="text"
-                        sx={{ fontSize: "2rem", maxWidth: "30%" }}
+                        sx={{ fontSize: "2rem", maxWidth: "60%" }}
                     />
                 </Grid>
             </Grid>
