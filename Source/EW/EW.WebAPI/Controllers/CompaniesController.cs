@@ -124,17 +124,23 @@ namespace EW.WebAPI.Controllers
                     Address = model.Address,
                     TaxNumber = model.TaxNumber,
                 };
-                result.IsSuccess = await _companyService.AddCompany(newCompany);
-                result.Message = result.IsSuccess ? "Thêm công ty thành công " : "Thêm công ty thất bại";
-                if (result.IsSuccess)
+                var data = await _companyService.AddCompany(newCompany);
+                if(data != null)
                 {
-                    result.Data = await _companyService.GetCompany(newCompany);
+                    result.Message = "Thêm công ty thành công ";
+                    result.Data = data;
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    result.Message = "Thêm công ty thất bại";
+                    result.IsSuccess = false;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                result.InternalError();
+                result.InternalError(ex.Message);
             }
             return Ok(result);
         }

@@ -56,7 +56,7 @@ namespace EW.Services.Business
             return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id || model.Email == item.Email);
         }
 
-        public async Task<bool> AddCompany(Company model)
+        public async Task<Company> AddCompany(Company model)
         {
             var newCompany = new Company
             {
@@ -75,7 +75,9 @@ namespace EW.Services.Business
                 Description = Constaints.COUNTRY_DEFAULT
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
-            return await _unitOfWork.SaveChangeAsync();
+            if (await _unitOfWork.SaveChangeAsync() == false)
+                throw new Exception("Thêm công ty mới thất bại");
+            return newCompany;
         }
 
         public async Task<bool> UploadAvatarCompany(Company company)

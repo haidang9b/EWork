@@ -77,11 +77,11 @@ namespace EW.WebAPI.Controllers
                     };
 
                     var resultAddCV = await _userCVService.AddCV(ownerCV);
-                    if(resultAddCV)
+                    if (resultAddCV != null) 
                     {
                         result.IsSuccess = true;
                         result.Message = "Upload cv thành công";
-                        result.Data = await _userCVService.GetUserCVByInfo(new UserCV { CVUrl = resultUpload.Path});
+                        result.Data = resultAddCV;
                     }
                     else
                     {
@@ -101,7 +101,7 @@ namespace EW.WebAPI.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-
+                result.InternalError(ex.Message);
             }
 
             return Ok(result);

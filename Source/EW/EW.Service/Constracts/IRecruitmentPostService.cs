@@ -9,7 +9,7 @@ namespace EW.Services.Constracts
 {
     public interface IRecruitmentPostService
     {
-        Task<bool> Add(RecruitmentPost model);
+        Task<RecruitmentPost> Add(RecruitmentPost model);
         Task<bool> Update(RecruitmentPost model);
         Task<IEnumerable<RecruitmentPost>> GetAll();
         Task<RecruitmentPost> GetRecruitmentPost(RecruitmentPost model);

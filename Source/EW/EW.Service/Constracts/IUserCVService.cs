@@ -9,7 +9,7 @@ namespace EW.Services.Constracts
 {
     public interface IUserCVService
     {
-        Task<bool> AddCV(UserCV model);
+        Task<UserCV> AddCV(UserCV model);
         Task<bool> RemoveCV(UserCV model);
         Task<IEnumerable<UserCV>> GetUserCVsByUser(User model);
         Task<UserCV> GetUserCVByInfo(UserCV model);
