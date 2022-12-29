@@ -14,10 +14,10 @@
             Message = message;
         }
 
-        public void InternalError()
+        public void InternalError(string message = "Internal Server Error")
         {
             HttpStatusCode = 500;
-            Message = "Internal Server Error";
+            Message = message;
             IsSuccess = false;
         }
     }

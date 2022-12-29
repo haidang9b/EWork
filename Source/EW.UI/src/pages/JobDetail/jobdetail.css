@@ -26,3 +26,7 @@ img.job-detail-header__img {
     color: rgb(218, 33, 33);
     font-weight: bold;
 }
+
+.job-detail-apply-dialog__label {
+    margin-top: 8px;
+}

@@ -35,10 +35,11 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var user = await _userService.GetUser(new User { Username = _username });
+                var dataCV = await _userCVService.GetUserCVsByUser(user);
                 result.Data = new UserProfileViewModel
                 {
                     Experiences = user.Experences,
-                    CVs = await _userCVService.GetUserCVsByUser(user),
+                    CVs = dataCV.OrderByDescending(item => item.CreatedDate).ToList(),
                     CoverLetter = user.CoverLetter,
                 };
             }
