@@ -81,8 +81,6 @@ app.MapControllers();
 
 app.Run();
 
-
-
 void RegisterService(IServiceCollection services)
 {
     services.AddScoped(typeof(IRepository<>), typeof(EWRepository<>));
@@ -94,5 +92,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IEmailService, EmailService>();
     services.AddScoped<IRecruitmentPostService, RecruitmentPostService>();
     services.AddScoped<ICompanyService, CompanyService>();
+    services.AddScoped<IApplicationService, ApplicationService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

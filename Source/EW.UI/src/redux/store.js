@@ -14,6 +14,7 @@ import filterSlice from "../components/FilterArea/filter.slice";
 import jobFilterSlice from "../components/SelectorJobsArea/jobFilter.slice";
 import jobsSlice from "../pages/Jobs/jobs.slice";
 import jobDetailSlice from "../pages/JobDetail/jobDetail.slice";
+import applicationSlice from "../pages/JobDetail/ApplyModal/application.slice";
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
     users: usersSlice.reducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
     jobFilter: jobFilterSlice.reducer,
     jobs: jobsSlice.reducer,
     jobDetail: jobDetailSlice.reducer,
+    application: applicationSlice.reducer,
 });
 
 export const store = configureStore({

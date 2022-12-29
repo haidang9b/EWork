@@ -43,7 +43,7 @@ const profileSlice = createSlice({
             .addCase(uploadNewCVThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess && action.payload?.data) {
                     state.status = Status.succeeded;
-                    state.cvs.push(action.payload?.data);
+                    state.cvs.unshift(action.payload?.data);
                 } else {
                     state.status = Status.failed;
                 }

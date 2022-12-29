@@ -12,6 +12,9 @@ import "./jobdetail.css";
 import SkeletonJobDetailHeader from "./SkeletonJobDetailHeader";
 import { getPageName } from "../../common/nameApp";
 import SkeletonJobDetailBody from "./SkeletonJobDetailBody";
+import { getProfileThunk } from "../CVManagement/profile.slice";
+import { getApplicationOfUserThunk } from "./ApplyModal/application.slice";
+
 const JobDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -19,6 +22,8 @@ const JobDetail = () => {
     const { status, job } = useSelector(jobDetailSelector);
     useEffect(() => {
         dispatch(getJobDetailThunk(id));
+        dispatch(getProfileThunk());
+        dispatch(getApplicationOfUserThunk());
     }, [id, dispatch]);
     useEffect(() => {
         if (job?.jobTitle) {
@@ -57,5 +62,6 @@ const JobDetail = () => {
         </>
     );
 };
+
 JobDetail.displayName = "JobDetail";
 export default JobDetail;
