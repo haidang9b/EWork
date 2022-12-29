@@ -101,7 +101,7 @@ namespace EW.WebAPI.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-
+                result.InternalError(ex.Message);
             }
 
             return Ok(result);
