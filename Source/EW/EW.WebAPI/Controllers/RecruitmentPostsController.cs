@@ -100,16 +100,16 @@ namespace EW.WebAPI.Controllers
                         postAdd.CompanyId = company.Id;
                     }
 
-                    result.IsSuccess = await _recruitmentPostService.Add(postAdd);
-                    if (result.IsSuccess)
-                    {
-                        result.Message = "Thêm bài tuyển dụng thành công";
-                        result.Data = await _recruitmentPostService.GetRecruitmentSpecific(postAdd);
-                    }
-                    else
+                    var data = await _recruitmentPostService.Add(postAdd);
+                    if (data == null)
                     {
                         result.IsSuccess = false;
                         result.Message = "Không thể thêm bài tuyển dụng này";
+                    }
+                    else
+                    {
+                        result.Message = "Thêm bài tuyển dụng thành công";
+                        result.Data = data;
                     }
                 }
                 else
@@ -149,7 +149,7 @@ namespace EW.WebAPI.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                result.InternalError();
+                result.InternalError(ex.Message);
             }
             return Ok(result);
         }

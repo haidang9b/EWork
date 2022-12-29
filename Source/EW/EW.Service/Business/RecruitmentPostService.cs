@@ -18,12 +18,14 @@ namespace EW.Services.Business
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Add(RecruitmentPost model)
+        public async Task<RecruitmentPost> Add(RecruitmentPost model)
         {
             model.UpdatedDate = DateTime.Now;
             model.CreatedDate = DateTime.Now;
             await _unitOfWork.Repository<RecruitmentPost>().AddAsync(model);
-            return await _unitOfWork.SaveChangeAsync();
+            if (await _unitOfWork.SaveChangeAsync() == false)
+                throw new Exception("Thêm bài viết thất bại");
+            return model;
         }
 
         public async Task<bool> Delete(RecruitmentPost model)

@@ -17,12 +17,14 @@ namespace EW.Services.Business
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddCV(UserCV model)
+        public async Task<UserCV> AddCV(UserCV model)
         {
             model.UpdatedDate = DateTimeOffset.Now;
             model.CreatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<UserCV>().AddAsync(model);
-            return await _unitOfWork.SaveChangeAsync();
+            if (await _unitOfWork.SaveChangeAsync() == false)
+                throw new Exception("Thêm cv thất bại");
+            return model;
         }
 
         public async Task<UserCV> GetUserCVByInfo(UserCV model)
