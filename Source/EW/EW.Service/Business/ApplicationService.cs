@@ -1,5 +1,6 @@
 ﻿using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Domain.ViewModels;
 using EW.Repository;
 using EW.Services.Constracts;
 using System;
@@ -66,6 +67,33 @@ namespace EW.Services.Business
                 throw new Exception("Không tồn tại người dùng này");
             }
             return await _unitOfWork.Repository<Application>().GetAsync(item => item.UserCV.UserId == currentUser.Id);
+        }
+
+        public async Task<IEnumerable<JobAppliedViewModel>> GetJobsApplied(User user)
+        {
+            var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
+            if (currentUser == null)
+            {
+                throw new Exception("Không tồn tại người dùng này");
+            }
+            var applieds = await _unitOfWork.Repository<Application>().GetAsync(item => item.UserCV.UserId == currentUser.Id, "RecruitmentPost,UserCV");
+            var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
+
+            return applieds.AsQueryable().Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company) => new JobAppliedViewModel
+            {
+                Id = apply.Id,
+                RecruitmentPostId = apply.RecruitmentPostId,
+                CompanyId = company.Id,
+                CompanyName = company.CompanyName,
+                CreatedDate = apply.CreatedDate,
+                UpdatedDate = apply.UpdatedDate,
+                Description = apply.Description,
+                CVName = apply.UserCV.CVName,
+                UserCVId = apply.UserCV.UserId,
+                CVUrl = apply.UserCV.CVUrl,
+                JobTitle = apply.RecruitmentPost.JobTitle,
+                Status = apply.Status,
+            }).ToList();
         }
     }
 }

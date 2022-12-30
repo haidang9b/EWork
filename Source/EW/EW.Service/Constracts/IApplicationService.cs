@@ -1,5 +1,6 @@
 ﻿using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace EW.Services.Constracts
     {
         Task<Application> Add(AddApplicationModel model);
         Task<IEnumerable<Application>> GetByApplier(User user);
+        Task<IEnumerable<JobAppliedViewModel>> GetJobsApplied(User user);
     }
 }

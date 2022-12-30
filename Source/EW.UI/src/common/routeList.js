@@ -24,11 +24,6 @@ const sidebarNonLoginData = [
 ];
 const sidebarStudentData = [
     {
-        title: "Trang chủ",
-        path: "/",
-        icon: <AiIcons.AiFillHome />,
-    },
-    {
         title: "Thông tin cá nhân",
         path: "/profile",
         icon: <IoIcons.IoMdPerson />,
@@ -44,9 +39,9 @@ const sidebarStudentData = [
         icon: <IoIcons.IoMdPaperPlane />,
     },
     {
-        title: "My Jobs",
-        path: "/recruitment-post",
-        icon: <IoIcons.IoMdPaperPlane />,
+        title: "Công việc đã ứng tuyển",
+        path: "/jobs-applied",
+        icon: <IoIcons.IoMdSend />,
     },
     {
         title: "My Companies",

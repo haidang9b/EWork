@@ -177,7 +177,7 @@ const Navbar = () => {
                     role="presentation"
                     onClick={() => setOpenSideBar(false)}
                 >
-                    {user && (
+                    {user ? (
                         <>
                             <List>
                                 <ListItem disablePadding>
@@ -203,8 +203,28 @@ const Navbar = () => {
                             </List>
                             <Divider />
                         </>
-                    )}
-
+                    ) : null}
+                    {isStudent ? (
+                        <>
+                            {sidebarNonLoginData.map((item) => (
+                                <ListItem
+                                    key={JSON.stringify(item)}
+                                    disablePadding
+                                >
+                                    <ListItemButton
+                                        onClick={() => {
+                                            setOpenSideBar(false);
+                                            navigate(`${item.path}`);
+                                        }}
+                                    >
+                                        <ListItemIcon>{item.icon}</ListItemIcon>
+                                        <ListItemText primary={item.title} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                            <Divider />
+                        </>
+                    ) : null}
                     <List>
                         {navbarItemsList.map((item, index) => (
                             <ListItem key={index} disablePadding>
@@ -219,7 +239,7 @@ const Navbar = () => {
                                 </ListItemButton>
                             </ListItem>
                         ))}
-                        {user && (
+                        {user ? (
                             <>
                                 <Divider />
 
@@ -238,7 +258,7 @@ const Navbar = () => {
                                     </ListItemButton>
                                 </ListItem>
                             </>
-                        )}
+                        ) : null}
                     </List>
                 </Box>
             </Drawer>

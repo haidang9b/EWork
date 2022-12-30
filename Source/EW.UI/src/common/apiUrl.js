@@ -44,3 +44,4 @@ export const GET_TOP_COMPANIES_URL = "/companies/top-companies";
 
 // applications controller
 export const APPLICATION_CONTROLLER_URL = "/applications";
+export const GET_JOBS_APPLIED_URL = "/applications/jobs-applied";
