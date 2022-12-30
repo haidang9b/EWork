@@ -207,3 +207,11 @@ export const JobSkills = [
     "Wordpress",
     "Xamarin",
 ];
+
+export const ApplicationStatus = [
+    { value: 0, label: "Đã tiếp nhận CV" },
+    { value: 1, label: "Đã đánh dấu" },
+    { value: 2, label: "Hẹn phỏng vấn" },
+    { value: 3, label: "Xong" },
+    { value: 4, label: "Từ chối" },
+];

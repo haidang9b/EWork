@@ -17,3 +17,4 @@ export { default as CompanyDetail } from "./CompanyDetail";
 export { default as Companies } from "./Companies";
 export { default as Jobs } from "./Jobs";
 export { default as JobDetail } from "./JobDetail";
+export { default as JobsApplied } from "./ApplicationFlow";

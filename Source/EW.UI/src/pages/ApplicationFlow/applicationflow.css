@@ -1,0 +1,13 @@
+.application-flow-table__job-title {
+    text-decoration: none;
+    color: #007cc0;
+}
+
+.application-flow-table__date {
+    text-align: right;
+}
+
+.application-flow-table__company {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+}

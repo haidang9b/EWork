@@ -38,7 +38,7 @@ const JobDetailBody = () => {
     return (
         <>
             <Grid container>
-                <Grid item sm={12} xs={12} lg={8} md={8} padding={1}>
+                <Grid item sm={12} xs={12} lg={8} md={8}>
                     <Paper className="job-detail">
                         <Grid padding={2}>
                             {moment().isAfter(job?.deadline) ? (
@@ -108,7 +108,7 @@ const JobDetailBody = () => {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} xs={12} lg={4} md={4} padding={1}>
+                <Grid item sm={12} xs={12} lg={4} md={4} paddingLeft={1}>
                     <Paper className="job-detail">
                         <Grid padding={2} container>
                             <Grid item sm={12} xs={12} lg={12} md={12}>

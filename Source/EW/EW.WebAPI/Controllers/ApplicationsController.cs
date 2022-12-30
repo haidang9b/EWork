@@ -60,7 +60,7 @@ namespace EW.WebAPI.Controllers
         /// Get applications by username request
         /// </summary>
         /// <returns>Data applications of user</returns>
-        [Authorize(Roles ="Student")]
+        [Authorize(Roles = "Student")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -81,5 +81,28 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get jobs applied of student, system will detect user request and response data
+        /// </summary>
+        /// <returns>List data jobs applied</returns>
+        [Authorize(Roles = "Student")]
+        [HttpGet("jobs-applied")]
+        public async Task<IActionResult> GetJobsApplied()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _applicationService.GetJobsApplied(new User
+                {
+                    Username = _username,
+                });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }
