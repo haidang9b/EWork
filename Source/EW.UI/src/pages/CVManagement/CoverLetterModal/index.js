@@ -9,14 +9,14 @@ import {
     Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { profileSelector } from "../profile.slice";
+import { documentSelector } from "../document.slice";
 import { RichTextEditor } from "../../../components";
 import PropTypes from "prop-types";
 import { Status } from "../../../common/constants";
 import { Stack } from "@mui/system";
 
 const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
-    const { status, coverLetter } = useSelector(profileSelector);
+    const { status, coverLetter } = useSelector(documentSelector);
     const [editor, setEditor] = useState();
 
     return (

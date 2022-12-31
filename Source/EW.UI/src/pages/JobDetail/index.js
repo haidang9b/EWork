@@ -12,7 +12,7 @@ import "./jobdetail.css";
 import SkeletonJobDetailHeader from "./SkeletonJobDetailHeader";
 import { getPageName } from "../../common/nameApp";
 import SkeletonJobDetailBody from "./SkeletonJobDetailBody";
-import { getProfileThunk } from "../CVManagement/profile.slice";
+import { getDocumentThunk } from "../CVManagement/document.slice";
 import { getApplicationOfUserThunk } from "./ApplyModal/application.slice";
 
 const JobDetail = () => {
@@ -22,7 +22,7 @@ const JobDetail = () => {
     const { status, job } = useSelector(jobDetailSelector);
     useEffect(() => {
         dispatch(getJobDetailThunk(id));
-        dispatch(getProfileThunk());
+        dispatch(getDocumentThunk());
         dispatch(getApplicationOfUserThunk());
     }, [id, dispatch]);
     useEffect(() => {

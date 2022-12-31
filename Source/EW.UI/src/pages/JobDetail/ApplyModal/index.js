@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { RichTextEditor } from "../../../components";
 import useNotify from "../../../hook/useNotify";
-import { profileSelector } from "../../CVManagement/profile.slice";
+import { documentSelector } from "../../CVManagement/document.slice";
 import { addApplicationThunk, applicationSelector } from "./application.slice";
 
 const DEFAULT_VALUE_ID_CV_SELECTED = -1;
@@ -33,7 +33,7 @@ const DEFAULT_VALUE_ID_CV_SELECTED = -1;
  */
 const ApplyModal = ({ applyDialog, setApplyDialog }) => {
     const [currentCV, setCurrentCV] = useState(DEFAULT_VALUE_ID_CV_SELECTED);
-    const { coverLetter, cvs } = useSelector(profileSelector);
+    const { coverLetter, cvs } = useSelector(documentSelector);
     const { setNotify } = useNotify();
     const [editor, setEditor] = useState(null);
     const { status } = useSelector(applicationSelector);

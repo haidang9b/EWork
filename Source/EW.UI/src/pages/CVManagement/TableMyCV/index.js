@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
-import { profileSelector, removeCVThunk } from "../profile.slice";
+import { documentSelector, removeCVThunk } from "../document.slice";
 import useNotify from "../../../hook/useNotify";
 import useFileUpload from "../../../hook/useFileUpload";
 import moment from "moment";
@@ -19,7 +19,7 @@ const TableMyCV = () => {
         subtitle: "",
     });
     const dispatch = useDispatch();
-    const { status, cvs } = useSelector(profileSelector);
+    const { status, cvs } = useSelector(documentSelector);
 
     const columns = [
         {

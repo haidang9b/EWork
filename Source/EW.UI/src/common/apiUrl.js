@@ -21,7 +21,7 @@ export const ADD_ACCOUNT_FACULTY_URL = "/users/add-account-faculty";
 export const EDIT_ACCOUNT_URL = "/users/update-account";
 
 // profile controller
-export const GET_PROFILE_URL = "/profile/get-profile";
+export const GET_DOCUMENT_URL = "/profile/get-document";
 export const EDIT_COVER_LETTER_URL = "/profile/update-cover-letter";
 export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 
