@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Install NPM Dependencies
-        run: npm i
+        run: npm i --force
       - name: Build Project
         run: npm run build
       - name: Upload artifact in order to deploy
