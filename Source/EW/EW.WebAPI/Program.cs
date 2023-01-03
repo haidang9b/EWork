@@ -96,5 +96,8 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IApplicationService, ApplicationService>();
     services.AddScoped<IProfileSerivce, ProfileService>();
     services.AddScoped<IWorkHistoryService, WorkHistoryService>();
+    services.AddScoped<IProjectService, ProjectService>();
+    services.AddScoped<ICertificateService, CertificateService>();
+    services.AddScoped<IEductionService, EducationService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

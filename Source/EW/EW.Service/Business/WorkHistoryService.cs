@@ -50,6 +50,7 @@ namespace EW.Services.Business
             currentWorkHistory.From = workHistory.From;
             currentWorkHistory.To = workHistory.To;
             currentWorkHistory.CompanyName = workHistory.CompanyName;
+            currentWorkHistory.IsWorking = workHistory.IsWorking;
             _unitOfWork.Repository<WorkHistory>().Update(currentWorkHistory);
             return await _unitOfWork.SaveChangeAsync();
         }
