@@ -24,6 +24,9 @@ export const EDIT_ACCOUNT_URL = "/users/update-account";
 export const GET_DOCUMENT_URL = "/profile/get-document";
 export const EDIT_COVER_LETTER_URL = "/profile/update-cover-letter";
 export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
+export const GET_PROFILE_URL = "/profile/my-information";
+export const PUT_CONTACT_PROFILE_URL = "/profile/contact";
+export const WORK_HISTORY_PROFILE_URL = "/profile/work-history";
 
 //upload controller
 export const UPLOAD_NEW_CV_URL = "/uploads/upload-new-cv";

@@ -4,6 +4,7 @@ using EW.Infrastructure;
 using EW.Repository;
 using EW.Services.Business;
 using EW.Services.Constracts;
+using EW.Services.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -94,5 +95,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<ICompanyService, CompanyService>();
     services.AddScoped<IApplicationService, ApplicationService>();
     services.AddScoped<IProfileSerivce, ProfileService>();
+    services.AddScoped<IWorkHistoryService, WorkHistoryService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

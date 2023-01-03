@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EW.Domain.Entities
@@ -14,6 +15,7 @@ namespace EW.Domain.Entities
         public string EmailContact { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public long UserId { get; set; }
+        [JsonIgnore]
         public User? User { get; set; }
         public string Objective { get; set; } = string.Empty;
         public string Skills { get; set; } = string.Empty;
