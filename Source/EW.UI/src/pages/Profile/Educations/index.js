@@ -1,15 +1,17 @@
-import { Button, Divider, Grid, TextField } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { Button, Divider, Grid, IconButton, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RichTextEditor } from "../../../components";
+import { ConfirmDialog, RichTextEditor } from "../../../components";
 import useNotify from "../../../hook/useNotify";
 import {
     addEducationThunk,
     profileSelector,
+    removeEducationThunk,
     updateEducationThunk,
 } from "../profile.slice";
 const DEFAULT_VALUE_ID = -1;
@@ -141,6 +143,100 @@ const EducationInput = ({ orgName, from, to, description, isAdd, id }) => {
     );
 };
 
+const EducationItem = ({ orgName, from, to, description, id }) => {
+    const { setNotify } = useNotify();
+    const dispatch = useDispatch();
+    const [isEditing, setIsEditing] = useState(false);
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "Xác nhận học vấn",
+        subtitle: `Bạn có muốn xóa học vấn tại ${orgName} không?`,
+    });
+    const handleRemove = () => {
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: true,
+            onConfirm: async () => {
+                const resultDispatch = await dispatch(
+                    removeEducationThunk(id)
+                ).unwrap();
+                setNotify({
+                    isOpen: true,
+                    title: "Xóa học vấn",
+                    message: resultDispatch?.message,
+                    type: resultDispatch?.isSuccess ? "success" : "error",
+                });
+                setConfirmDialog({
+                    ...confirmDialog,
+                    isOpen: false,
+                });
+            },
+        });
+    };
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+    return (
+        <>
+            {isEditing ? (
+                <>
+                    <EducationInput
+                        isAdd={false}
+                        orgName={orgName}
+                        from={from}
+                        to={to}
+                        description={description}
+                        id={id}
+                    />
+                    <Button
+                        variant="contained"
+                        color="warning"
+                        onClick={() => {
+                            setIsEditing(false);
+                        }}
+                    >
+                        Hủy
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <div>
+                        <div className="profile-work-history-item__company-name">
+                            {orgName}{" "}
+                            <IconButton
+                                disabled={isEditing}
+                                onClick={handleEdit}
+                            >
+                                <Edit />
+                            </IconButton>
+                            <IconButton
+                                onClick={handleRemove}
+                                disabled={isEditing}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </div>
+                        <em>
+                            {moment(from).format("MM/YYYY")} -{" "}
+                            {moment(to).format("MM/YYYY")}
+                        </em>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: description,
+                            }}
+                        ></div>
+                    </div>
+                </>
+            )}
+
+            <ConfirmDialog
+                confirm={confirmDialog}
+                setConfirm={setConfirmDialog}
+            />
+        </>
+    );
+};
+
 const Educations = () => {
     const { educations } = useSelector(profileSelector);
     const [addForms, setAddForms] = useState([]);
@@ -156,7 +252,18 @@ const Educations = () => {
     return (
         <>
             <div className="profile__header">Học vấn</div>
-            <div></div>
+            <div>
+                {educations.map((item) => (
+                    <EducationItem
+                        key={JSON.stringify(item)}
+                        orgName={item.orgName}
+                        from={item.from}
+                        to={item.to}
+                        description={item.description}
+                        id={item.id}
+                    />
+                ))}
+            </div>
             <Divider />
 
             <div>

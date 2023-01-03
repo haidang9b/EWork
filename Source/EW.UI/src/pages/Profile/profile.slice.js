@@ -88,7 +88,48 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(updateWorkHistoryThunk.rejected, failureReducer),
+            .addCase(updateWorkHistoryThunk.rejected, failureReducer)
+            .addCase(addEducationThunk.pending, loadingReducer)
+            .addCase(addEducationThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.educations.push(action.payload?.data);
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(addEducationThunk.rejected, failureReducer)
+            .addCase(removeEducationThunk.pending, loadingReducer)
+            .addCase(removeEducationThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentEducations = state.educations.filter(
+                        (item) => item.id !== action.payload.data?.id
+                    );
+                    state.educations = currentEducations;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(removeEducationThunk.rejected, failureReducer)
+            .addCase(updateEducationThunk.pending, loadingReducer)
+            .addCase(updateEducationThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentEducation = state.educations.find(
+                        (item) => item.id === action.payload.data?.id
+                    );
+                    let { orgName, from, to, description } =
+                        action.payload.data;
+                    currentEducation.orgName = orgName;
+                    currentEducation.from = from;
+                    currentEducation.to = to;
+                    currentEducation.description = description;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(updateEducationThunk.rejected, failureReducer),
 });
 
 export const getProfileThunk = createAsyncThunk(
