@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EW.Services.Contracts
 {
-    public interface IEductionService
+    public interface IEducationService
     {
         Task<Education> Add(Education model);
         Task<bool> Delete(Education model);

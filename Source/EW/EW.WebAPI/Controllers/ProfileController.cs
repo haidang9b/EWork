@@ -21,15 +21,28 @@ namespace EW.WebAPI.Controllers
         private readonly IUserCVService _userCVService;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IWorkHistoryService _workHistoryService;
+        private readonly IEducationService _educationService;
+        private readonly IProjectService _projectService;
+        private readonly ICertificateService _certificateService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProfileController(IUserService userService, ILogger<ProfileController> logger, IUserCVService userCVService, IProfileSerivce profileSerivce, IWorkHistoryService workHistoryService)
+        public ProfileController(IUserService userService, 
+                                ILogger<ProfileController> logger, 
+                                IUserCVService userCVService, 
+                                IProfileSerivce profileSerivce, 
+                                IWorkHistoryService workHistoryService, 
+                                IEducationService educationService, 
+                                IProjectService projectService, 
+                                ICertificateService certificateService)
         {
             _userService = userService;
             _logger = logger;
             _userCVService = userCVService;
             _profileSerivce = profileSerivce;
             _workHistoryService = workHistoryService;
+            _educationService = educationService;
+            _projectService = projectService;
+            _certificateService = certificateService;
         }
 
         /// <summary>
@@ -333,5 +346,340 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+
+        /// <summary>
+        /// Add new Education
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPost("educations")]
+        public async Task<IActionResult> AddEducation(AddEducationModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if (profile == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Vui lòng get dữ liệu trước khi update";
+                    return Ok(result);
+                }
+
+                var newEducation = new Education
+                {
+                    ProfileId = profile.Id,
+                    Description = model.Description,
+                    From = model.From,
+                    To = model.To,
+                    OrgName = model.OrgName
+                };
+                var data = await _educationService.Add(newEducation);
+                if (data == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không thể thêm học vấn này";
+                    return Ok(result);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = "Thêm học vấn thành công";
+                    result.Data = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Remove education
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpDelete("educations/{id}")]
+        public async Task<IActionResult> DeleteEducation(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _educationService.Delete(new Education { Id = id });
+                if (result.IsSuccess)
+                {
+                    result.Message = "Xóa học vấn thành công";
+                    result.Data = new Education { Id = id };
+                }
+                else
+                {
+                    result.Message = "Xóa học vấn thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update education
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPut("educations")]
+        public async Task<IActionResult> UpdateEducation(Education model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _educationService.Update(model);
+                if (result.IsSuccess)
+                {
+                    result.Message = "Cập nhật học vấn thành công";
+                    result.Data = model;
+                }
+                else
+                {
+                    result.Message = "Cập nhật học vấn thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Add new Certificate
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPost("certificates")]
+        public async Task<IActionResult> AddCertificate(AddCertificateModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if (profile == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Vui lòng get dữ liệu trước khi update";
+                    return Ok(result);
+                }
+
+                var newCertificate = new Certificate
+                {
+                    ProfileId = profile.Id,
+                    Description = model.Description,
+                    From = model.From,
+                    To = model.To,
+                    CertificateName = model.CertificateName
+                };
+                var data = await _certificateService.Add(newCertificate);
+                if (data == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không thể thêm chứng chỉ này";
+                    return Ok(result);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = "Thêm chứng chỉ thành công";
+                    result.Data = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Remove Certificate
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpDelete("certificates/{id}")]
+        public async Task<IActionResult> DeleteCertificate(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _certificateService.Delete(new Certificate { Id = id });
+                if (result.IsSuccess)
+                {
+                    result.Message = "Xóa chứng chỉ thành công";
+                    result.Data = new Education { Id = id };
+                }
+                else
+                {
+                    result.Message = "Xóa chứng chỉ thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update Certificate
+        /// </summary>
+        /// <param name="model">Certificate</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPut("certificates")]
+        public async Task<IActionResult> UpdateCetificate(Certificate model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _certificateService.Update(model);
+                if (result.IsSuccess)
+                {
+                    result.Message = "Cập nhật chứng chỉ thành công";
+                    result.Data = model;
+                }
+                else
+                {
+                    result.Message = "Cập nhật chứng chỉ thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Add new project
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPost("projects")]
+        public async Task<IActionResult> AddProject(AddProjectModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if (profile == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Vui lòng get dữ liệu trước khi update";
+                    return Ok(result);
+                }
+
+                var newProject = new Project
+                {
+                    ProfileId = profile.Id,
+                    Description = model.Description,
+                    From = model.From,
+                    To = model.To,
+                    CustomerName = model.CustomerName,
+                    ProjectName = model.ProjectName,
+                };
+                var data = await _projectService.Add(newProject);
+                if (data == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Không thể thêm dự án này";
+                    return Ok(result);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = "Thêm dự án thành công";
+                    result.Data = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Remove Certificate
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpDelete("projects/{id}")]
+        public async Task<IActionResult> DeleteProject(long id)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _projectService.Delete(new Project { Id = id });
+                if (result.IsSuccess)
+                {
+                    result.Message = "Xóa dự án thành công";
+                    result.Data = new Project { Id = id };
+                }
+                else
+                {
+                    result.Message = "Xóa dự án thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update Certificate
+        /// </summary>
+        /// <param name="model">Certificate</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPut("projects")]
+        public async Task<IActionResult> UpdateProject(Project model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.IsSuccess = await _projectService.Update(model);
+                if (result.IsSuccess)
+                {
+                    result.Message = "Cập nhật dự án thành công";
+                    result.Data = model;
+                }
+                else
+                {
+                    result.Message = "Cập nhật dự án thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
+
     }
 }

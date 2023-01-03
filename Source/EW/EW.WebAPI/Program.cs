@@ -98,6 +98,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IWorkHistoryService, WorkHistoryService>();
     services.AddScoped<IProjectService, ProjectService>();
     services.AddScoped<ICertificateService, CertificateService>();
-    services.AddScoped<IEductionService, EducationService>();
+    services.AddScoped<IEducationService, EducationService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

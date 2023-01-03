@@ -8,6 +8,7 @@ import Contacts from "./Contacts";
 import Educations from "./Educations";
 import "./profile.css";
 import { getProfileThunk, profileSelector } from "./profile.slice";
+import Projects from "./Projects";
 import SkeletonProfile from "./SkeletonProfile";
 import WorkHistories from "./WorkHistories";
 const Profile = () => {
@@ -52,6 +53,15 @@ const Profile = () => {
                         <SkeletonProfile />
                     ) : (
                         <Certificates />
+                    )}
+                </Grid>
+            </Paper>
+            <Paper>
+                <Grid padding={2} marginTop={1}>
+                    {status === Status.loading ? (
+                        <SkeletonProfile />
+                    ) : (
+                        <Projects />
                     )}
                 </Grid>
             </Paper>

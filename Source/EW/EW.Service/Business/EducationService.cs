@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EW.Services.Business
 {
-    public class EducationService : IEductionService
+    public class EducationService : IEducationService
     {
         private readonly IUnitOfWork _unitOfWork;
         public EducationService(IUnitOfWork unitOfWork)
