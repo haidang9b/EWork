@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
+    EDUCATION_PROFILE_URL,
     GET_PROFILE_URL,
     PUT_CONTACT_PROFILE_URL,
     WORK_HISTORY_PROFILE_URL,
@@ -131,5 +132,32 @@ export const updateWorkHistoryThunk = createAsyncThunk(
         return response.data;
     }
 );
+
+export const addEducationThunk = createAsyncThunk(
+    "profile/addEducation",
+    async (obj) => {
+        const response = await httpClient.post(EDUCATION_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
+export const removeEducationThunk = createAsyncThunk(
+    "profile/removeEducation",
+    async (id) => {
+        const response = await httpClient.delete(
+            `${EDUCATION_PROFILE_URL}/${id}`
+        );
+        return response.data;
+    }
+);
+
+export const updateEducationThunk = createAsyncThunk(
+    "profile/updateEducation",
+    async (obj) => {
+        const response = await httpClient.put(EDUCATION_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
 export default profileSlice;
 export const profileSelector = (state) => state.profile;

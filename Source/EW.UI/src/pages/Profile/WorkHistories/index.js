@@ -210,12 +210,12 @@ const WorkHistoryItem = ({
             onConfirm: async () => {
                 const resultDispatch = await dispatch(
                     removeWorkHistoryThunk(id)
-                );
+                ).unwrap();
                 setNotify({
                     isOpen: true,
                     title: "Xóa kinh nghiệm làm việc",
-                    message: resultDispatch.message,
-                    type: resultDispatch.isSuccess ? "success" : "error",
+                    message: resultDispatch?.message,
+                    type: resultDispatch?.isSuccess ? "success" : "error",
                 });
                 setConfirmDialog({
                     ...confirmDialog,
