@@ -149,7 +149,7 @@ const EducationItem = ({ orgName, from, to, description, id }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
-        title: "Xác nhận học vấn",
+        title: "Xác nhận xóa học vấn",
         subtitle: `Bạn có muốn xóa học vấn tại ${orgName} không?`,
     });
     const handleRemove = () => {

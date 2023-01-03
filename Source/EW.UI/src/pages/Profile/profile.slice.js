@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
+    CERTIFICATE_PROFILE_URL,
     EDUCATION_PROFILE_URL,
     GET_PROFILE_URL,
     PUT_CONTACT_PROFILE_URL,
@@ -129,7 +130,48 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(updateEducationThunk.rejected, failureReducer),
+            .addCase(updateEducationThunk.rejected, failureReducer)
+            .addCase(addCertificateThunk.pending, loadingReducer)
+            .addCase(addCertificateThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.certificates.push(action.payload?.data);
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(addCertificateThunk.rejected, failureReducer)
+            .addCase(removeCertificateThunk.pending, loadingReducer)
+            .addCase(removeCertificateThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentCertificates = state.certificates.filter(
+                        (item) => item.id !== action.payload.data?.id
+                    );
+                    state.certificates = currentCertificates;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(removeCertificateThunk.rejected, failureReducer)
+            .addCase(updateCertificateThunk.pending, loadingReducer)
+            .addCase(updateCertificateThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentCertificate = state.certificates.find(
+                        (item) => item.id === action.payload.data?.id
+                    );
+                    let { certificateName, from, to, description } =
+                        action.payload.data;
+                    currentCertificate.certificateName = certificateName;
+                    currentCertificate.from = from;
+                    currentCertificate.to = to;
+                    currentCertificate.description = description;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(updateCertificateThunk.rejected, failureReducer),
 });
 
 export const getProfileThunk = createAsyncThunk(
@@ -200,5 +242,30 @@ export const updateEducationThunk = createAsyncThunk(
     }
 );
 
+export const addCertificateThunk = createAsyncThunk(
+    "profile/addCertificate",
+    async (obj) => {
+        const response = await httpClient.post(CERTIFICATE_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
+export const removeCertificateThunk = createAsyncThunk(
+    "profile/removeCertificate",
+    async (id) => {
+        const response = await httpClient.delete(
+            `${CERTIFICATE_PROFILE_URL}/${id}`
+        );
+        return response.data;
+    }
+);
+
+export const updateCertificateThunk = createAsyncThunk(
+    "profile/updateCertificate",
+    async (obj) => {
+        const response = await httpClient.put(CERTIFICATE_PROFILE_URL, obj);
+        return response.data;
+    }
+);
 export default profileSlice;
 export const profileSelector = (state) => state.profile;
