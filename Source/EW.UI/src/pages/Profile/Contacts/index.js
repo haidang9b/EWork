@@ -310,4 +310,5 @@ const Contacts = () => {
     );
 };
 
+Contacts.displayName = "Contacts";
 export default Contacts;

@@ -301,4 +301,6 @@ const Certificates = () => {
     );
 };
 
+Certificates.displayName = "Certificates";
+
 export default Certificates;

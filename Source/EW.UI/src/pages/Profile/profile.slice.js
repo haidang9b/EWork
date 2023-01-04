@@ -4,6 +4,7 @@ import {
     CERTIFICATE_PROFILE_URL,
     EDUCATION_PROFILE_URL,
     GET_PROFILE_URL,
+    PROJECT_PROFILE_URL,
     PUT_CONTACT_PROFILE_URL,
     WORK_HISTORY_PROFILE_URL,
 } from "../../common/apiUrl";
@@ -171,7 +172,49 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(updateCertificateThunk.rejected, failureReducer),
+            .addCase(updateCertificateThunk.rejected, failureReducer)
+            .addCase(addProjectThunk.pending, loadingReducer)
+            .addCase(addProjectThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.projects.push(action.payload?.data);
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(addProjectThunk.rejected, failureReducer)
+            .addCase(removeProjectThunk.pending, loadingReducer)
+            .addCase(removeProjectThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentProjects = state.projects.filter(
+                        (item) => item.id !== action.payload.data?.id
+                    );
+                    state.projects = currentProjects;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(removeProjectThunk.rejected, failureReducer)
+            .addCase(updateProjectThunk.pending, loadingReducer)
+            .addCase(updateProjectThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    let currentProject = state.projects.find(
+                        (item) => item.id === action.payload.data?.id
+                    );
+                    let { projectName, customerName, from, to, description } =
+                        action.payload.data;
+                    currentProject.projectName = projectName;
+                    currentProject.customerName = customerName;
+                    currentProject.from = from;
+                    currentProject.to = to;
+                    currentProject.description = description;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(updateProjectThunk.rejected, failureReducer),
 });
 
 export const getProfileThunk = createAsyncThunk(
@@ -267,5 +310,32 @@ export const updateCertificateThunk = createAsyncThunk(
         return response.data;
     }
 );
+
+export const addProjectThunk = createAsyncThunk(
+    "profile/addProject",
+    async (obj) => {
+        const response = await httpClient.post(PROJECT_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
+export const removeProjectThunk = createAsyncThunk(
+    "profile/removeProject",
+    async (id) => {
+        const response = await httpClient.delete(
+            `${PROJECT_PROFILE_URL}/${id}`
+        );
+        return response.data;
+    }
+);
+
+export const updateProjectThunk = createAsyncThunk(
+    "profile/updateProject",
+    async (obj) => {
+        const response = await httpClient.put(PROJECT_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
 export default profileSlice;
 export const profileSelector = (state) => state.profile;

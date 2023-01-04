@@ -35,5 +35,5 @@ const SkeletonProfile = () => {
         </>
     );
 };
-
+SkeletonProfile.displayName = "SkeletonProfile";
 export default SkeletonProfile;

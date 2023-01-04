@@ -351,4 +351,6 @@ const WorkHistories = () => {
     );
 };
 
+WorkHistories.displayName = "WorkHistories";
+
 export default WorkHistories;

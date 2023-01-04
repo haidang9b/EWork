@@ -265,7 +265,6 @@ const Educations = () => {
                 ))}
             </div>
             <Divider />
-
             <div>
                 {addForms.map((item) => (
                     <EducationInput
@@ -294,5 +293,6 @@ const Educations = () => {
         </>
     );
 };
+Educations.displayName = "Educations";
 
 export default Educations;

@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
+import { getPageName } from "../../common/nameApp";
 import Certificates from "./Certificates";
 import Contacts from "./Contacts";
 import Educations from "./Educations";
@@ -16,6 +17,9 @@ const Profile = () => {
     useEffect(() => {
         dispatch(getProfileThunk());
     }, [dispatch]);
+    useEffect(() => {
+        document.title = getPageName("Thông tin chi tiết cá nhân");
+    }, []);
     const { status } = useSelector(profileSelector);
     return (
         <Container>
@@ -68,5 +72,7 @@ const Profile = () => {
         </Container>
     );
 };
+
+Profile.displayName = "Profile";
 
 export default Profile;
