@@ -4,7 +4,7 @@ import { Status } from "../../common/constants";
 import {
     DELETE_REMOVE_CV_URL,
     EDIT_COVER_LETTER_URL,
-    GET_PROFILE_URL,
+    GET_DOCUMENT_URL,
     UPLOAD_NEW_CV_URL,
 } from "../../common/apiUrl";
 import { failureReducer, loadingReducer } from "../../common/utils";
@@ -12,23 +12,21 @@ import { failureReducer, loadingReducer } from "../../common/utils";
 const initialState = {
     cvs: [],
     coverLetter: "",
-    experiences: [],
     status: Status.idle,
 };
 
-const profileSlice = createSlice({
-    name: "profile",
+const documentSlice = createSlice({
+    name: "document",
     initialState: initialState,
     extraReducers: (builder) =>
         builder
-            .addCase(getProfileThunk.pending, loadingReducer)
-            .addCase(getProfileThunk.fulfilled, (state, action) => {
+            .addCase(getDocumentThunk.pending, loadingReducer)
+            .addCase(getDocumentThunk.fulfilled, (state, action) => {
                 state.cvs = action.payload?.data?.cVs;
-                state.experiences = action.payload?.data?.experences;
                 state.coverLetter = action.payload?.data?.coverLetter;
                 state.status = Status.succeeded;
             })
-            .addCase(getProfileThunk.rejected, failureReducer)
+            .addCase(getDocumentThunk.rejected, failureReducer)
             .addCase(editCoverLetterThunk.pending, loadingReducer)
             .addCase(editCoverLetterThunk.fulfilled, (state, action) => {
                 if (action.payload?.isSuccess) {
@@ -64,15 +62,15 @@ const profileSlice = createSlice({
             .addCase(removeCVThunk.rejected, failureReducer),
 });
 
-export const getProfileThunk = createAsyncThunk(
-    "profile/getProfile",
+export const getDocumentThunk = createAsyncThunk(
+    "document/getDocumentThunk",
     async () => {
-        const response = await httpClient.get(GET_PROFILE_URL);
+        const response = await httpClient.get(GET_DOCUMENT_URL);
         return response.data;
     }
 );
 export const editCoverLetterThunk = createAsyncThunk(
-    "profile/editCoverLetter",
+    "document/editCoverLetter",
     async (obj) => {
         const response = await httpClient.put(EDIT_COVER_LETTER_URL, obj);
         return response.data;
@@ -80,7 +78,7 @@ export const editCoverLetterThunk = createAsyncThunk(
 );
 
 export const uploadNewCVThunk = createAsyncThunk(
-    "profile/uploadNewCV",
+    "document/uploadNewCV",
     async (file) => {
         const formData = new FormData();
         formData.append("File", file);
@@ -94,7 +92,7 @@ export const uploadNewCVThunk = createAsyncThunk(
 );
 
 export const removeCVThunk = createAsyncThunk(
-    "profile/removeCV",
+    "document/removeCV",
     async (id) => {
         const response = await httpClient.delete(
             `${DELETE_REMOVE_CV_URL}/${id}`
@@ -103,5 +101,5 @@ export const removeCVThunk = createAsyncThunk(
     }
 );
 
-export const profileSelector = (state) => state.profile;
-export default profileSlice;
+export const documentSelector = (state) => state.document;
+export default documentSlice;

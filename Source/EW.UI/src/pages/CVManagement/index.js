@@ -8,9 +8,9 @@ import CoverLetterModal from "./CoverLetterModal";
 import TableMyCV from "./TableMyCV";
 import {
     editCoverLetterThunk,
-    getProfileThunk,
+    getDocumentThunk,
     uploadNewCVThunk,
-} from "./profile.slice";
+} from "./document.slice";
 import "./CVManagement.css";
 import useNotify from "../../hook/useNotify";
 import { UploadFileDialog } from "../../components";
@@ -70,7 +70,7 @@ const CVManagement = () => {
     };
     useEffect(() => {
         document.title = getPageName("Quản lý CV");
-        dispatch(getProfileThunk());
+        dispatch(getDocumentThunk());
     }, [dispatch]);
     return (
         <>

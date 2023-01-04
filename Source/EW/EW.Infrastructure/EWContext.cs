@@ -27,5 +27,10 @@ namespace EW.Infrastructure
         public DbSet<Recruiter> Recruiters { get; set; }
         public DbSet<RecruitmentPost> RecruitmentPosts { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<WorkHistory> WorkHistory { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Certificate> Certificates { get; set; } 
     }
 }

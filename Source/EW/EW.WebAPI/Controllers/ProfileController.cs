@@ -1,5 +1,6 @@
 ﻿using EW.Domain.Entities;
 using EW.Services.Constracts;
+using EW.Services.Contracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Profiles;
 using EW.WebAPI.Models.ViewModels;
@@ -18,17 +19,26 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ILogger<ProfileController> _logger;
         private readonly IUserCVService _userCVService;
+        private readonly IProfileSerivce _profileSerivce;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProfileController(IUserService userService, ILogger<ProfileController> logger, IUserCVService userCVService)
+        public ProfileController(IUserService userService, 
+                                ILogger<ProfileController> logger, 
+                                IUserCVService userCVService, 
+                                IProfileSerivce profileSerivce)
         {
             _userService = userService;
             _logger = logger;
             _userCVService = userCVService;
+            _profileSerivce = profileSerivce;
         }
 
-
-        [HttpGet("get-profile")]
+        /// <summary>
+        /// Get get data: cover letter, cvs of user
+        /// </summary>
+        /// <returns>cover letter, cvs</returns>
+        [HttpGet("get-document")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetProfile()
         {
             var result = new ApiResult();
@@ -51,8 +61,13 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Update cover letter of student
+        /// </summary>
+        /// <param name="model">UpdateCoverLetterModel</param>
+        /// <returns>is success and message</returns>
         [HttpPut("update-cover-letter")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateCoverLetter(UpdateCoverLetterModel model)
         {
             var result = new ApiResult();
@@ -89,7 +104,13 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Remove cv of user
+        /// </summary>
+        /// <param name="Id">long</param>
+        /// <returns></returns>
         [HttpDelete("remove-cv/{id:long}")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> RemoveCVUser(long Id)
         {
             var result = new ApiResult();
@@ -118,6 +139,84 @@ namespace EW.WebAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get profile user request, role: student
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpGet("my-information")]
+        public async Task<IActionResult> MyInformation()
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if(profile == null)
+                {
+                    var initProfile = await _profileSerivce.InitProfile(new User { Username = _username });
+                    result.IsSuccess = true;
+                    result.Message = "Lấy dữ liệu thành công";
+                    result.Data = initProfile;
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = "Lấy dữ liệu thành công";
+                    result.Data = profile;
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update data contact and objective of student request
+        /// </summary>
+        /// <param name="ContactModel">model</param>
+        /// <returns>data updated</returns>
+        [Authorize(Roles = "Student")]
+        [HttpPut("contact")]
+        public async Task<IActionResult> EditContact(ContactModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if(profile == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Vui lòng get dữ liệu trước khi update";
+                    return Ok(result);
+                }
+                profile.EmailContact = model.EmailContact;
+                profile.PhoneNumber = model.PhoneNumber;
+                profile.Github = model.Github;
+                profile.Linkedin = model.Linkedin;
+                profile.Address = model.Address;
+                profile.Objective = model.Objective;
+                result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
+                if(result.IsSuccess)
+                {
+                    result.Data = profile;
+                    result.Message = "Cập nhật thông tin thành công";
+                }
+                else
+                {
+                    result.Message = "Cập nhật thông tin thất bại";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }
