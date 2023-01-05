@@ -108,6 +108,7 @@ namespace EW.Services.Business
                     Description = application.Description,
                     UpdatedDate = application.UpdatedDate,
                     CreatedDate = application.CreatedDate,
+                    Status = application.Status
                 };
 
                 responseData.Add(row);
@@ -149,6 +150,31 @@ namespace EW.Services.Business
                 JobTitle = apply.RecruitmentPost.JobTitle,
                 Status = apply.Status,
             }).ToList();
+        }
+
+        public async Task<bool> IsHasRole(ApplicationUserModel model)
+        {
+            var currentRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username, "Company");
+            if (currentRecruiter == null)
+                throw new Exception("Không tồn tại user này");
+            var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == model.ApplicationId);
+            if (currentApplication == null)
+                throw new Exception("Không tồn tại ứng tuyển này");
+            var currentRecruitmentPost = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == currentApplication.RecruitmentPostId);
+
+            return currentRecruitmentPost.CompanyId == currentRecruiter.CompanyId;
+        }
+
+        public async Task<bool> Update(Application application)
+        {
+            var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == application.Id);
+            if (currentApplication == null)
+                throw new Exception("Không tồn tại ứng tuyển này");
+            currentApplication.UpdatedDate = DateTimeOffset.Now;
+            currentApplication.Description = application.Description;
+            currentApplication.Status = application.Status;
+            _unitOfWork.Repository<Application>().Update(currentApplication);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }

@@ -2,3 +2,14 @@
     text-decoration: none;
     color: #007cc0;
 }
+
+.applied-modal__header {
+    font-size: 1rem;
+    font-weight: 400;
+}
+.applied-modal__row {
+    margin-top: 4px;
+}
+.applied-modal__label {
+    margin-top: 0.8rem;
+}

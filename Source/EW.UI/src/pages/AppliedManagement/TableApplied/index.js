@@ -16,6 +16,7 @@ const TableApplied = () => {
     const applieds = useSelector(appliedsRemainingSelector);
     const [appliedDetailDialog, setAppliedDetailDialog] = useState({
         isOpen: false,
+        data: null,
     });
     const { getFilePathUpload } = useFileUpload();
     const columns = [

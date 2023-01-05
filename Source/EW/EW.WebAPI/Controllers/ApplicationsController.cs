@@ -125,5 +125,48 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Update status and description of application
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Business")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateApplication(UpdateProgressModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var isHasRole = await _applicationService.IsHasRole(new ApplicationUserModel { Username = _username, ApplicationId = model.Id });
+                if(!isHasRole)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Bạn không có quyền cập nhật";
+                    return Ok(result);
+                }
+                result.IsSuccess = await _applicationService.Update(new Application
+                {
+                    Id = model.Id,
+                    Status = model.Status,
+                    Description = model.Description
+                });
+                if(result.IsSuccess)
+                {
+                    result.Data = model;
+                    result.Message = "Cập nhật thông tin thành công";
+                }
+                else
+                {
+                    result.Message = "Cập nhật thông tin không thành công";
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }
