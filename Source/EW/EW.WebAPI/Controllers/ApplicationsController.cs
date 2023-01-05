@@ -104,5 +104,26 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Get applied for business, this route will return data all applier and infor applied
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Business")]
+        [HttpGet("applieds")]
+        public async Task<IActionResult> GetApplied()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
+                result.Message = "Lấy dữ liệu thành công";
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }

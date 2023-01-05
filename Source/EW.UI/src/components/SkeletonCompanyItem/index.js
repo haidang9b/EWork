@@ -2,6 +2,11 @@ import { Card, Grid, Skeleton, CardContent } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
+/**
+ * Loading component for company Item, if company reducer in status loading, this help to show animation loading
+ * @example
+ * <SkeletonCompanyItem/>
+ */
 const SkeletonCompanyItem = () => {
     return (
         <Grid item xs={12} sm={6} md={4} lg={3} padding={1}>
@@ -21,5 +26,7 @@ const SkeletonCompanyItem = () => {
         </Grid>
     );
 };
+
+SkeletonCompanyItem.displayName = "SkeletonCompanyItem";
 
 export default SkeletonCompanyItem;

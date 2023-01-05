@@ -22,6 +22,7 @@ import {
     Jobs,
     JobDetail,
     JobsApplied,
+    AppliedManagement,
 } from "./pages";
 function App() {
     return (
@@ -61,6 +62,10 @@ function App() {
                     element={<CompanyInformation />}
                 />
                 <Route path="hr-management" element={<HRManagement />} />
+                <Route
+                    path="applies-management"
+                    element={<AppliedManagement />}
+                />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
                 <Route path="my-cv" element={<CVManagement />} />

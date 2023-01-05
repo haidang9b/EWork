@@ -1,7 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { CompanyTypes, Status } from "../common/constants";
 import { filterSelector } from "../components/FilterArea/filter.slice";
+import { appliedFilterSelector } from "../components/SelectorApplied/appliedFilter.slice";
 import { jobFilterSelector } from "../components/SelectorJobsArea/jobFilter.slice";
+import { appliedSelector } from "../pages/AppliedManagement/applied.slice";
 import { jobsSelector } from "../pages/Jobs/jobs.slice";
 import { topCompanySelector } from "./topCompany.slice";
 export const statusAuthCurrentSelector = (state) => state.auth.status;
@@ -93,5 +95,40 @@ export const jobsRemainingSelector = createSelector(
             );
         }
         return jobsRemaining;
+    }
+);
+
+export const appliedsRemainingSelector = createSelector(
+    filterSelector,
+    appliedSelector,
+    appliedFilterSelector,
+    (filter, applies, selectors) => {
+        const { text } = filter;
+        const { applieds } = applies;
+        const { postIds, statusSelected } = selectors;
+        let appliedsRemaining = [...applieds];
+        if (text) {
+            appliedsRemaining = appliedsRemaining.filter(
+                (item) =>
+                    item.user?.fullName
+                        .toLowerCase()
+                        .includes(text.toLowerCase()) ||
+                    item.user?.email.toLowerCase().includes(text.toLowerCase())
+            );
+        }
+
+        if (postIds.length > 0) {
+            appliedsRemaining = appliedsRemaining.filter((item) =>
+                postIds.includes(item.post?.recruitmentPostId)
+            );
+        }
+
+        if (statusSelected.length > 0) {
+            appliedsRemaining = appliedsRemaining.filter((item) =>
+                statusSelected.includes(item.status)
+            );
+        }
+
+        return appliedsRemaining;
     }
 );

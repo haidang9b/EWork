@@ -67,14 +67,19 @@ const sidebarRecruiterData = [
         icon: <IoIcons.IoMdPeople />,
     },
     {
+        title: "Bài tuyển dụng",
+        path: "/recruitment-posts",
+        icon: <MdIcons.MdReceipt />,
+    },
+    {
+        title: "Quản lý ứng tuyển",
+        path: "/applies-management",
+        icon: <MdIcons.MdOutlinePostAdd />,
+    },
+    {
         title: "Tìm kiếm sinh viên",
         path: "/search-student",
         icon: <MdIcons.MdOutlineFindReplace />,
-    },
-    {
-        title: "Bài tuyển dụng",
-        path: "/recruitment-posts",
-        icon: <MdIcons.MdOutlinePostAdd />,
     },
 ];
 
