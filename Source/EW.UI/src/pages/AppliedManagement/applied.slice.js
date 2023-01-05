@@ -33,7 +33,6 @@ const appliedSlice = createSlice({
                     const currentApplied = state.applieds.find(
                         (item) => item.id === action.payload?.data?.id
                     );
-                    console.log(currentApplied);
                     currentApplied.updatedDate =
                         action.payload?.data?.updatedDate;
                     currentApplied.description =
