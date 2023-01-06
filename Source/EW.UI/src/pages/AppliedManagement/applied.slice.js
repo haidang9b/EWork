@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../../common/apis/httpClient";
 import {
     APPLICATION_CONTROLLER_URL,
-    GET_APPLIEDS_BY_BUSINESS,
+    GET_APPLIEDS_BY_BUSINESS_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
 import { failureReducer, loadingReducer } from "../../common/utils";
@@ -49,7 +49,7 @@ const appliedSlice = createSlice({
 export const getAppliedByBusinessThunk = createAsyncThunk(
     "applied/getAppliedByBusiness",
     async () => {
-        const response = await httpClient.get(GET_APPLIEDS_BY_BUSINESS);
+        const response = await httpClient.get(GET_APPLIEDS_BY_BUSINESS_URL);
         return response.data;
     }
 );
