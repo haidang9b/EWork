@@ -45,5 +45,5 @@ const RecruitmentPost = () => {
         </Container>
     );
 };
-
+RecruitmentPost.displayName = "RecruitmentPost";
 export default RecruitmentPost;

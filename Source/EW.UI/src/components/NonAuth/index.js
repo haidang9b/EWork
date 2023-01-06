@@ -16,5 +16,5 @@ const NonAuth = () => {
         <Outlet />
     );
 };
-
+NonAuth.displayName = "NonAuth";
 export default NonAuth;

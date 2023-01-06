@@ -8,5 +8,5 @@ const Loading = () => {
         </div>
     );
 };
-
+Loading.displayName = "Loading";
 export default Loading;

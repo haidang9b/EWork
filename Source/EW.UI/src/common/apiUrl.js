@@ -27,9 +27,16 @@ export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 export const GET_PROFILE_URL = "/profile/my-information";
 export const PUT_CONTACT_PROFILE_URL = "/profile/contact";
 
+// work histories controller
 export const WORK_HISTORY_PROFILE_URL = "/workhistories";
+
+// educations controller
 export const EDUCATION_PROFILE_URL = "/educations";
+
+// certificates controller
 export const CERTIFICATE_PROFILE_URL = "/certificates";
+
+// projects controller
 export const PROJECT_PROFILE_URL = "/projects";
 
 //upload controller
@@ -52,3 +59,4 @@ export const GET_TOP_COMPANIES_URL = "/companies/top-companies";
 // applications controller
 export const APPLICATION_CONTROLLER_URL = "/applications";
 export const GET_JOBS_APPLIED_URL = "/applications/jobs-applied";
+export const GET_APPLIEDS_BY_BUSINESS_URL = "/applications/applieds";

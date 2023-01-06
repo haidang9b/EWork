@@ -6,6 +6,7 @@ using EW.Services.Constracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +15,12 @@ namespace EW.Services.Business
     public class ApplicationService : IApplicationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRecruitmentPostService _recruitmentPostService;
 
-        public ApplicationService(IUnitOfWork unitOfWork)
+        public ApplicationService(IUnitOfWork unitOfWork, IRecruitmentPostService recruitmentPostService)
         {
             _unitOfWork = unitOfWork;
+            _recruitmentPostService = recruitmentPostService;
         }
 
         public async Task<Application> Add(AddApplicationModel model)
@@ -59,6 +62,60 @@ namespace EW.Services.Business
             return newApplication;
         }
 
+        public async Task<IEnumerable<AppliedForBusinessViewModel>> GetAppliedsForBusiness(User user)
+        {
+            var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
+            if (currentUser == null)
+            {
+                throw new Exception("Không tồn tại người dùng này");
+            }
+            var posts = await _recruitmentPostService.GetRecruitmentPostsByUser(currentUser);
+            var postIds = posts.Select(item => item.Id).ToList();
+            var users = await _unitOfWork.Repository<User>().GetAllAsync();
+            var applications = await _unitOfWork.Repository<Application>().GetAsync(item => postIds.Contains(item.RecruitmentPostId), "RecruitmentPost,UserCV");
+            var responseData = new List<AppliedForBusinessViewModel>();
+            foreach(var application in applications)
+            {
+                var applicationUser = users.FirstOrDefault(item => item.Id == application.UserCV.UserId);
+                if (applicationUser == null)
+                    continue;
+                var userRow = new UserInforJobApplicationViewModel
+                {
+                    Id = applicationUser.Id,
+                    FullName = applicationUser.FullName,
+                    Email = applicationUser.Email,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                };
+
+                var cv = new CVInforJobApplicationViewModel
+                {
+                    UserCVId = application.UserCVId,
+                    CVUrl = application.UserCV.CVUrl,
+                    CVName = application.UserCV.CVName,
+                };
+
+                var post = new PostInforJobApplicationViewModel
+                {
+                    RecruitmentPostId = application.RecruitmentPostId,
+                    JobTitle = application.RecruitmentPost.JobTitle,
+                };
+                var row = new AppliedForBusinessViewModel
+                {
+                    Id = application.Id,
+                    User = userRow,
+                    CV = cv,
+                    Post = post,
+                    Description = application.Description,
+                    UpdatedDate = application.UpdatedDate,
+                    CreatedDate = application.CreatedDate,
+                    Status = application.Status
+                };
+
+                responseData.Add(row);
+            }
+            return responseData;
+        }
+
         public async Task<IEnumerable<Application>> GetByApplier(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
@@ -78,7 +135,6 @@ namespace EW.Services.Business
             }
             var applieds = await _unitOfWork.Repository<Application>().GetAsync(item => item.UserCV.UserId == currentUser.Id, "RecruitmentPost,UserCV");
             var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
-
             return applieds.AsQueryable().Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company) => new JobAppliedViewModel
             {
                 Id = apply.Id,
@@ -94,6 +150,31 @@ namespace EW.Services.Business
                 JobTitle = apply.RecruitmentPost.JobTitle,
                 Status = apply.Status,
             }).ToList();
+        }
+
+        public async Task<bool> IsHasRole(ApplicationUserModel model)
+        {
+            var currentRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username, "Company");
+            if (currentRecruiter == null)
+                throw new Exception("Không tồn tại user này");
+            var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == model.ApplicationId);
+            if (currentApplication == null)
+                throw new Exception("Không tồn tại ứng tuyển này");
+            var currentRecruitmentPost = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == currentApplication.RecruitmentPostId);
+
+            return currentRecruitmentPost.CompanyId == currentRecruiter.CompanyId;
+        }
+
+        public async Task<bool> Update(Application application)
+        {
+            var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == application.Id);
+            if (currentApplication == null)
+                throw new Exception("Không tồn tại ứng tuyển này");
+            currentApplication.UpdatedDate = DateTimeOffset.Now;
+            currentApplication.Description = application.Description;
+            currentApplication.Status = application.Status;
+            _unitOfWork.Repository<Application>().Update(currentApplication);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }
