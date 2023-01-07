@@ -202,6 +202,7 @@ namespace EW.WebAPI.Controllers
                 profile.Linkedin = model.Linkedin;
                 profile.Address = model.Address;
                 profile.Objective = model.Objective;
+                profile.Skills = model.Skills;
                 result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
                 if(result.IsSuccess)
                 {

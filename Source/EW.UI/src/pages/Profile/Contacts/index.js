@@ -26,6 +26,7 @@ const Contacts = () => {
     const emailContactRef = useRef();
     const phoneNumberRef = useRef();
     const objectiveRef = useRef();
+    const skillRef = useRef();
     const dispatch = useDispatch();
     const onClickUpdate = async () => {
         if (addressRef.current?.value < 3) {
@@ -88,6 +89,16 @@ const Contacts = () => {
             objectiveRef.current.focus();
             return;
         }
+        if (skillRef.current?.value < 3) {
+            setNotify({
+                isOpen: true,
+                message: "Vui lòng nhập kỹ năng đang có của bạn",
+                title: "Chỉnh sửa thông tin liên hệ",
+                type: "error",
+            });
+            skillRef.current.focus();
+            return;
+        }
         let obj = {
             github: githubRef.current?.value,
             address: addressRef.current?.value,
@@ -95,6 +106,7 @@ const Contacts = () => {
             linkedin: linkedinRef.current?.value,
             emailContact: emailContactRef.current?.value,
             objective: objectiveRef.current?.value,
+            skills: skillRef.current?.value,
         };
 
         const resultDispatch = await dispatch(updateContactThunk(obj)).unwrap();
@@ -252,7 +264,7 @@ const Contacts = () => {
                 </div>
             </div>
             <div className="profile-contact__row">
-                <div style={{ fontSize: "1.3rem" }}>Mục tiêu</div>
+                <div style={{ fontSize: "1.2rem" }}>Mục tiêu</div>
                 <div className="profile-contact__input">
                     {isEditing ? (
                         <TextField
@@ -277,6 +289,24 @@ const Contacts = () => {
                         </>
                     )}
                 </div>
+            </div>
+            <div className="profile-contact__row">
+                <div style={{ fontSize: "1.2rem" }}>Kỹ năng</div>
+                {isEditing ? (
+                    <TextField
+                        label="Danh sách kỹ năng"
+                        placeholder="Danh sách kỹ năng"
+                        variant="outlined"
+                        defaultValue={profile?.skills}
+                        inputRef={skillRef}
+                        required
+                        fullWidth
+                    />
+                ) : profile?.skills ? (
+                    profile?.skills
+                ) : (
+                    <em>Chưa có thông tin</em>
+                )}
             </div>
             <div
                 style={{
