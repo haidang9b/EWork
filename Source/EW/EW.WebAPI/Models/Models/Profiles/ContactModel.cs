@@ -8,5 +8,6 @@
         public string EmailContact { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string Objective { get; set; } = string.Empty;
+        public string Skills { get; set; } = string.Empty;
     }
 }
