@@ -16,7 +16,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Status } from "../../common/constants";
-import { Hero } from "../../components";
+import { Banner, Hero } from "../../components";
 import useNotify from "../../hook/useNotify";
 import {
     authSelector,
@@ -156,13 +156,18 @@ const ConfirmRecover = () => {
         );
     }
     return (
-        <Hero
-            title={"Mã này không tồn tại"}
-            subtitle={
-                "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
-            }
-            children={<Link to="/recover">Quay về trang khôi phục</Link>}
-        />
+        <Hero hero="notFoundHero">
+            <Banner
+                title={"Mã này không tồn tại"}
+                subtitle={
+                    "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
+                }
+            >
+                <Link to="/recover" className="btn-banner">
+                    Quay về trang khôi phục
+                </Link>
+            </Banner>
+        </Hero>
     );
 };
 

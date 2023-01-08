@@ -21,3 +21,4 @@ export { default as FilterArea } from "./FilterArea";
 export { default as CompanyItem } from "./CompanyItem";
 export { default as ListJob } from "./ListJob";
 export { default as SelectorApplied } from "./SelectorApplied";
+export { default as Banner } from "./Banner";

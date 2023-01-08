@@ -1,3 +1,11 @@
+:root {
+    --primaryColor: #1976d2;
+    --mainBlack: #222;
+    --mainWhite: #fff;
+    --mainSpacing: 3px;
+    --mainTransition: all 0.3s linear;
+}
+
 .item-center {
     display: flex;
     justify-content: center;
@@ -21,4 +29,95 @@
 
 .MuiChip-root {
     border-radius: 8% !important;
+}
+
+.banner {
+    display: inline-block;
+    background: #00000080;
+    color: var(--mainWhite);
+    padding: 2rem 1rem;
+    text-align: center;
+    letter-spacing: 3px;
+}
+
+.banner div {
+    width: 10rem;
+    height: 5px;
+    background: var(--primaryColor);
+    margin: 1.7rem auto;
+}
+
+.banner p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.banner h1 {
+    font-size: 2.5rem;
+}
+
+@media screen and (min-width: 576px) {
+    .banner {
+        padding: 2rem 3rem;
+    }
+    .banner h1 {
+        font-size: 3rem;
+    }
+}
+@media screen and (min-width: 992px) {
+    .banner {
+        padding: 2rem 6rem;
+    }
+    .banner h1 {
+        font-size: 4rem;
+    }
+}
+
+.btn-banner {
+    display: inline-block;
+    text-decoration: none;
+    letter-spacing: var(--mainSpacing);
+    color: var(--mainWhite);
+    background: var(--primaryColor);
+    padding: 0.4rem 0.9rem;
+    border: 3px solid var(--primaryColor);
+    transition: var(--mainTransition);
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.btn-banner:hover {
+    background: transparent;
+    color: var(--primaryColor);
+}
+
+.defaultHero,
+.notFoundHero,
+.authHero,
+.jobHero,
+.companyHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/Meeting-rafiki.svg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notFoundHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/404.svg") center/cover no-repeat;
+}
+
+.authHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/401.svg") center/cover no-repeat;
+}
+
+.jobHero {
+    background: url("./assets/images/Job.svg") center/cover no-repeat;
+    min-height: 60vh;
+}
+
+.companyHero {
+    background: url("./assets/images/Company.svg") center/cover no-repeat;
+    min-height: 60vh;
 }
