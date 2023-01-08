@@ -1,9 +1,11 @@
 import {
     Button,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormControlLabel,
     InputLabel,
     MenuItem,
     Select,
@@ -15,7 +17,9 @@ import { useDispatch } from "react-redux";
 import { CompanyStatus } from "../../../common/constants";
 import useNotify from "../../../hook/useNotify";
 import { editCompanyInformationThunk } from "../company.slice";
+
 const DEFAULT_VALUE_STATUS = 0;
+const DEFAULT_VALUE_FEATURED = false;
 
 const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
     const [currentStatus, setCurrentStatus] = useState(DEFAULT_VALUE_STATUS);
@@ -27,6 +31,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         setCurrentStatus(data?.status);
+        setCurrentFeatured(data?.featured);
     }, [data]);
     const handleChange = (e) => {
         setCurrentStatus(e.target.value);
@@ -34,7 +39,9 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
     const handleClose = () => {
         setCompanyDetailModal({ ...companyDetailModal, isOpen: false });
     };
-
+    const [currentFeatured, setCurrentFeatured] = useState(
+        DEFAULT_VALUE_FEATURED
+    );
     const handleSubmit = async () => {
         if (companyNameRef?.current.value.length < 6) {
             setNotify({
@@ -71,6 +78,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             companyType: data?.companyType,
             country: data?.country,
             description: data?.description,
+            featured: currentFeatured,
         };
 
         const resultDispatch = await dispatch(
@@ -153,6 +161,17 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
                     defaultValue={data?.taxNumber}
                     inputRef={taxNumberRef}
                 />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            defaultChecked={data?.featured}
+                            onChange={() => {
+                                setCurrentFeatured(!currentFeatured);
+                            }}
+                        />
+                    }
+                    label="Hiển thị tại trang chủ"
+                />
                 <InputLabel id="demo-simple-select-required-label">
                     Trạng thái
                 </InputLabel>
@@ -174,7 +193,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             <DialogActions>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     onClick={handleSubmit}
                     fullWidth={true}
                 >

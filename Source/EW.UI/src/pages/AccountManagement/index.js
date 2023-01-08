@@ -6,6 +6,7 @@ import { getRolesThunk, getUsersThunk } from "./users.slice";
 import { getPageName } from "../../common/nameApp";
 import TableAccount from "./TableAccount";
 import UserDialog from "./UserModal";
+import { Add } from "@mui/icons-material";
 
 const AccountManagement = () => {
     const dispatch = useDispatch();
@@ -36,7 +37,11 @@ const AccountManagement = () => {
                 marginTop: "2%",
             }}
         >
-            <Button variant="contained" onClick={addNewAccount}>
+            <Button
+                variant="contained"
+                onClick={addNewAccount}
+                startIcon={<Add />}
+            >
                 Thêm tài khoản
             </Button>
             <TableAccount

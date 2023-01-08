@@ -1,10 +1,9 @@
 import { Container } from "@mui/system";
-import { Button } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Status } from "../../common/constants";
-import { Hero } from "../../components";
+import { Banner, Hero } from "../../components";
 import { getJobDetailThunk, jobDetailSelector } from "./jobDetail.slice";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailHeader from "./JobDetailHeader";
@@ -17,7 +16,6 @@ import { getApplicationOfUserThunk } from "./ApplyModal/application.slice";
 
 const JobDetail = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { status, job } = useSelector(jobDetailSelector);
     useEffect(() => {
@@ -51,13 +49,15 @@ const JobDetail = () => {
     }
     return (
         <>
-            <Hero
-                title="Không tìm thấy công việc"
-                subtitle="Không có công việc nào từ đường dẫn này, vui lòng thử lại"
-            >
-                <Button onClick={() => navigate("/")}>
-                    Quay lại trang chủ
-                </Button>
+            <Hero hero="notFoundHero">
+                <Banner
+                    title="Không tìm thấy công việc"
+                    subtitle="Không có công việc nào từ đường dẫn này, vui lòng thử lại"
+                >
+                    <Link to={"/"} className="btn-banner">
+                        Trang chủ
+                    </Link>
+                </Banner>
             </Hero>
         </>
     );

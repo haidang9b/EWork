@@ -52,6 +52,7 @@ const JobDetailBody = () => {
                                 </Button>
                             ) : user && isStudent && !isApplied() ? (
                                 <Button
+                                    color="success"
                                     variant="contained"
                                     fullWidth
                                     onClick={handleOpenApply}
@@ -125,7 +126,10 @@ const JobDetailBody = () => {
                             <Grid item sm={12} xs={12} lg={12} md={12}>
                                 <div className="d-flex">
                                     <div>
-                                        <Group color="action" />
+                                        <Group
+                                            color="action"
+                                            className="icon-flex"
+                                        />
                                     </div>
                                     <div>
                                         Số nhân viên:{" "}
@@ -140,7 +144,10 @@ const JobDetailBody = () => {
                                 </div>
                                 <div className="d-flex">
                                     <div>
-                                        <Language color="action" />
+                                        <Language
+                                            color="action"
+                                            className="icon-flex"
+                                        />
                                     </div>
                                     <div>
                                         Đến từ:{" "}
@@ -151,7 +158,10 @@ const JobDetailBody = () => {
                                 </div>
                                 <div className="d-flex">
                                     <div>
-                                        <Settings color="action" />
+                                        <Settings
+                                            color="action"
+                                            className="icon-flex"
+                                        />
                                     </div>
                                     <div>
                                         Loại hình công ty:{" "}
@@ -166,7 +176,10 @@ const JobDetailBody = () => {
                                 </div>
                                 <div className="d-flex">
                                     <div>
-                                        <Place color="action" />
+                                        <Place
+                                            color="action"
+                                            className="icon-flex"
+                                        />
                                     </div>
                                     <div>
                                         Địa chỉ:

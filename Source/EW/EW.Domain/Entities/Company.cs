@@ -34,5 +34,7 @@ namespace EW.Domain.Entities
         public ECompanyType CompanyType { get; set; }
         [DefaultValue("")]
         public string Description { get; set; }
+        [DefaultValue(false)]
+        public bool Featured { get; set; }
     }
 }

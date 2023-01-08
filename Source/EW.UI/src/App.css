@@ -1,3 +1,14 @@
+:root {
+    --primaryColor: #6db784;
+    --buttonColor: #f9e45b;
+    --mainBlack: #222;
+    --mainWhite: #fff;
+    --mainSpacing: 3px;
+    --darkGrey: #dddcdc;
+    --darkBlue: #1b4d89;
+    --mainTransition: all 0.3s linear;
+}
+
 .item-center {
     display: flex;
     justify-content: center;
@@ -21,4 +32,202 @@
 
 .MuiChip-root {
     border-radius: 8% !important;
+}
+
+.icon-flex {
+    margin-right: 8px;
+}
+.divider {
+    width: 10rem;
+    height: 5px;
+    background: var(--buttonColor);
+    margin: 1.7rem auto;
+}
+/* Banner */
+.banner {
+    display: inline-block;
+    background: #00000080;
+    color: var(--mainWhite);
+    padding: 2rem 1rem;
+    text-align: center;
+    letter-spacing: 3px;
+}
+
+.banner div {
+    width: 10rem;
+    height: 5px;
+    background: var(--primaryColor);
+    margin: 1.7rem auto;
+}
+
+.banner p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.banner h1 {
+    font-size: 2.5rem;
+}
+
+@media screen and (min-width: 576px) {
+    .banner {
+        padding: 2rem 3rem;
+    }
+    .banner h1 {
+        font-size: 3rem;
+    }
+}
+@media screen and (min-width: 992px) {
+    .banner {
+        padding: 2rem 6rem;
+    }
+    .banner h1 {
+        font-size: 4rem;
+    }
+}
+
+.btn-banner {
+    display: inline-block;
+    text-decoration: none;
+    letter-spacing: var(--mainSpacing);
+    color: var(--mainBlack);
+    font-weight: bolder;
+    background: var(--buttonColor);
+    padding: 0.4rem 0.9rem;
+    border: 3px solid var(--buttonColor);
+    transition: var(--mainTransition);
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.btn-banner:hover {
+    background: transparent;
+    color: var(--buttonColor);
+}
+/* End Banner */
+
+/* Hero */
+.defaultHero,
+.notFoundHero,
+.authHero,
+.jobHero,
+.companyHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/Home.svg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: contain;
+}
+
+.notFoundHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/404.svg") center/cover no-repeat;
+    background-size: contain;
+}
+
+.authHero {
+    min-height: calc(100vh - 100px);
+    background: url("./assets/images/401.svg") center/cover no-repeat;
+    background-size: contain;
+}
+
+.jobHero {
+    background: url("./assets/images/Job.svg") center/cover no-repeat;
+    min-height: 60vh;
+}
+
+.companyHero {
+    background: url("./assets/images/Company.svg") center/cover no-repeat;
+    min-height: 60vh;
+}
+/* End Hero */
+/* Title */
+.section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+.section-title h4 {
+    font-size: 2rem;
+    letter-spacing: var(--mainSpacing);
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+}
+.section-title div {
+    width: 5rem;
+    height: 5px;
+    margin: 0 auto;
+    background: var(--primaryColor);
+}
+/* end of Title */
+/* services */
+.services {
+    padding: 5rem 0;
+}
+.services {
+    color: var(--mainWhite);
+    background: var(--darkBlue);
+    text-align: center;
+}
+.services-center {
+    width: 70vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    grid-row-gap: 2rem;
+    grid-column-gap: 50px;
+}
+.service span {
+    display: inline-block;
+    color: var(--buttonColor);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+.services h6 {
+    letter-spacing: var(--mainSpacing);
+    text-transform: capitalize;
+}
+.services p {
+    width: 80%;
+    margin: 0 auto;
+}
+@media screen and (min-width: 992px) {
+    .services-center {
+        width: 95vw;
+        max-width: 1170px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .services p {
+        width: 100%;
+    }
+}
+/*end of services */
+
+.featured-companies {
+    padding: 5rem 0;
+}
+.featured-companies-center {
+    width: 80vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-row-gap: 2rem;
+    grid-column-gap: 40px;
+}
+@media screen and (min-width: 776px) {
+    .featured-companies-center {
+        width: 90vw;
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    }
+}
+@media screen and (min-width: 992px) {
+    .featured-companies-center {
+        width: 95vw;
+        max-width: 1170px;
+    }
+}
+
+.featured-companies {
+    background-color: #98d4d2;
 }

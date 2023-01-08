@@ -5,25 +5,17 @@ import PropTypes from "prop-types";
 /**
  * Return component Hero with data
  * @param {Object} object
- * @param {Node} object.children is component or html element
- * @param {String} object.title is string, title of Hero
- * @param {String} object.subtitle is string, subtitle of Hero
+ * @param {JSX.Element} object.children is component or html element
+ * @param {String} object.hero is string, class of hero
  * @returns component Hero with data
  * @example
  * <Hero children title subtitle/>
  */
-const Hero = ({ children, title, subtitle }) => {
+const Hero = ({ children, hero }) => {
     return (
-        <div id="notfound">
-            <div className="notfound">
-                <div className="notfound-404">
-                    <h1>Oops!</h1>
-                </div>
-                <h2>{title}</h2>
-                <p>{subtitle}</p>
-                {children}
-            </div>
-        </div>
+        <>
+            <header className={hero}>{children}</header>
+        </>
     );
 };
 
@@ -31,12 +23,10 @@ Hero.displayName = "Hero";
 
 Hero.propTypes = {
     children: PropTypes.node,
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
+    hero: PropTypes.string,
 };
 
 Hero.defaultProps = {
-    title: "",
-    subtitle: "",
+    hero: "defaultHero",
 };
 export default Hero;

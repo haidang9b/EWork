@@ -123,6 +123,7 @@ const RecoveryAccount = () => {
                         <Stack minWidth={"100%"}>
                             <Button
                                 variant="contained"
+                                color="success"
                                 fullWidth={true}
                                 onClick={handleRecover}
                                 startIcon={<SendSharp />}
@@ -131,6 +132,7 @@ const RecoveryAccount = () => {
                                 Khôi phục
                             </Button>
                             <LinearProgress
+                                color="success"
                                 sx={{
                                     display:
                                         status === Status.loading

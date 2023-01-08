@@ -196,6 +196,7 @@ const AppliedDetailModal = ({
                 <Stack minWidth={"100%"}>
                     <Button
                         variant="contained"
+                        color="success"
                         fullWidth
                         onClick={handleSubmit}
                         disabled={status === Status.loading}
@@ -203,6 +204,7 @@ const AppliedDetailModal = ({
                         Cập nhật trạng thái
                     </Button>
                     <LinearProgress
+                        color="success"
                         sx={{
                             display:
                                 status === Status.loading ? "block" : "none",

@@ -123,6 +123,7 @@ namespace EW.WebAPI.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
                     TaxNumber = model.TaxNumber,
+                    Featured = model.Featured,
                 };
                 var data = await _companyService.AddCompany(newCompany);
                 if(data != null)

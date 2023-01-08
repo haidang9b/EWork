@@ -1,27 +1,33 @@
-import { Container } from "@mui/system";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { getPageName } from "../../common/nameApp";
-import { ListCompany, SearchBar } from "../../components";
-import {
-    topCompanySelector,
-    getTopCompaniesThunk,
-} from "../../redux/topCompany.slice";
-import Benifit from "./Benifit";
+import { Banner, FeaturedCompanies, Hero, Services } from "../../components";
+import { getTopCompaniesThunk } from "../../redux/topCompany.slice";
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { companies, status } = useSelector(topCompanySelector);
     useEffect(() => {
         document.title = getPageName("Trang chủ");
         dispatch(getTopCompaniesThunk());
     }, [dispatch]);
     return (
-        <Container>
-            <SearchBar />
-            <Benifit />
-            <ListCompany companies={companies} status={status} />
-        </Container>
+        <>
+            <div>
+                <Hero>
+                    <Banner
+                        title={"EWORK"}
+                        subtitle="Trang hỗ trợ tìm kiếm việc làm cho sinh viên TDTU"
+                    >
+                        <Link to="/jobs" className="btn-banner">
+                            Tìm việc
+                        </Link>
+                    </Banner>
+                </Hero>
+                <Services />
+                <FeaturedCompanies />
+            </div>
+        </>
     );
 };
 

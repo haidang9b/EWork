@@ -465,6 +465,7 @@ const RecruitmentPostModal = ({
                         fullWidth
                         onClick={handleSubmit}
                         variant="contained"
+                        color="success"
                     >
                         {recruitmentPostModal.isUpdate
                             ? "Cập nhật bài viết"

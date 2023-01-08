@@ -124,6 +124,7 @@ const ApplyModal = ({ applyDialog, setApplyDialog }) => {
                 <Stack minWidth={"100%"}>
                     <Button
                         startIcon={<Send />}
+                        color="success"
                         fullWidth
                         variant="contained"
                         onClick={handleApply}
@@ -132,6 +133,7 @@ const ApplyModal = ({ applyDialog, setApplyDialog }) => {
                         Ứng tuyển
                     </Button>
                     <LinearProgress
+                        color="success"
                         sx={{
                             display:
                                 status === Status.loading ? "block" : "none",

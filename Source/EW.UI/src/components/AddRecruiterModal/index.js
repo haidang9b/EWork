@@ -304,7 +304,7 @@ const AddRecruiterModal = ({ addRecruiterModal, setAddRecruiterModal }) => {
                 <DialogActions>
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="success"
                         onClick={handleSubmit}
                         fullWidth={true}
                     >

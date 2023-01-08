@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { useRef, useEffect } from "react";
-import RecruitmentImgDefault from "../../assets/images/recruitment-img.jpg";
+import RecruitmentImgDefault from "../../assets/images/recruiter.png";
 import { Send } from "@mui/icons-material";
 import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
@@ -343,6 +343,7 @@ const CreateRecruiter = () => {
 
                             <Button
                                 type="submit"
+                                color="success"
                                 variant="contained"
                                 startIcon={<Send />}
                                 onClick={handleSubmit}
@@ -355,6 +356,7 @@ const CreateRecruiter = () => {
                                 Gửi thông tin đăng ký
                             </Button>
                             <LinearProgress
+                                color="success"
                                 sx={{
                                     display:
                                         status === Status.loading

@@ -93,6 +93,7 @@ const InformationCard = () => {
         }
         let obj = {
             country,
+            featured: information?.featured,
             id: information?.id,
             status: information?.status,
             companyName: companyNameRef?.current.value,
@@ -126,7 +127,7 @@ const InformationCard = () => {
                 <tbody>
                     <tr>
                         <td>
-                            <Work color="action" />
+                            <Work color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">
                             Tên doanh nghiệp
@@ -163,7 +164,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Email color="action" />
+                            <Email color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Email công ty</td>
                         <td>
@@ -187,7 +188,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Phone color="action" />
+                            <Phone color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">
                             Số điện thoại công ty
@@ -214,7 +215,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Place color="action" />
+                            <Place color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Địa chỉ</td>
                         <td>
@@ -240,7 +241,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <AttachMoney color="action" />
+                            <AttachMoney color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Mã số thuế</td>
                         <td>
@@ -266,7 +267,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Language color="action" />
+                            <Language color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Quốc gia</td>
                         <td>
@@ -283,7 +284,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Group color="action" />
+                            <Group color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Số nhân viên</td>
                         <td>
@@ -323,7 +324,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Settings color="action" />
+                            <Settings color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">
                             Loại hình công ty
@@ -365,7 +366,7 @@ const InformationCard = () => {
                     </tr>
                     <tr>
                         <td>
-                            <Info color="action" />
+                            <Info color="action" className="icon-flex" />
                         </td>
                         <td className="infor-company__header">Mô tả</td>
                         <td>
@@ -395,7 +396,7 @@ const InformationCard = () => {
                                 <>
                                     <Button
                                         variant="contained"
-                                        color="primary"
+                                        color="success"
                                         sx={{
                                             marginRight: "4px",
                                         }}

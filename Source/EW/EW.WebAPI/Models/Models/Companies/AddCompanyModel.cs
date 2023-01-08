@@ -10,5 +10,6 @@ namespace EW.WebAPI.Models.Models.Companies
         public string Address { get; set; }
         public string TaxNumber { get; set; }
         public EStatusRecruiter Status { get; set; }
+        public bool Featured { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+import { Add } from "@mui/icons-material";
 import { Button, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -23,6 +24,8 @@ const RecruitmentPost = () => {
         <Container>
             <Button
                 variant="contained"
+                color="primary"
+                startIcon={<Add />}
                 onClick={() => {
                     setRecruitmentPostModal({
                         ...recruitmentPostModal,

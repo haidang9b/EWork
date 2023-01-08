@@ -8,11 +8,10 @@ import {
     companyDetailSelector,
     getCompanyDetailByIdThunk,
 } from "./companyDetail.slice";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Status } from "../../common/constants";
 import CompanyDetailHeader from "./CompanyDetailHeader";
-import { Hero } from "../../components";
-import { Button } from "@mui/material";
+import { Banner, Hero } from "../../components";
 import SkeletonCompanyDetailBody from "./SkeletonCompanyDetailBody";
 import CompanyDetailBody from "./CompanyDetailBody";
 import SkeletonCompanyDetailFooter from "./SkeletonCompanyDetailFooter";
@@ -20,7 +19,6 @@ import CompanyDetailFooter from "./CompanyDetailFooter";
 
 const CompanyDetail = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { company, status } = useSelector(companyDetailSelector);
     useEffect(() => {
@@ -57,13 +55,15 @@ const CompanyDetail = () => {
     }
     return (
         <>
-            <Hero
-                title="Không tìm thấy công ty"
-                subtitle="Không có công ty nào từ đường dẫn này, vui lòng thử lại"
-            >
-                <Button onClick={() => navigate("/")}>
-                    Quay lại trang chủ
-                </Button>
+            <Hero hero="notFoundHero">
+                <Banner
+                    title="Không tìm thấy công ty"
+                    subtitle="Không có công ty nào từ đường dẫn này, vui lòng thử lại"
+                >
+                    <Link to={"/"} className="btn-banner">
+                        Trang chủ
+                    </Link>
+                </Banner>
             </Hero>
         </>
     );

@@ -39,6 +39,7 @@ const companySlice = createSlice({
                         action.payload?.data?.companyName;
                     currentCompany.address = action.payload?.data?.address;
                     currentCompany.taxNumber = action.payload?.data?.taxNumber;
+                    currentCompany.featured = action.payload?.data?.featured;
                 } else {
                     state.status = Status.failed;
                 }

@@ -1,3 +1,4 @@
+import { Add } from "@mui/icons-material";
 import { Button, Chip, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
@@ -77,6 +78,7 @@ const TableCompany = () => {
         <>
             <Button
                 variant="contained"
+                startIcon={<Add />}
                 onClick={() => {
                     setAddCompanyModal({
                         ...addCompanyModal,

@@ -8,6 +8,7 @@
 }
 img.job-item__img {
     border-radius: 8px;
+    object-fit: contain;
 }
 .job-item {
     padding: 8px;

@@ -196,7 +196,12 @@ const UserDialog = ({ userDialog, setUserDialog }) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" fullWidth onClick={handleSubmit}>
+                <Button
+                    color="success"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleSubmit}
+                >
                     {userDialog?.isUpdate ? "Cập nhật" : "Thêm"}
                 </Button>
             </DialogActions>

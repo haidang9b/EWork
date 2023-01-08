@@ -8,6 +8,7 @@ import { getPageName } from "../../common/nameApp";
 import AddRecruiterModal from "../AddRecruiterModal";
 import { recruiterSelector } from "../../redux/recruiter.slice";
 import SkeletonTable from "../SkeletonTable";
+import { Add } from "@mui/icons-material";
 
 const TableRecruiter = () => {
     const [addRecruiterModal, setAddRecruiterModal] = useState({
@@ -66,6 +67,7 @@ const TableRecruiter = () => {
                         isOpen: true,
                     });
                 }}
+                startIcon={<Add />}
             >
                 Thêm nhà tuyển dụng
             </Button>

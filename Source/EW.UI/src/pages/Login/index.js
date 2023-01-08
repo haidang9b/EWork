@@ -162,6 +162,7 @@ const Login = () => {
                                         <Button
                                             type="submit"
                                             variant="contained"
+                                            color="success"
                                             startIcon={<SendSharp />}
                                             onClick={handleSubmit}
                                             sx={{
@@ -172,6 +173,7 @@ const Login = () => {
                                             Đăng nhập
                                         </Button>
                                         <LinearProgress
+                                            color="success"
                                             sx={{
                                                 display:
                                                     status === Status.loading
