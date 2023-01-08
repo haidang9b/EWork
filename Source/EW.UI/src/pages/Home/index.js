@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getPageName } from "../../common/nameApp";
-import { Banner, Hero } from "../../components";
+import { Banner, Hero, Services } from "../../components";
 
 const Home = () => {
     useEffect(() => {
@@ -13,13 +13,14 @@ const Home = () => {
                 <Hero>
                     <Banner
                         title={"EWORK"}
-                        subtitle="Trang hỗ trợ tìm kiếm việc làm cho TDTU"
+                        subtitle="Trang hỗ trợ tìm kiếm việc làm cho sinh viên TDTU"
                     >
                         <Link to="/jobs" className="btn-banner">
                             Tìm việc
                         </Link>
                     </Banner>
                 </Hero>
+                <Services />
             </div>
         </>
     );
