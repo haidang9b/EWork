@@ -36,13 +36,16 @@ const CompanyDetailHeader = () => {
                     <Grid xs={12} sm={12} md={6} lg={6} item>
                         <div className="d-flex">
                             <div>
-                                <Place color="action" />
+                                <Place color="action" className="icon-flex" />
                             </div>
                             <div>Địa chỉ: {company?.address}</div>
                         </div>
                         <div className="d-flex">
                             <div>
-                                <Language color="action" />
+                                <Language
+                                    color="action"
+                                    className="icon-flex"
+                                />
                             </div>
                             <div>
                                 Đến từ:{" "}
@@ -53,7 +56,10 @@ const CompanyDetailHeader = () => {
                     <Grid xs={12} sm={12} md={6} lg={6} item>
                         <div className="d-flex">
                             <div>
-                                <Settings color="action" />
+                                <Settings
+                                    color="action"
+                                    className="icon-flex"
+                                />
                             </div>
                             <div>
                                 Loại hình công ty:{" "}
@@ -67,7 +73,7 @@ const CompanyDetailHeader = () => {
                         </div>
                         <div className="d-flex">
                             <div>
-                                <Group color="action" />
+                                <Group color="action" className="icon-flex" />
                             </div>
                             <div>
                                 Số nhân viên:{" "}

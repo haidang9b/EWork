@@ -69,7 +69,10 @@ const JobDetailHeader = () => {
                         <br />
                         <div className="d-flex">
                             <div>
-                                <MonetizationOnOutlined color="action" />
+                                <MonetizationOnOutlined
+                                    color="action"
+                                    className="icon-flex"
+                                />
                             </div>
                             <div className="job-detail-body__salary">
                                 {getSalary()}
@@ -77,7 +80,7 @@ const JobDetailHeader = () => {
                         </div>
                         <div className="d-flex">
                             <div>
-                                <Work color="action" />
+                                <Work color="action" className="icon-flex" />
                             </div>
                             <div>
                                 <strong>Hình thức: </strong>
@@ -91,7 +94,10 @@ const JobDetailHeader = () => {
                         </div>
                         <div className="d-flex">
                             <div>
-                                <DataObjectOutlined color="action" />
+                                <DataObjectOutlined
+                                    color="action"
+                                    className="icon-flex"
+                                />
                             </div>
                             <div>
                                 <strong>Số năm kinh nghiệm: </strong>

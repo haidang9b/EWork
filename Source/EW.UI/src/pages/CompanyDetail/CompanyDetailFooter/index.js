@@ -18,7 +18,7 @@ const CompanyDetailFooter = () => {
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                     <div className="d-flex company-detail-footer__row">
                         <div>
-                            <Place color="action" />
+                            <Place color="action" className="icon-flex" />
                         </div>
                         <div>Địa chỉ: {company?.address}</div>
                     </div>
@@ -26,7 +26,7 @@ const CompanyDetailFooter = () => {
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                     <div className="d-flex company-detail-footer__row">
                         <div>
-                            <Email color="action" />
+                            <Email color="action" className="icon-flex" />
                         </div>
                         <div>Email: {company?.email}</div>
                     </div>
@@ -34,7 +34,7 @@ const CompanyDetailFooter = () => {
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                     <div className="d-flex company-detail-footer__row">
                         <div>
-                            <Phone color="action" />
+                            <Phone color="action" className="icon-flex" />
                         </div>
                         <div>Địa chỉ: {company?.phoneNumber}</div>
                     </div>

@@ -3,7 +3,7 @@
     --mainBlack: #222;
     --mainWhite: #fff;
     --mainSpacing: 3px;
-    --darkGrey: #cfcfcf;
+    --darkGrey: #dddcdc;
     --mainTransition: all 0.3s linear;
 }
 
@@ -32,6 +32,11 @@
     border-radius: 8% !important;
 }
 
+.icon-flex {
+    margin-right: 8px;
+}
+
+/* Banner */
 .banner {
     display: inline-block;
     background: #00000080;
@@ -90,7 +95,9 @@
     background: transparent;
     color: var(--primaryColor);
 }
+/* End Banner */
 
+/* Hero */
 .defaultHero,
 .notFoundHero,
 .authHero,
@@ -122,7 +129,7 @@
     background: url("./assets/images/Company.svg") center/cover no-repeat;
     min-height: 60vh;
 }
-
+/* End Hero */
 /* Title */
 .section-title {
     text-align: center;
