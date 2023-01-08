@@ -18,5 +18,6 @@ namespace EW.Domain.Models
         public string Country { get; set; }
         public ETeamSize TeamSize { get; set; }
         public string Description { get; set; }
+        public bool Featured { get; set; }
     }
 }

@@ -8,6 +8,8 @@ import {
     MenuItem,
     Select,
     TextField,
+    FormControlLabel,
+    Checkbox,
 } from "@mui/material";
 import { func, object } from "prop-types";
 import React, { useRef, useState } from "react";
@@ -18,11 +20,14 @@ import useNotify from "../../../hook/useNotify";
 import { addCompanyThunk } from "../company.slice";
 
 const DEFAULT_VALUE_STATUS = 0;
-
+const DEFAULT_VALUE_FEATURED = false;
 const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
     const dispatch = useDispatch();
     const { setNotify } = useNotify();
     const [currentStatus, setCurrentStatus] = useState(DEFAULT_VALUE_STATUS);
+    const [currentFeatured, setCurrentFeatured] = useState(
+        DEFAULT_VALUE_FEATURED
+    );
     const companyNameRef = useRef();
     const phoneNumberRef = useRef();
     const emailRef = useRef();
@@ -96,6 +101,7 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
                 Address: addressRef.current.value,
                 Status: currentStatus,
                 TaxNumber: taxNumberRef.current.value,
+                featured: currentFeatured,
             })
         ).unwrap();
 
@@ -176,6 +182,17 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
                     }}
                     inputRef={taxNumberRef}
                     required
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={currentFeatured}
+                            onChange={() => {
+                                setCurrentFeatured(!currentFeatured);
+                            }}
+                        />
+                    }
+                    label="Hiển thị tại trang chủ"
                 />
                 <InputLabel id="status-add-company">Trạng thái</InputLabel>
                 <Select

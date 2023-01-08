@@ -40,6 +40,7 @@ namespace EW.Services.Business
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
                     AvatarUrl = Constaints.STRING_BLANK,
+                    Featured = false,
                 };
                 _unitOfWork.Repository<Company>().Add(newCompany);
                 var resultAddCompany = await _unitOfWork.SaveChangeAsync();

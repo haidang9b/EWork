@@ -29,6 +29,7 @@ const Services = () => {
     return (
         <section className="services">
             <Title title="services" />
+            <div className="divider"></div>
             <div className="services-center">
                 {services.map((item, index) => {
                     return (
@@ -43,5 +44,5 @@ const Services = () => {
         </section>
     );
 };
-
+Services.displayName = "Services";
 export default Services;

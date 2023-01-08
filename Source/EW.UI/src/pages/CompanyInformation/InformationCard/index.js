@@ -93,6 +93,7 @@ const InformationCard = () => {
         }
         let obj = {
             country,
+            featured: information?.featured,
             id: information?.id,
             status: information?.status,
             companyName: companyNameRef?.current.value,

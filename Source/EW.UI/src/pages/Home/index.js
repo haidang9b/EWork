@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPageName } from "../../common/nameApp";
-import { Banner, Hero, Services } from "../../components";
+import { Banner, FeaturedCompanies, Hero, Services } from "../../components";
+import { getTopCompaniesThunk } from "../../redux/topCompany.slice";
 
 const Home = () => {
+    const dispatch = useDispatch();
     useEffect(() => {
         document.title = getPageName("Trang chủ");
-    }, []);
+        dispatch(getTopCompaniesThunk());
+    }, [dispatch]);
     return (
         <>
             <div>
@@ -21,6 +25,7 @@ const Home = () => {
                     </Banner>
                 </Hero>
                 <Services />
+                <FeaturedCompanies />
             </div>
         </>
     );

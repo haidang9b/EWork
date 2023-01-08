@@ -37,6 +37,7 @@ const CompanyItem = ({ id, name, avatarUrl, companyType, jobsHiring }) => {
                             }
                             alt={name}
                             loading="lazy"
+                            className="top-company__item-img"
                         />
                         <div className="top-company__item text-center">
                             <Link

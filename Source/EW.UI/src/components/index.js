@@ -24,3 +24,4 @@ export { default as SelectorApplied } from "./SelectorApplied";
 export { default as Banner } from "./Banner";
 export { default as Services } from "./Services";
 export { default as Title } from "./Title";
+export { default as FeaturedCompanies } from "./FeaturedCompanies";

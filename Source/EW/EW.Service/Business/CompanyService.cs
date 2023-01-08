@@ -47,6 +47,7 @@ namespace EW.Services.Business
             existCompany.TeamSize = model.TeamSize;
             existCompany.Country = model.Country;
             existCompany.Description = model.Description;
+            existCompany.Featured = model.Featured;
             _unitOfWork.Repository<Company>().Update(existCompany);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -72,7 +73,8 @@ namespace EW.Services.Business
                 Country = Constaints.COUNTRY_DEFAULT,
                 TeamSize = ETeamSize.ZeroTo50,
                 CompanyType = ECompanyType.Product,
-                Description = Constaints.COUNTRY_DEFAULT
+                Description = Constaints.COUNTRY_DEFAULT,
+                Featured = model.Featured,
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             if (await _unitOfWork.SaveChangeAsync() == false)
@@ -104,6 +106,7 @@ namespace EW.Services.Business
                     AvatarUrl = company.AvatarUrl,
                     JobsHiring = JobsHiring.Count(),
                     CompanyType = company.CompanyType,
+                    Featured = company.Featured,
                 });
             }
             return result;

@@ -9,6 +9,12 @@
     background-color: "#fff";
 }
 
+.top-company__item-img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+}
+
 .top-company:hover {
     box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
