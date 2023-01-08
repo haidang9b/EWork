@@ -23,6 +23,7 @@ const RecruitmentPost = () => {
         <Container>
             <Button
                 variant="contained"
+                color="success"
                 onClick={() => {
                     setRecruitmentPostModal({
                         ...recruitmentPostModal,

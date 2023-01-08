@@ -1,9 +1,11 @@
 :root {
-    --primaryColor: #1976d2;
+    --primaryColor: #6db784;
+    --buttonColor: #f9e45b;
     --mainBlack: #222;
     --mainWhite: #fff;
     --mainSpacing: 3px;
     --darkGrey: #dddcdc;
+    --darkBlue: #1b4d89;
     --mainTransition: all 0.3s linear;
 }
 
@@ -38,7 +40,7 @@
 .divider {
     width: 10rem;
     height: 5px;
-    background: var(--primaryColor);
+    background: var(--buttonColor);
     margin: 1.7rem auto;
 }
 /* Banner */
@@ -88,17 +90,18 @@
     display: inline-block;
     text-decoration: none;
     letter-spacing: var(--mainSpacing);
-    color: var(--mainWhite);
-    background: var(--primaryColor);
+    color: var(--mainBlack);
+    font-weight: bolder;
+    background: var(--buttonColor);
     padding: 0.4rem 0.9rem;
-    border: 3px solid var(--primaryColor);
+    border: 3px solid var(--buttonColor);
     transition: var(--mainTransition);
     text-transform: uppercase;
     cursor: pointer;
 }
 .btn-banner:hover {
     background: transparent;
-    color: var(--primaryColor);
+    color: var(--buttonColor);
 }
 /* End Banner */
 
@@ -113,16 +116,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-size: contain;
 }
 
 .notFoundHero {
     min-height: calc(100vh - 100px);
     background: url("./assets/images/404.svg") center/cover no-repeat;
+    background-size: contain;
 }
 
 .authHero {
     min-height: calc(100vh - 100px);
     background: url("./assets/images/401.svg") center/cover no-repeat;
+    background-size: contain;
 }
 
 .jobHero {
@@ -158,11 +164,12 @@
     padding: 5rem 0;
 }
 .services {
-    background: var(--darkGrey);
+    color: var(--mainWhite);
+    background: var(--darkBlue);
     text-align: center;
 }
 .services-center {
-    width: 90vw;
+    width: 70vw;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
@@ -171,7 +178,7 @@
 }
 .service span {
     display: inline-block;
-    color: var(--primaryColor);
+    color: var(--buttonColor);
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
 }
@@ -219,4 +226,8 @@
         width: 95vw;
         max-width: 1170px;
     }
+}
+
+.featured-companies {
+    background-color: #98d4d2;
 }

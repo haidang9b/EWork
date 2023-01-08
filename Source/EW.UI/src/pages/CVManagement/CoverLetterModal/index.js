@@ -58,6 +58,7 @@ const CoverLetterModal = ({ coverLetterDialog, setCoverLetterDialog }) => {
                         Cập nhật
                     </Button>
                     <LinearProgress
+                        color="success"
                         sx={{
                             display:
                                 status === Status.loading ? "block" : "none",

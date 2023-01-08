@@ -343,6 +343,7 @@ const CreateRecruiter = () => {
 
                             <Button
                                 type="submit"
+                                color="success"
                                 variant="contained"
                                 startIcon={<Send />}
                                 onClick={handleSubmit}
@@ -355,6 +356,7 @@ const CreateRecruiter = () => {
                                 Gửi thông tin đăng ký
                             </Button>
                             <LinearProgress
+                                color="success"
                                 sx={{
                                     display:
                                         status === Status.loading

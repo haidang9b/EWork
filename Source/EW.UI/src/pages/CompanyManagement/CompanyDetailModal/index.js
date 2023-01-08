@@ -193,7 +193,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
             <DialogActions>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     onClick={handleSubmit}
                     fullWidth={true}
                 >

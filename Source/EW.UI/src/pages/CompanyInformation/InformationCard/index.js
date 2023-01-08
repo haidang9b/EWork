@@ -396,7 +396,7 @@ const InformationCard = () => {
                                 <>
                                     <Button
                                         variant="contained"
-                                        color="primary"
+                                        color="success"
                                         sx={{
                                             marginRight: "4px",
                                         }}

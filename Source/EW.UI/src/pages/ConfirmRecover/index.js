@@ -133,6 +133,7 @@ const ConfirmRecover = () => {
                             <Stack minWidth={"100%"}>
                                 <Button
                                     variant="contained"
+                                    color="success"
                                     fullWidth={true}
                                     onClick={handleRecover}
                                     startIcon={<SendSharp />}
@@ -141,6 +142,7 @@ const ConfirmRecover = () => {
                                     Khôi phục
                                 </Button>
                                 <LinearProgress
+                                    color="success"
                                     sx={{
                                         display:
                                             status === Status.loading

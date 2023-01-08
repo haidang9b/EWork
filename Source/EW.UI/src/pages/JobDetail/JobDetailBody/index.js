@@ -52,6 +52,7 @@ const JobDetailBody = () => {
                                 </Button>
                             ) : user && isStudent && !isApplied() ? (
                                 <Button
+                                    color="success"
                                     variant="contained"
                                     fullWidth
                                     onClick={handleOpenApply}

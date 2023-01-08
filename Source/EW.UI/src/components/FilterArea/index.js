@@ -1,5 +1,5 @@
 import { Search } from "@mui/icons-material";
-import { Button, Grid, InputAdornment, Paper, TextField } from "@mui/material";
+import { Grid, InputAdornment, Paper, TextField } from "@mui/material";
 import { string } from "prop-types";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
@@ -54,14 +54,13 @@ const FilterArea = ({ label }) => {
                         lg={2}
                         className="item-center"
                     >
-                        <Button
-                            variant="contained"
-                            fullWidth
+                        <button
+                            className="btn-banner"
                             type="submit"
                             onSubmit={handleSearch}
                         >
                             Tìm kiếm
-                        </Button>
+                        </button>
                     </Grid>
                 </Grid>
             </Paper>

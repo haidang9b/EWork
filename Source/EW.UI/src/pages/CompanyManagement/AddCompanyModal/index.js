@@ -215,7 +215,7 @@ const AddCompanyModal = ({ addCompanyModal, setAddCompanyModal }) => {
             <DialogActions>
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     fullWidth={true}
                     onClick={handleSubmit}
                 >

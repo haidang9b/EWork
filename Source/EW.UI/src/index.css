@@ -5,10 +5,13 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f0f2f5;
+    background-color: #f0f2f5b4;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
+}
+.nav-bar {
+    background: var(--primaryColor);
 }
