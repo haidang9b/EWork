@@ -7,7 +7,7 @@ import { Banner, Hero } from "../../components";
 import { getJobDetailThunk, jobDetailSelector } from "./jobDetail.slice";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailHeader from "./JobDetailHeader";
-import "./jobdetail.css";
+import "./JobDetail.css";
 import SkeletonJobDetailHeader from "./SkeletonJobDetailHeader";
 import { getPageName } from "../../common/nameApp";
 import SkeletonJobDetailBody from "./SkeletonJobDetailBody";
