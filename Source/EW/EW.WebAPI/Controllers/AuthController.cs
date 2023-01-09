@@ -7,6 +7,7 @@ using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
 {
@@ -19,6 +20,7 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly ICompanyService _companyService;
         private readonly ILogger<AuthController> _logger;
+        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService)
         {
             _userService = userService;
@@ -224,6 +226,12 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// This request to generate code and send email reset password
+        /// </summary>
+        /// <param name="model">RecoveryPasswordModel</param>
+        /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost("recovery")]
         public async Task<IActionResult> RecoveryPassword(RecoveryPasswordModel model)
         {
@@ -258,7 +266,12 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
-
+        /// <summary>
+        /// This password check code reset password is valid or not valid, this step pass then user can using next step
+        /// </summary>
+        /// <param name="model">ValidateRecoverModel</param>
+        /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost("is-valid-code-recover")]
         public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
         {
@@ -285,6 +298,12 @@ namespace EW.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Reset password with code sent(by email) and access to link, enter password to reset
+        /// </summary>
+        /// <param name="model">SubmitRecoverModel</param>
+        /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
         {
@@ -311,5 +330,60 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Update password from request model
+        /// </summary>
+        /// <param name="model">UpdatePassword</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("update-password")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model.ConfirmPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+                {
+                    result.Message = "Mật khẩu không được có khoảng trắng";
+                    result.IsSuccess = false;
+                }
+                else if (model.NewPassword != model.ConfirmPassword)
+                {
+                    result.Message = "Mật khẩu mới và xác minh mật khẩu không khớp";
+                    result.IsSuccess = false;
+                }
+                else
+                {
+                    var currentUser = await _userService.GetUser(new User { Username = _username });
+                    if(BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
+                    {
+                        var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
+                        currentUser.Password = hashed;
+                        result.IsSuccess = await _userService.UpdateUser(currentUser);
+                        if (result.IsSuccess)
+                        {
+                            result.Message = "Cập nhật mật khẩu thành công";
+                        }
+                        else
+                        {
+                            result.Message = "Cập nhật mật khẩu thất bại";
+                        }
+                    }
+                    else
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "Mật khẩu cũ không chính xác, vui lòng kiểm tra lại";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+
+            return Ok(result);
+        } 
+
     }
 }

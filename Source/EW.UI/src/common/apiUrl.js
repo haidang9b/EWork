@@ -7,6 +7,7 @@ export const LOGIN_GOOGLE_URL = "/auth/login-google";
 export const RECOVER_ACCOUNT_URL = "/auth/recovery";
 export const VALIDATE_CODE_RECOVER_URL = "/auth/is-valid-code-recover";
 export const RESET_PASSWORD_URL = "/auth/reset-password";
+export const UPDATE_PASSWORD_URL = "/auth/update-password";
 
 // recruiters controller
 export const RECRUITER_REGISTER_URL = "/recruiters/register";

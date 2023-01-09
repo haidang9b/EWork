@@ -35,6 +35,7 @@ const ConfirmRecover = () => {
     const [code, setCode] = useState("");
     const { status } = useSelector(authSelector);
     const passwordRef = useRef();
+    const formRef = useRef();
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
@@ -55,7 +56,8 @@ const ConfirmRecover = () => {
         }
     }, [dispatch, searchParams, username, code, navigate]);
 
-    const handleRecover = async () => {
+    const handleRecover = async (e) => {
+        e.preventDefault();
         if (passwordRef.current.value.length < 6) {
             setNotify({
                 isOpen: true,
@@ -81,6 +83,7 @@ const ConfirmRecover = () => {
             type: resultDispatch?.isSuccess ? "success" : "error",
             title: "Khôi phục tài khoản",
         });
+        formRef.current.reset();
     };
     if (status === Status.loading) {
         return (
@@ -111,47 +114,56 @@ const ConfirmRecover = () => {
                             },
                         }}
                     >
-                        <CardContent>
-                            <Box pb={2}>
-                                <Typography variant="h3">
-                                    Khôi phục mật khẩu
-                                </Typography>
-                                <TextField
-                                    label="Mật khẩu mới"
-                                    variant="standard"
-                                    placeholder="Nhập mật khẩu mới"
-                                    fullWidth
-                                    required
-                                    inputRef={passwordRef}
-                                    type="password"
-                                />
-                            </Box>
-                        </CardContent>
+                        <form onSubmit={handleRecover} ref={formRef}>
+                            <CardContent>
+                                <Box pb={2}>
+                                    <Typography variant="h3">
+                                        Khôi phục mật khẩu
+                                    </Typography>
+                                    <Typography variant="caption">
+                                        Hãy sửa dụng mật khẩu mà bạn chưa từng
+                                        dùng ở đâu. Nên đặt mật khẩu có ít nhất
+                                        1 ký tự chữ viết hoa, 1 ký tự số và 1 ký
+                                        tự đặc biệt để đảm bảo an toàn cho tài
+                                        khoản.
+                                    </Typography>
+                                    <TextField
+                                        label="Mật khẩu mới"
+                                        variant="standard"
+                                        placeholder="Nhập mật khẩu mới"
+                                        fullWidth
+                                        required
+                                        inputRef={passwordRef}
+                                        type="password"
+                                    />
+                                </Box>
+                            </CardContent>
 
-                        <Divider />
-                        <CardActions>
-                            <Stack minWidth={"100%"}>
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    fullWidth={true}
-                                    onClick={handleRecover}
-                                    startIcon={<SendSharp />}
-                                    disabled={status === Status.loading}
-                                >
-                                    Khôi phục
-                                </Button>
-                                <LinearProgress
-                                    color="success"
-                                    sx={{
-                                        display:
-                                            status === Status.loading
-                                                ? "block"
-                                                : "none",
-                                    }}
-                                />
-                            </Stack>
-                        </CardActions>
+                            <Divider />
+                            <CardActions>
+                                <Stack minWidth={"100%"}>
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        fullWidth={true}
+                                        type="submit"
+                                        startIcon={<SendSharp />}
+                                        disabled={status === Status.loading}
+                                    >
+                                        Khôi phục
+                                    </Button>
+                                    <LinearProgress
+                                        color="success"
+                                        sx={{
+                                            display:
+                                                status === Status.loading
+                                                    ? "block"
+                                                    : "none",
+                                        }}
+                                    />
+                                </Stack>
+                            </CardActions>
+                        </form>
                     </Card>
                 </Grid>
             </Container>

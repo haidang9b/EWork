@@ -27,7 +27,7 @@ import {
 } from "../../common/routeList";
 import useAuth from "../../hook/useAuth";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Group, Login, Logout } from "@mui/icons-material";
+import { Group, Login, Logout, Password } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
 
@@ -247,6 +247,20 @@ const Navbar = () => {
                         {user ? (
                             <>
                                 <Divider />
+                                {!isStudent ? (
+                                    <ListItem disablePadding>
+                                        <ListItemButton
+                                            onClick={() => {
+                                                navigate("/update-password");
+                                            }}
+                                        >
+                                            <ListItemIcon>
+                                                <Password />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Đổi mật khẩu" />
+                                        </ListItemButton>
+                                    </ListItem>
+                                ) : null}
 
                                 <ListItem disablePadding>
                                     <ListItemButton

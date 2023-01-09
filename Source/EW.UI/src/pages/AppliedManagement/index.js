@@ -26,5 +26,5 @@ const AppliedManagement = () => {
         </Container>
     );
 };
-
+AppliedManagement.displayName = "AppliedManagement";
 export default AppliedManagement;

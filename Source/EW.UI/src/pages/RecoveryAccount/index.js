@@ -30,11 +30,13 @@ const RecoveryAccount = () => {
     const { status } = useSelector(authSelector);
     const usernameRef = useRef();
     const emailRef = useRef();
+    const formRef = useRef();
     useEffect(() => {
         document.title = getPageName("Khôi phục tài khoản");
     }, []);
 
-    const handleRecover = async () => {
+    const handleRecover = async (e) => {
+        e.preventDefault();
         if (usernameRef.current?.value.length === 0) {
             setNotify({
                 type: "error",
@@ -69,6 +71,7 @@ const RecoveryAccount = () => {
             message: resultDispatch?.message,
             type: resultDispatch?.isSuccess ? "success" : "error",
         });
+        formRef.current.reset();
     };
     return (
         <Container>
@@ -91,57 +94,59 @@ const RecoveryAccount = () => {
                         },
                     }}
                 >
-                    <CardContent>
-                        <Box pb={2}>
-                            <Typography variant="h3">
-                                Khôi phục mật khẩu
-                            </Typography>
-                            <TextField
-                                label="Tên người dùng"
-                                variant="standard"
-                                placeholder="Nhập username"
-                                fullWidth
-                                required
-                                inputRef={usernameRef}
-                            />
-                            <TextField
-                                label="Email"
-                                variant="standard"
-                                placeholder="Nhập email"
-                                fullWidth
-                                required
-                                inputRef={emailRef}
-                            />
-                        </Box>
-                        <Link to={"/login"} className="text-link">
-                            Quay lại đăng nhập
-                        </Link>
-                    </CardContent>
+                    <form ref={formRef} onSubmit={handleRecover}>
+                        <CardContent>
+                            <Box pb={2}>
+                                <Typography variant="h3">
+                                    Khôi phục mật khẩu
+                                </Typography>
+                                <TextField
+                                    label="Tên người dùng"
+                                    variant="standard"
+                                    placeholder="Nhập username"
+                                    fullWidth
+                                    required
+                                    inputRef={usernameRef}
+                                />
+                                <TextField
+                                    label="Email"
+                                    variant="standard"
+                                    placeholder="Nhập email"
+                                    fullWidth
+                                    required
+                                    inputRef={emailRef}
+                                />
+                            </Box>
+                            <Link to={"/login"} className="text-link">
+                                Quay lại đăng nhập
+                            </Link>
+                        </CardContent>
 
-                    <Divider />
-                    <CardActions>
-                        <Stack minWidth={"100%"}>
-                            <Button
-                                variant="contained"
-                                color="success"
-                                fullWidth={true}
-                                onClick={handleRecover}
-                                startIcon={<SendSharp />}
-                                disabled={status === Status.loading}
-                            >
-                                Khôi phục
-                            </Button>
-                            <LinearProgress
-                                color="success"
-                                sx={{
-                                    display:
-                                        status === Status.loading
-                                            ? "block"
-                                            : "none",
-                                }}
-                            />
-                        </Stack>
-                    </CardActions>
+                        <Divider />
+                        <CardActions>
+                            <Stack minWidth={"100%"}>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    fullWidth={true}
+                                    type="submit"
+                                    startIcon={<SendSharp />}
+                                    disabled={status === Status.loading}
+                                >
+                                    Khôi phục
+                                </Button>
+                                <LinearProgress
+                                    color="success"
+                                    sx={{
+                                        display:
+                                            status === Status.loading
+                                                ? "block"
+                                                : "none",
+                                    }}
+                                />
+                            </Stack>
+                        </CardActions>
+                    </form>
                 </Card>
             </Grid>
         </Container>
