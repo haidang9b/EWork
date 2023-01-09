@@ -23,6 +23,7 @@ import {
     JobDetail,
     JobsApplied,
     AppliedManagement,
+    UpdatePassword,
 } from "./pages";
 function App() {
     return (
@@ -55,6 +56,7 @@ function App() {
                 element={<RequireAuth allowedRoles={["Business", "Faculty"]} />}
             >
                 <Route path="recruitment-posts" element={<RecruitmentPost />} />
+                <Route path="update-password" element={<UpdatePassword />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Business"]} />}>
                 <Route

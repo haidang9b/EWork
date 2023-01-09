@@ -5,6 +5,7 @@ import {
     LOGIN_URL,
     RECOVER_ACCOUNT_URL,
     RESET_PASSWORD_URL,
+    UPDATE_PASSWORD_URL,
     VALIDATE_CODE_RECOVER_URL,
 } from "../common/apiUrl";
 import TokenService from "../common/apis/token.service";
@@ -87,6 +88,11 @@ const authSlice = createSlice({
                 state.status = Status.succeeded;
             })
             .addCase(handleResetPasswordThunk.rejected, failureReducer)
+            .addCase(updatePasswordThunk.pending, loadingReducer)
+            .addCase(updatePasswordThunk.fulfilled, (state, action) => {
+                state.status = Status.succeeded;
+            })
+            .addCase(updatePasswordThunk.rejected, failureReducer)
             .addCase(handleLogout.pending, logoutAccount)
             .addCase(handleLogout.fulfilled, logoutAccount)
             .addCase(handleLogout.rejected, logoutAccount);
@@ -150,5 +156,12 @@ export const handleResetPasswordThunk = createAsyncThunk(
     }
 );
 
+export const updatePasswordThunk = createAsyncThunk(
+    "auth/updatePassword",
+    async (obj) => {
+        const response = await httpClient.post(UPDATE_PASSWORD_URL, obj);
+        return response.data;
+    }
+);
 export default authSlice;
 export const authSelector = (state) => state.auth;
