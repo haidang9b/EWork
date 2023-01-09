@@ -1,5 +1,4 @@
 import React from "react";
-import "./hero.css";
 import PropTypes from "prop-types";
 
 /**

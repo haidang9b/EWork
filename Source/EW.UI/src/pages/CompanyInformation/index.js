@@ -7,7 +7,7 @@ import {
     companyInformationSelector,
     getCompanyInformationThunk,
 } from "./companyInformation.slice";
-import "./companyinformation.css";
+import "./CompanyInformation.css";
 import { getPageName } from "../../common/nameApp";
 const InformationCard = React.lazy(() => import("./InformationCard"));
 const HeaderCard = React.lazy(() => import("./HeaderCard"));

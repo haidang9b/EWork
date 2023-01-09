@@ -26,7 +26,6 @@ import {
     editProfileCompanyInformationThunk,
 } from "../companyInformation.slice";
 import useNotify from "../../../hook/useNotify";
-import "../companyinformation.css";
 import { CountrySelector, RichTextEditor } from "../../../components";
 import { CompanyTypes, TeamSizeTypes } from "../../../common/constants";
 import countryList from "../../../common/countryList";

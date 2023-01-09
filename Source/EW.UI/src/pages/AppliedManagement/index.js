@@ -6,7 +6,7 @@ import { FilterArea, SelectorApplied } from "../../components";
 import { getRecruitmentPostsThunk } from "../RecruitmentPost/recruitmentPost.slice";
 import { getAppliedByBusinessThunk } from "./applied.slice";
 
-import "./appliedmanagement.css";
+import "./AppliedManagement.css";
 import TableApplied from "./TableApplied";
 
 const AppliedManagement = () => {
