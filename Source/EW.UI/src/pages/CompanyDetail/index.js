@@ -2,7 +2,7 @@ import { Container } from "@mui/system";
 import React, { useEffect } from "react";
 import { getPageName } from "../../common/nameApp";
 import SkeletonCompanyDetailHeader from "./SkeletonCompanyDetailHeader";
-import "./companydetail.css";
+import "./CompanyDetail.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
     companyDetailSelector,

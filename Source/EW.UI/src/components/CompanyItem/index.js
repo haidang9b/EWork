@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ImageDefault from "../../assets/images/company-default.webp";
 import { CompanyTypes } from "../../common/constants";
 import useFileUpload from "../../hook/useFileUpload";
-import "./companyitem.css";
+import "./CompanyItem.css";
 
 /**
  * Render Item Company

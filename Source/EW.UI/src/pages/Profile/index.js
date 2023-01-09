@@ -7,7 +7,7 @@ import { getPageName } from "../../common/nameApp";
 import Certificates from "./Certificates";
 import Contacts from "./Contacts";
 import Educations from "./Educations";
-import "./profile.css";
+import "./Profile.css";
 import { getProfileThunk, profileSelector } from "./profile.slice";
 import Projects from "./Projects";
 import SkeletonProfile from "./SkeletonProfile";

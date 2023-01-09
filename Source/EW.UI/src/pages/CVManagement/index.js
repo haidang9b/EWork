@@ -11,7 +11,6 @@ import {
     getDocumentThunk,
     uploadNewCVThunk,
 } from "./document.slice";
-import "./CVManagement.css";
 import useNotify from "../../hook/useNotify";
 import { UploadFileDialog } from "../../components";
 

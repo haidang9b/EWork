@@ -1,7 +1,7 @@
 import { Grid, Skeleton } from "@mui/material";
 import React from "react";
 
-import "../JobItem/jobitem.css";
+import "../JobItem/JobItem.css";
 const SkeletonJobItem = () => {
     return (
         <Grid container className="job-item">

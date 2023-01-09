@@ -15,7 +15,7 @@ import { ValidateEmail, ValidatePhoneNumber } from "../../common/validator";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
-import "./createrecruiter.css";
+import "./CreateRecruiter.css";
 import useNotify from "../../hook/useNotify";
 import {
     recruiterRegisterSelector,

@@ -18,7 +18,7 @@ import { ApplicationStatus, Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import { SkeletonTable } from "../../components";
 import { getJobsAppliedThunk, jobsAppliedSelector } from "./jobsApplied.slice";
-import "./applicationflow.css";
+import "./ApplicationFlow.css";
 import { ExpandMore } from "@mui/icons-material";
 import useFileUpload from "../../hook/useFileUpload";
 

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
-import "./richtexteditor.css";
+import "./RichTextEditor.css";
 /**
  * Create new Rich Text Editor, using text html easy
  * @param editor object to set editor, get data from RichTextEditor
