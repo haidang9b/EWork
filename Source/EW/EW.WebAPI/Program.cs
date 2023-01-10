@@ -26,6 +26,7 @@ builder.Services.AddCors(options =>
 
 RegisterService(builder.Services);
 builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<CustomConfig>(builder.Configuration.GetSection("CustomConfigs"));
 builder.Services.AddCors();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

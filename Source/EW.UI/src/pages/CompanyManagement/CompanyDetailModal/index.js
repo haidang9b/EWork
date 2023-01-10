@@ -7,16 +7,18 @@ import {
     DialogTitle,
     FormControlLabel,
     InputLabel,
+    LinearProgress,
     MenuItem,
     Select,
     TextField,
 } from "@mui/material";
+import { Stack } from "@mui/system";
 import { func, object } from "prop-types";
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { CompanyStatus } from "../../../common/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { CompanyStatus, Status } from "../../../common/constants";
 import useNotify from "../../../hook/useNotify";
-import { editCompanyInformationThunk } from "../company.slice";
+import { companySelector, editCompanyInformationThunk } from "../company.slice";
 
 const DEFAULT_VALUE_STATUS = 0;
 const DEFAULT_VALUE_FEATURED = false;
@@ -27,6 +29,7 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
     const addressRef = useRef();
     const taxNumberRef = useRef();
     const { data } = companyDetailModal;
+    const { status } = useSelector(companySelector);
     const { setNotify } = useNotify();
     const dispatch = useDispatch();
     useEffect(() => {
@@ -191,22 +194,36 @@ const CompanyDetailModal = ({ companyDetailModal, setCompanyDetailModal }) => {
                 </Select>
             </DialogContent>
             <DialogActions>
-                <Button
-                    variant="contained"
-                    color="success"
-                    onClick={handleSubmit}
-                    fullWidth={true}
-                >
-                    Cập nhật
-                </Button>
-                <Button
-                    variant="contained"
-                    color="warning"
-                    onClick={handleClose}
-                    fullWidth={true}
-                >
-                    Hủy
-                </Button>
+                <Stack minWidth={"100%"}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleSubmit}
+                        fullWidth
+                        disabled={status === Status.loading}
+                    >
+                        Cập nhật
+                    </Button>
+                    <LinearProgress
+                        color="success"
+                        sx={{
+                            display:
+                                status === Status.loading ? "block" : "none",
+                        }}
+                    />
+                    <Button
+                        sx={{
+                            marginTop: "4px",
+                        }}
+                        disabled={status === Status.loading}
+                        variant="contained"
+                        color="warning"
+                        onClick={handleClose}
+                        fullWidth
+                    >
+                        Hủy
+                    </Button>
+                </Stack>
             </DialogActions>
         </Dialog>
     );
