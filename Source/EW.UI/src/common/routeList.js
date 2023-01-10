@@ -90,8 +90,8 @@ const sidebarFacultyData = [
         icon: <AiIcons.AiFillHome />,
     },
     {
-        title: "Báo cáo",
-        path: "/reports",
+        title: "Dashboard",
+        path: "/dashboard",
         icon: <IoIcons.IoIosPaper />,
     },
     {

@@ -61,3 +61,8 @@ export const GET_TOP_COMPANIES_URL = "/companies/top-companies";
 export const APPLICATION_CONTROLLER_URL = "/applications";
 export const GET_JOBS_APPLIED_URL = "/applications/jobs-applied";
 export const GET_APPLIEDS_BY_BUSINESS_URL = "/applications/applieds";
+
+// chart controller
+export const NUMBER_APPLICATION_URL = "/charts/application";
+export const NUMBER_RECRUITMENT_POST_URL = "/charts/post";
+export const NUMBER_RANKING_TECH_STACK_URL = "/charts/ranking-tech";

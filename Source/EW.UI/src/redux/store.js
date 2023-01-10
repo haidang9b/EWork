@@ -19,6 +19,7 @@ import jobsAppliedSlice from "../pages/ApplicationFlow/jobsApplied.slice";
 import profileSlice from "../pages/Profile/profile.slice";
 import appliedSlice from "../pages/AppliedManagement/applied.slice";
 import appliedFilterSlice from "../components/SelectorApplied/appliedFilter.slice";
+import chartSlice from "./chart.slice";
 
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
     profile: profileSlice.reducer,
     appliedFilter: appliedFilterSlice.reducer,
     applied: appliedSlice.reducer,
+    chart: chartSlice.reducer,
 });
 
 export const store = configureStore({

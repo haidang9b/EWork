@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { getPageName } from "../../../common/nameApp";
-import { SkeletonTable } from "../../../components";
+import { SkeletonTable, CustomToolbar } from "../../../components";
 import AddCompanyModal from "../AddCompanyModal";
 import { companySelector } from "../company.slice";
 import CompanyDetailModal from "../CompanyDetailModal";
@@ -93,6 +93,9 @@ const TableCompany = () => {
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
+                        components={{
+                            Toolbar: CustomToolbar,
+                        }}
                         onRowClick={handleChangeStatus}
                         rows={companies}
                         columns={columns}

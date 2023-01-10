@@ -99,5 +99,6 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<IProjectService, ProjectService>();
     services.AddScoped<ICertificateService, CertificateService>();
     services.AddScoped<IEducationService, EducationService>();
+    services.AddScoped<IChartService, ChartService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
