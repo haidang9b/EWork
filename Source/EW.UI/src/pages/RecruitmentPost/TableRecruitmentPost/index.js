@@ -5,7 +5,7 @@ import { func, object } from "prop-types";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Status, Currency } from "../../../common/constants";
-import { SkeletonTable } from "../../../components";
+import { CustomToolbar, SkeletonTable } from "../../../components";
 import { recruitmentPostSelector } from "../recruitmentPost.slice";
 
 const TableRecruitmentPost = ({
@@ -13,6 +13,21 @@ const TableRecruitmentPost = ({
     setRecruitmentPostModal,
 }) => {
     const { status, posts } = useSelector(recruitmentPostSelector);
+    const getSalaryString = (from, to, currency, type) => {
+        let currentCurrency = Currency.find((item) => item.value === currency);
+        switch (type) {
+            case 1:
+                return `Thương lượng`;
+            case 2:
+                return `Từ ${from} - ${to} ${currentCurrency?.label}`;
+            case 3:
+                return `Lên tới  ${to} ${currentCurrency?.label}`;
+            case 4:
+                return `Tối thiểu ${from} ${currentCurrency?.label}`;
+            default:
+                return `Thương lượng`;
+        }
+    };
     const columns = [
         { field: "id", headerName: "ID", width: 40 },
         { field: "jobTitle", headerName: "Tiêu đề bài viết", width: 240 },
@@ -20,32 +35,27 @@ const TableRecruitmentPost = ({
             field: "companyName",
             headerName: "Tên công ty",
             width: 150,
-            renderCell: (cellValues) => {
-                return cellValues.row?.company?.companyName;
-            },
+            renderCell: (cellValues) => cellValues.row?.company?.companyName,
+            valueGetter: (cellValues) => cellValues.row?.company?.companyName,
         },
         {
             field: "salary",
             headerName: "Lương",
             width: 200,
-            renderCell: (cellValues) => {
-                let currentCurrency = Currency.find(
-                    (item) => item.value === cellValues.row?.currency
-                );
-                switch (cellValues.row?.salaryType) {
-                    case 1:
-                        return `Thương lượng`;
-                    case 2:
-                        return `Từ ${cellValues.row?.salaryFrom} - ${cellValues.row?.salaryTo} ${currentCurrency?.label}`;
-                    case 3:
-                        return `Lên tới ${cellValues.row?.salaryTo} ${currentCurrency?.label}`;
-                    case 4:
-                        return `Tối thiểu ${cellValues.row?.salaryFrom} ${currentCurrency?.label}`;
-
-                    default:
-                        return `Thương lượng`;
-                }
-            },
+            renderCell: (cellValues) =>
+                getSalaryString(
+                    cellValues.row?.salaryFrom,
+                    cellValues.row?.salaryTo,
+                    cellValues.row?.currency,
+                    cellValues.row?.salaryType
+                ),
+            valueGetter: (cellValues) =>
+                getSalaryString(
+                    cellValues.row?.salaryFrom,
+                    cellValues.row?.salaryTo,
+                    cellValues.row?.currency,
+                    cellValues.row?.salaryType
+                ),
         },
         {
             field: "updateBy",
@@ -54,6 +64,8 @@ const TableRecruitmentPost = ({
             renderCell: (cellValues) => {
                 return cellValues.row?.updatedByUser?.fullName;
             },
+            valueGetter: (cellValues) =>
+                cellValues.row?.updatedByUser?.fullName,
         },
         {
             field: "deadline",
@@ -91,6 +103,9 @@ const TableRecruitmentPost = ({
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
+                        components={{
+                            Toolbar: CustomToolbar,
+                        }}
                         rows={posts}
                         columns={columns}
                         pageSize={10}

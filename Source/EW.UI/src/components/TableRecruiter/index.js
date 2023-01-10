@@ -9,6 +9,7 @@ import AddRecruiterModal from "../AddRecruiterModal";
 import { recruiterSelector } from "../../redux/recruiter.slice";
 import SkeletonTable from "../SkeletonTable";
 import { Add } from "@mui/icons-material";
+import CustomToolbar from "../CustomToolbar";
 
 const TableRecruiter = () => {
     const [addRecruiterModal, setAddRecruiterModal] = useState({
@@ -38,9 +39,8 @@ const TableRecruiter = () => {
             field: "company.Name",
             headerName: "Tên công ty",
             width: 160,
-            renderCell: (cellValues) => {
-                return cellValues.row?.company?.companyName;
-            },
+            renderCell: (cellValues) => cellValues.row?.company?.companyName,
+            valueGetter: (cellValues) => cellValues.row?.company?.companyName,
         },
         {
             field: "updatedDate",
@@ -76,6 +76,9 @@ const TableRecruiter = () => {
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
+                        components={{
+                            Toolbar: CustomToolbar,
+                        }}
                         rows={recruiters}
                         columns={columns}
                         pageSize={10}

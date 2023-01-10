@@ -21,6 +21,7 @@ const CompanyDescriptionTab = ({ name, description }) => {
                 <Typography variant="h5">Giới thiệu về {name}</Typography>
             </div>
             <div
+                className="article"
                 dangerouslySetInnerHTML={{
                     __html: description,
                 }}

@@ -231,3 +231,10 @@
 .featured-companies {
     background-color: #98d4d2;
 }
+.article {
+    max-width: 100%;
+}
+.article img {
+    max-width: 100%;
+    object-fit: contain;
+}
