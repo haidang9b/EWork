@@ -1,5 +1,8 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Commons.Helpers;
+using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Companies;
@@ -7,6 +10,8 @@ using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
 using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
@@ -19,15 +24,19 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
         private readonly IRecruitmentPostService _recruitmentPostService;
+        private readonly IEmailService _emailService;
+        private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<RecruitersController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService)
+        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IOptions<CustomConfig> customConfig)
         {
             _recruiterService = recruiterService;
             _userService = userService;
             _companyService = companyService;
             _logger = logger;
             _recruitmentPostService = recruitmentPostService;
+            _emailService = emailService;
+            _customConfig = customConfig;
         }
 
         /// <summary>
@@ -61,10 +70,12 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> Put(UpdateCompanyModel model)
         {
+            var currentUser = await _userService.GetUser(new User { Username = _username });
             var result = new ApiResult();
             try
             {
                 var existCompany = await _companyService.GetCompany(new Company { Id = model.Id });
+                var currentStatus = existCompany.Status;
                 if (existCompany == null)
                 {
                     result.IsSuccess = false;
@@ -77,6 +88,25 @@ namespace EW.WebAPI.Controllers
                         result.IsSuccess = true;
                         result.Message = "Cập nhật thông tin thành công";
                         result.Data = await _companyService.GetCompany(new Company { Id = model.Id });
+
+                        if (currentUser.RoleId == (long)ERole.ID_Faculty && currentStatus != model.Status && model.Status != EStatusRecruiter.Pending) 
+                        {
+                            var body = string.Empty;
+                            using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/ChangeStatusCompany.html")))
+                            {
+
+                                body = reader.ReadToEnd();
+
+                            }
+                            var bodyBuilder = new System.Text.StringBuilder(body);
+                            bodyBuilder.Replace("{companyName}", existCompany.CompanyName);
+                            bodyBuilder.Replace("{fromStatus}", EnumHelper.Description(currentStatus));
+                            bodyBuilder.Replace("{toStatus}", EnumHelper.Description(model.Status));
+                            bodyBuilder.Replace("{url}", _customConfig.Value.FrontEndURL);
+                            var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Cập nhật trạng thái cho doanh nghiệp", ToEmail = existCompany.Email };
+                            await _emailService.SendEmail(data);
+                            result.Message = "Cập nhật thông tin thành công và đã gửi mail về công ty";
+                        }   
                     }
                     else
                     {

@@ -7,6 +7,7 @@ using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers
@@ -19,15 +20,17 @@ namespace EW.WebAPI.Controllers
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly ICompanyService _companyService;
+        private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<AuthController> _logger;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService)
+        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig)
         {
             _userService = userService;
             _tokenService = tokenService;
             _companyService = companyService;
             _emailService = emailService;
             _logger = logger;
+            _customConfig = customConfig;
         }
 
         [HttpPost("Register")]
@@ -253,7 +256,7 @@ namespace EW.WebAPI.Controllers
                 var key = await _userService.GenKeyResetPassword(exist);
                 var bodyBuilder = new System.Text.StringBuilder(body);
                 bodyBuilder.Replace("{username}", exist.FullName);
-                bodyBuilder.Replace("{url}", $"http://localhost:3000/confirm-recover?code={key}&username={exist.Username}");
+                bodyBuilder.Replace("{url}", $"{_customConfig.Value.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
                 var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
                 await _emailService.SendEmail(data);
                 result.IsSuccess = true;
