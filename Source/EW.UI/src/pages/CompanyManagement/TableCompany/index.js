@@ -26,7 +26,7 @@ const TableCompany = () => {
         { field: "phoneNumber", headerName: "Số điện thoại", width: 160 },
         {
             field: "email",
-            headerName: "email",
+            headerName: "Email",
             width: 160,
         },
         {
@@ -56,6 +56,16 @@ const TableCompany = () => {
                         return <Chip label="Hoạt động" color="success" />;
                     default:
                         return <Chip label="Vô hiệu hóa" color="error" />;
+                }
+            },
+            valueGetter: (cellValues) => {
+                switch (cellValues.row?.status) {
+                    case 0:
+                        return "Chờ xét";
+                    case 1:
+                        return "Hoạt động";
+                    default:
+                        return "Vô hiệu hóa";
                 }
             },
         },

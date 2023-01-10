@@ -1,5 +1,9 @@
 import { Box, Paper } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarExport,
+} from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,6 +14,23 @@ import useFileUpload from "../../../hook/useFileUpload";
 import { appliedsRemainingSelector } from "../../../redux/selectors";
 import { appliedSelector } from "../applied.slice";
 import AppliedDetailModal from "../AppliedDetailModal";
+
+const CustomToolbarExport = () => {
+    return (
+        <GridToolbarContainer
+            sx={{
+                display: "flex",
+                float: "right",
+            }}
+        >
+            <GridToolbarExport
+                csvOptions={{
+                    utf8WithBom: true,
+                }}
+            />
+        </GridToolbarContainer>
+    );
+};
 
 const TableApplied = () => {
     const { status } = useSelector(appliedSelector);
@@ -24,25 +45,22 @@ const TableApplied = () => {
             field: "fullName",
             headerName: "Tên ứng viên",
             width: 180,
-            renderCell: (cellValues) => {
-                return cellValues.row?.user?.fullName;
-            },
+            renderCell: (cellValues) => cellValues.row?.user?.fullName,
+            valueGetter: (cellValues) => cellValues.row?.user?.fullName,
         },
         {
             field: "email",
             headerName: "Email",
             width: 160,
-            renderCell: (cellValues) => {
-                return cellValues.row?.user?.email;
-            },
+            renderCell: (cellValues) => cellValues.row?.user?.email,
+            valueGetter: (cellValues) => cellValues.row?.user?.email,
         },
         {
             field: "phoneNumber",
             headerName: "Số điện thoại",
             width: 100,
-            renderCell: (cellValues) => {
-                return cellValues.row?.user?.phoneNumber;
-            },
+            renderCell: (cellValues) => cellValues.row?.user?.phoneNumber,
+            valueGetter: (cellValues) => cellValues.row?.user?.phoneNumber,
         },
         {
             field: "jobTitle",
@@ -58,6 +76,7 @@ const TableApplied = () => {
                     </Link>
                 );
             },
+            valueGetter: (cellValues) => cellValues.row?.post?.jobTitle,
         },
         {
             field: "createdDate",
@@ -81,9 +100,13 @@ const TableApplied = () => {
                 ApplicationStatus.find(
                     (item) => item.value === cellValues.row?.status
                 )?.label,
+            valueGetter: (cellValues) =>
+                ApplicationStatus.find(
+                    (item) => item.value === cellValues.row?.status
+                )?.label,
         },
         {
-            field: "cv",
+            field: "document",
             headerName: "Hồ sơ",
             width: 100,
             renderCell: (cellValues) => (
@@ -100,6 +123,10 @@ const TableApplied = () => {
                     {cellValues.row?.cv?.cvName}
                 </a>
             ),
+            valueGetter: (cellValues) =>
+                cellValues.row?.cv?.cvUrl
+                    ? getFilePathUpload(cellValues.row?.cv?.cvUrl)
+                    : "",
         },
     ];
     const handleViewDetailApplication = (params) => {
@@ -118,6 +145,9 @@ const TableApplied = () => {
                 <>
                     <Paper style={{ width: "100%" }}>
                         <DataGrid
+                            components={{
+                                Toolbar: CustomToolbarExport,
+                            }}
                             rows={applieds}
                             columns={columns}
                             pageSize={10}

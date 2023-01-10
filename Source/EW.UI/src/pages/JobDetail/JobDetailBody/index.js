@@ -88,6 +88,7 @@ const JobDetailBody = () => {
                                     </Typography>
                                     <br />
                                     <div
+                                        className="article"
                                         dangerouslySetInnerHTML={{
                                             __html: job?.jobDescription,
                                         }}
@@ -100,6 +101,7 @@ const JobDetailBody = () => {
                                     </Typography>
                                     <br />
                                     <div
+                                        className="article"
                                         dangerouslySetInnerHTML={{
                                             __html: job?.company?.description,
                                         }}

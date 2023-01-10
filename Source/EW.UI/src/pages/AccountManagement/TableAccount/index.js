@@ -4,7 +4,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveThunk, usersSelector } from "../users.slice";
 import { Status } from "../../../common/constants";
-import { ConfirmDialog, SkeletonTable } from "../../../components";
+import {
+    ConfirmDialog,
+    CustomToolbar,
+    SkeletonTable,
+} from "../../../components";
 import useNotify from "../../../hook/useNotify";
 import moment from "moment";
 import { Edit } from "@mui/icons-material";
@@ -17,6 +21,18 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
         subtitle: "",
     });
     const dispatch = useDispatch();
+    const getRoleString = (roleId) => {
+        switch (roleId) {
+            case 1:
+                return "Khoa";
+            case 2:
+                return "Doanh nghiệp";
+            case 3:
+                return "Sinh viên";
+            default:
+                return "Sinh viên";
+        }
+    };
     const { status, users } = useSelector(usersSelector);
     const columns = [
         { field: "id", headerName: "ID", width: 80 },
@@ -36,18 +52,8 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
             field: "role.Name",
             headerName: "Quyền",
             width: 160,
-            renderCell: (cellValues) => {
-                switch (cellValues.row?.roleId) {
-                    case 1:
-                        return "Khoa";
-                    case 2:
-                        return "Doanh nghiệp";
-                    case 3:
-                        return "Sinh viên";
-                    default:
-                        return "Sinh viên";
-                }
-            },
+            renderCell: (cellValues) => getRoleString(cellValues.row?.roleId),
+            valueGetter: (cellValues) => getRoleString(cellValues.row?.roleId),
         },
         {
             field: "updatedDate",
@@ -160,6 +166,9 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
             ) : (
                 <Paper style={{ width: "100%" }}>
                     <DataGrid
+                        components={{
+                            Toolbar: CustomToolbar,
+                        }}
                         rows={users}
                         columns={columns}
                         pageSize={10}

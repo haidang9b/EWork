@@ -379,6 +379,7 @@ const InformationCard = () => {
                                 </>
                             ) : (
                                 <div
+                                    className="article"
                                     dangerouslySetInnerHTML={{
                                         __html: information?.description,
                                     }}
