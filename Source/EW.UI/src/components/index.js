@@ -28,3 +28,4 @@ export { default as FeaturedCompanies } from "./FeaturedCompanies";
 export { default as ApplicationRateChart } from "./ApplicationRateChart";
 export { default as PostPerDayChart } from "./PostPerDayChart";
 export { default as RankingTechStackChart } from "./RankingTechStackChart";
+export { default as CustomToolbar } from "./CustomToolbar";
