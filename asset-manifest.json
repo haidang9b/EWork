@@ -1,38 +1,39 @@
 {
   "files": {
-    "main.css": "/static/css/main.7a7744f6.css",
-    "main.js": "/static/js/main.67433998.js",
+    "main.css": "/static/css/main.84da4acd.css",
+    "main.js": "/static/js/main.6a7d878d.js",
     "static/js/309.67922c20.chunk.js": "/static/js/309.67922c20.chunk.js",
     "static/js/804.d7b0a910.chunk.js": "/static/js/804.d7b0a910.chunk.js",
     "static/js/151.75a54d87.chunk.js": "/static/js/151.75a54d87.chunk.js",
     "static/js/912.d761a633.chunk.js": "/static/js/912.d761a633.chunk.js",
     "static/js/787.601ba34f.chunk.js": "/static/js/787.601ba34f.chunk.js",
-    "static/js/711.847e7578.chunk.js": "/static/js/711.847e7578.chunk.js",
+    "static/js/711.5db6d49a.chunk.js": "/static/js/711.5db6d49a.chunk.js",
     "static/js/703.055c7a58.chunk.js": "/static/js/703.055c7a58.chunk.js",
     "static/js/513.c13949d3.chunk.js": "/static/js/513.c13949d3.chunk.js",
     "static/js/728.6c0da224.chunk.js": "/static/js/728.6c0da224.chunk.js",
     "static/media/recruiter.png": "/static/media/recruiter.66d610115987289d45b0.png",
     "static/media/401.svg": "/static/media/401.0630fe94db317e531404.svg",
     "static/media/Company.svg": "/static/media/Company.e1969a78cfb1d7574a55.svg",
+    "static/media/Search.svg": "/static/media/Search.47c79f4be7461533c0eb.svg",
     "static/media/Home.svg": "/static/media/Home.9a82202d2d9b6f1657e0.svg",
     "static/media/Job.svg": "/static/media/Job.e9dd11fa9fe483833e39.svg",
     "static/media/404.svg": "/static/media/404.647d1271f0df28e8a12d.svg",
     "static/media/company-default.webp": "/static/media/company-default.19eab44c4cb92391ab4c.webp",
     "index.html": "/index.html",
-    "main.7a7744f6.css.map": "/static/css/main.7a7744f6.css.map",
-    "main.67433998.js.map": "/static/js/main.67433998.js.map",
+    "main.84da4acd.css.map": "/static/css/main.84da4acd.css.map",
+    "main.6a7d878d.js.map": "/static/js/main.6a7d878d.js.map",
     "309.67922c20.chunk.js.map": "/static/js/309.67922c20.chunk.js.map",
     "804.d7b0a910.chunk.js.map": "/static/js/804.d7b0a910.chunk.js.map",
     "151.75a54d87.chunk.js.map": "/static/js/151.75a54d87.chunk.js.map",
     "912.d761a633.chunk.js.map": "/static/js/912.d761a633.chunk.js.map",
     "787.601ba34f.chunk.js.map": "/static/js/787.601ba34f.chunk.js.map",
-    "711.847e7578.chunk.js.map": "/static/js/711.847e7578.chunk.js.map",
+    "711.5db6d49a.chunk.js.map": "/static/js/711.5db6d49a.chunk.js.map",
     "703.055c7a58.chunk.js.map": "/static/js/703.055c7a58.chunk.js.map",
     "513.c13949d3.chunk.js.map": "/static/js/513.c13949d3.chunk.js.map",
     "728.6c0da224.chunk.js.map": "/static/js/728.6c0da224.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7a7744f6.css",
-    "static/js/main.67433998.js"
+    "static/css/main.84da4acd.css",
+    "static/js/main.6a7d878d.js"
   ]
 }
