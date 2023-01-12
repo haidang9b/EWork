@@ -73,7 +73,8 @@ namespace EW.WebAPI.Controllers
                     {
                         CVUrl = resultUpload.Path,
                         CVName = fileNameRequest,
-                        UserId = user.Id
+                        UserId = user.Id,
+                        Featured = false,
                     };
 
                     var resultAddCV = await _userCVService.AddCV(ownerCV);

@@ -1,11 +1,15 @@
 import { Delete, Download, RemoveRedEyeOutlined } from "@mui/icons-material";
-import { IconButton, Paper } from "@mui/material";
+import { Button, IconButton, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../../common/constants";
 import { ConfirmDialog, SkeletonTable } from "../../../components";
-import { documentSelector, removeCVThunk } from "../document.slice";
+import {
+    documentSelector,
+    removeCVThunk,
+    updateFeaturedCVThunk,
+} from "../document.slice";
 import useNotify from "../../../hook/useNotify";
 import useFileUpload from "../../../hook/useFileUpload";
 import moment from "moment";
@@ -101,6 +105,66 @@ const TableMyCV = () => {
                         </IconButton>
                     </>
                 );
+            },
+        },
+        {
+            field: "featured",
+            headerName: "Trạng thái",
+            width: 240,
+            renderCell: (cellValues) => {
+                const onClick = () => {
+                    setConfirmDialog({
+                        ...confirmDialog,
+                        isOpen: true,
+                        title: "Thay đổi trạng thái CV",
+                        subtitle: `Bạn có đồng ý ${
+                            cellValues.row?.featured ? " tắt " : " bật "
+                        } trạng thái tìm việc của CV ${
+                            cellValues.row?.cvName
+                        } không? CV được bật sẽ được hiển thị trong danh sách ứng viên tìm kiếm (nếu bạn có BẬT TÌM VIỆC)`,
+                        onConfirm: async () => {
+                            let resultDispatch = await dispatch(
+                                updateFeaturedCVThunk({
+                                    id: cellValues.row?.id,
+                                    featured: !cellValues.row?.featured,
+                                })
+                            ).unwrap();
+                            setNotify({
+                                isOpen: true,
+                                title: "Thay đổi trạng thái CV",
+                                message: resultDispatch.message,
+                                type: resultDispatch.isSuccess
+                                    ? "success"
+                                    : "error",
+                            });
+                            setConfirmDialog({
+                                ...confirmDialog,
+                                isOpen: false,
+                            });
+                        },
+                    });
+                };
+                if (cellValues.row?.featured) {
+                    return (
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={onClick}
+                        >
+                            Đang bật
+                        </Button>
+                    );
+                } else {
+                    return (
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={onClick}
+                        >
+                            Không bật
+                        </Button>
+                    );
+                }
             },
         },
     ];

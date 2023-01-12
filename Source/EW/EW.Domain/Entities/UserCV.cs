@@ -19,5 +19,6 @@ namespace EW.Domain.Entities
         public string CVName { get; set; }
         [StringLength(350)]
         public string CVUrl { get; set; }
+        public bool Featured { get; set; }
     }
 }
