@@ -298,7 +298,11 @@ const MakeCVTemplate = ({ language }) => {
 
     return (
         <div>
-            <ProfileRender profile={profile} fullName={user?.given_name} />
+            <ProfileRender
+                profile={profile}
+                fullName={user?.given_name}
+                language={language}
+            />
             {workHistory && workHistory?.length > 0 ? (
                 <WorkHistoryRender
                     workHistory={workHistory}

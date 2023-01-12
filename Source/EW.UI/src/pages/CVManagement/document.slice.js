@@ -5,6 +5,7 @@ import {
     DELETE_REMOVE_CV_URL,
     EDIT_COVER_LETTER_URL,
     GET_DOCUMENT_URL,
+    UPDATE_FEATURED_CV_URL,
     UPLOAD_NEW_CV_URL,
 } from "../../common/apiUrl";
 import { failureReducer, loadingReducer } from "../../common/utils";
@@ -59,7 +60,25 @@ const documentSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(removeCVThunk.rejected, failureReducer),
+            .addCase(removeCVThunk.rejected, failureReducer)
+            .addCase(updateFeaturedCVThunk.pending, loadingReducer)
+            .addCase(updateFeaturedCVThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.status = Status.succeeded;
+                    let newData = state.cvs.map((item) => {
+                        if (item.id === action.payload?.data?.id) {
+                            item.featured = action.payload?.data?.featured;
+                        } else {
+                            item.featured = false;
+                        }
+                        return item;
+                    });
+                    state.cvs = newData;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(updateFeaturedCVThunk.rejected, failureReducer),
 });
 
 export const getDocumentThunk = createAsyncThunk(
@@ -97,6 +116,14 @@ export const removeCVThunk = createAsyncThunk(
         const response = await httpClient.delete(
             `${DELETE_REMOVE_CV_URL}/${id}`
         );
+        return response.data;
+    }
+);
+
+export const updateFeaturedCVThunk = createAsyncThunk(
+    "document/updateFeaturedCV",
+    async (obj) => {
+        const response = await httpClient.put(UPDATE_FEATURED_CV_URL, obj);
         return response.data;
     }
 );

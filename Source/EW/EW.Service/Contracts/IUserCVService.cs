@@ -13,5 +13,6 @@ namespace EW.Services.Constracts
         Task<bool> RemoveCV(UserCV model);
         Task<IEnumerable<UserCV>> GetUserCVsByUser(User model);
         Task<UserCV> GetUserCVByInfo(UserCV model);
+        Task<bool> UpdateFeaturedCV(UserCV model);
     }
 }

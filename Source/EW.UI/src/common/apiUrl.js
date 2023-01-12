@@ -22,12 +22,10 @@ export const ADD_ACCOUNT_FACULTY_URL = "/users/add-account-faculty";
 export const EDIT_ACCOUNT_URL = "/users/update-account";
 
 // profile controller
-export const GET_DOCUMENT_URL = "/profile/get-document";
-export const EDIT_COVER_LETTER_URL = "/profile/update-cover-letter";
-export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 export const GET_PROFILE_URL = "/profile/my-information";
 export const PUT_CONTACT_PROFILE_URL = "/profile/contact";
 export const PUT_STATUS_PROFILE_URL = "/profile/change-status-open-for-work";
+
 // work histories controller
 export const WORK_HISTORY_PROFILE_URL = "/workhistories";
 
@@ -66,3 +64,9 @@ export const GET_APPLIEDS_BY_BUSINESS_URL = "/applications/applieds";
 export const NUMBER_APPLICATION_URL = "/charts/application";
 export const NUMBER_RECRUITMENT_POST_URL = "/charts/post";
 export const NUMBER_RANKING_TECH_STACK_URL = "/charts/ranking-tech";
+
+// documents controller
+export const GET_DOCUMENT_URL = "/documents";
+export const EDIT_COVER_LETTER_URL = "/documents/update-cover-letter";
+export const DELETE_REMOVE_CV_URL = "/documents";
+export const UPDATE_FEATURED_CV_URL = "/documents";
