@@ -1,4 +1,13 @@
-import { Grid, Paper, Button, Skeleton } from "@mui/material";
+import {
+    Switch,
+    Grid,
+    Paper,
+    Button,
+    Skeleton,
+    FormGroup,
+    FormControlLabel,
+    Box,
+} from "@mui/material";
 import { Container } from "@mui/system";
 import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,11 +17,16 @@ import Certificates from "./Certificates";
 import Contacts from "./Contacts";
 import Educations from "./Educations";
 import "./Profile.css";
-import { getProfileThunk, profileSelector } from "./profile.slice";
+import {
+    getProfileThunk,
+    profileSelector,
+    updateOpenForWorkThunk,
+} from "./profile.slice";
 import Projects from "./Projects";
 import SkeletonProfile from "./SkeletonProfile";
 import WorkHistories from "./WorkHistories";
 import { DocumentScanner } from "@mui/icons-material";
+import { ConfirmDialog } from "../../components";
 
 const PreviewMyProfile = React.lazy(() => import("./PreviewMyProfile"));
 
@@ -24,14 +38,67 @@ const Profile = () => {
     useEffect(() => {
         document.title = getPageName("Thông tin chi tiết cá nhân");
     }, []);
-    const { status } = useSelector(profileSelector);
-
+    const { status, profile } = useSelector(profileSelector);
     const [myProfileDialog, setMyProfileDialog] = useState({
         isOpen: false,
     });
-
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "Thay đổi trạng thái tìm việc",
+        subtitle: "Bạn có chắc chắn muốn thay đổi trạng thái tìm việc?",
+        onConfirm: () => {},
+    });
+    const onChangeStatusOpenForWork = (event) => {
+        const toggleStatus = event.target.checked;
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: true,
+            title: "Thay đổi trạng thái tìm việc",
+            subtitle: `Bạn có chắc chắn muốn ${
+                toggleStatus ? "bật" : "tắt"
+            } trạng thái tìm việc?`,
+            onConfirm: () => {
+                dispatch(
+                    updateOpenForWorkThunk({
+                        isOpenForWork: toggleStatus,
+                    })
+                );
+                setConfirmDialog({
+                    ...confirmDialog,
+                    isOpen: false,
+                });
+            },
+        });
+    };
     return (
         <Container>
+            <Box width={"100%"} marginTop={1}>
+                {status === Status.loading ? (
+                    <Skeleton
+                        sx={{
+                            //set css to right
+                            marginLeft: "auto",
+                        }}
+                    >
+                        <Button></Button>
+                    </Skeleton>
+                ) : (
+                    <FormGroup>
+                        <FormControlLabel
+                            sx={{
+                                marginLeft: "auto",
+                            }}
+                            control={
+                                <Switch
+                                    checked={profile?.isOpenForWork}
+                                    onChange={onChangeStatusOpenForWork}
+                                />
+                            }
+                            label="Trạng thái tìm việc"
+                        />
+                    </FormGroup>
+                )}
+            </Box>
             <Button
                 onClick={() => {
                     setMyProfileDialog({
@@ -49,7 +116,6 @@ const Profile = () => {
             >
                 Tạo CV
             </Button>
-
             <Paper>
                 <Grid padding={2} marginTop={1}>
                     {status === Status.loading ? (
@@ -115,6 +181,10 @@ const Profile = () => {
                     setMyProfileDialog={setMyProfileDialog}
                 />
             </Suspense>
+            <ConfirmDialog
+                confirm={confirmDialog}
+                setConfirm={setConfirmDialog}
+            />
         </Container>
     );
 };

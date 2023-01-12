@@ -37,6 +37,7 @@ namespace EW.Services.Business
                 EmailContact = currentUser.Email,
                 Objective = Constaints.STRING_BLANK,
                 Skills = Constaints.STRING_BLANK,
+                IsOpenForWork = false,
             };
             await _unitOfWork.Repository<Profile>().AddAsync(newProfile);
             if((await _unitOfWork.SaveChangeAsync()) == false){
@@ -59,6 +60,7 @@ namespace EW.Services.Business
             currentProfile.EmailContact = profile.EmailContact;
             currentProfile.Objective = profile.Objective;
             currentProfile.Skills = profile.Skills;
+            currentProfile.IsOpenForWork = profile.IsOpenForWork;
             return await _unitOfWork.SaveChangeAsync();
         }
     }

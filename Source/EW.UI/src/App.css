@@ -110,7 +110,8 @@
 .notFoundHero,
 .authHero,
 .jobHero,
-.companyHero {
+.companyHero,
+.searchCandidateHero {
     min-height: calc(100vh - 100px);
     background: url("./assets/images/Home.svg") center/cover no-repeat;
     display: flex;
@@ -139,6 +140,12 @@
 .companyHero {
     background: url("./assets/images/Company.svg") center/cover no-repeat;
     min-height: 60vh;
+}
+
+.searchCandidateHero {
+    background: url("./assets/images/Search.svg") center/cover no-repeat;
+    min-height: 60vh;
+    background-size: contain;
 }
 /* End Hero */
 /* Title */
