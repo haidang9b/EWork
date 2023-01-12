@@ -295,7 +295,7 @@ const Projects = () => {
         <>
             <div className="profile__header">Dự án đã làm</div>
             <div>
-                {projects.map((item) => (
+                {projects?.map((item) => (
                     <ProjectItem
                         key={JSON.stringify(item)}
                         customerName={item.customerName}

@@ -73,12 +73,8 @@ const CVManagement = () => {
     }, [dispatch]);
     return (
         <>
-            <Container
-                sx={{
-                    marginTop: "2%",
-                }}
-            >
-                <Box sx={{ width: "100%" }}>
+            <Container>
+                <Box width="100%" marginTop={1}>
                     <div className="d-flex space-btw">
                         <div className="d-flex ">
                             <Button

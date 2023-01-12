@@ -221,5 +221,52 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Turn on or turn off status open for work 
+        /// </summary>
+        /// <param name="model">UpdateStatusModel</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Student")]
+        [HttpPut("change-status-open-for-work")]
+        public async Task<IActionResult> UpdateStatusOpenForWork(UpdateStatusModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                if (profile == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Vui lòng get dữ liệu trước khi update";
+                    return Ok(result);
+                }
+
+                if(string.IsNullOrEmpty(profile.PhoneNumber) 
+                    || string.IsNullOrEmpty(profile.Objective) 
+                    || string.IsNullOrEmpty(profile.Skills))
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Bạn vui lòng điền đầy đủ thông tin trước khi bật tìm kiếm việc làm";
+                    return Ok(result);
+                }
+                profile.IsOpenForWork = model.IsOpenForWork;
+                result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
+                if (result.IsSuccess)
+                {
+                    result.Data = profile;
+                    result.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thành công" : "Tắt tìm kiếm việc thành công";
+                }
+                else
+                {
+                    result.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thất bại" : "Tắt tìm kiếm việc thất bại";
+                }
+            }
+            catch(Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }

@@ -27,7 +27,7 @@ export const EDIT_COVER_LETTER_URL = "/profile/update-cover-letter";
 export const DELETE_REMOVE_CV_URL = "/profile/remove-cv";
 export const GET_PROFILE_URL = "/profile/my-information";
 export const PUT_CONTACT_PROFILE_URL = "/profile/contact";
-
+export const PUT_STATUS_PROFILE_URL = "/profile/change-status-open-for-work";
 // work histories controller
 export const WORK_HISTORY_PROFILE_URL = "/workhistories";
 

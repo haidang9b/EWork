@@ -260,7 +260,7 @@ const Certificates = () => {
         <>
             <div className="profile__header">Chứng chỉ</div>
             <div>
-                {certificates.map((item) => (
+                {certificates?.map((item) => (
                     <CertificateItem
                         key={JSON.stringify(item)}
                         certificateName={item.certificateName}

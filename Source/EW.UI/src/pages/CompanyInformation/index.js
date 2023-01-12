@@ -30,11 +30,9 @@ const CompanyInformation = () => {
             ) : (
                 <Suspense fallback={<SkeletonProfile />}>
                     <Container>
-                        <Box width="100%">
-                            <Box>
-                                <HeaderCard />
-                                <InformationCard />
-                            </Box>
+                        <Box width="100%" marginTop={1}>
+                            <HeaderCard />
+                            <InformationCard />
                         </Box>
                     </Container>
                 </Suspense>

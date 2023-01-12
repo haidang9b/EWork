@@ -78,7 +78,7 @@ const sidebarRecruiterData = [
     },
     {
         title: "Tìm kiếm sinh viên",
-        path: "/search-student",
+        path: "/search-candidate",
         icon: <MdIcons.MdOutlineFindReplace />,
     },
 ];

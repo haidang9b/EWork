@@ -1,4 +1,5 @@
 import { Container, Grid } from "@mui/material";
+import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
@@ -31,18 +32,20 @@ const Dashboard = () => {
     }, []);
     return (
         <Container>
-            {status === Status.loading ? (
-                <SkeletonDashboard />
-            ) : (
-                <>
-                    <ApplicationRateCard />
-                    <Grid container>
-                        <ApplicationRateChart />
-                        <PostPerDayChart />
-                        <RankingTechStackChart />
-                    </Grid>
-                </>
-            )}
+            <Box width="100%" marginTop={1}>
+                {status === Status.loading ? (
+                    <SkeletonDashboard />
+                ) : (
+                    <>
+                        <ApplicationRateCard />
+                        <Grid container>
+                            <ApplicationRateChart />
+                            <PostPerDayChart />
+                            <RankingTechStackChart />
+                        </Grid>
+                    </>
+                )}
+            </Box>
         </Container>
     );
 };

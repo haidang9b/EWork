@@ -24,6 +24,7 @@ import {
     JobsApplied,
     AppliedManagement,
     UpdatePassword,
+    SearchCandidate,
 } from "./pages";
 function App() {
     return (
@@ -68,6 +69,7 @@ function App() {
                     path="applies-management"
                     element={<AppliedManagement />}
                 />
+                <Route path="search-candidate" element={<SearchCandidate />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>
                 <Route path="my-cv" element={<CVManagement />} />

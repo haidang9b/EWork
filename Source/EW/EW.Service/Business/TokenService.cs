@@ -23,7 +23,7 @@ namespace EW.Services.Business
             var signingCredentials =
                 new SigningCredentials(_keyRefreshToken, SecurityAlgorithms.HmacSha256Signature);
             var header = new JwtHeader(signingCredentials);
-            var payload = new JwtPayload(user.Email, null, null, null, DateTime.Now.AddDays(5)); // The expired time of payload is 5 days
+            var payload = new JwtPayload(user.Email, null, null, null, DateTime.Now.AddMonths(1)); // The expired time of payload is 1 month
             var securityToken = new JwtSecurityToken(header, payload);
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
@@ -43,7 +43,7 @@ namespace EW.Services.Business
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddSeconds(30),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
             var tokenHandler = new JwtSecurityTokenHandler();

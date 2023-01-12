@@ -79,7 +79,7 @@ const UpdatePassword = () => {
     }, []);
     return (
         <Container>
-            <Box marginTop={1}>
+            <Box width="100%" marginTop={1}>
                 <Grid
                     container
                     alignItems="center"

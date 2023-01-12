@@ -23,5 +23,6 @@ namespace EW.Domain.Entities
         public virtual ICollection<Education>? Educations { get; set; }
         public virtual ICollection<Project>? Projects { get; set; }
         public virtual ICollection<Certificate>? Certificates { get; set; }
+        public bool IsOpenForWork { get; set; }
     }
 }

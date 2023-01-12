@@ -180,13 +180,13 @@ const EducationsRender = ({ educations, language }) => {
             <Divider />
             <div className="profile__header">{educationText}</div>
             <div>
-                {educations.map((item) => (
+                {educations?.map((item) => (
                     <EducationItemRender
                         key={JSON.stringify(item)}
-                        orgName={item.orgName}
-                        from={item.from}
-                        to={item.to}
-                        description={item.description}
+                        orgName={item?.orgName}
+                        from={item?.from}
+                        to={item?.to}
+                        description={item?.description}
                     />
                 ))}
             </div>
@@ -223,7 +223,7 @@ const CertificatesRender = ({ certificates, language }) => {
         <>
             <Divider />
             <div className="profile__header">{certificateText}</div>
-            {certificates.map((item) => (
+            {certificates?.map((item) => (
                 <CertificateItemRender
                     key={JSON.stringify(item)}
                     certificateName={item.certificateName}
@@ -270,7 +270,7 @@ const ProjectsRender = ({ projects, language }) => {
         <>
             <Divider />
             <div className="profile__header">{projectText}</div>
-            {projects.map((item) => (
+            {projects?.map((item) => (
                 <ProjectItemRender
                     key={JSON.stringify(item)}
                     projectName={item.projectName}

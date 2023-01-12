@@ -6,6 +6,7 @@ import {
     GET_PROFILE_URL,
     PROJECT_PROFILE_URL,
     PUT_CONTACT_PROFILE_URL,
+    PUT_STATUS_PROFILE_URL,
     WORK_HISTORY_PROFILE_URL,
 } from "../../common/apiUrl";
 import { Status } from "../../common/constants";
@@ -214,7 +215,18 @@ const profileSlice = createSlice({
                     state.status = Status.failed;
                 }
             })
-            .addCase(updateProjectThunk.rejected, failureReducer),
+            .addCase(updateProjectThunk.rejected, failureReducer)
+            .addCase(updateOpenForWorkThunk.pending, loadingReducer)
+            .addCase(updateOpenForWorkThunk.fulfilled, (state, action) => {
+                if (action.payload?.isSuccess && action.payload?.data) {
+                    state.profile.isOpenForWork =
+                        action.payload.data?.isOpenForWork;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                }
+            })
+            .addCase(updateOpenForWorkThunk.rejected, failureReducer),
 });
 
 export const getProfileThunk = createAsyncThunk(
@@ -333,6 +345,14 @@ export const updateProjectThunk = createAsyncThunk(
     "profile/updateProject",
     async (obj) => {
         const response = await httpClient.put(PROJECT_PROFILE_URL, obj);
+        return response.data;
+    }
+);
+
+export const updateOpenForWorkThunk = createAsyncThunk(
+    "profile/updateOpenForWork",
+    async (obj) => {
+        const response = await httpClient.put(PUT_STATUS_PROFILE_URL, obj);
         return response.data;
     }
 );

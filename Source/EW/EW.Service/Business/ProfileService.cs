@@ -37,11 +37,16 @@ namespace EW.Services.Business
                 EmailContact = currentUser.Email,
                 Objective = Constaints.STRING_BLANK,
                 Skills = Constaints.STRING_BLANK,
+                IsOpenForWork = false,
             };
             await _unitOfWork.Repository<Profile>().AddAsync(newProfile);
             if((await _unitOfWork.SaveChangeAsync()) == false){
                 throw new Exception("Không thể khởi tại profile");
             }
+            newProfile.Certificates = new List<Certificate>();
+            newProfile.Projects = new List<Project>();
+            newProfile.Educations = new List<Education>();
+            newProfile.WorkHistory = new List<WorkHistory>();
             return newProfile;
         }
 
@@ -59,6 +64,7 @@ namespace EW.Services.Business
             currentProfile.EmailContact = profile.EmailContact;
             currentProfile.Objective = profile.Objective;
             currentProfile.Skills = profile.Skills;
+            currentProfile.IsOpenForWork = profile.IsOpenForWork;
             return await _unitOfWork.SaveChangeAsync();
         }
     }

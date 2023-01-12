@@ -20,3 +20,4 @@ export { default as JobDetail } from "./JobDetail";
 export { default as JobsApplied } from "./ApplicationFlow";
 export { default as AppliedManagement } from "./AppliedManagement";
 export { default as UpdatePassword } from "./UpdatePassword";
+export { default as SearchCandidate } from "./SearchCandidate";

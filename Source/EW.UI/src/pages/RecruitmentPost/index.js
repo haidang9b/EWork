@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
@@ -22,29 +22,31 @@ const RecruitmentPost = () => {
     }, [dispatch]);
     return (
         <Container>
-            <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Add />}
-                onClick={() => {
-                    setRecruitmentPostModal({
-                        ...recruitmentPostModal,
-                        isOpen: true,
-                        isUpdate: false,
-                        data: null,
-                    });
-                }}
-            >
-                Thêm bài viết mới
-            </Button>
-            <TableRecruitmentPost
-                recruitmentPostModal={recruitmentPostModal}
-                setRecruitmentPostModal={setRecruitmentPostModal}
-            />
-            <RecruitmentPostModal
-                recruitmentPostModal={recruitmentPostModal}
-                setRecruitmentPostModal={setRecruitmentPostModal}
-            />
+            <Box width="100%" marginTop={1}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Add />}
+                    onClick={() => {
+                        setRecruitmentPostModal({
+                            ...recruitmentPostModal,
+                            isOpen: true,
+                            isUpdate: false,
+                            data: null,
+                        });
+                    }}
+                >
+                    Thêm bài viết mới
+                </Button>
+                <TableRecruitmentPost
+                    recruitmentPostModal={recruitmentPostModal}
+                    setRecruitmentPostModal={setRecruitmentPostModal}
+                />
+                <RecruitmentPostModal
+                    recruitmentPostModal={recruitmentPostModal}
+                    setRecruitmentPostModal={setRecruitmentPostModal}
+                />
+            </Box>
         </Container>
     );
 };
