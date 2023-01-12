@@ -1,6 +1,6 @@
 import { Grid, Paper, Button, Skeleton } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
@@ -17,7 +17,6 @@ import { DocumentScanner } from "@mui/icons-material";
 const PreviewMyProfile = React.lazy(() => import("./PreviewMyProfile"));
 
 const Profile = () => {
-    const profileRef = useRef();
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getProfileThunk());
@@ -32,7 +31,7 @@ const Profile = () => {
     });
 
     return (
-        <Container ref={profileRef} id="my-profile">
+        <Container>
             <Button
                 onClick={() => {
                     setMyProfileDialog({

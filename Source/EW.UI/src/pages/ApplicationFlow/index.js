@@ -2,6 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Box,
     Paper,
     Step,
     StepLabel,
@@ -185,13 +186,15 @@ const JobsApplied = () => {
     }, [dispatch]);
     return (
         <Container>
-            {status === Status.loading ? (
-                <SkeletonTable />
-            ) : (
-                <>
-                    <TableJobsApplied />
-                </>
-            )}
+            <Box width="100%" marginTop={1}>
+                {status === Status.loading ? (
+                    <SkeletonTable />
+                ) : (
+                    <>
+                        <TableJobsApplied />
+                    </>
+                )}
+            </Box>
         </Container>
     );
 };

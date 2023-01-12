@@ -17,7 +17,7 @@ const CompanyManagement = () => {
     }, [dispatch]);
     return (
         <Container>
-            <Box sx={{ width: "100%" }}>
+            <Box width="100%" marginTop={1}>
                 <Box sx={{ borderBottom: 1 }}>
                     <Tabs
                         value={value}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "@mui/system";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { getRolesThunk, getUsersThunk } from "./users.slice";
 import { getPageName } from "../../common/nameApp";
@@ -32,23 +32,24 @@ const AccountManagement = () => {
     };
 
     return (
-        <Container
-            sx={{
-                marginTop: "2%",
-            }}
-        >
-            <Button
-                variant="contained"
-                onClick={addNewAccount}
-                startIcon={<Add />}
-            >
-                Thêm tài khoản
-            </Button>
-            <TableAccount
-                userDialog={userDialog}
-                setUserDialog={setUserDialog}
-            />
-            <UserDialog userDialog={userDialog} setUserDialog={setUserDialog} />
+        <Container>
+            <Box width="100%" marginTop={1}>
+                <Button
+                    variant="contained"
+                    onClick={addNewAccount}
+                    startIcon={<Add />}
+                >
+                    Thêm tài khoản
+                </Button>
+                <TableAccount
+                    userDialog={userDialog}
+                    setUserDialog={setUserDialog}
+                />
+                <UserDialog
+                    userDialog={userDialog}
+                    setUserDialog={setUserDialog}
+                />
+            </Box>
         </Container>
     );
 };

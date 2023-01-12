@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
@@ -12,7 +12,9 @@ const HRManagement = () => {
     }, [dispatch]);
     return (
         <Container>
-            <TableRecruiter />
+            <Box width="100%" marginTop={1}>
+                <TableRecruiter />
+            </Box>
         </Container>
     );
 };
