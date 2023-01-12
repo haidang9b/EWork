@@ -308,7 +308,7 @@ const WorkHistories = () => {
         <>
             <div className="profile__header">Kinh nghiệm làm việc</div>
             <div>
-                {workHistory.map((item) => (
+                {workHistory?.map((item) => (
                     <WorkHistoryItem
                         key={JSON.stringify(item)}
                         companyName={item.companyName}

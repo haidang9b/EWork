@@ -27,6 +27,7 @@ import SkeletonProfile from "./SkeletonProfile";
 import WorkHistories from "./WorkHistories";
 import { DocumentScanner } from "@mui/icons-material";
 import { ConfirmDialog } from "../../components";
+import useNotify from "../../hook/useNotify";
 
 const PreviewMyProfile = React.lazy(() => import("./PreviewMyProfile"));
 
@@ -48,6 +49,7 @@ const Profile = () => {
         subtitle: "Bạn có chắc chắn muốn thay đổi trạng thái tìm việc?",
         onConfirm: () => {},
     });
+    const { setNotify } = useNotify();
     const onChangeStatusOpenForWork = (event) => {
         const toggleStatus = event.target.checked;
         setConfirmDialog({
@@ -57,12 +59,18 @@ const Profile = () => {
             subtitle: `Bạn có chắc chắn muốn ${
                 toggleStatus ? "bật" : "tắt"
             } trạng thái tìm việc?`,
-            onConfirm: () => {
-                dispatch(
+            onConfirm: async () => {
+                const resultDispatch = await dispatch(
                     updateOpenForWorkThunk({
                         isOpenForWork: toggleStatus,
                     })
-                );
+                ).unwrap();
+                setNotify({
+                    isOpen: true,
+                    type: resultDispatch?.isSuccess ? "success" : "error",
+                    message: resultDispatch?.message,
+                    title: "Thay đổi trạng thái tìm việc",
+                });
                 setConfirmDialog({
                     ...confirmDialog,
                     isOpen: false,

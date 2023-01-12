@@ -240,6 +240,15 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Vui lòng get dữ liệu trước khi update";
                     return Ok(result);
                 }
+
+                if(string.IsNullOrEmpty(profile.PhoneNumber) 
+                    || string.IsNullOrEmpty(profile.Objective) 
+                    || string.IsNullOrEmpty(profile.Skills))
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Bạn vui lòng điền đầy đủ thông tin trước khi bật tìm kiếm việc làm";
+                    return Ok(result);
+                }
                 profile.IsOpenForWork = model.IsOpenForWork;
                 result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
                 if (result.IsSuccess)

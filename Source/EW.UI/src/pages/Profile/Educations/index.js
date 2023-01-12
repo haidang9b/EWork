@@ -253,7 +253,7 @@ const Educations = () => {
         <>
             <div className="profile__header">Học vấn</div>
             <div>
-                {educations.map((item) => (
+                {educations?.map((item) => (
                     <EducationItem
                         key={JSON.stringify(item)}
                         orgName={item.orgName}
@@ -266,7 +266,7 @@ const Educations = () => {
             </div>
             <Divider />
             <div>
-                {addForms.map((item) => (
+                {addForms?.map((item) => (
                     <EducationInput
                         key={JSON.stringify(item)}
                         orgName={item.orgName}

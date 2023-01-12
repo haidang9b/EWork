@@ -43,6 +43,10 @@ namespace EW.Services.Business
             if((await _unitOfWork.SaveChangeAsync()) == false){
                 throw new Exception("Không thể khởi tại profile");
             }
+            newProfile.Certificates = new List<Certificate>();
+            newProfile.Projects = new List<Project>();
+            newProfile.Educations = new List<Education>();
+            newProfile.WorkHistory = new List<WorkHistory>();
             return newProfile;
         }
 
