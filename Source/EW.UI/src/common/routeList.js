@@ -34,19 +34,9 @@ const sidebarStudentData = [
         icon: <IoIcons.IoMdDocument />,
     },
     {
-        title: "Nhà tuyển dụng xem hồ sơ",
-        path: "/recruitment-post",
-        icon: <IoIcons.IoMdPaperPlane />,
-    },
-    {
         title: "Công việc đã ứng tuyển",
         path: "/jobs-applied",
         icon: <IoIcons.IoMdSend />,
-    },
-    {
-        title: "My Companies",
-        path: "/recruitment-post",
-        icon: <IoIcons.IoMdPaperPlane />,
     },
 ];
 

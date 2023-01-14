@@ -30,7 +30,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Group, Login, Logout, Password } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "../../redux/auth.slice";
-
+import "./Navbar.css";
 const Navbar = () => {
     const { user, isBusiness, isFaculty, isStudent } = useAuth();
     const dispatch = useDispatch();
@@ -73,8 +73,12 @@ const Navbar = () => {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" onClick={() => navigate("/")}>
-                            Ework
+                        <Typography
+                            variant="h6"
+                            onClick={() => navigate("/")}
+                            className="logo-name"
+                        >
+                            EWork | Begin your work
                         </Typography>
                         <Box sx={{ flexGrow: 1 }}></Box>
 
