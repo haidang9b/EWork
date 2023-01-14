@@ -42,13 +42,19 @@ namespace EW.Services.Business
             {
                 throw new Exception("Người dùng không sở hữu cv này");
             }
+            var existApplied = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.RecruitmentPostId == model.RecruitmentPostId && item.UserCV.UserId == user.Id);
+            if (existApplied != null) 
+            {
+                throw new Exception("Yêu cầu này đã tồn tại, vui lòng kiểm tra lại");
+            }
+           
             var newApplication = new Application
             {
                 UserCVId = model.UserCVId,
                 RecruitmentPostId = model.RecruitmentPostId,
                 CoverLetter = model.CoverLetter,
                 Description = "",
-                Status = Commons.Enums.EApplicationStatus.ReceptionCV,
+                Status = model.Status,
                 CreatedDate = DateTimeOffset.Now,
                 UpdatedDate = DateTimeOffset.Now,
             };

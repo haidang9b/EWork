@@ -13,27 +13,27 @@ namespace EW.Domain.Entities
     public class Company: BaseEntity
     {
         [StringLength(200)]
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = string.Empty;
         [StringLength(12, MinimumLength = 9, ErrorMessage = "Độ dài số điện thoại phải từ 9 đến 12 kí tự")]
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         [StringLength(300)]
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
         [StringLength(50)]
         [DefaultValue("")]
-        public string TaxNumber { get; set; }
+        public string TaxNumber { get; set; } = string.Empty;
         [StringLength(350)]
-        public string AvatarUrl { get; set; }
+        public string AvatarUrl { get; set; } = string.Empty;
         public EStatusRecruiter Status { get; set; }
         [StringLength(10)]
         [DefaultValue("VN")]
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
         [DefaultValue(ETeamSize.ZeroTo50)]
         public ETeamSize TeamSize { get; set; }
         [DefaultValue(ECompanyType.Product)]
         public ECompanyType CompanyType { get; set; }
         [DefaultValue("")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         [DefaultValue(false)]
         public bool Featured { get; set; }
     }

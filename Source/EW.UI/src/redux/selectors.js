@@ -5,6 +5,7 @@ import { appliedFilterSelector } from "../components/SelectorApplied/appliedFilt
 import { jobFilterSelector } from "../components/SelectorJobsArea/jobFilter.slice";
 import { appliedSelector } from "../pages/AppliedManagement/applied.slice";
 import { jobsSelector } from "../pages/Jobs/jobs.slice";
+import { searchCandidateSelector } from "../pages/SearchCandidate/searchCandidate.slice";
 import { topCompanySelector } from "./topCompany.slice";
 export const statusAuthCurrentSelector = (state) => state.auth.status;
 export const statusUsersCurrentSelector = (state) => state.users.status;
@@ -130,5 +131,26 @@ export const appliedsRemainingSelector = createSelector(
         }
 
         return appliedsRemaining;
+    }
+);
+
+export const candidateRemainingSelector = createSelector(
+    filterSelector,
+    searchCandidateSelector,
+    (filter, searchCandidate) => {
+        const { text } = filter;
+        const { candidates } = searchCandidate;
+        let candidateRemaining = [...candidates];
+        if (text) {
+            candidateRemaining = candidateRemaining.filter(
+                (item) =>
+                    item.fullName?.toLowerCase().includes(text.toLowerCase()) ||
+                    item.emailContact
+                        ?.toLowerCase()
+                        .includes(text.toLowerCase()) ||
+                    item.skills?.toLowerCase().includes(text.toLowerCase())
+            );
+        }
+        return candidateRemaining;
     }
 );

@@ -13,7 +13,7 @@ const styles = {
     },
 };
 
-const ProfileRender = ({ profile, fullName, language }) => {
+export const ProfileRender = ({ profile, fullName, language }) => {
     const objectiveText = language === "vi" ? "Mục tiêu" : "Objective";
     const skillText = language === "vi" ? "Kỹ năng" : "Skills";
     return (

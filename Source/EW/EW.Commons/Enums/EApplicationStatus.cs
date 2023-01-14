@@ -12,7 +12,7 @@ namespace EW.Commons.Enums
         [Description("CV tiếp nhận - sinh viên gửi cv")]
         ReceptionCV,
         [Description("Đã đánh dấu")]
-        Masked,
+        Marked,
         [Description("Hẹn phỏng vấn")]
         Interview,
         [Description("Xong")]
