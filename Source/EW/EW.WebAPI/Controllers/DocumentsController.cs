@@ -19,12 +19,14 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<UploadsController> _logger;
         private readonly IUserCVService _userCVService;
         private readonly IUserService _userService;
+        private readonly IProfileSerivce _profileSerivce;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public DocumentsController(ILogger<UploadsController> logger, IUserCVService userCVService, IUserService userService)
+        public DocumentsController(ILogger<UploadsController> logger, IUserCVService userCVService, IUserService userService, IProfileSerivce profileSerivce)
         {
             _logger = logger;
             _userCVService = userCVService;
             _userService = userService;
+            _profileSerivce = profileSerivce;
         }
 
         /// <summary>
@@ -138,6 +140,7 @@ namespace EW.WebAPI.Controllers
         }
         /// <summary>
         /// Pick cv featured of user
+        /// Check user have status turn on open for work, if tunrn on, use only change featured CV and can't update cv featured
         /// </summary>
         /// <param name="model">ChangeStatusCVModel</param>
         /// <returns></returns>
@@ -151,6 +154,13 @@ namespace EW.WebAPI.Controllers
                 var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
                 if(currentCV != null && currentCV.User.Username == _username)
                 {
+                    var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                    if (profile != null && profile.IsOpenForWork && currentCV.Featured && !model.Featured) 
+                    {
+                        result.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
+                        result.IsSuccess = false;
+                        return Ok(result);
+                    }
                     currentCV.Featured = model.Featured;
                     result.IsSuccess = await _userCVService.UpdateFeaturedCV(currentCV);                    
                     if (result.IsSuccess)
