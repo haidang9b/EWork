@@ -124,6 +124,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
+                var currrentUser = await _userService.GetUser(new User { Username = _username});
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
                 if (profile == null)
                 {
@@ -138,6 +139,13 @@ namespace EW.WebAPI.Controllers
                 {
                     result.IsSuccess = false;
                     result.Message = "Bạn vui lòng điền đầy đủ thông tin trước khi bật tìm kiếm việc làm";
+                    return Ok(result);
+                }
+                var cvsOfUser = await _userCVService.GetUserCVsByUser(currrentUser);
+                if (!cvsOfUser.Where(item => item.Featured).Any())
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Bạn vui lòng chọn CV chính để bật tìm việc tại quản lý CV";
                     return Ok(result);
                 }
                 profile.IsOpenForWork = model.IsOpenForWork;
