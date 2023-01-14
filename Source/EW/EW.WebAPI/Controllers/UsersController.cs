@@ -35,7 +35,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _userService.GetUsers();
+                var data = await _userService.GetUsers();
+                result.Data = data.OrderByDescending(item => item.CreatedDate);
             }
             catch (Exception ex)
             {

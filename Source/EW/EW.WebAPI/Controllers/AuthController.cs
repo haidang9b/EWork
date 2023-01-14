@@ -117,8 +117,7 @@ namespace EW.WebAPI.Controllers
             catch (Exception error)
             {
                 _logger.LogError(error.Message);
-                result.InternalError();
-                result.Message = error.Message;
+                result.InternalError(error.Message);
             }
             return Ok(result);
         }
@@ -136,6 +135,10 @@ namespace EW.WebAPI.Controllers
                     Email = validate.Issuer,
                     Username = validate.Issuer,
                 });
+                if(!exist.IsActive)
+                {
+                    throw new Exception("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                }
                 var token = _tokenService.CreateToken(exist);
                 var rfToken = _tokenService.CreateRefreshToken(exist);
                 result.Data = new LoginViewModel
@@ -222,9 +225,8 @@ namespace EW.WebAPI.Controllers
             }
             catch(Exception ex)
             {
-                result.InternalError();
+                result.InternalError(ex.Message);
                 _logger.LogError(ex.Message);
-                result.Message = ex.Message;
             }
             return Ok(result);
         }
@@ -246,12 +248,12 @@ namespace EW.WebAPI.Controllers
                 {
                     throw new Exception("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
                 }
+                if(!exist.IsActive)
+                    throw new Exception("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                 var body = string.Empty;
                 using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
                 {
-
                     body = reader.ReadToEnd();
-
                 }
                 var key = await _userService.GenKeyResetPassword(exist);
                 var bodyBuilder = new System.Text.StringBuilder(body);
@@ -264,6 +266,7 @@ namespace EW.WebAPI.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 result.InternalError();
                 result.Message = ex.Message;
             }

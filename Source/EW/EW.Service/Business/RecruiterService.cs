@@ -116,7 +116,7 @@ namespace EW.Services.Business
                 UpdatedDate = item.UpdatedDate,
                 IsActive = item.User.IsActive
 
-            }).OrderByDescending(r => r.Company.Id).ToList();
+            }).OrderByDescending(r => r.CreatedDate).ToList();
         }
         
         public async Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model)
@@ -207,7 +207,7 @@ namespace EW.Services.Business
                 UpdatedDate = item.UpdatedDate,
                 IsActive = item.User.IsActive
 
-            }).OrderByDescending(r => r.Company.Id).ToList();
+            }).OrderByDescending(r => r.CreatedDate).ToList();
         }
     }
 }

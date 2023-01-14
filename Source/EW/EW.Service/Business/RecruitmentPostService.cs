@@ -75,7 +75,7 @@ namespace EW.Services.Business
                 recruitmentPosts = recruitmentPosts.Where(item => item.CompanyId == recruiter.CompanyId).ToList();
             }
             // else user is Faculty, load all data
-            return recruitmentPosts;
+            return recruitmentPosts.OrderByDescending(item => item.CreatedDate);
         }
 
         public async Task<RecruitmentPost> GetRecruitmentSpecific(RecruitmentPost model)

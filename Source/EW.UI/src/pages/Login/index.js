@@ -102,7 +102,7 @@ const Login = () => {
     return (
         <>
             {status === Status.succeeded && user ? (
-                <Navigate to="/dashboard" replace />
+                <Navigate to="/" replace />
             ) : (
                 <Container>
                     <Grid

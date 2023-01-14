@@ -119,7 +119,7 @@ namespace EW.Services.Business
 
                 responseData.Add(row);
             }
-            return responseData;
+            return responseData.OrderByDescending(item => item.CreatedDate);
         }
 
         public async Task<IEnumerable<Application>> GetByApplier(User user)

@@ -93,7 +93,7 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<TopComapnyModel>> GetTopCompanies()
         {
-            var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
+            var companies = await _unitOfWork.Repository<Company>().GetAsync(item => item.Status == EStatusRecruiter.Active);
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
             var result = new List<TopComapnyModel>();
             foreach(var company in companies)

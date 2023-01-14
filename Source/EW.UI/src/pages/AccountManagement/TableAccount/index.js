@@ -95,7 +95,6 @@ const TableAccount = ({ userDialog, setUserDialog }) => {
                         title: "Chỉnh sửa trạng thái tài khoản",
                         type: resultDispatch.isSuccess ? "success" : "error",
                     });
-
                     setConfirmDialog({
                         ...confirmDialog,
                         isOpen: false,
