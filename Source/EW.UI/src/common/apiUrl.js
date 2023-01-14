@@ -25,7 +25,7 @@ export const EDIT_ACCOUNT_URL = "/users/update-account";
 export const GET_PROFILE_URL = "/profile/my-information";
 export const PUT_CONTACT_PROFILE_URL = "/profile/contact";
 export const PUT_STATUS_PROFILE_URL = "/profile/change-status-open-for-work";
-
+export const GET_CANDIDATES_URL = "/profile/get-candidates-open-for-work";
 // work histories controller
 export const WORK_HISTORY_PROFILE_URL = "/workhistories";
 
@@ -59,6 +59,7 @@ export const GET_TOP_COMPANIES_URL = "/companies/top-companies";
 export const APPLICATION_CONTROLLER_URL = "/applications";
 export const GET_JOBS_APPLIED_URL = "/applications/jobs-applied";
 export const GET_APPLIEDS_BY_BUSINESS_URL = "/applications/applieds";
+export const MARK_APPLIED_URL = "/applications/marked";
 
 // chart controller
 export const NUMBER_APPLICATION_URL = "/charts/application";

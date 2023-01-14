@@ -16,9 +16,9 @@ namespace EW.Domain.Entities
         [JsonIgnore]
         public User User { get; set; }
         [StringLength(150)]
-        public string CVName { get; set; }
+        public string CVName { get; set; } = string.Empty;
         [StringLength(350)]
-        public string CVUrl { get; set; }
+        public string CVUrl { get; set; } = string.Empty;
         public bool Featured { get; set; }
     }
 }

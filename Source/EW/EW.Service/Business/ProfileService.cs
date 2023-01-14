@@ -1,10 +1,12 @@
 ﻿using EW.Commons.Constaints;
 using EW.Domain.Entities;
+using EW.Domain.ViewModels;
 using EW.Repository;
 using EW.Services.Constracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +24,35 @@ namespace EW.Services.Business
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
             return await _unitOfWork.Repository<Profile>().FirstOrDefaultAsync(item => item.UserId == currentUser.Id, "WorkHistory,Educations,Projects,Certificates");
+        }
+
+        public async Task<IEnumerable<ProfileOpenForWorkViewModel>> GetProfileOpenForWorks()
+        {
+            var candidates = await _unitOfWork.Repository<Profile>().GetAsync(item => item.IsOpenForWork, "User");
+            var cvsFeatured = await _unitOfWork.Repository<UserCV>().GetAsync(item => item.Featured);
+            var result = new List<ProfileOpenForWorkViewModel>();
+            foreach(var profile in candidates)
+            {
+                var cvFeaturedOfProfile = cvsFeatured.FirstOrDefault(item => item.UserId == profile.UserId);
+                if (cvFeaturedOfProfile == null)
+                    continue;
+                result.Add(new ProfileOpenForWorkViewModel
+                {
+                    UserId = profile.UserId,
+                    FullName = profile.User?.FullName ?? "",
+                    Address = profile.Address,
+                    Linkedin = profile.Linkedin,
+                    Github = profile.Github,
+                    EmailContact = profile.EmailContact,
+                    PhoneNumber = profile.PhoneNumber,
+                    Objective = profile.Objective,
+                    Skill = profile.Skills,
+                    CVId = cvFeaturedOfProfile.Id,
+                    CVName = cvFeaturedOfProfile.CVName,
+                    CVUrl = cvFeaturedOfProfile.CVUrl,
+                });
+            }
+            return result;
         }
 
         public async Task<Profile> InitProfile(User user)

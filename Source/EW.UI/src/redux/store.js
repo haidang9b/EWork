@@ -20,6 +20,7 @@ import profileSlice from "../pages/Profile/profile.slice";
 import appliedSlice from "../pages/AppliedManagement/applied.slice";
 import appliedFilterSlice from "../components/SelectorApplied/appliedFilter.slice";
 import chartSlice from "./chart.slice";
+import searchCandidateSlice from "../pages/SearchCandidate/searchCandidate.slice";
 
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
     appliedFilter: appliedFilterSlice.reducer,
     applied: appliedSlice.reducer,
     chart: chartSlice.reducer,
+    searchCandidate: searchCandidateSlice.reducer,
 });
 
 export const store = configureStore({

@@ -167,5 +167,27 @@ namespace EW.WebAPI.Controllers
             }
             return Ok(result);
         }
+        /// <summary>
+        /// Get all profile is turning on open for work
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-candidates-open-for-work")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCandidateOpenForWork()
+        {
+            var result = new ApiResult();
+            try
+            {
+                result.Data = await _profileSerivce.GetProfileOpenForWorks();
+                result.IsSuccess = true;
+                result.Message = "Lấy dữ liệu thành công";
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }

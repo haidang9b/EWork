@@ -45,6 +45,8 @@ namespace EW.WebAPI.Controllers
                     UserCVId = model.UserCVId,
                     UserId = currentUser.Id,
                     CoverLetter = model.CoverLetter,
+                    Status = Commons.Enums.EApplicationStatus.ReceptionCV,
+                    Description = ""
                 });
                 result.Message = "Ứng tuyển thành công";
             }
@@ -165,6 +167,37 @@ namespace EW.WebAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// This controller add new application by business
+        /// </summary>
+        /// <param name="model">MarkedApplicationRequestModel</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Business")]
+        [HttpPost("marked")]
+        public async Task<IActionResult> MarkedUser(MarkedApplicationRequestModel model)
+        {
+            var result = new ApiResult();
+            try
+            {
+                var newApplication = new AddApplicationModel
+                {
+                    RecruitmentPostId = model.RecruitmentPostId,
+                    UserCVId = model.UserCVId,
+                    Description = model.Description,
+                    CoverLetter = "",
+                    Status = Commons.Enums.EApplicationStatus.Marked,
+                    UserId = model.UserId.HasValue ? model.UserId.Value : 0,
+                };
+                result.Data = await _applicationService.Add(newApplication);
+                result.Message = "Đánh dấu thành công";
+            }
+            catch(Exception ex)
+            {
+                result.InternalError(ex.Message);
+                _logger.LogError(ex.Message);
             }
             return Ok(result);
         }
