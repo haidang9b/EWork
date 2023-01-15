@@ -1,0 +1,16 @@
+.blog-item__content {
+    font-size: small;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-decoration: none;
+}
+.blog-item__title {
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+.blog-item:hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}

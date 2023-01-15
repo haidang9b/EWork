@@ -1,4 +1,4 @@
-import { Chip, Grid } from "@mui/material";
+import { Chip, Divider, Grid } from "@mui/material";
 import { number, string } from "prop-types";
 import React from "react";
 import useFileUpload from "../../hook/useFileUpload";
@@ -61,65 +61,77 @@ const JobItem = ({
         return arr.filter((item) => item !== "");
     };
     return (
-        <Grid container className="job-item">
-            <Grid
-                item
-                sm={0}
-                xs={0}
-                md={3}
-                lg={3}
-                className="job-item__area-img"
-            >
-                <img
-                    src={
-                        avatarUrl ? getFilePathUpload(avatarUrl) : ImageDefault
-                    }
-                    height="180px"
-                    alt={jobTitle}
-                    className="job-item__img"
-                    loading="lazy"
-                />
-            </Grid>
-            <Grid item sm={12} xs={12} md={9} lg={9} className="job-item__body">
-                <div className="job-item__title">
-                    <Link to={`/job-detail/${id}`} className="text-link">
-                        {jobTitle}
-                    </Link>
-                </div>
-                <div>
-                    <div className="d-flex job-item__salary">
-                        <div>
-                            <MonetizationOnOutlined
-                                color="action"
-                                className="job-item__icon"
-                            />
-                        </div>
-                        <div className="job-item__body-label">
-                            {getSalary()}
-                        </div>
+        <>
+            <Grid container className="job-item">
+                <Grid
+                    item
+                    sm={0}
+                    xs={0}
+                    md={3}
+                    lg={3}
+                    className="job-item__area-img"
+                >
+                    <img
+                        src={
+                            avatarUrl
+                                ? getFilePathUpload(avatarUrl)
+                                : ImageDefault
+                        }
+                        height="180px"
+                        alt={jobTitle}
+                        className="job-item__img"
+                        loading="lazy"
+                    />
+                </Grid>
+                <Grid
+                    item
+                    sm={12}
+                    xs={12}
+                    md={9}
+                    lg={9}
+                    className="job-item__body"
+                >
+                    <div className="job-item__title">
+                        <Link to={`/job-detail/${id}`} className="text-link">
+                            {jobTitle}
+                        </Link>
                     </div>
-                </div>
-                <div
-                    className="job-item__body-desc article"
-                    dangerouslySetInnerHTML={{
-                        __html: jobDescription,
-                    }}
-                ></div>
-
-                <div className="d-flex">
                     <div>
-                        {getTechStacks().map((item) => (
-                            <Chip
-                                key={item}
-                                label={item}
-                                sx={{ marginRight: "4px" }}
-                            />
-                        ))}
+                        <div className="d-flex job-item__salary">
+                            <div>
+                                <MonetizationOnOutlined
+                                    color="action"
+                                    className="job-item__icon"
+                                />
+                            </div>
+                            <div className="job-item__body-label">
+                                {getSalary()}
+                            </div>
+                        </div>
                     </div>
-                    <div>Đã đăng {moment(updatedDate).fromNow()}</div>
-                </div>
+                    <div
+                        className="job-item__body-desc article"
+                        dangerouslySetInnerHTML={{
+                            __html: jobDescription,
+                        }}
+                    ></div>
+
+                    <div className="d-flex">
+                        <div>
+                            {getTechStacks().map((item) => (
+                                <Chip
+                                    key={item}
+                                    label={item}
+                                    sx={{ marginRight: "4px" }}
+                                />
+                            ))}
+                        </div>
+                        <div>Đã đăng {moment(updatedDate).fromNow()}</div>
+                    </div>
+                </Grid>
             </Grid>
-        </Grid>
+            <Divider />
+        </>
     );
 };
 

@@ -22,3 +22,5 @@ export { default as AppliedManagement } from "./AppliedManagement";
 export { default as UpdatePassword } from "./UpdatePassword";
 export { default as SearchCandidate } from "./SearchCandidate";
 export { default as BlogManagement } from "./BlogManagement";
+export { default as Blogs } from "./Blogs";
+export { default as BlogDetail } from "./BlogDetail";
