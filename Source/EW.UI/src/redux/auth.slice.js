@@ -79,7 +79,11 @@ const authSlice = createSlice({
             .addCase(
                 handleValidateCodeRecoverThunk.fulfilled,
                 (state, action) => {
-                    state.status = Status.succeeded;
+                    if (action.payload.isSuccess) {
+                        state.status = Status.succeeded;
+                    } else {
+                        state.status = Status.failed;
+                    }
                 }
             )
             .addCase(handleValidateCodeRecoverThunk.rejected, failureReducer)

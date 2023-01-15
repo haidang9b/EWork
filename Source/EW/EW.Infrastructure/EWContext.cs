@@ -32,5 +32,7 @@ namespace EW.Infrastructure
         public DbSet<Project> Projects { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Certificate> Certificates { get; set; } 
+        public DbSet<BlogCategory> BlogCategories { get; set; } 
+        public DbSet<Blog> Blogs { get; set; }
     }
 }
