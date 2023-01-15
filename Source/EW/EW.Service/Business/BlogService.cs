@@ -39,12 +39,12 @@ namespace EW.Services.Business
 
         public async Task<Blog> Get(long id)
         {
-            return await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == id);
+            return await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == id, "BlogCategory,User");
         }
 
         public async Task<IEnumerable<Blog>> GetAll()
         {
-            var blogs = await _unitOfWork.Repository<Blog>().GetAllAsync("BlogCategory");
+            var blogs = await _unitOfWork.Repository<Blog>().GetAllAsync("BlogCategory,User");
             return blogs.OrderByDescending(item => item.CreatedDate).ToList();
         }
 

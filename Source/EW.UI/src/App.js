@@ -25,6 +25,7 @@ import {
     AppliedManagement,
     UpdatePassword,
     SearchCandidate,
+    BlogManagement,
 } from "./pages";
 function App() {
     return (
@@ -51,7 +52,8 @@ function App() {
                 <Route
                     path="company-management"
                     element={<CompanyManagement />}
-                />
+                />{" "}
+                <Route path="blog-management" element={<BlogManagement />} />
             </Route>
             <Route
                 element={<RequireAuth allowedRoles={["Business", "Faculty"]} />}

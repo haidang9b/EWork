@@ -12,12 +12,12 @@ namespace EW.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogCategoiesController : ControllerBase
+    public class BlogCategoriesController : ControllerBase
     {
         private readonly IBlogCategoryService _blogCategoryService;
-        private readonly ILogger<BlogCategoiesController> _logger;
+        private readonly ILogger<BlogCategoriesController> _logger;
 
-        public BlogCategoiesController(IBlogCategoryService blogCategoryService, ILogger<BlogCategoiesController> logger)
+        public BlogCategoriesController(IBlogCategoryService blogCategoryService, ILogger<BlogCategoriesController> logger)
         {
             _blogCategoryService = blogCategoryService;
             _logger = logger;

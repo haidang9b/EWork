@@ -71,3 +71,9 @@ export const GET_DOCUMENT_URL = "/documents";
 export const EDIT_COVER_LETTER_URL = "/documents/update-cover-letter";
 export const DELETE_REMOVE_CV_URL = "/documents";
 export const UPDATE_FEATURED_CV_URL = "/documents";
+
+// blogs Controller
+export const GET_BLOGS_URL = "/blogs";
+
+// blog categories Controller
+export const GET_BLOG_CATEGORIES_URL = "/blogcategories";

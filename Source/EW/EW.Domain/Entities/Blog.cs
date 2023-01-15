@@ -10,8 +10,8 @@ namespace EW.Domain.Entities
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
-        public long CreatedBy { get; set; }
-        public User? UserCreate { get; set; }
+        public long UserId { get; set; }
+        public User? User { get; set; }
         public long BlogCategoryId { get; set; }
         public BlogCategory? BlogCategory { get;set; }
     }

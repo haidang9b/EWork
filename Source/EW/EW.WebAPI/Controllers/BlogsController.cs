@@ -3,6 +3,7 @@ using EW.Services.Constracts;
 using EW.Services.Contracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Blogs;
+using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,19 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _blogService.GetAll();
+                var data = await _blogService.GetAll();
+                result.Data = data.Select(item => new BlogDetailViewModel
+                {
+                    Id = item.Id,
+                    BlogCategoryId = item.BlogCategoryId,
+                    UpdatedDate = item.UpdatedDate,
+                    CreatedDate = item.CreatedDate,
+                    Content = item.Content,
+                    Title = item.Title,
+                    Author = item.User?.FullName,
+                    BlogCategoryName = item.BlogCategory?.Name,
+                    CreatedBy= item.UserId,
+                });
                 result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
@@ -68,7 +81,18 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    result.Data = data;
+                    result.Data = new BlogDetailViewModel
+                    {
+                        Id = data.Id,
+                        BlogCategoryId = data.BlogCategoryId,
+                        UpdatedDate = data.UpdatedDate,
+                        CreatedDate = data.CreatedDate,
+                        Content = data.Content,
+                        Title = data.Title,
+                        Author = data.User.FullName,
+                        CreatedBy = data.UserId,
+                        BlogCategoryName = data.BlogCategory.Name
+                    };
                     result.Message = "Lấy dữ liệu thành công";
                 }
             }
@@ -96,10 +120,25 @@ namespace EW.WebAPI.Controllers
                 {
                     Title = model.Title,
                     Content = model.Content,
-                    CreatedBy = user.Id,
-                    BlogCategoryId = model.BlogCategoryId
+                    UserId = user.Id,
+                    BlogCategoryId = model.BlogCategoryId,
+                    
                 };
-                result.Data = await _blogService.Add(newBlog);
+                await _blogService.Add(newBlog);
+                var data = await _blogService.Get(newBlog.Id);
+
+                result.Data = new BlogDetailViewModel
+                {
+                    Id = data.Id,
+                    BlogCategoryId = data.BlogCategoryId,
+                    UpdatedDate = data.UpdatedDate,
+                    CreatedDate = data.CreatedDate,
+                    Content = data.Content,
+                    Title = data.Title,
+                    Author = user.FullName,
+                    CreatedBy = data.UserId,
+                    BlogCategoryName = data.BlogCategory.Name
+                };
                 result.Message = "Thêm bài viết thành công";
             }
             catch(Exception ex)
@@ -154,7 +193,21 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _blogService.Update(model);
+                await _blogService.Update(model);
+                var data = await _blogService.Get(model.Id);
+                result.Data = new BlogDetailViewModel
+                {
+                    Id = data.Id,
+                    BlogCategoryId = data.BlogCategoryId,
+                    UpdatedDate = data.UpdatedDate,
+                    CreatedDate = data.CreatedDate,
+                    Content = data.Content,
+                    Title = data.Title,
+                    Author = data.User.FullName,
+                    CreatedBy = data.UserId,
+                    BlogCategoryName = data.BlogCategory.Name
+                };
+
                 result.Message = "Cập nhật bài viết thành công";
             }
             catch (Exception ex)

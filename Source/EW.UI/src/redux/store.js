@@ -21,6 +21,8 @@ import appliedSlice from "../pages/AppliedManagement/applied.slice";
 import appliedFilterSlice from "../components/SelectorApplied/appliedFilter.slice";
 import chartSlice from "./chart.slice";
 import searchCandidateSlice from "../pages/SearchCandidate/searchCandidate.slice";
+import blogsSlice from "../pages/BlogManagement/blogs.slice";
+import blogCategoriesSlice from "../pages/BlogManagement/blogCategories.slice";
 
 const rootReducer = combineReducers({
     auth: authSlice.reducer,
@@ -45,6 +47,8 @@ const rootReducer = combineReducers({
     applied: appliedSlice.reducer,
     chart: chartSlice.reducer,
     searchCandidate: searchCandidateSlice.reducer,
+    blogs: blogsSlice.reducer,
+    blogCategories: blogCategoriesSlice.reducer,
 });
 
 export const store = configureStore({
