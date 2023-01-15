@@ -26,6 +26,8 @@ import {
     UpdatePassword,
     SearchCandidate,
     BlogManagement,
+    Blogs,
+    BlogDetail,
 } from "./pages";
 function App() {
     return (
@@ -36,6 +38,8 @@ function App() {
             <Route path="companies" element={<Companies />} />
             <Route path="jobs" element={<Jobs />} />
             <Route path="job-detail/:id" element={<JobDetail />} />
+            <Route path="blogs" element={<Blogs />} />
+            <Route path="blog/:id" element={<BlogDetail />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />

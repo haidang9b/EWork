@@ -2,8 +2,10 @@ import { createSelector } from "@reduxjs/toolkit";
 import { CompanyTypes, Status } from "../common/constants";
 import { filterSelector } from "../components/FilterArea/filter.slice";
 import { appliedFilterSelector } from "../components/SelectorApplied/appliedFilter.slice";
+import { blogsFilterSelector } from "../components/SelectorBlogs/blogsFilter.slice";
 import { jobFilterSelector } from "../components/SelectorJobsArea/jobFilter.slice";
 import { appliedSelector } from "../pages/AppliedManagement/applied.slice";
+import { blogsSelector } from "../pages/BlogManagement/blogs.slice";
 import { jobsSelector } from "../pages/Jobs/jobs.slice";
 import { searchCandidateSelector } from "../pages/SearchCandidate/searchCandidate.slice";
 import { topCompanySelector } from "./topCompany.slice";
@@ -152,5 +154,30 @@ export const candidateRemainingSelector = createSelector(
             );
         }
         return candidateRemaining;
+    }
+);
+
+export const blogsRemaningSelector = createSelector(
+    filterSelector,
+    blogsFilterSelector,
+    blogsSelector,
+    (filter, categories, blogsData) => {
+        const { text } = filter;
+        const { blogCategories } = categories;
+        const { blogs } = blogsData;
+        let blogsRemaining = [...blogs];
+        if (text) {
+            blogsRemaining = blogsRemaining?.filter(
+                (item) =>
+                    item.title.toLowerCase().includes(text.toLowerCase()) ||
+                    item.author.toLowerCase().includes(text.toLowerCase())
+            );
+        }
+        if (blogCategories?.length > 0) {
+            blogsRemaining = blogsRemaining.filter((item) =>
+                blogCategories.includes(item.blogCategoryId)
+            );
+        }
+        return blogsRemaining;
     }
 );

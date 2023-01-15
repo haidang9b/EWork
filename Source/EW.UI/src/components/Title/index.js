@@ -7,5 +7,8 @@ const Title = ({ title }) => {
         </div>
     );
 };
-
+Title.displayName = "Title";
+Title.defaultProps = {
+    title: "",
+};
 export default Title;
