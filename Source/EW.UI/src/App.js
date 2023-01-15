@@ -39,7 +39,7 @@ function App() {
             <Route path="jobs" element={<Jobs />} />
             <Route path="job-detail/:id" element={<JobDetail />} />
             <Route path="blogs" element={<Blogs />} />
-            <Route path="blog-detail/:id" element={<BlogDetail />} />
+            <Route path="blog/:id" element={<BlogDetail />} />
             <Route element={<NonAuth />}>
                 <Route path="login" element={<Login />} />
                 <Route path="recruiter-sign-up" element={<CreateRecruiter />} />
