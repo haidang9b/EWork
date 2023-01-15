@@ -83,105 +83,108 @@ const ConfirmRecover = () => {
             type: resultDispatch?.isSuccess ? "success" : "error",
             title: "Khôi phục tài khoản",
         });
+
+        if (resultDispatch?.isSuccess) {
+            navigate("/login");
+        }
         formRef.current.reset();
     };
-    if (status === Status.loading) {
+    if (status === Status.loading || status === Status.idle) {
         return (
             <>
                 <SkeletonRecover />
             </>
         );
     }
-    if (data?.isSuccess) {
+    if (status === Status.failed || !data?.isSuccess) {
         return (
-            <Container>
-                <Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                    sx={{
-                        padding: "2%",
-                    }}
+            <Hero hero="notFoundHero">
+                <Banner
+                    title={"Mã này không tồn tại"}
+                    subtitle={
+                        "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
+                    }
                 >
-                    <Card
-                        sx={{
-                            width: {
-                                sx: "100%",
-                                sm: "100%",
-                                md: "60%",
-                            },
-                        }}
-                    >
-                        <form onSubmit={handleRecover} ref={formRef}>
-                            <CardContent>
-                                <Box pb={2}>
-                                    <Typography variant="h3">
-                                        Khôi phục mật khẩu
-                                    </Typography>
-                                    <Typography variant="caption">
-                                        Hãy sửa dụng mật khẩu mà bạn chưa từng
-                                        dùng ở đâu. Nên đặt mật khẩu có ít nhất
-                                        1 ký tự chữ viết hoa, 1 ký tự số và 1 ký
-                                        tự đặc biệt để đảm bảo an toàn cho tài
-                                        khoản.
-                                    </Typography>
-                                    <TextField
-                                        label="Mật khẩu mới"
-                                        variant="standard"
-                                        placeholder="Nhập mật khẩu mới"
-                                        fullWidth
-                                        required
-                                        inputRef={passwordRef}
-                                        type="password"
-                                    />
-                                </Box>
-                            </CardContent>
-
-                            <Divider />
-                            <CardActions>
-                                <Stack minWidth={"100%"}>
-                                    <Button
-                                        variant="contained"
-                                        color="success"
-                                        fullWidth={true}
-                                        type="submit"
-                                        startIcon={<SendSharp />}
-                                        disabled={status === Status.loading}
-                                    >
-                                        Khôi phục
-                                    </Button>
-                                    <LinearProgress
-                                        color="success"
-                                        sx={{
-                                            display:
-                                                status === Status.loading
-                                                    ? "block"
-                                                    : "none",
-                                        }}
-                                    />
-                                </Stack>
-                            </CardActions>
-                        </form>
-                    </Card>
-                </Grid>
-            </Container>
+                    <Link to="/recover" className="btn-banner">
+                        Quay về trang khôi phục
+                    </Link>
+                </Banner>
+            </Hero>
         );
     }
     return (
-        <Hero hero="notFoundHero">
-            <Banner
-                title={"Mã này không tồn tại"}
-                subtitle={
-                    "Có vẻ như liên kết này đã hết hạn, vui lòng gửi yêu cầu mới để có liên kết mới"
-                }
+        <Container>
+            <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                sx={{
+                    padding: "2%",
+                }}
             >
-                <Link to="/recover" className="btn-banner">
-                    Quay về trang khôi phục
-                </Link>
-            </Banner>
-        </Hero>
+                <Card
+                    sx={{
+                        width: {
+                            sx: "100%",
+                            sm: "100%",
+                            md: "60%",
+                        },
+                    }}
+                >
+                    <form onSubmit={handleRecover} ref={formRef}>
+                        <CardContent>
+                            <Box pb={2}>
+                                <Typography variant="h3">
+                                    Khôi phục mật khẩu
+                                </Typography>
+                                <Typography variant="caption">
+                                    Hãy sửa dụng mật khẩu mà bạn chưa từng dùng
+                                    ở đâu. Nên đặt mật khẩu có ít nhất 1 ký tự
+                                    chữ viết hoa, 1 ký tự số và 1 ký tự đặc biệt
+                                    để đảm bảo an toàn cho tài khoản.
+                                </Typography>
+                                <TextField
+                                    label="Mật khẩu mới"
+                                    variant="standard"
+                                    placeholder="Nhập mật khẩu mới"
+                                    fullWidth
+                                    required
+                                    inputRef={passwordRef}
+                                    type="password"
+                                />
+                            </Box>
+                        </CardContent>
+
+                        <Divider />
+                        <CardActions>
+                            <Stack minWidth={"100%"}>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    fullWidth={true}
+                                    type="submit"
+                                    startIcon={<SendSharp />}
+                                    disabled={status === Status.loading}
+                                >
+                                    Khôi phục
+                                </Button>
+                                <LinearProgress
+                                    color="success"
+                                    sx={{
+                                        display:
+                                            status === Status.loading
+                                                ? "block"
+                                                : "none",
+                                    }}
+                                />
+                            </Stack>
+                        </CardActions>
+                    </form>
+                </Card>
+            </Grid>
+        </Container>
     );
 };
 
