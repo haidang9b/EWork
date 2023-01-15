@@ -13,5 +13,6 @@ namespace EW.Services.Contracts
         Task<Blog> Add(Blog blog);
         Task<Blog> Update(Blog blog);
         Task<bool> Delete(Blog blog);
+        Task<Blog> Get(long id);
     }
 }

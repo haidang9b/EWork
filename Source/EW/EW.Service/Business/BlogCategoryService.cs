@@ -45,7 +45,8 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<BlogCategory>> GetAll()
         {
-            return await _unitOfWork.Repository<BlogCategory>().GetAllAsync();
+            var blogCategories = await _unitOfWork.Repository<BlogCategory>().GetAllAsync();
+            return blogCategories.OrderByDescending(item => item.CreatedDate).ToList();
         }
 
         public async Task<BlogCategory> Update(BlogCategory model)

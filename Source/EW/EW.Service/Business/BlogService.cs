@@ -4,6 +4,7 @@ using EW.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,9 +37,15 @@ namespace EW.Services.Business
             return await _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task<Blog> Get(long id)
+        {
+            return await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == id);
+        }
+
         public async Task<IEnumerable<Blog>> GetAll()
         {
-            return await _unitOfWork.Repository<Blog>().GetAllAsync("BlogCategory");
+            var blogs = await _unitOfWork.Repository<Blog>().GetAllAsync("BlogCategory");
+            return blogs.OrderByDescending(item => item.CreatedDate).ToList();
         }
 
         public async Task<Blog> Update(Blog blog)

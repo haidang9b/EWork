@@ -101,5 +101,7 @@ void RegisterService(IServiceCollection services)
     services.AddScoped<ICertificateService, CertificateService>();
     services.AddScoped<IEducationService, EducationService>();
     services.AddScoped<IChartService, ChartService>();
+    services.AddScoped<IBlogCategoryService, BlogCategoryService>();
+    services.AddScoped<IBlogService, BlogService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
