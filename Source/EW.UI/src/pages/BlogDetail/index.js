@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import httpClient from "../../common/apis/httpClient";
 import { GET_BLOGS_URL } from "../../common/apiUrl";
+import { getPageName } from "../../common/nameApp";
 import { Banner, Hero } from "../../components";
 
 const BlogDetail = () => {
@@ -33,18 +34,48 @@ const BlogDetail = () => {
         };
         fetchBlog();
     }, [id]);
+    useEffect(() => {
+        if (blog) document.title = getPageName(blog?.title);
+    }, [blog]);
     if (loading)
         return (
             <Container>
                 <Paper>
-                    <Skeleton
-                        variant="text"
-                        width="100%"
-                        sx={{
-                            fontSize: 30,
-                        }}
-                    />
-                    <Skeleton variant="rectangular" width="100%" height={500} />
+                    <Grid margin={1} padding={2}>
+                        <Skeleton
+                            variant="text"
+                            width="100%"
+                            sx={{
+                                fontSize: 30,
+                            }}
+                        />
+                        <Skeleton
+                            variant="text"
+                            width="100%"
+                            sx={{
+                                fontSize: 30,
+                            }}
+                        />
+                        <Skeleton
+                            variant="text"
+                            width="100%"
+                            sx={{
+                                fontSize: 30,
+                            }}
+                        />
+                        <Skeleton
+                            variant="text"
+                            width="100%"
+                            sx={{
+                                fontSize: 30,
+                            }}
+                        />
+                        <Skeleton
+                            variant="rectangular"
+                            width="100%"
+                            height={500}
+                        />
+                    </Grid>
                 </Paper>
             </Container>
         );
