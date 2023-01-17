@@ -1,5 +1,6 @@
 ﻿using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Applications;
@@ -15,15 +16,21 @@ namespace EW.WebAPI.Controllers
     public class ApplicationsController : ControllerBase
     {
         private readonly IApplicationService _applicationService;
+        private readonly IRecruitmentPostService _recruitmentPostService;
         private readonly ILogger<ApplicationsController> _logger;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+        private readonly IUserCVService _userCVService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ApplicationsController(IApplicationService applicationService, ILogger<ApplicationsController> logger, IUserService userService)
+        public ApplicationsController(IApplicationService applicationService, ILogger<ApplicationsController> logger, IUserService userService, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IUserCVService userCVService)
         {
             _applicationService = applicationService;
             _logger = logger;
             _userService = userService;
+            _recruitmentPostService = recruitmentPostService;
+            _emailService = emailService;
+            _userCVService = userCVService;
         }
 
         /// <summary>
@@ -39,6 +46,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var currentUser = await _userService.GetUser(new User { Username = _username });
+                
                 result.Data = await _applicationService.Add(new AddApplicationModel
                 {
                     RecruitmentPostId = model.RecruitmentPostId,
@@ -49,6 +57,20 @@ namespace EW.WebAPI.Controllers
                     Description = ""
                 });
                 result.Message = "Ứng tuyển thành công";
+                if(result.Data != null)
+                {
+                    var body = string.Empty;
+                    var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
+                    using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/AppliedNotify.html")))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    var bodyBuilder = new System.Text.StringBuilder(body);
+                    bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
+                    bodyBuilder.Replace("{receiver}", currentUser.FullName);
+                    var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã nhận được hồ sơ ứng tuyển của bạn", ToEmail = currentUser.Email };
+                    await _emailService.SendEmail(data);
+                }
             }
             catch(Exception ex)
             {
@@ -193,6 +215,21 @@ namespace EW.WebAPI.Controllers
                 };
                 result.Data = await _applicationService.Add(newApplication);
                 result.Message = "Đánh dấu thành công";
+                if (result.Data != null)
+                {
+                    var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
+                    var body = string.Empty;
+                    var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
+                    using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/MarkedNotify.html")))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    var bodyBuilder = new System.Text.StringBuilder(body);
+                    bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
+                    bodyBuilder.Replace("{receiver}", currentUserCV.User.FullName);
+                    var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã đánh dấu hồ sơ của bạn", ToEmail = currentUserCV.User.Email };
+                    await _emailService.SendEmail(data);
+                }
             }
             catch(Exception ex)
             {
