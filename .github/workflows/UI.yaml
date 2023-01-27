@@ -43,16 +43,19 @@ jobs:
       run:
         working-directory: Source/EW.UI
    
-
+    
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with: 
           name: production-files
           path: Source/EW.UI/build
-      - name: Deploy to github pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy production to Netlify
+        uses: South-Paw/action-netlify-deploy@v1.2.0
         with:
-          github_token: ${{ secrets.GH_ACCESS_TOKEN }}
-          publish_dir: Source/EW.UI/build
+          github-token: ${{ secrets.GH_ACCESS_TOKEN }}
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+          build-dir: 'Source/EW.UI/build'
+          comment-on-commit: true
         
