@@ -50,7 +50,7 @@ const JobDetailBody = () => {
                                 >
                                     Việc làm đã hết hạn nộp
                                 </Button>
-                            ) : user && isStudent && !isApplied() ? (
+                            ) : isStudent && !isApplied() ? (
                                 <Button
                                     color="success"
                                     variant="contained"
@@ -70,7 +70,7 @@ const JobDetailBody = () => {
                                         Bạn đã nộp đơn ứng tuyển
                                     </Button>
                                 </>
-                            ) : (
+                            ) : user && !isStudent ? (null) : (
                                 <Button
                                     variant="contained"
                                     fullWidth

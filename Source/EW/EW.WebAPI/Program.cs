@@ -60,13 +60,12 @@ if (app.Environment.IsDevelopment() == false)
 }
 
 
-using (var scope = app.Services.CreateScope())
+/*using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     var context = services.GetRequiredService<EWContext>();
     context.Database.Migrate();
-}
+}*/
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions

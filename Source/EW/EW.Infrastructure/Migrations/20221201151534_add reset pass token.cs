@@ -9,19 +9,6 @@ namespace EW.Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "RefreshToken",
-                table: "Users",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.AddColumn<string>(
-                name: "TokenResetPassword",
-                table: "Users",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
@@ -47,13 +34,6 @@ namespace EW.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "RefreshToken",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "TokenResetPassword",
-                table: "Users");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
