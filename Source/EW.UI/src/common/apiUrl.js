@@ -1,4 +1,4 @@
-export const BASE_URL = "https://localhost:7096/api";
+export const BASE_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // auth controller
 export const REFRESH_TOKEN_URL = "/auth/RefreshToken";

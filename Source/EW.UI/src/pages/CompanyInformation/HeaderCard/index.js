@@ -33,7 +33,7 @@ const HeaderCard = () => {
             setNotify({
                 isOpen: true,
                 message: resultDispatch.message,
-                title: "Đăng tải CV mới",
+                title: "Đăng tải hình ảnh đại diện mới",
                 type: resultDispatch.isSuccess ? "success" : "error",
             });
             if (resultDispatch.isSuccess) {
