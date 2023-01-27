@@ -115,6 +115,7 @@ const WorkHistoryItemRender = ({
                 </em>
                 <div style={styles.article}>
                     <div
+                        className="article"
                         dangerouslySetInnerHTML={{
                             __html: description,
                         }}

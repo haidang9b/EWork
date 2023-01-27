@@ -253,3 +253,11 @@
     max-width: 100%;
     object-fit: contain;
 }
+
+.short-article {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}

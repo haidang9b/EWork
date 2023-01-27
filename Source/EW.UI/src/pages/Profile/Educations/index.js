@@ -221,6 +221,7 @@ const EducationItem = ({ orgName, from, to, description, id }) => {
                             {moment(to).format("MM/YYYY")}
                         </em>
                         <div
+                            className="article"
                             dangerouslySetInnerHTML={{
                                 __html: description,
                             }}

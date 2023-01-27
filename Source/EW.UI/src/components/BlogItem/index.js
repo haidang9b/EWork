@@ -35,8 +35,8 @@ const BlogItem = ({
                 {title}
             </Link>
             <div
+                className="short-article"
                 dangerouslySetInnerHTML={{ __html: content }}
-                className="blog-item__content"
             ></div>
             <Grid container>
                 <Grid item xs={6}>

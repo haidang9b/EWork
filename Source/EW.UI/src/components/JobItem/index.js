@@ -110,7 +110,7 @@ const JobItem = ({
                         </div>
                     </div>
                     <div
-                        className="job-item__body-desc article"
+                        className="short-article"
                         dangerouslySetInnerHTML={{
                             __html: jobDescription,
                         }}
