@@ -79,6 +79,18 @@ const Login = () => {
                 name,
                 googleId,
             };
+            // begin -- check email for student of TDTU
+            // if (!email.includes("student.tdtu.edu.vn")) {
+            //     setNotify({
+            //         isOpen: true,
+            //         message:
+            //             "Đăng nhập bằng tài khoản Google chỉ hỗ trợ cho sinh viên TDTU (đuôi @student.tdtu.edu.vn)",
+            //         type: "error",
+            //         title: "Đăng nhập bằng tài khoản Google",
+            //     });
+            //     return;
+            // }
+            // end -- check email for student of TDTU
             let res = await dispatch(handleLoginGoogleThunk(obj)).unwrap();
             setNotify({
                 isOpen: true,
