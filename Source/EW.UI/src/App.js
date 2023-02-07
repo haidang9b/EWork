@@ -64,6 +64,10 @@ function App() {
             >
                 <Route path="recruitment-posts" element={<RecruitmentPost />} />
                 <Route path="update-password" element={<UpdatePassword />} />
+                <Route
+                    path="applies-management"
+                    element={<AppliedManagement />}
+                />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Business"]} />}>
                 <Route
@@ -71,10 +75,6 @@ function App() {
                     element={<CompanyInformation />}
                 />
                 <Route path="hr-management" element={<HRManagement />} />
-                <Route
-                    path="applies-management"
-                    element={<AppliedManagement />}
-                />
                 <Route path="search-candidate" element={<SearchCandidate />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={["Student"]} />}>

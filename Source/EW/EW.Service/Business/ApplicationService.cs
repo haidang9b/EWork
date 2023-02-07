@@ -68,6 +68,54 @@ namespace EW.Services.Business
             return newApplication;
         }
 
+        public async Task<IEnumerable<AppliedForBusinessViewModel>> GetApplieds()
+        {
+            var applications = await _unitOfWork.Repository<Application>().GetAllAsync("RecruitmentPost,UserCV");
+            var responseData = new List<AppliedForBusinessViewModel>();
+            var users = await _unitOfWork.Repository<User>().GetAllAsync();
+            foreach (var application in applications)
+            {
+                var applicationUser = users.FirstOrDefault(item => item.Id == application.UserCV.UserId);
+                if (applicationUser == null)
+                    continue;
+                var userRow = new UserInforJobApplicationViewModel
+                {
+                    Id = applicationUser.Id,
+                    FullName = applicationUser.FullName,
+                    Email = applicationUser.Email,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                };
+
+                var cv = new CVInforJobApplicationViewModel
+                {
+                    UserCVId = application.UserCVId,
+                    CVUrl = application.UserCV.CVUrl,
+                    CVName = application.UserCV.CVName,
+                };
+
+                var post = new PostInforJobApplicationViewModel
+                {
+                    RecruitmentPostId = application.RecruitmentPostId,
+                    JobTitle = application.RecruitmentPost.JobTitle,
+                    CompanyId = application.RecruitmentPost.CompanyId,
+                };
+                var row = new AppliedForBusinessViewModel
+                {
+                    Id = application.Id,
+                    User = userRow,
+                    CV = cv,
+                    Post = post,
+                    Description = application.Description,
+                    UpdatedDate = application.UpdatedDate,
+                    CreatedDate = application.CreatedDate,
+                    Status = application.Status
+                };
+
+                responseData.Add(row);
+            }
+            return responseData.OrderByDescending(item => item.CreatedDate);
+        }
+
         public async Task<IEnumerable<AppliedForBusinessViewModel>> GetAppliedsForBusiness(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
@@ -104,6 +152,7 @@ namespace EW.Services.Business
                 {
                     RecruitmentPostId = application.RecruitmentPostId,
                     JobTitle = application.RecruitmentPost.JobTitle,
+                    CompanyId = application.RecruitmentPost.CompanyId,
                 };
                 var row = new AppliedForBusinessViewModel
                 {

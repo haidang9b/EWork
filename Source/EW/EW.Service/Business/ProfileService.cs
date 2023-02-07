@@ -84,10 +84,12 @@ namespace EW.Services.Business
         public async Task<bool> UpdateProfile(Profile profile)
         {
             var currentProfile = await _unitOfWork.Repository<Profile>().FirstOrDefaultAsync(item => item.Id == profile.Id);
-            if(currentProfile == null)
+            var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == profile.UserId);
+            if(currentProfile == null || currentUser == null)
             {
                 throw new Exception("Không có profile, vui lòng thử lại");
             }
+            currentUser.PhoneNumber = profile.PhoneNumber;
             currentProfile.Address = profile.Address;
             currentProfile.Github = profile.Github;
             currentProfile.Linkedin = profile.Linkedin;
@@ -96,6 +98,8 @@ namespace EW.Services.Business
             currentProfile.Objective = profile.Objective;
             currentProfile.Skills = profile.Skills;
             currentProfile.IsOpenForWork = profile.IsOpenForWork;
+            _unitOfWork.Repository<User>().Update(currentUser);
+            _unitOfWork.Repository<Profile>().Update(currentProfile);
             return await _unitOfWork.SaveChangeAsync();
         }
     }

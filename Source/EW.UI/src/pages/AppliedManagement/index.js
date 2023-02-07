@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getPageName } from "../../common/nameApp";
 import { FilterArea, SelectorApplied } from "../../components";
+import { getCompaniesThunk } from "../CompanyManagement/company.slice";
 import { getRecruitmentPostsThunk } from "../RecruitmentPost/recruitmentPost.slice";
 import { getAppliedByBusinessThunk } from "./applied.slice";
 
@@ -14,6 +15,7 @@ const AppliedManagement = () => {
     useEffect(() => {
         dispatch(getRecruitmentPostsThunk());
         dispatch(getAppliedByBusinessThunk());
+        dispatch(getCompaniesThunk());
     }, [dispatch]);
     useEffect(() => {
         document.title = getPageName("Quản lý ứng tuyển");

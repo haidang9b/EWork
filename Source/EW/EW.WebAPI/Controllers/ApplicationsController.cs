@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Enums;
+using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Services.Business;
 using EW.Services.Constracts;
@@ -132,14 +133,22 @@ namespace EW.WebAPI.Controllers
         /// Get applied for business, this route will return data all applier and infor applied
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "Business")]
+        [Authorize(Roles = "Business,Faculty")]
         [HttpGet("applieds")]
         public async Task<IActionResult> GetApplied()
         {
             var result = new ApiResult();
             try
             {
-                result.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
+                var currentUser = await _userService.GetUser(new User { Username = _username });
+                if(currentUser.RoleId == (long)ERole.ID_Faculty)
+                {
+                    result.Data = await _applicationService.GetApplieds();
+                }
+                else
+                {
+                    result.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
+                }
                 result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
