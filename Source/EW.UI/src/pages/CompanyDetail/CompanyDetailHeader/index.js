@@ -6,7 +6,7 @@ import { CompanyTypes, TeamSizeTypes } from "../../../common/constants";
 import countryList from "../../../common/countryList";
 import useFileUpload from "../../../hook/useFileUpload";
 import { companyDetailSelector } from "../companyDetail.slice";
-import ImageDefault from "../../../assets/images/company-default.webp";
+import ImageDefault from "../../../assets/images/company-default.png";
 
 const CompanyDetailHeader = () => {
     const { getFilePathUpload } = useFileUpload();
