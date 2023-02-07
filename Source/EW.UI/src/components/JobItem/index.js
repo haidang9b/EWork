@@ -2,7 +2,7 @@ import { Chip, Divider, Grid } from "@mui/material";
 import { number, string } from "prop-types";
 import React from "react";
 import useFileUpload from "../../hook/useFileUpload";
-import ImageDefault from "../../assets/images/company-default.webp";
+import ImageDefault from "../../assets/images/company-default.png";
 import "./JobItem.css";
 import { Currency } from "../../common/constants";
 import { MonetizationOnOutlined } from "@mui/icons-material";

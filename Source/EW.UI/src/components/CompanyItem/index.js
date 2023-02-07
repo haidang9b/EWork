@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { number, string } from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
-import ImageDefault from "../../assets/images/company-default.webp";
+import ImageDefault from "../../assets/images/company-default.png";
 import { CompanyTypes } from "../../common/constants";
 import useFileUpload from "../../hook/useFileUpload";
 import "./CompanyItem.css";

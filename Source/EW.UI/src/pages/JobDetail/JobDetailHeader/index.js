@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { Currency, WorkingTypes } from "../../../common/constants";
 import useFileUpload from "../../../hook/useFileUpload";
 import { jobDetailSelector } from "../jobDetail.slice";
-import ImageDefault from "../../../assets/images/company-default.webp";
+import ImageDefault from "../../../assets/images/company-default.png";
 const JobDetailHeader = () => {
     const { job } = useSelector(jobDetailSelector);
     const { getFilePathUpload } = useFileUpload();
