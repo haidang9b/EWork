@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.77016982.css",
-    "main.js": "/static/js/main.121e21c4.js",
+    "main.js": "/static/js/main.37144dc4.js",
     "static/js/309.4032c1d5.chunk.js": "/static/js/309.4032c1d5.chunk.js",
     "static/js/804.a5105f71.chunk.js": "/static/js/804.a5105f71.chunk.js",
     "static/js/151.7c8fb1b1.chunk.js": "/static/js/151.7c8fb1b1.chunk.js",
@@ -11,6 +11,7 @@
     "static/js/513.c13949d3.chunk.js": "/static/js/513.c13949d3.chunk.js",
     "static/js/728.6c0da224.chunk.js": "/static/js/728.6c0da224.chunk.js",
     "static/media/recruiter.png": "/static/media/recruiter.66d610115987289d45b0.png",
+    "static/media/company-default.png": "/static/media/company-default.2b7cd014b7f7d4a90bd2.png",
     "static/media/401.svg": "/static/media/401.0630fe94db317e531404.svg",
     "static/media/Company.svg": "/static/media/Company.e1969a78cfb1d7574a55.svg",
     "static/media/Search.svg": "/static/media/Search.47c79f4be7461533c0eb.svg",
@@ -18,10 +19,9 @@
     "static/media/Home.svg": "/static/media/Home.9a82202d2d9b6f1657e0.svg",
     "static/media/Job.svg": "/static/media/Job.e9dd11fa9fe483833e39.svg",
     "static/media/404.svg": "/static/media/404.647d1271f0df28e8a12d.svg",
-    "static/media/company-default.webp": "/static/media/company-default.19eab44c4cb92391ab4c.webp",
     "index.html": "/index.html",
     "main.77016982.css.map": "/static/css/main.77016982.css.map",
-    "main.121e21c4.js.map": "/static/js/main.121e21c4.js.map",
+    "main.37144dc4.js.map": "/static/js/main.37144dc4.js.map",
     "309.4032c1d5.chunk.js.map": "/static/js/309.4032c1d5.chunk.js.map",
     "804.a5105f71.chunk.js.map": "/static/js/804.a5105f71.chunk.js.map",
     "151.7c8fb1b1.chunk.js.map": "/static/js/151.7c8fb1b1.chunk.js.map",
@@ -33,6 +33,6 @@
   },
   "entrypoints": [
     "static/css/main.77016982.css",
-    "static/js/main.121e21c4.js"
+    "static/js/main.37144dc4.js"
   ]
 }
