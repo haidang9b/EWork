@@ -106,9 +106,9 @@ const sidebarFacultyData = [
         icon: <FaIcons.FaNewspaper />,
     },
     {
-        title: "Hỗ trợ",
-        path: "/supports",
-        icon: <IoIcons.IoMdHelpCircle />,
+        title: "Thống kê tuyển dụng",
+        path: "/applies-management",
+        icon: <MdIcons.MdOutlinePostAdd />,
     },
 ];
 export {

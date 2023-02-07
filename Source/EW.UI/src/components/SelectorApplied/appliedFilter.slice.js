@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     postIds: [],
     statusSelected: [],
+    companySelected: [],
 };
 
 const appliedFilterSlice = createSlice({
@@ -15,6 +16,9 @@ const appliedFilterSlice = createSlice({
 
         statusSelectedChange: (state, action) => {
             state.statusSelected = [...action.payload];
+        },
+        companySelectedChange: (state, action) => {
+            state.companySelected = [...action.payload];
         },
     },
 });

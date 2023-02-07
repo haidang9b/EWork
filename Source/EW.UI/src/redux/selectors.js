@@ -108,7 +108,7 @@ export const appliedsRemainingSelector = createSelector(
     (filter, applies, selectors) => {
         const { text } = filter;
         const { applieds } = applies;
-        const { postIds, statusSelected } = selectors;
+        const { postIds, statusSelected, companySelected } = selectors;
         let appliedsRemaining = [...applieds];
         if (text) {
             appliedsRemaining = appliedsRemaining.filter(
@@ -129,6 +129,12 @@ export const appliedsRemainingSelector = createSelector(
         if (statusSelected.length > 0) {
             appliedsRemaining = appliedsRemaining.filter((item) =>
                 statusSelected.includes(item.status)
+            );
+        }
+
+        if (companySelected.length > 0) {
+            appliedsRemaining = appliedsRemaining.filter((item) =>
+                companySelected.includes(item.post?.companyId)
             );
         }
 

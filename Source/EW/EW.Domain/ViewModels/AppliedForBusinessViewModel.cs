@@ -31,7 +31,9 @@ namespace EW.Domain.ViewModels
     {
         public long RecruitmentPostId { get; set; }
         public string? JobTitle { get; set; }
+        public long CompanyId { get; set; }
     }
+
     public class CVInforJobApplicationViewModel
     {
         public long UserCVId { get; set; }

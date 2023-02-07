@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { appliedSelector, updateProgressAppliedThunk } from "../applied.slice";
 import useNotify from "../../../hook/useNotify";
 import { func, object } from "prop-types";
+import useAuth from "../../../hook/useAuth";
 
 const DEFAULT_VALUE_STATUS = 1;
 
@@ -42,6 +43,7 @@ const AppliedDetailModal = ({
     const { getFilePathUpload } = useFileUpload();
     const { status } = useSelector(appliedSelector);
     const [currentStatus, setCurrentStatus] = useState(DEFAULT_VALUE_STATUS);
+    const { isFaculty } = useAuth();
     const handleClose = () => {
         setAppliedDetailDialog({
             ...appliedDetailDialog,
@@ -165,6 +167,7 @@ const AppliedDetailModal = ({
                     </InputLabel>
                     <Select
                         labelId="applied-modal-status"
+                        disabled={isFaculty}
                         defaultValue={data?.status}
                         fullWidth
                         onChange={(e) => setCurrentStatus(e.target.value)}
@@ -189,10 +192,15 @@ const AppliedDetailModal = ({
                         maxRows={10}
                         inputRef={descriptionRef}
                         fullWidth
+                        disabled={isFaculty}
                     />
                 </Box>
             </DialogContent>
-            <DialogActions>
+            <DialogActions
+                sx={{
+                    display: isFaculty ? "none" : "block",
+                }}
+            >
                 <Stack minWidth={"100%"}>
                     <Button
                         variant="contained"
