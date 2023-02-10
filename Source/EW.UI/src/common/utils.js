@@ -26,3 +26,14 @@ export function loadingReducer(state) {
 export function failureReducer(state, action) {
     state.status = Status.failed;
 }
+
+/**
+ * covert html to plain text
+ * @param {*} html
+ * @returns
+ * plain text from html
+ */
+export function convertHTMLToText(html) {
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+}

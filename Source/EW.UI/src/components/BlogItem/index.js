@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
+import { convertHTMLToText } from "../../common/utils";
 import "./BlogItem.css";
 /**
  * render blog item
@@ -34,10 +35,7 @@ const BlogItem = ({
             <Link to={`/blog/${id}`} className="blog-item__title text-link">
                 {title}
             </Link>
-            <div
-                className="short-article"
-                dangerouslySetInnerHTML={{ __html: content }}
-            ></div>
+            <div className="short-article">{convertHTMLToText(content)}</div>
             <Grid container>
                 <Grid item xs={6}>
                     <div>

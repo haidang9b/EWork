@@ -8,6 +8,7 @@ import { Currency } from "../../common/constants";
 import { MonetizationOnOutlined } from "@mui/icons-material";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { convertHTMLToText } from "../../common/utils";
 
 /**
  * Display job item from data input
@@ -109,12 +110,9 @@ const JobItem = ({
                             </div>
                         </div>
                     </div>
-                    <div
-                        className="short-article"
-                        dangerouslySetInnerHTML={{
-                            __html: jobDescription,
-                        }}
-                    ></div>
+                    <div className="short-article">
+                        {convertHTMLToText(jobDescription)}
+                    </div>
 
                     <div className="d-flex">
                         <div>
