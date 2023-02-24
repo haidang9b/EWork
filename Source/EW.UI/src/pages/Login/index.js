@@ -76,8 +76,8 @@ const Login = () => {
             let obj = {
                 email,
                 name,
-                googleId: picture,
-                imageUrl: sub,
+                googleId: sub,
+                imageUrl: picture,
             };
             // begin -- check email for student of TDTU
             // if (!email.includes("student.tdtu.edu.vn")) {
