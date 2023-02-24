@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { GoogleLogin } from "react-google-login";
 import {
     CardActions,
     CardContent,
@@ -16,7 +15,6 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
-import { gapi } from "gapi-script";
 import {
     handleLoginThunk,
     handleLoginGoogleThunk,
@@ -27,9 +25,10 @@ import { Status } from "../../common/constants";
 import { getPageName } from "../../common/nameApp";
 import useNotify from "../../hook/useNotify";
 import useAuth from "../../hook/useAuth";
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
-    const clientId = process.env.REACT_APP_CLIENT_ID;
     const { user } = useAuth();
     const { status } = useSelector(authSelector);
     const { setNotify } = useNotify();
@@ -71,13 +70,14 @@ const Login = () => {
     };
 
     const responseGoogle = async (response) => {
-        if (response.googleId !== "") {
-            let { email, imageUrl, name, googleId } = response.profileObj;
+        if (response.credential) {
+            var decoded = jwt_decode(response.credential);
+            const { email, picture, name, sub } = decoded;
             let obj = {
                 email,
-                imageUrl,
                 name,
-                googleId,
+                googleId: picture,
+                imageUrl: sub,
             };
             // begin -- check email for student of TDTU
             // if (!email.includes("student.tdtu.edu.vn")) {
@@ -102,14 +102,7 @@ const Login = () => {
     };
     useEffect(() => {
         document.title = getPageName("Đăng nhập");
-        const initClient = () => {
-            gapi.client.init({
-                clientId: clientId,
-                scope: "",
-            });
-        };
-        gapi.load("client:auth2", initClient);
-    }, [clientId]);
+    }, []);
 
     return (
         <>
@@ -198,11 +191,8 @@ const Login = () => {
                                         <br />
                                         <GoogleLogin
                                             disabled={status === Status.loading}
-                                            clientId={clientId}
-                                            buttonText="Đăng nhập Google"
                                             onSuccess={responseGoogle}
-                                            onFailure={responseGoogle}
-                                            cookiePolicy={"single_host_origin"}
+                                            onError={responseGoogle}
                                         />
                                     </Stack>
                                 </CardActions>

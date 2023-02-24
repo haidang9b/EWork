@@ -8,14 +8,17 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import Navbar from "./layouts/Navbar";
 import { Notification } from "./components";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <Provider store={store}>
-        <BrowserRouter>
-            <Navbar />
-            <App />
-            <Notification />
-        </BrowserRouter>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+            <BrowserRouter>
+                <Navbar />
+                <App />
+                <Notification />
+            </BrowserRouter>
+        </GoogleOAuthProvider>
     </Provider>
 );
 
