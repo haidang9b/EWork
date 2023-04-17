@@ -8,7 +8,7 @@ namespace EW.Domain.Models
 {
     public class ApplicationUserModel
     {
-        public string Username { get; set;} = string.Empty;
+        public string Username { get; set;}
         public long ApplicationId { get; set; }
     }
 }

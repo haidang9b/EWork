@@ -54,7 +54,7 @@ namespace EW.WebAPI.Controllers
                     UserCVId = model.UserCVId,
                     UserId = currentUser.Id,
                     CoverLetter = model.CoverLetter,
-                    Status = Commons.Enums.EApplicationStatus.ReceptionCV,
+                    Status = EApplicationStatus.ReceptionCV,
                     Description = ""
                 });
                 result.Message = "Ứng tuyển thành công";
@@ -219,8 +219,8 @@ namespace EW.WebAPI.Controllers
                     UserCVId = model.UserCVId,
                     Description = model.Description,
                     CoverLetter = "",
-                    Status = Commons.Enums.EApplicationStatus.Marked,
-                    UserId = model.UserId.HasValue ? model.UserId.Value : 0,
+                    Status = EApplicationStatus.Marked,
+                    UserId = model.UserId ?? 0,
                 };
                 result.Data = await _applicationService.Add(newApplication);
                 result.Message = "Đánh dấu thành công";

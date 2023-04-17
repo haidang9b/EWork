@@ -1,4 +1,5 @@
-﻿using EW.Commons.Enums;
+﻿using AutoMapper;
+using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Services.Constracts;
@@ -22,8 +23,9 @@ namespace EW.WebAPI.Controllers
         private readonly ICompanyService _companyService;
         private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<AuthController> _logger;
+        private IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig)
+        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig, IMapper mapper)
         {
             _userService = userService;
             _tokenService = tokenService;
@@ -31,6 +33,7 @@ namespace EW.WebAPI.Controllers
             _emailService = emailService;
             _logger = logger;
             _customConfig = customConfig;
+            _mapper = mapper;
         }
 
         [HttpPost("Register")]
@@ -48,14 +51,8 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    result.IsSuccess = await _userService.Register(new User
-                    {
-                        Email = model.Email,
-                        Username = model.Username,
-                        Password = model.Password,
-                        PhoneNumber = model.NumberPhone,
-                        FullName = model.FullName,
-                    });
+                    var newUser = _mapper.Map<User>(model);
+                    result.IsSuccess = await _userService.Register(newUser);
                 }
             }
             catch (Exception error)
@@ -197,14 +194,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var resultRegister = await _userService.RegisterWithGoogle(new User
-                {
-                    Username = model.GoogleId,
-                    Email = model.Email,
-                    FullName = model.FullName,
-                    ImageUrl = model.ImageUrl
-
-                });
+                var newUser = _mapper.Map<User>(model);
+                var resultRegister = await _userService.RegisterWithGoogle(newUser);
                 if(!resultRegister)
                 {
                     throw new Exception("Có lỗi trong quá trình đăng nhập");

@@ -7,20 +7,20 @@ namespace EW.Domain.Entities
     public class User : BaseEntity
     {
         [StringLength(150)]
-        public string Username { get; set; } = string.Empty;
+        public string Username { get; set; }
         [StringLength(150)]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; }
         [StringLength(150)]
-        public string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; }
         [StringLength(200)]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; }
         [StringLength(12, MinimumLength = 9, ErrorMessage = "Độ dài số điện thoại phải từ 9 đến 12 kí tự")]
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; }
         [StringLength(350)]
-        public string ImageUrl { get; set; } = string.Empty;
-        public string CoverLetter { get; set; } = string.Empty;
+        public string ImageUrl { get; set; }
+        public string CoverLetter { get; set; }
         [StringLength(150)]
-        public string TokenResetPassword { get; set; } = string.Empty;
+        public string TokenResetPassword { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("Role")]
         public long RoleId { get; set; }

@@ -9,9 +9,9 @@ namespace EW.Domain.Entities
 {
     public class BlogCategory : BaseEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string Description { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Blog>? Blogs { get; set; }
+        public virtual ICollection<Blog> Blogs { get; set; }
     }
 }

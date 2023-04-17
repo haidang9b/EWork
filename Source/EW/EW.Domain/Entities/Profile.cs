@@ -9,16 +9,16 @@ namespace EW.Domain.Entities
 {
     public class Profile: BaseEntity
     {
-        public string Address { get; set; } = string.Empty;
-        public string Linkedin { get; set; } = string.Empty;
-        public string Github { get; set; } = string.Empty;
-        public string EmailContact { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string Address { get; set; }
+        public string Linkedin { get; set; }
+        public string Github { get; set; }
+        public string EmailContact { get; set; }
+        public string PhoneNumber { get; set; }
         public long UserId { get; set; }
         [JsonIgnore]
         public User? User { get; set; }
-        public string Objective { get; set; } = string.Empty;
-        public string Skills { get; set; } = string.Empty;
+        public string Objective { get; set; }
+        public string Skills { get; set; }
         public virtual ICollection<WorkHistory>? WorkHistory { get; set; }
         public virtual ICollection<Education>? Educations { get; set; }
         public virtual ICollection<Project>? Projects { get; set; }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using EW.Commons.Constaints;
 using EW.Domain.Models;
 using EW.Infrastructure;
@@ -5,6 +6,7 @@ using EW.Repository;
 using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.Services.Contracts;
+using EW.WebAPI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -84,6 +86,8 @@ app.Run();
 
 void RegisterService(IServiceCollection services)
 {
+    IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+    services.AddSingleton(mapper);
     services.AddScoped(typeof(IRepository<>), typeof(EWRepository<>));
     services.AddScoped(typeof(IDatabaseFactory<>), typeof(DatabaseFactory<>));
     services.AddScoped<IUserService, UserService>();

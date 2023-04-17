@@ -8,6 +8,6 @@ namespace EW.Domain.Entities
 {
     public class Certificate: History
     {
-        public string CertificateName { get; set; } = string.Empty;
+        public string CertificateName { get; set; }
     }
 }
