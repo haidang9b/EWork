@@ -3,6 +3,7 @@ using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.Models.Companies;
+using EW.WebAPI.Models.Models.Profiles;
 using EW.WebAPI.Models.ViewModels;
 
 namespace EW.WebAPI
@@ -27,6 +28,7 @@ namespace EW.WebAPI
                 .ForMember(dest => dest.CreatedBy, option => option.MapFrom(source => source.UserId));
 
                 config.CreateMap<AddCompanyModel, Company>();
+                config.CreateMap<AddProjectModel, Project>();
             });
             return mappingConfig;
         }
