@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using AutoMapper;
+using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.Services.Contracts;
 using EW.WebAPI.Models;
@@ -18,13 +19,15 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<BlogsController> _logger;
         private readonly IBlogService _blogService;
         private readonly IUserService _userService;
+        private IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public BlogsController(ILogger<BlogsController> logger, IBlogService blogService, IUserService userService)
+        public BlogsController(ILogger<BlogsController> logger, IBlogService blogService, IUserService userService, IMapper mapper)
         {
             _logger = logger;
             _blogService = blogService;
             _userService = userService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -39,18 +42,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var data = await _blogService.GetAll();
-                result.Data = data.Select(item => new BlogDetailViewModel
-                {
-                    Id = item.Id,
-                    BlogCategoryId = item.BlogCategoryId,
-                    UpdatedDate = item.UpdatedDate,
-                    CreatedDate = item.CreatedDate,
-                    Content = item.Content,
-                    Title = item.Title,
-                    Author = item.User?.FullName,
-                    BlogCategoryName = item.BlogCategory?.Name,
-                    CreatedBy= item.UserId,
-                });
+                result.Data = _mapper.Map<IEnumerable<BlogDetailViewModel>>(data);
                 result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)
@@ -81,18 +73,7 @@ namespace EW.WebAPI.Controllers
                 }
                 else
                 {
-                    result.Data = new BlogDetailViewModel
-                    {
-                        Id = data.Id,
-                        BlogCategoryId = data.BlogCategoryId,
-                        UpdatedDate = data.UpdatedDate,
-                        CreatedDate = data.CreatedDate,
-                        Content = data.Content,
-                        Title = data.Title,
-                        Author = data.User.FullName,
-                        CreatedBy = data.UserId,
-                        BlogCategoryName = data.BlogCategory.Name
-                    };
+                    result.Data = _mapper.Map<BlogDetailViewModel>(data);
                     result.Message = "Lấy dữ liệu thành công";
                 }
             }
@@ -126,19 +107,7 @@ namespace EW.WebAPI.Controllers
                 };
                 await _blogService.Add(newBlog);
                 var data = await _blogService.Get(newBlog.Id);
-
-                result.Data = new BlogDetailViewModel
-                {
-                    Id = data.Id,
-                    BlogCategoryId = data.BlogCategoryId,
-                    UpdatedDate = data.UpdatedDate,
-                    CreatedDate = data.CreatedDate,
-                    Content = data.Content,
-                    Title = data.Title,
-                    Author = user.FullName,
-                    CreatedBy = data.UserId,
-                    BlogCategoryName = data.BlogCategory.Name
-                };
+                result.Data = _mapper.Map<BlogDetailViewModel>(data);
                 result.Message = "Thêm bài viết thành công";
             }
             catch(Exception ex)
@@ -195,19 +164,7 @@ namespace EW.WebAPI.Controllers
             {
                 await _blogService.Update(model);
                 var data = await _blogService.Get(model.Id);
-                result.Data = new BlogDetailViewModel
-                {
-                    Id = data.Id,
-                    BlogCategoryId = data.BlogCategoryId,
-                    UpdatedDate = data.UpdatedDate,
-                    CreatedDate = data.CreatedDate,
-                    Content = data.Content,
-                    Title = data.Title,
-                    Author = data.User.FullName,
-                    CreatedBy = data.UserId,
-                    BlogCategoryName = data.BlogCategory.Name
-                };
-
+                result.Data = _mapper.Map<BlogDetailViewModel>(data);
                 result.Message = "Cập nhật bài viết thành công";
             }
             catch (Exception ex)
