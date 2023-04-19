@@ -1,4 +1,5 @@
-﻿using EW.Commons.Enums;
+﻿using AutoMapper;
+using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
@@ -20,14 +21,16 @@ namespace EW.WebAPI.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitmentPostsController> _logger;
+        private IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public RecruitmentPostsController(IRecruitmentPostService recruitmentPostService, IUserService userService, IRecruiterService recruiterService, ILogger<RecruitmentPostsController> logger, ICompanyService companyService)
+        public RecruitmentPostsController(IRecruitmentPostService recruitmentPostService, IUserService userService, IRecruiterService recruiterService, ILogger<RecruitmentPostsController> logger, ICompanyService companyService, IMapper mapper)
         {
             _recruitmentPostService = recruitmentPostService;
             _userService = userService;
             _recruiterService = recruiterService;
             _logger = logger;
             _companyService = companyService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -60,23 +63,12 @@ namespace EW.WebAPI.Controllers
                 if (model.Id == 0)
                 {
                     // if user is Business, company Id get from request, else get from user and company (table recruiter)
-                    var postAdd = new RecruitmentPost
-                    {
-                        JobTitle = model.JobTitle,
-                        JobDescription = model.JobDescription,
-                        SalaryFrom = model.SalaryFrom,
-                        SalaryTo = model.SalaryTo,
-                        Currency = model.Currency,
-                        Deadline = model.Deadline,
-                        CreatedDate = DateTimeOffset.Now,
-                        UpdatedDate = DateTimeOffset.Now,
-                        SalaryType = model.SalaryType,
-                        TechStacks = model.TechStacks,
-                        YearExperience = model.YearExperience,
-                        WorkingType = model.WorkingType,
-                        IsActive = true
-                    };
+                    var postAdd = _mapper.Map<RecruitmentPost>(model);
+                    postAdd.IsActive = true;
+                    postAdd.CreatedDate = DateTimeOffset.Now;
+                    postAdd.UpdatedDate = DateTimeOffset.Now;
                     postAdd.UpdatedBy = currentUser.Id;
+
                     if (currentUser.RoleId == (long)ERole.ID_Business)
                     {
                         var recruiter = await _recruiterService.GetRecruiterByUser(currentUser);
@@ -171,7 +163,7 @@ namespace EW.WebAPI.Controllers
                 {
                     result.IsSuccess = await _recruitmentPostService.Delete(exist);
                     result.Message = result.IsSuccess ? "Xóa bài viết thành công" : "Xóa bài viết thất bại";
-                    result.Data = result.IsSuccess ? exist : null;
+                    result.Data = exist;
                 }
 
             }
@@ -192,23 +184,8 @@ namespace EW.WebAPI.Controllers
             {
                 var data = await _recruitmentPostService.GetAll();
                 data = data.OrderByDescending(item => item.UpdatedDate).ToList();
-                result.Data = data.Select(post => new RecruitmentPostShortViewModel
-                {
-                    Id = post.Id,
-                    JobTitle = post.JobTitle,
-                    SalaryType = post.SalaryType,
-                    SalaryFrom = post.SalaryFrom,
-                    SalaryTo = post.SalaryTo,
-                    Currency = post.Currency,
-                    TechStacks = post.TechStacks,
-                    YearExperience = post.YearExperience,
-                    JobDescription = post.JobDescription,
-                    UpdatedDate = post.UpdatedDate,
-                    AvatarUrl = post.Company.AvatarUrl,
-                    WorkingType = post.WorkingType,
-                    CompanyType = post.Company.CompanyType,
-                    CompanyName = post.Company.CompanyName
-                }).ToList();
+                result.Data = _mapper.Map<IEnumerable<RecruitmentPostShortViewModel>>(data);
+                 
                 result.Message = "Lấy dữ liệu thành công";
             }
             catch(Exception ex)

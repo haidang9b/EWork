@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using EW.Services.Contracts;
 using EW.Services.Constracts;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace EW.WebAPI.Controllers
 {
@@ -17,13 +18,15 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IProjectService _projectService;
+        private IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProjectsController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, IProjectService projectService)
+        public ProjectsController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, IProjectService projectService, IMapper mapper)
         {
             _logger = logger;
             _profileSerivce = profileSerivce;
             _projectService = projectService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -44,16 +47,9 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Vui lòng get dữ liệu trước khi update";
                     return Ok(result);
                 }
-
-                var newProject = new Project
-                {
-                    ProfileId = profile.Id,
-                    Description = model.Description,
-                    From = model.From,
-                    To = model.To,
-                    CustomerName = model.CustomerName,
-                    ProjectName = model.ProjectName,
-                };
+                var newProject = _mapper.Map<Project>(model);
+                newProject.ProfileId = profile.Id;
+                
                 var data = await _projectService.Add(newProject);
                 if (data == null)
                 {

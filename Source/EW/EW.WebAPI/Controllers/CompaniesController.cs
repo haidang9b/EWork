@@ -1,4 +1,5 @@
-﻿using EW.Commons.Enums;
+﻿using AutoMapper;
+using EW.Commons.Enums;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
@@ -27,8 +28,9 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<RecruitersController> _logger;
+        private IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IOptions<CustomConfig> customConfig)
+        public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IOptions<CustomConfig> customConfig, IMapper mapper)
         {
             _recruiterService = recruiterService;
             _userService = userService;
@@ -37,6 +39,7 @@ namespace EW.WebAPI.Controllers
             _recruitmentPostService = recruitmentPostService;
             _emailService = emailService;
             _customConfig = customConfig;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -146,15 +149,7 @@ namespace EW.WebAPI.Controllers
                     result.Message = "Email này đã được sử dụng";
                     return Ok(result);
                 }
-                var newCompany = new Company
-                {
-                    CompanyName = model.CompanyName,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    Address = model.Address,
-                    TaxNumber = model.TaxNumber,
-                    Featured = model.Featured,
-                };
+                var newCompany = _mapper.Map<Company>(model);
                 var data = await _companyService.AddCompany(newCompany);
                 if(data != null)
                 {
