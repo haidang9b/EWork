@@ -4,6 +4,7 @@ using EW.Domain.Entities;
 using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.Models.Companies;
 using EW.WebAPI.Models.Models.Profiles;
+using EW.WebAPI.Models.Models.RecruitmentPosts;
 using EW.WebAPI.Models.ViewModels;
 
 namespace EW.WebAPI
@@ -29,6 +30,11 @@ namespace EW.WebAPI
 
                 config.CreateMap<AddCompanyModel, Company>();
                 config.CreateMap<AddProjectModel, Project>();
+                config.CreateMap<RecruitmentPostModel, RecruitmentPost>();
+                config.CreateMap<RecruitmentPost, RecruitmentPostShortViewModel>()
+                .ForMember(dest => dest.AvatarUrl, option => option.MapFrom(source => source.Company.AvatarUrl))
+                .ForMember(dest => dest.CompanyName, option => option.MapFrom(source => source.Company.CompanyName))
+                .ForMember(dest => dest.CompanyType, option => option.MapFrom(source => source.Company.CompanyType));
             });
             return mappingConfig;
         }
