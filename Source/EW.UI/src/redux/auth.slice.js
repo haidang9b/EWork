@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import httpClient from "../common/apis/httpClient";
 import {
+    GET_USER_INFO_URL,
     LOGIN_GOOGLE_URL,
     LOGIN_URL,
     RECOVER_ACCOUNT_URL,
@@ -31,6 +32,7 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
+                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -40,12 +42,14 @@ const authSlice = createSlice({
             .addCase(handleRefreshTokenThunk.pending, loadingReducer)
             .addCase(handleRefreshTokenThunk.fulfilled, (state, action) => {
                 if (action.payload.isSuccess) {
+                    fetchUserInfo();
                     TokenService.setAccessToken(
                         action.payload.data.accessToken
                     );
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
+                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -58,12 +62,14 @@ const authSlice = createSlice({
                     action.payload.data?.accessToken &&
                     action.payload.data?.refreshToken
                 ) {
+                    fetchUserInfo();
                     TokenService.setAccessToken(
                         action.payload.data.accessToken
                     );
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
+                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -99,13 +105,25 @@ const authSlice = createSlice({
             .addCase(updatePasswordThunk.rejected, failureReducer)
             .addCase(handleLogout.pending, logoutAccount)
             .addCase(handleLogout.fulfilled, logoutAccount)
-            .addCase(handleLogout.rejected, logoutAccount);
+            .addCase(handleLogout.rejected, logoutAccount)
+            .addCase(fetchUserInfo.pending, loadingReducer)
+            .addCase(fetchUserInfo.fulfilled, (state, action) => {
+                if (action.payload.isSuccess) {
+                    state.user = action.payload.data;
+                    state.status = Status.succeeded;
+                } else {
+                    state.status = Status.failed;
+                    state.user = null;
+                }
+            })
+            .addCase(fetchUserInfo.rejected, failureReducer);
     },
 });
 
 const logoutAccount = (state, action) => {
     state.accessToken = null;
     state.refreshToken = null;
+    state.user = null;
     state.status = Status.idle;
 };
 
@@ -164,6 +182,14 @@ export const updatePasswordThunk = createAsyncThunk(
     "auth/updatePassword",
     async (obj) => {
         const response = await httpClient.post(UPDATE_PASSWORD_URL, obj);
+        return response.data;
+    }
+);
+
+export const fetchUserInfo = createAsyncThunk(
+    "auth/fetchUserInfo",
+    async () => {
+        const response = await httpClient.get(GET_USER_INFO_URL);
         return response.data;
     }
 );

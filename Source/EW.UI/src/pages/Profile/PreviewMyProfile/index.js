@@ -67,7 +67,7 @@ const PreviewMyProfile = ({ myProfileDialog, setMyProfileDialog }) => {
                 const fileName = `${
                     nameCV
                         ? nameCV
-                        : moment().format(`${user?.given_name}_DD_MM_YYYY`)
+                        : moment().format(`${user?.fullName}_DD_MM_YYYY`)
                 }.pdf`;
                 const imgWidth = 8.5;
                 const pageHeightStandard = 11;

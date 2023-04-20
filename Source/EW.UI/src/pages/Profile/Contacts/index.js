@@ -131,7 +131,7 @@ const Contacts = () => {
                     <Edit />
                 </IconButton>
             </div>
-            <div className="profile-contact__name">{user?.given_name}</div>
+            <div className="profile-contact__name">{user?.fullName}</div>
 
             <div className="d-flex profile-contact__row">
                 <div className="profile__icon">

@@ -92,8 +92,8 @@ const Navbar = () => {
                                         <Avatar
                                             alt="Avatar"
                                             src={
-                                                user?.certthumbprint
-                                                    ? user?.certthumbprint
+                                                user?.imageUrl
+                                                    ? user?.imageUrl
                                                     : "/static/images/avatar/2.jpg"
                                             }
                                         />
@@ -197,15 +197,15 @@ const Navbar = () => {
                                             <Avatar
                                                 alt="Avatar"
                                                 src={
-                                                    user?.certthumbprint
-                                                        ? user?.certthumbprint
+                                                    user?.imageUrl
+                                                        ? user?.imageUrl
                                                         : "/static/images/avatar/2.jpg"
                                                 }
                                             />
                                         </ListItemIcon>
                                         <ListItemText>
                                             Xin chào{" "}
-                                            <strong>{user?.given_name}</strong>
+                                            <strong>{user?.fullName}</strong>
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>

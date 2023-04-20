@@ -102,6 +102,7 @@ namespace EW.WebAPI.Controllers
                     {
                         AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
+                        User = _mapper.Map<UserInfoViewModel>(exist)
                     };
                     result.Data = data;
                 }
@@ -142,6 +143,7 @@ namespace EW.WebAPI.Controllers
                 {
                     AccessToken = token,
                     RefreshToken = rfToken,
+                    User = _mapper.Map<UserInfoViewModel>(model)
                 };
 
             }
@@ -208,6 +210,7 @@ namespace EW.WebAPI.Controllers
                     {
                         AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
+                        User = _mapper.Map<UserInfoViewModel>(model)
                     };
                     result.Data = data;
                     result.Message = "Đăng nhập thành công";
@@ -380,7 +383,23 @@ namespace EW.WebAPI.Controllers
             }
 
             return Ok(result);
-        } 
-
+        }
+        [HttpGet("get-user-info")]
+        [Authorize]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var result = new ApiResult();
+            try
+            {
+                var currentUser = await _userService.GetUser(new User { Username = _username });
+                result.IsSuccess = true;
+                result.Data = _mapper.Map<UserInfoViewModel>(currentUser);
+            }
+            catch(Exception ex)
+            {
+                result.InternalError(ex.Message);
+            }
+            return Ok(result);
+        }
     }
 }
