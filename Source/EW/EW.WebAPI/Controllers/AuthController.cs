@@ -143,7 +143,7 @@ namespace EW.WebAPI.Controllers
                 {
                     AccessToken = token,
                     RefreshToken = rfToken,
-                    User = _mapper.Map<UserInfoViewModel>(model)
+                    User = _mapper.Map<UserInfoViewModel>(exist)
                 };
 
             }
@@ -210,7 +210,7 @@ namespace EW.WebAPI.Controllers
                     {
                         AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
-                        User = _mapper.Map<UserInfoViewModel>(model)
+                        User = _mapper.Map<UserInfoViewModel>(exist)
                     };
                     result.Data = data;
                     result.Message = "Đăng nhập thành công";
