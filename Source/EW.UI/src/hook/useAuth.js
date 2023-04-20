@@ -1,4 +1,4 @@
-import TokenService from "../common/apis/token.service";
+import { useSelector } from "react-redux";
 import { Role } from "../common/constants";
 
 /**
@@ -6,8 +6,8 @@ import { Role } from "../common/constants";
  * @returns {user, isFaculty, isBusiness, isStudent} user logged in app
  */
 const useAuth = () => {
-    let token = TokenService.getAccessToken();
-    let user = TokenService.getUserFromToken(token);
+    // let token = TokenService.getAccessToken();
+    let user = useSelector((state) => state.auth.user);
     return {
         user: user,
         isFaculty: user?.role === Role.Faculty,

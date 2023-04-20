@@ -8,6 +8,7 @@ export const RECOVER_ACCOUNT_URL = "/auth/recovery";
 export const VALIDATE_CODE_RECOVER_URL = "/auth/is-valid-code-recover";
 export const RESET_PASSWORD_URL = "/auth/reset-password";
 export const UPDATE_PASSWORD_URL = "/auth/update-password";
+export const GET_USER_INFO_URL = "/auth/get-user-info";
 
 // recruiters controller
 export const RECRUITER_REGISTER_URL = "/recruiters/register";

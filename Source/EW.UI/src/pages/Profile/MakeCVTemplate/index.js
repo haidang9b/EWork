@@ -301,7 +301,7 @@ const MakeCVTemplate = ({ language }) => {
         <div>
             <ProfileRender
                 profile={profile}
-                fullName={user?.given_name}
+                fullName={user?.fullName}
                 language={language}
             />
             {workHistory && workHistory?.length > 0 ? (

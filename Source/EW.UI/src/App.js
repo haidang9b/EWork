@@ -29,7 +29,14 @@ import {
     Blogs,
     BlogDetail,
 } from "./pages";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUserInfo } from "./redux/auth.slice";
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch]);
     return (
         <Routes>
             <Route path="/" element={<Home />} />
