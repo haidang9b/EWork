@@ -19,6 +19,7 @@ import {
     handleLoginThunk,
     handleLoginGoogleThunk,
     authSelector,
+    fetchUserInfo,
 } from "../../redux/auth.slice";
 import { Link, Navigate } from "react-router-dom";
 import { Status } from "../../common/constants";
@@ -67,6 +68,9 @@ const Login = () => {
             type: res.isSuccess ? "success" : "error",
             title: "Đăng nhập",
         });
+        if (res.isSuccess) {
+            dispatch(fetchUserInfo());
+        }
     };
 
     const responseGoogle = async (response) => {
@@ -98,6 +102,9 @@ const Login = () => {
                 type: res.isSuccess ? "success" : "error",
                 title: "Đăng nhập",
             });
+            if (res.isSuccess) {
+                dispatch(fetchUserInfo());
+            }
         }
     };
     useEffect(() => {

@@ -6,7 +6,6 @@ import { Role } from "../common/constants";
  * @returns {user, isFaculty, isBusiness, isStudent} user logged in app
  */
 const useAuth = () => {
-    // let token = TokenService.getAccessToken();
     let user = useSelector((state) => state.auth.user);
     return {
         user: user,
