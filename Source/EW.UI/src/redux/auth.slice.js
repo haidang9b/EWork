@@ -32,7 +32,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -49,7 +48,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;
@@ -69,7 +67,6 @@ const authSlice = createSlice({
                     TokenService.setRefreshToken(
                         action.payload.data.refreshToken
                     );
-                    state.user = action.payload.data.user;
                     state.status = Status.succeeded;
                 } else {
                     state.status = Status.failed;

@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 const RequireAuth = ({ allowedRoles }) => {
     const { user } = useAuth();
     const location = useLocation();
-
     return allowedRoles?.includes(user?.role) ? (
         <Outlet />
     ) : user ? (

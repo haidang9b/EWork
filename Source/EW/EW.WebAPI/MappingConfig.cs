@@ -36,7 +36,8 @@ namespace EW.WebAPI
                 .ForMember(dest => dest.CompanyName, option => option.MapFrom(source => source.Company.CompanyName))
                 .ForMember(dest => dest.CompanyType, option => option.MapFrom(source => source.Company.CompanyType));
 
-                config.CreateMap<User, UserInfoViewModel>();
+                config.CreateMap<User, UserInfoViewModel>()
+                .ForMember(dest => dest.Role, option => option.MapFrom(source => source.Role.Name));
             });
             return mappingConfig;
         }
