@@ -2,11 +2,6 @@
 using EW.Domain.ViewModels;
 using EW.Repository;
 using EW.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Services.Business
 {

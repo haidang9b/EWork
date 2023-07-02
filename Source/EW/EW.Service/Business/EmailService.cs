@@ -1,14 +1,8 @@
 ﻿using EW.Domain.Models;
 using EW.Services.Constracts;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EW.Services.Business
 {
