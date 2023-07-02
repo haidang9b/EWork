@@ -1,11 +1,8 @@
 ﻿using EW.Domain.Entities;
 using EW.Services.Constracts;
-using EW.Services.Contracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Profiles;
-using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

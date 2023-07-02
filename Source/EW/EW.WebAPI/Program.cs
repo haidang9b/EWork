@@ -1,12 +1,6 @@
-using AutoMapper;
 using EW.Commons.Constaints;
 using EW.Domain.Models;
 using EW.Infrastructure;
-using EW.Repository;
-using EW.Services.Business;
-using EW.Services.Constracts;
-using EW.Services.Contracts;
-using EW.WebAPI;
 using EW.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

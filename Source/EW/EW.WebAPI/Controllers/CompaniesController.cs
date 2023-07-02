@@ -3,16 +3,13 @@ using EW.Commons.Enums;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
-using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Companies;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
 using System.Security.Claims;
 
 namespace EW.WebAPI.Controllers

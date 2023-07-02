@@ -2,13 +2,10 @@
 using EW.Domain.Entities;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models;
 using EW.WebAPI.Models.Models.Auths;
 using EW.WebAPI.Models.Models.Users;
-using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -1,7 +1,6 @@
 ﻿using EW.Services.Contracts;
 using EW.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EW.WebAPI.Controllers

@@ -1,11 +1,7 @@
 ﻿using EW.Domain.Entities;
-using EW.Services.Business;
-using EW.Services.Constracts;
 using EW.Services.Contracts;
 using EW.WebAPI.Models;
-using EW.WebAPI.Models.Models.Blogs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EW.WebAPI.Controllers

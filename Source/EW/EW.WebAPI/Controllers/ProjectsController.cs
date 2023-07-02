@@ -1,13 +1,12 @@
-﻿using EW.Domain.Entities;
-using EW.WebAPI.Models.Models.Profiles;
-using EW.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using EW.Services.Contracts;
+﻿using AutoMapper;
+using EW.Domain.Entities;
 using EW.Services.Constracts;
+using EW.Services.Contracts;
+using EW.WebAPI.Models;
+using EW.WebAPI.Models.Models.Profiles;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using AutoMapper;
 
 namespace EW.WebAPI.Controllers
 {

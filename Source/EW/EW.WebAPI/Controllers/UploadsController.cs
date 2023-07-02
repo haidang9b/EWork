@@ -5,7 +5,6 @@ using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Uploads;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
