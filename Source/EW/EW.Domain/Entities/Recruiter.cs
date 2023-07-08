@@ -2,7 +2,7 @@
 
 namespace EW.Domain.Entities
 {
-    public class Recruiter: BaseEntity
+    public class Recruiter : BaseEntity
     {
         public long UserId { get; set; }
         public User User { get; set; }

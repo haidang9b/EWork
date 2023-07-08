@@ -6,7 +6,7 @@
         public string FullName { get; set; }
         public string Address { get; set; }
         public string Linkedin { get; set; }
-        public string Github { get; set; } 
+        public string Github { get; set; }
         public string EmailContact { get; set; }
         public string PhoneNumber { get; set; }
         public string Objective { get; set; }

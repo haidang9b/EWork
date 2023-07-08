@@ -48,7 +48,7 @@ namespace EW.WebAPI.Controllers
                 }
                 var newProject = _mapper.Map<Project>(model);
                 newProject.ProfileId = profile.Id;
-                
+
                 var data = await _projectService.Add(newProject);
                 if (data is null)
                 {

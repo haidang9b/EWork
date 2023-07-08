@@ -21,9 +21,9 @@ namespace EW.WebAPI.Controllers
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public DocumentsController(
-            ILogger<UploadsController> logger, 
-            IUserCVService userCVService, 
-            IUserService userService, 
+            ILogger<UploadsController> logger,
+            IUserCVService userCVService,
+            IUserService userService,
             IProfileSerivce profileSerivce
         )
         {
@@ -156,17 +156,17 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
-                if(currentCV is not null && currentCV.User.Username == Username)
+                if (currentCV is not null && currentCV.User.Username == Username)
                 {
                     var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                    if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured) 
+                    if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured)
                     {
                         result.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
                         result.IsSuccess = false;
                         return Ok(result);
                     }
                     currentCV.Featured = model.Featured;
-                    result.IsSuccess = await _userCVService.UpdateFeaturedCV(currentCV);                    
+                    result.IsSuccess = await _userCVService.UpdateFeaturedCV(currentCV);
                     if (result.IsSuccess)
                     {
                         result.Message = "Cập nhật thành công cv chính";
@@ -183,7 +183,7 @@ namespace EW.WebAPI.Controllers
                     result.IsSuccess = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);

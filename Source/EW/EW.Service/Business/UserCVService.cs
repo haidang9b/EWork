@@ -42,9 +42,9 @@ namespace EW.Services.Business
         public async Task<bool> UpdateFeaturedCV(UserCV model)
         {
             var cvs = await _unitOfWork.Repository<UserCV>().GetAsync(item => item.UserId == model.UserId);
-            foreach(var cv in cvs)
+            foreach (var cv in cvs)
             {
-                if(cv.Id == model.Id)
+                if (cv.Id == model.Id)
                 {
                     cv.Featured = model.Featured;
                 }

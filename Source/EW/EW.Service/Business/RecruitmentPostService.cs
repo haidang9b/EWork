@@ -38,10 +38,10 @@ namespace EW.Services.Business
 
         public async Task<RecruitmentPost> GetRecruitmentPost(RecruitmentPost model)
         {
-            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id 
+            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id
                             || item.JobTitle == model.JobTitle
-                            || item.JobDescription == model.JobDescription 
-                            || item.CreatedDate == model.CreatedDate 
+                            || item.JobDescription == model.JobDescription
+                            || item.CreatedDate == model.CreatedDate
                             || item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
         }
 
@@ -58,13 +58,13 @@ namespace EW.Services.Business
         public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user)
         {
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync("Company,UpdatedByUser");
-            
+
             // if user is business, load only data recruitment post of user's company
-            if(user.RoleId == (long)ERole.ID_Business)
+            if (user.RoleId == (long)ERole.ID_Business)
             {
                 var recruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.UserId == user.Id, "Company");
 
-                if(recruiter is null)
+                if (recruiter is null)
                 {
                     return new List<RecruitmentPost>();
                 }
@@ -76,12 +76,12 @@ namespace EW.Services.Business
 
         public async Task<RecruitmentPost> GetRecruitmentSpecific(RecruitmentPost model)
         {
-           return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id 
-                            && item.JobTitle == model.JobTitle
-                            && item.JobDescription == model.JobDescription
-                            && item.CreatedDate == model.CreatedDate
-                            && item.UpdatedDate == model.UpdatedDate
-                            && item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
+            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id
+                             && item.JobTitle == model.JobTitle
+                             && item.JobDescription == model.JobDescription
+                             && item.CreatedDate == model.CreatedDate
+                             && item.UpdatedDate == model.UpdatedDate
+                             && item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
         }
 
         public async Task<bool> Update(RecruitmentPost model)

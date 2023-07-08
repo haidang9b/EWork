@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EW.Domain.Entities
 {
-    public class UserExperience:BaseEntity
+    public class UserExperience : BaseEntity
     {
         [ForeignKey("User")]
         public long UserId { get; set; }

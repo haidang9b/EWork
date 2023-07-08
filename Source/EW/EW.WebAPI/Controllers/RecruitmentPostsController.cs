@@ -24,11 +24,11 @@ namespace EW.WebAPI.Controllers
         private readonly IMapper _mapper;
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         public RecruitmentPostsController(
-            IRecruitmentPostService recruitmentPostService, 
-            IUserService userService, 
-            IRecruiterService recruiterService, 
-            ILogger<RecruitmentPostsController> logger, 
-            ICompanyService companyService, 
+            IRecruitmentPostService recruitmentPostService,
+            IUserService userService,
+            IRecruiterService recruiterService,
+            ILogger<RecruitmentPostsController> logger,
+            ICompanyService companyService,
             IMapper mapper
         )
         {
@@ -41,7 +41,7 @@ namespace EW.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Business,Faculty")]
+        [Authorize(Roles = "Business,Faculty")]
         public async Task<IActionResult> Index()
         {
             var result = new ApiResult();
@@ -51,7 +51,7 @@ namespace EW.WebAPI.Controllers
                 result.Data = await _recruitmentPostService.GetRecruitmentPostsByUser(currentUser);
                 result.Message = "Lấy dữ liệu thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
@@ -114,7 +114,7 @@ namespace EW.WebAPI.Controllers
                 else
                 {
                     var existPost = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.Id });
-                    if(existPost is null)
+                    if (existPost is null)
                     {
                         result.IsSuccess = false;
                         result.Message = "Không có bài viết nào từ yêu cầu này, vui lòng thử lại";
@@ -145,7 +145,7 @@ namespace EW.WebAPI.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);
@@ -161,7 +161,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = id });
-                if(exist is null)
+                if (exist is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không có bài viết từ ID này";
@@ -174,7 +174,7 @@ namespace EW.WebAPI.Controllers
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError();
                 _logger.LogError(ex.Message);
@@ -192,10 +192,10 @@ namespace EW.WebAPI.Controllers
                 var data = await _recruitmentPostService.GetAll();
                 data = data.OrderByDescending(item => item.UpdatedDate).ToList();
                 result.Data = _mapper.Map<IEnumerable<RecruitmentPostShortViewModel>>(data);
-                 
+
                 result.Message = "Lấy dữ liệu thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
@@ -211,12 +211,12 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id }) 
+                var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id })
                             ?? throw new EWException("Không có dữ liệu từ id này");
                 result.Data = post;
                 result.Message = "Lấy dữ liệu thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();

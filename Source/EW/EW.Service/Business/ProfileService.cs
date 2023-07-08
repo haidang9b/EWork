@@ -26,7 +26,7 @@ namespace EW.Services.Business
             var candidates = await _unitOfWork.Repository<Profile>().GetAsync(item => item.IsOpenForWork, "User");
             var cvsFeatured = await _unitOfWork.Repository<UserCV>().GetAsync(item => item.Featured);
             var result = new List<ProfileOpenForWorkViewModel>();
-            foreach(var profile in candidates)
+            foreach (var profile in candidates)
             {
                 var cvFeaturedOfProfile = cvsFeatured.FirstOrDefault(item => item.UserId == profile.UserId);
                 if (cvFeaturedOfProfile is null)
@@ -66,7 +66,8 @@ namespace EW.Services.Business
                 IsOpenForWork = false,
             };
             await _unitOfWork.Repository<Profile>().AddAsync(newProfile);
-            if((await _unitOfWork.SaveChangeAsync()) == false){
+            if ((await _unitOfWork.SaveChangeAsync()) == false)
+            {
                 throw new EWException("Không thể khởi tại profile");
             }
             newProfile.Certificates = new List<Certificate>();
@@ -80,7 +81,7 @@ namespace EW.Services.Business
         {
             var currentProfile = await _unitOfWork.Repository<Profile>().FirstOrDefaultAsync(item => item.Id == profile.Id);
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == profile.UserId);
-            if(currentProfile is null || currentUser is null)
+            if (currentProfile is null || currentUser is null)
             {
                 throw new EWException("Không có profile, vui lòng thử lại");
             }

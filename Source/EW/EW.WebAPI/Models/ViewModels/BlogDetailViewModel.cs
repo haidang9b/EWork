@@ -1,6 +1,4 @@
-﻿using EW.Domain.Entities;
-
-namespace EW.WebAPI.Models.ViewModels
+﻿namespace EW.WebAPI.Models.ViewModels
 {
     public class BlogDetailViewModel
     {
@@ -11,7 +9,7 @@ namespace EW.WebAPI.Models.ViewModels
         public long BlogCategoryId { get; set; }
         public string BlogCategoryName { get; set; } = string.Empty;
         public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset UpdatedDate { get; set;}
+        public DateTimeOffset UpdatedDate { get; set; }
         public string Author { get; set; } = string.Empty;
     }
 }

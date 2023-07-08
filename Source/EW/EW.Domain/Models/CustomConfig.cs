@@ -3,6 +3,6 @@
     public class CustomConfig
     {
         public string FrontEndURL { get; set; }
-        public string BackEndURL { get; set; } 
+        public string BackEndURL { get; set; }
     }
 }
