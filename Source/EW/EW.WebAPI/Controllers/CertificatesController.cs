@@ -13,20 +13,20 @@ namespace EW.WebAPI.Controllers
     [ApiController]
     public class CertificatesController : ControllerBase
     {
-        private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly ICertificateService _certificateService;
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
+        private readonly ApiResult _apiResult;
+
         public CertificatesController(
-            ILogger<ProfileController> logger,
             IProfileSerivce profileSerivce,
             ICertificateService certificateService
         )
         {
-            _logger = logger;
             _profileSerivce = profileSerivce;
             _certificateService = certificateService;
+            _apiResult = new();
         }
         /// <summary>
         /// Add new Certificate
@@ -36,45 +36,37 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AddCertificateModel model)
         {
-            var result = new ApiResult();
-            try
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Vui lòng get dữ liệu trước khi update";
-                    return Ok(result);
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Vui lòng get dữ liệu trước khi update";
+                return Ok(_apiResult);
+            }
 
-                var newCertificate = new Certificate
-                {
-                    ProfileId = profile.Id,
-                    Description = model.Description,
-                    From = model.From,
-                    To = model.To,
-                    CertificateName = model.CertificateName
-                };
-                var data = await _certificateService.Add(newCertificate);
-                if (data is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể thêm chứng chỉ này";
-                    return Ok(result);
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = "Thêm chứng chỉ thành công";
-                    result.Data = data;
-                }
-            }
-            catch (Exception ex)
+            var newCertificate = new Certificate
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                ProfileId = profile.Id,
+                Description = model.Description,
+                From = model.From,
+                To = model.To,
+                CertificateName = model.CertificateName
+            };
+            var data = await _certificateService.Add(newCertificate);
+            if (data is null)
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể thêm chứng chỉ này";
+                return Ok(_apiResult);
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.IsSuccess = true;
+                _apiResult.Message = "Thêm chứng chỉ thành công";
+                _apiResult.Data = data;
+            }
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -86,26 +78,17 @@ namespace EW.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _certificateService.Delete(new Certificate { Id = id });
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _certificateService.Delete(new Certificate { Id = id });
-                if (result.IsSuccess)
-                {
-                    result.Message = "Xóa chứng chỉ thành công";
-                    result.Data = new Education { Id = id };
-                }
-                else
-                {
-                    result.Message = "Xóa chứng chỉ thất bại";
-                }
+                _apiResult.Message = "Xóa chứng chỉ thành công";
+                _apiResult.Data = new Education { Id = id };
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Xóa chứng chỉ thất bại";
             }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -117,26 +100,17 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Certificate model)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _certificateService.Update(model);
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _certificateService.Update(model);
-                if (result.IsSuccess)
-                {
-                    result.Message = "Cập nhật chứng chỉ thành công";
-                    result.Data = model;
-                }
-                else
-                {
-                    result.Message = "Cập nhật chứng chỉ thất bại";
-                }
+                _apiResult.Message = "Cập nhật chứng chỉ thành công";
+                _apiResult.Data = model;
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Cập nhật chứng chỉ thất bại";
             }
-            return Ok(result);
+            return Ok(_apiResult);
         }
     }
 }

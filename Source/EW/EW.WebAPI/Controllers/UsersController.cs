@@ -74,6 +74,7 @@ namespace EW.WebAPI.Controllers
                     _apiResult.Message = "Không thể thêm tài khoản này";
                 }
             }
+
             return Ok(_apiResult);
         }
 
@@ -84,6 +85,7 @@ namespace EW.WebAPI.Controllers
             _apiResult.Data = await _userService.GetRoles();
             _apiResult.IsSuccess = true;
             _apiResult.Message = "Lấy các quyền thành công";
+
             return Ok(_apiResult);
         }
 
@@ -155,6 +157,7 @@ namespace EW.WebAPI.Controllers
                     _apiResult.IsSuccess = false;
                 }
             }
+
             return Ok(_apiResult);
         }
 

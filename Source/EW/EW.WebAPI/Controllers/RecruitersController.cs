@@ -16,20 +16,20 @@ namespace EW.WebAPI.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
-        private readonly ILogger<RecruitersController> _logger;
+        private readonly ApiResult _apiResult;
+
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public RecruitersController(
             IRecruiterService recruiterService,
             IUserService userService,
-            ILogger<RecruitersController> logger,
             ICompanyService companyService
         )
         {
             _recruiterService = recruiterService;
             _userService = userService;
-            _logger = logger;
             _companyService = companyService;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -43,51 +43,33 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> GetRecruiters()
         {
-            var result = new ApiResult();
-            try
+            var currentUser = await _userService.GetUser(new User { Username = Username });
+            if (currentUser.RoleId == (long)ERole.ID_Business)
             {
-                var currentUser = await _userService.GetUser(new User { Username = Username });
-                if (currentUser.RoleId == (long)ERole.ID_Business)
-                {
-                    var currentCompany = await _companyService.GetCompanyByUser(currentUser);
-                    result.Data = await _recruiterService.GetRecruitersByCompany(currentCompany);
-                }
-                else
-                {
-                    result.Data = await _recruiterService.GetRecruiters();
-                }
-                result.Message = "Lấy dữ liệu thành công";
+                var currentCompany = await _companyService.GetCompanyByUser(currentUser);
+                _apiResult.Data = await _recruiterService.GetRecruitersByCompany(currentCompany);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
+                _apiResult.Data = await _recruiterService.GetRecruiters();
             }
-            return Ok(result);
+            _apiResult.Message = "Lấy dữ liệu thành công";
+            return Ok(_apiResult);
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterRecruiterModel model)
         {
-            var result = new ApiResult();
-            try
+            var exist = await _companyService.Find(new Company
             {
-                var exist = await _companyService.Find(new Company
-                {
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                });
-                result.IsSuccess = await _recruiterService.AddNewRecruiter(model);
-                result.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-                result.Message = ex.Message;
-            }
-            return Ok(result);
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+            });
+            _apiResult.IsSuccess = await _recruiterService.AddNewRecruiter(model);
+            _apiResult.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -102,54 +84,48 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> AddNewRecruiter(AddNewRecruiterAccountModel model)
         {
-            var result = new ApiResult();
-            try
+            var currentUser = await _userService.GetUser(new User { Username = Username });
+            var existUser = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+
+            if (currentUser.RoleId == (long)ERole.ID_Business)
             {
-                var currentUser = await _userService.GetUser(new User { Username = Username });
-                var existUser = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+                var currentCompany = await _companyService.GetCompanyByUser(currentUser);
+                if (currentCompany is null)
+                {
+                    _apiResult.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
+                    _apiResult.IsSuccess = false;
 
-                if (currentUser.RoleId == (long)ERole.ID_Business)
-                {
-                    var currentCompany = await _companyService.GetCompanyByUser(currentUser);
-                    if (currentCompany is null)
-                    {
-                        result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
-                        result.IsSuccess = false;
-                        return Ok(result);
-                    }
-                    model.CompanyId = currentCompany.Id;
+                    return Ok(_apiResult);
                 }
-                else
+                model.CompanyId = currentCompany.Id;
+            }
+            else
+            {
+                var existCompany = await _companyService.GetCompany(new Company { Id = model.CompanyId });
+                if (existCompany is null)
                 {
-                    var existCompany = await _companyService.GetCompany(new Company { Id = model.CompanyId });
-                    if (existCompany is null)
-                    {
-                        result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
-                        result.IsSuccess = false;
-                        return Ok(result);
-                    }
-                }
-                if (existUser is not null)
-                {
-                    result.Message = "Username hoặc email này đã tồn tại, vui lòng chọn email khác";
-                    result.IsSuccess = false;
-                    return Ok(result);
-                }
+                    _apiResult.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
+                    _apiResult.IsSuccess = false;
 
-                result.IsSuccess = await _recruiterService.AssignUserToCompany(model);
-                result.Message = result.IsSuccess ? "Thêm tài khoản nhân sự thành công" : "Thêm tài khoản nhân sự thất bại";
-                if (result.IsSuccess)
-                {
-                    result.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
+                    return Ok(_apiResult);
                 }
             }
-            catch (Exception ex)
+            if (existUser is not null)
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-                result.Message = ex.Message;
+                _apiResult.Message = "Username hoặc email này đã tồn tại, vui lòng chọn email khác";
+                _apiResult.IsSuccess = false;
+
+                return Ok(_apiResult);
             }
-            return Ok(result);
+
+            _apiResult.IsSuccess = await _recruiterService.AssignUserToCompany(model);
+            _apiResult.Message = _apiResult.IsSuccess ? "Thêm tài khoản nhân sự thành công" : "Thêm tài khoản nhân sự thất bại";
+            if (_apiResult.IsSuccess)
+            {
+                _apiResult.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
+            }
+
+            return Ok(_apiResult);
         }
     }
 }

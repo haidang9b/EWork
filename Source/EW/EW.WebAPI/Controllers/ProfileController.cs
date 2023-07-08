@@ -14,22 +14,22 @@ namespace EW.WebAPI.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ILogger<ProfileController> _logger;
         private readonly IUserCVService _userCVService;
         private readonly IProfileSerivce _profileSerivce;
+        private readonly ApiResult _apiResult;
+
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public ProfileController(
             IUserService userService,
-            ILogger<ProfileController> logger,
             IUserCVService userCVService,
             IProfileSerivce profileSerivce
         )
         {
             _userService = userService;
-            _logger = logger;
             _userCVService = userCVService;
             _profileSerivce = profileSerivce;
+            _apiResult = new();
         }
 
 
@@ -41,30 +41,22 @@ namespace EW.WebAPI.Controllers
         [HttpGet("my-information")]
         public async Task<IActionResult> MyInformation()
         {
-            var result = new ApiResult();
-            try
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    var initProfile = await _profileSerivce.InitProfile(new User { Username = Username });
-                    result.IsSuccess = true;
-                    result.Message = "Lấy dữ liệu thành công";
-                    result.Data = initProfile;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = "Lấy dữ liệu thành công";
-                    result.Data = profile;
-                }
+                var initProfile = await _profileSerivce.InitProfile(new User { Username = Username });
+                _apiResult.IsSuccess = true;
+                _apiResult.Message = "Lấy dữ liệu thành công";
+                _apiResult.Data = initProfile;
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.IsSuccess = true;
+                _apiResult.Message = "Lấy dữ liệu thành công";
+                _apiResult.Data = profile;
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -76,40 +68,33 @@ namespace EW.WebAPI.Controllers
         [HttpPut("contact")]
         public async Task<IActionResult> EditContact(ContactModel model)
         {
-            var result = new ApiResult();
-            try
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Vui lòng get dữ liệu trước khi update";
-                    return Ok(result);
-                }
-                profile.EmailContact = model.EmailContact;
-                profile.PhoneNumber = model.PhoneNumber;
-                profile.Github = model.Github;
-                profile.Linkedin = model.Linkedin;
-                profile.Address = model.Address;
-                profile.Objective = model.Objective;
-                profile.Skills = model.Skills;
-                result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
-                if (result.IsSuccess)
-                {
-                    result.Data = profile;
-                    result.Message = "Cập nhật thông tin thành công";
-                }
-                else
-                {
-                    result.Message = "Cập nhật thông tin thất bại";
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Vui lòng get dữ liệu trước khi update";
+
+                return Ok(_apiResult);
             }
-            catch (Exception ex)
+            profile.EmailContact = model.EmailContact;
+            profile.PhoneNumber = model.PhoneNumber;
+            profile.Github = model.Github;
+            profile.Linkedin = model.Linkedin;
+            profile.Address = model.Address;
+            profile.Objective = model.Objective;
+            profile.Skills = model.Skills;
+            _apiResult.IsSuccess = await _profileSerivce.UpdateProfile(profile);
+            if (_apiResult.IsSuccess)
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Data = profile;
+                _apiResult.Message = "Cập nhật thông tin thành công";
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.Message = "Cập nhật thông tin thất bại";
+            }
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Turn on or turn off status open for work 
@@ -120,51 +105,45 @@ namespace EW.WebAPI.Controllers
         [HttpPut("change-status-open-for-work")]
         public async Task<IActionResult> UpdateStatusOpenForWork(UpdateStatusModel model)
         {
-            var result = new ApiResult();
-            try
+            var currrentUser = await _userService.GetUser(new User { Username = Username });
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var currrentUser = await _userService.GetUser(new User { Username = Username });
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Vui lòng get dữ liệu trước khi update";
-                    return Ok(result);
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Vui lòng get dữ liệu trước khi update";
+                return Ok(_apiResult);
+            }
 
-                if (string.IsNullOrEmpty(profile.PhoneNumber)
-                    || string.IsNullOrEmpty(profile.Objective)
-                    || string.IsNullOrEmpty(profile.Skills))
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Bạn vui lòng điền đầy đủ thông tin trước khi bật tìm kiếm việc làm";
-                    return Ok(result);
-                }
-                var cvsOfUser = await _userCVService.GetUserCVsByUser(currrentUser);
-                if (!cvsOfUser.Where(item => item.Featured).Any())
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Bạn vui lòng chọn CV chính để bật tìm việc tại quản lý CV";
-                    return Ok(result);
-                }
-                profile.IsOpenForWork = model.IsOpenForWork;
-                result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
-                if (result.IsSuccess)
-                {
-                    result.Data = profile;
-                    result.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thành công" : "Tắt tìm kiếm việc thành công";
-                }
-                else
-                {
-                    result.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thất bại" : "Tắt tìm kiếm việc thất bại";
-                }
-            }
-            catch (Exception ex)
+            if (string.IsNullOrEmpty(profile.PhoneNumber)
+                || string.IsNullOrEmpty(profile.Objective)
+                || string.IsNullOrEmpty(profile.Skills))
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Bạn vui lòng điền đầy đủ thông tin trước khi bật tìm kiếm việc làm";
+
+                return Ok(_apiResult);
             }
-            return Ok(result);
+            var cvsOfUser = await _userCVService.GetUserCVsByUser(currrentUser);
+            if (!cvsOfUser.Where(item => item.Featured).Any())
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Bạn vui lòng chọn CV chính để bật tìm việc tại quản lý CV";
+
+                return Ok(_apiResult);
+            }
+            profile.IsOpenForWork = model.IsOpenForWork;
+            _apiResult.IsSuccess = await _profileSerivce.UpdateProfile(profile);
+            if (_apiResult.IsSuccess)
+            {
+                _apiResult.Data = profile;
+                _apiResult.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thành công" : "Tắt tìm kiếm việc thành công";
+            }
+            else
+            {
+                _apiResult.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thất bại" : "Tắt tìm kiếm việc thất bại";
+            }
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Get all profile is turning on open for work
@@ -174,19 +153,11 @@ namespace EW.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetCandidateOpenForWork()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _profileSerivce.GetProfileOpenForWorks();
-                result.IsSuccess = true;
-                result.Message = "Lấy dữ liệu thành công";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+            _apiResult.Data = await _profileSerivce.GetProfileOpenForWorks();
+            _apiResult.IsSuccess = true;
+            _apiResult.Message = "Lấy dữ liệu thành công";
+
+            return Ok(_apiResult);
         }
     }
 }

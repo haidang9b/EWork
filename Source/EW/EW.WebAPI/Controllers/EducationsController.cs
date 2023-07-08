@@ -13,19 +13,19 @@ namespace EW.WebAPI.Controllers
     [ApiController]
     public class EducationsController : ControllerBase
     {
-        private readonly ILogger<ProfileController> _logger;
         private readonly IEducationService _educationService;
         private readonly IProfileSerivce _profileSerivce;
+        private readonly ApiResult _apiResult;
+
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         public EducationsController(
-            ILogger<ProfileController> logger,
             IEducationService educationService,
             IProfileSerivce profileSerivce
         )
         {
-            _logger = logger;
             _educationService = educationService;
             _profileSerivce = profileSerivce;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -36,45 +36,37 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AddEducationModel model)
         {
-            var result = new ApiResult();
-            try
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Vui lòng get dữ liệu trước khi update";
-                    return Ok(result);
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Vui lòng get dữ liệu trước khi update";
+                return Ok(_apiResult);
+            }
 
-                var newEducation = new Education
-                {
-                    ProfileId = profile.Id,
-                    Description = model.Description,
-                    From = model.From,
-                    To = model.To,
-                    OrgName = model.OrgName
-                };
-                var data = await _educationService.Add(newEducation);
-                if (data is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể thêm học vấn này";
-                    return Ok(result);
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = "Thêm học vấn thành công";
-                    result.Data = data;
-                }
-            }
-            catch (Exception ex)
+            var newEducation = new Education
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                ProfileId = profile.Id,
+                Description = model.Description,
+                From = model.From,
+                To = model.To,
+                OrgName = model.OrgName
+            };
+            var data = await _educationService.Add(newEducation);
+            if (data is null)
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể thêm học vấn này";
+                return Ok(_apiResult);
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.IsSuccess = true;
+                _apiResult.Message = "Thêm học vấn thành công";
+                _apiResult.Data = data;
+            }
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -86,26 +78,18 @@ namespace EW.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _educationService.Delete(new Education { Id = id });
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _educationService.Delete(new Education { Id = id });
-                if (result.IsSuccess)
-                {
-                    result.Message = "Xóa học vấn thành công";
-                    result.Data = new Education { Id = id };
-                }
-                else
-                {
-                    result.Message = "Xóa học vấn thất bại";
-                }
+                _apiResult.Message = "Xóa học vấn thành công";
+                _apiResult.Data = new Education { Id = id };
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Xóa học vấn thất bại";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -117,26 +101,18 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Education model)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _educationService.Update(model);
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _educationService.Update(model);
-                if (result.IsSuccess)
-                {
-                    result.Message = "Cập nhật học vấn thành công";
-                    result.Data = model;
-                }
-                else
-                {
-                    result.Message = "Cập nhật học vấn thất bại";
-                }
+                _apiResult.Message = "Cập nhật học vấn thành công";
+                _apiResult.Data = model;
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Cập nhật học vấn thất bại";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
     }
 }
