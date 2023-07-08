@@ -16,17 +16,21 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IApplicationService _applicationService;
         private readonly IRecruitmentPostService _recruitmentPostService;
-        private readonly ILogger<ApplicationsController> _logger;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         private readonly ApiResult _apiResult;
 
-        public ApplicationsController(IApplicationService applicationService, ILogger<ApplicationsController> logger, IUserService userService, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IUserCVService userCVService)
+        public ApplicationsController(
+            IApplicationService applicationService, 
+            IUserService userService, 
+            IRecruitmentPostService recruitmentPostService, 
+            IEmailService emailService, 
+            IUserCVService userCVService
+            )
         {
             _applicationService = applicationService;
-            _logger = logger;
             _userService = userService;
             _recruitmentPostService = recruitmentPostService;
             _emailService = emailService;

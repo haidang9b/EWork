@@ -17,12 +17,13 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
-        private readonly ITokenService _tokenService;
-        public UsersController(IUserService userService, ILogger<UsersController> logger, ITokenService tokenService)
+        public UsersController(
+            IUserService userService,
+            ILogger<UsersController> logger
+        )
         {
             _userService = userService;
             _logger = logger;
-            _tokenService = tokenService;
         }
         // GET: api/<UsersController>
         [Authorize(Roles = "Faculty")]
@@ -104,7 +105,7 @@ namespace EW.WebAPI.Controllers
                 result.IsSuccess = true;
                 result.Message = "Lấy các quyền thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
                 _logger.LogError(ex.Message);
@@ -121,12 +122,12 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var userExist = await _userService.GetUser(new User { Id = model.Id, Username = model.Username });
-                if(userExist is null)
+                if (userExist is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này không tồn tại";
                 }
-                else if(userExist.IsActive == model.IsActive)
+                else if (userExist.IsActive == model.IsActive)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không thể thay đổi trạng thái giống như trạng thái cũ";
@@ -145,9 +146,9 @@ namespace EW.WebAPI.Controllers
                         result.Message = "Cập nhật trạng thái tài khoản thất bại";
                     }
                 }
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
@@ -163,7 +164,14 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _userService.GetUser(new User { Id = id });
-                if (exist is null || (exist is not null && (exist.Username != model.Username || exist.Email != model.Email)))
+                if (exist is null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Tài khoản này không tồn tại";
+                    return Ok(result);
+                }
+
+                else if (exist.Username != model.Username || exist.Email != model.Email)
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này không tồn tại";
@@ -174,7 +182,7 @@ namespace EW.WebAPI.Controllers
                     exist.PhoneNumber = model.NumberPhone;
                     exist.UpdatedDate = DateTimeOffset.Now;
                     result.IsSuccess = await _userService.UpdateUser(exist);
-                    if(result.IsSuccess)
+                    if (result.IsSuccess)
                     {
                         result.Message = "Cập nhật tài khoản thành công";
                         result.IsSuccess = true;
