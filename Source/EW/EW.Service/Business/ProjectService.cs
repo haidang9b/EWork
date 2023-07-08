@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -17,7 +18,7 @@ namespace EW.Services.Business
             model.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<Project>().AddAsync(model);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Không thể thêm dự án này");
+                throw new EWException("Không thể thêm dự án này");
             return model;
         }
 
@@ -26,7 +27,7 @@ namespace EW.Services.Business
             var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentProject == null)
             {
-                throw new Exception("Không tồn tại dự án này");
+                throw new EWException("Không tồn tại dự án này");
             }
             _unitOfWork.Repository<Project>().Delete(currentProject);
             return await _unitOfWork.SaveChangeAsync();
@@ -37,7 +38,7 @@ namespace EW.Services.Business
             var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentProject == null)
             {
-                throw new Exception("Không tồn tại dự án này");
+                throw new EWException("Không tồn tại dự án này");
             }
             currentProject.UpdatedDate = DateTimeOffset.Now;
             currentProject.Description = model.Description;

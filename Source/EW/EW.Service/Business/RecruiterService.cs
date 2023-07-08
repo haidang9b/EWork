@@ -1,5 +1,6 @@
 ﻿using EW.Commons.Constaints;
 using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
@@ -64,13 +65,13 @@ namespace EW.Services.Business
                 if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) != null) 
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception("Username hoặc email này đã đăng ký, vui lòng thử lại");
+                    throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
                 }
                 var resultAddFirstAccount = await _userService.Register(firstAccountOfCompany);
                 if(resultAddCompany == false || resultAddFirstAccount ==  false)
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception("Không thể thêm tài khoản hoặc công ty này");
+                    throw new EWException("Không thể thêm tài khoản hoặc công ty này");
                 }
 
                 var companyAdded = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(company => company.Email == newCompany.Email && company.PhoneNumber == newCompany.PhoneNumber);
@@ -94,10 +95,10 @@ namespace EW.Services.Business
                 else
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception("Không thể khởi tạo tài khoản này");
+                    throw new EWException("Không thể khởi tạo tài khoản này");
                 }
             }
-            throw new Exception("Username hoặc email này đã đăng ký, vui lòng thử lại");
+            throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
         }
        
         public async Task<IEnumerable<RecruiterViewModel>> GetRecruiters()
@@ -123,7 +124,7 @@ namespace EW.Services.Business
         {
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username || item.Email == model.Email || item.PhoneNumber == model.PhoneNumber);
             if (exist != null)
-                throw new Exception("Tài khoản này đã tồn tại, vui lòng thử lại");
+                throw new EWException("Tài khoản này đã tồn tại, vui lòng thử lại");
             _unitOfWork.BeginTransaction();
             var newRecruiter = new User
             {
@@ -144,14 +145,14 @@ namespace EW.Services.Business
             if(resultAdded == false)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Không thể đăng ký tài khoản này");
+                throw new EWException("Không thể đăng ký tài khoản này");
             }
             var userAdded = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username && item.Email == model.Email && item.PhoneNumber == model.PhoneNumber);
             var companyCurrent = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.CompanyId);
             if (userAdded == null || companyCurrent == null)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Không thể đăng ký tài khoản này");
+                throw new EWException("Không thể đăng ký tài khoản này");
             }
             var newAsign = new Recruiter
             {
@@ -167,7 +168,7 @@ namespace EW.Services.Business
             if(resultAdded == false)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Không thể đăng ký tài khoản này");
+                throw new EWException("Không thể đăng ký tài khoản này");
             }
             _unitOfWork.Commit();
             return true;

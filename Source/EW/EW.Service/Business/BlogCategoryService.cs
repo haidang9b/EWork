@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -17,13 +18,13 @@ namespace EW.Services.Business
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Name == model.Name);
             if (exist != null)
             {
-                throw new Exception("Đã tồn tại danh mục này rồi, vui lòng kiểm tra lại");
+                throw new EWException("Đã tồn tại danh mục này rồi, vui lòng kiểm tra lại");
             }
             model.CreatedDate = DateTimeOffset.Now;
             model.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<BlogCategory>().AddAsync(model);
             if (!(await _unitOfWork.SaveChangeAsync()))
-                throw new Exception("Không thể thêm danh mục này");
+                throw new EWException("Không thể thêm danh mục này");
             return model;
         }
 
@@ -32,7 +33,7 @@ namespace EW.Services.Business
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (exist == null) 
             {
-                throw new Exception("Không tồn tại danh mục này");
+                throw new EWException("Không tồn tại danh mục này");
             }
             _unitOfWork.Repository<BlogCategory>().Delete(exist);
             return await _unitOfWork.SaveChangeAsync();
@@ -49,14 +50,14 @@ namespace EW.Services.Business
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (exist == null)
             {
-                throw new Exception("Không tồn tại danh mục này");
+                throw new EWException("Không tồn tại danh mục này");
             }
             exist.UpdatedDate = DateTimeOffset.Now;
             exist.Name = model.Name;
             exist.Description = model.Description;
             _unitOfWork.Repository<BlogCategory>().Update(exist);
             if (!(await _unitOfWork.SaveChangeAsync()))
-                throw new Exception("Không thể cập nhật danh mục này");
+                throw new EWException("Không thể cập nhật danh mục này");
             return exist;
         }
     }

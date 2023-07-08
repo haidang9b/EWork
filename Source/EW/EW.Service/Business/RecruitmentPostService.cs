@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Constracts;
@@ -19,7 +20,7 @@ namespace EW.Services.Business
             model.CreatedDate = DateTime.Now;
             await _unitOfWork.Repository<RecruitmentPost>().AddAsync(model);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Thêm bài viết thất bại");
+                throw new EWException("Thêm bài viết thất bại");
             return model;
         }
 

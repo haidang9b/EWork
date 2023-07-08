@@ -1,5 +1,6 @@
 ﻿using EW.Commons.Constaints;
 using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Domain.ViewModels;
@@ -37,7 +38,7 @@ namespace EW.Services.Business
         {
             var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (existCompany == null)
-                throw new Exception("Công ty này không tồn tại, vui lòng kiểm tra lại");
+                throw new EWException("Công ty này không tồn tại, vui lòng kiểm tra lại");
             existCompany.CompanyName = model.CompanyName;
             existCompany.Address = model.Address;
             existCompany.Status = model.Status;
@@ -78,7 +79,7 @@ namespace EW.Services.Business
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Thêm công ty mới thất bại");
+                throw new EWException("Thêm công ty mới thất bại");
             return newCompany;
         }
 

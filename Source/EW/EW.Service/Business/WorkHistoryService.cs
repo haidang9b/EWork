@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -17,7 +18,7 @@ namespace EW.Services.Business
             workHistory.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<WorkHistory>().AddAsync(workHistory);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Không thể thêm kinh nghiệm làm việc này");
+                throw new EWException("Không thể thêm kinh nghiệm làm việc này");
             return workHistory;
         }
 
@@ -26,7 +27,7 @@ namespace EW.Services.Business
             var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id);
             if (currentWorkHistory == null) 
             {
-                throw new Exception("Không tồn tại kinh nghiệm làm việc này");
+                throw new EWException("Không tồn tại kinh nghiệm làm việc này");
             }
             _unitOfWork.Repository<WorkHistory>().Delete(currentWorkHistory);
             return await _unitOfWork.SaveChangeAsync();
@@ -38,7 +39,7 @@ namespace EW.Services.Business
             var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id);
             if (currentWorkHistory == null)
             {
-                throw new Exception("Không tồn tại kinh nghiệm làm việc này");
+                throw new EWException("Không tồn tại kinh nghiệm làm việc này");
             }
             currentWorkHistory.UpdatedDate = DateTimeOffset.Now;
             currentWorkHistory.Description = workHistory.Description;

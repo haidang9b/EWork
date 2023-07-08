@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Repository;
@@ -19,7 +20,7 @@ namespace EW.Services.Business
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Email == user.Email || item.PhoneNumber == user.PhoneNumber);
             if (exist != null)
             {
-                throw new Exception("Tài khoản này đã tồn tại");
+                throw new EWException("Tài khoản này đã tồn tại");
             }
             await _unitOfWork.Repository<User>().AddAsync(user);
             return await _unitOfWork.SaveChangeAsync();

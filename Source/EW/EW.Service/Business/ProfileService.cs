@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Constaints;
+using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Domain.ViewModels;
 using EW.Repository;
@@ -66,7 +67,7 @@ namespace EW.Services.Business
             };
             await _unitOfWork.Repository<Profile>().AddAsync(newProfile);
             if((await _unitOfWork.SaveChangeAsync()) == false){
-                throw new Exception("Không thể khởi tại profile");
+                throw new EWException("Không thể khởi tại profile");
             }
             newProfile.Certificates = new List<Certificate>();
             newProfile.Projects = new List<Project>();
@@ -81,7 +82,7 @@ namespace EW.Services.Business
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == profile.UserId);
             if(currentProfile == null || currentUser == null)
             {
-                throw new Exception("Không có profile, vui lòng thử lại");
+                throw new EWException("Không có profile, vui lòng thử lại");
             }
             currentUser.PhoneNumber = profile.PhoneNumber;
             currentProfile.Address = profile.Address;
