@@ -24,11 +24,8 @@ namespace EW.Services.Business
 
         public async Task<bool> Delete(WorkHistory workHistory)
         {
-            var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id);
-            if (currentWorkHistory is null) 
-            {
-                throw new EWException("Không tồn tại kinh nghiệm làm việc này");
-            }
+            var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id)
+                                        ?? throw new EWException("Không tồn tại kinh nghiệm làm việc này");
             _unitOfWork.Repository<WorkHistory>().Delete(currentWorkHistory);
             return await _unitOfWork.SaveChangeAsync();
 
@@ -36,11 +33,8 @@ namespace EW.Services.Business
 
         public async Task<bool> Update(WorkHistory workHistory)
         {
-            var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id);
-            if (currentWorkHistory is null)
-            {
-                throw new EWException("Không tồn tại kinh nghiệm làm việc này");
-            }
+            var currentWorkHistory = await _unitOfWork.Repository<WorkHistory>().FirstOrDefaultAsync(item => item.Id == workHistory.Id)
+                                        ?? throw new EWException("Không tồn tại kinh nghiệm làm việc này");
             currentWorkHistory.UpdatedDate = DateTimeOffset.Now;
             currentWorkHistory.Description = workHistory.Description;
             currentWorkHistory.From = workHistory.From;
