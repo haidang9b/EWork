@@ -72,7 +72,7 @@ namespace EW.WebAPI.Controllers
                     if (currentUser.RoleId == (long)ERole.ID_Business)
                     {
                         var recruiter = await _recruiterService.GetRecruiterByUser(currentUser);
-                        if (recruiter == null)
+                        if (recruiter is null)
                         {
                             result.IsSuccess = false;
                             result.Message = "Bạn không có quyền viết bài cho công ty";
@@ -83,7 +83,7 @@ namespace EW.WebAPI.Controllers
                     else
                     {
                         var company = await _companyService.GetCompany(new Company { Id = model.CompanyId ?? default(long) });
-                        if (company == null)
+                        if (company is null)
                         {
                             result.IsSuccess = false;
                             result.Message = "Không có công ty này, vui lòng kiểm tra lại";
@@ -93,7 +93,7 @@ namespace EW.WebAPI.Controllers
                     }
 
                     var data = await _recruitmentPostService.Add(postAdd);
-                    if (data == null)
+                    if (data is null)
                     {
                         result.IsSuccess = false;
                         result.Message = "Không thể thêm bài tuyển dụng này";
@@ -107,7 +107,7 @@ namespace EW.WebAPI.Controllers
                 else
                 {
                     var existPost = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.Id });
-                    if(existPost == null)
+                    if(existPost is null)
                     {
                         result.IsSuccess = false;
                         result.Message = "Không có bài viết nào từ yêu cầu này, vui lòng thử lại";
@@ -154,7 +154,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = id });
-                if(exist == null)
+                if(exist is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không có bài viết từ ID này";
@@ -205,7 +205,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id });
-                if(post == null)
+                if(post is null)
                 {
                     throw new EWException("Không có dữ liệu từ id này");
                 }

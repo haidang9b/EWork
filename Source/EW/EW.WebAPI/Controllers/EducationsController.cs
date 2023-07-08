@@ -36,7 +36,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if (profile == null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -52,7 +52,7 @@ namespace EW.WebAPI.Controllers
                     OrgName = model.OrgName
                 };
                 var data = await _educationService.Add(newEducation);
-                if (data == null)
+                if (data is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không thể thêm học vấn này";

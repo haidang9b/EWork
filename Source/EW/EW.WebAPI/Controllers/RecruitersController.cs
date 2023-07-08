@@ -105,7 +105,7 @@ namespace EW.WebAPI.Controllers
                 if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
                     var currentCompany = await _companyService.GetCompanyByUser(currentUser);
-                    if (currentCompany == null)
+                    if (currentCompany is null)
                     {
                         result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
                         result.IsSuccess = false;
@@ -116,14 +116,14 @@ namespace EW.WebAPI.Controllers
                 else
                 {
                     var existCompany = await _companyService.GetCompany(new Company { Id = model.CompanyId });
-                    if (existCompany == null)
+                    if (existCompany is null)
                     {
                         result.Message = "Không tồn tại công ty này, vui lòng chọn công ty khác";
                         result.IsSuccess = false;
                         return Ok(result);
                     }
                 }
-                if (existUser != null)
+                if (existUser is not null)
                 {
                     result.Message = "Username hoặc email này đã tồn tại, vui lòng chọn email khác";
                     result.IsSuccess = false;

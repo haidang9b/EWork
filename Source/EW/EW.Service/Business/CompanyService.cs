@@ -37,7 +37,7 @@ namespace EW.Services.Business
         public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
         {
             var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (existCompany == null)
+            if (existCompany is null)
                 throw new EWException("Công ty này không tồn tại, vui lòng kiểm tra lại");
             existCompany.CompanyName = model.CompanyName;
             existCompany.Address = model.Address;

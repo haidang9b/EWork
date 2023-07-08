@@ -51,7 +51,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exist != null)
+                if (exist is not null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này đã tồn tại";
@@ -121,7 +121,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var userExist = await _userService.GetUser(new User { Id = model.Id, Username = model.Username });
-                if(userExist == null)
+                if(userExist is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này không tồn tại";
@@ -163,7 +163,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _userService.GetUser(new User { Id = id });
-                if (exist == null || (exist != null && (exist.Username != model.Username || exist.Email != model.Email)))
+                if (exist is null || (exist is not null && (exist.Username != model.Username || exist.Email != model.Email)))
                 {
                     result.IsSuccess = false;
                     result.Message = "Tài khoản này không tồn tại";

@@ -22,13 +22,14 @@ namespace EW.Services.Business
         {
             var user = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == model.UserId);
             var recruitmentPost = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.RecruitmentPostId);
+            
             var cvApply = await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.UserCVId, "User");
-            if(recruitmentPost == null)
+            if(recruitmentPost is null)
             {
                 throw new EWException("Bài viết không tồn tại");
             }
 
-            if(cvApply == null)
+            if(cvApply is null)
             {
                 throw new EWException("CV không tồn tại");
             }
@@ -38,7 +39,7 @@ namespace EW.Services.Business
                 throw new EWException("Người dùng không sở hữu cv này");
             }
             var existApplied = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.RecruitmentPostId == model.RecruitmentPostId && item.UserCV.UserId == user.Id);
-            if (existApplied != null) 
+            if (existApplied is not null) 
             {
                 throw new EWException("Yêu cầu này đã tồn tại, vui lòng kiểm tra lại");
             }
@@ -71,7 +72,7 @@ namespace EW.Services.Business
             foreach (var application in applications)
             {
                 var applicationUser = users.FirstOrDefault(item => item.Id == application.UserCV.UserId);
-                if (applicationUser == null)
+                if (applicationUser is null)
                     continue;
                 var userRow = new UserInforJobApplicationViewModel
                 {
@@ -114,7 +115,7 @@ namespace EW.Services.Business
         public async Task<IEnumerable<AppliedForBusinessViewModel>> GetAppliedsForBusiness(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
-            if (currentUser == null)
+            if (currentUser is null)
             {
                 throw new EWException("Không tồn tại người dùng này");
             }
@@ -126,7 +127,7 @@ namespace EW.Services.Business
             foreach(var application in applications)
             {
                 var applicationUser = users.FirstOrDefault(item => item.Id == application.UserCV.UserId);
-                if (applicationUser == null)
+                if (applicationUser is null)
                     continue;
                 var userRow = new UserInforJobApplicationViewModel
                 {
@@ -169,7 +170,7 @@ namespace EW.Services.Business
         public async Task<IEnumerable<Application>> GetByApplier(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
-            if(currentUser == null)
+            if(currentUser is null)
             {
                 throw new EWException("Không tồn tại người dùng này");
             }
@@ -179,7 +180,7 @@ namespace EW.Services.Business
         public async Task<IEnumerable<JobAppliedViewModel>> GetJobsApplied(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
-            if (currentUser == null)
+            if (currentUser is null)
             {
                 throw new EWException("Không tồn tại người dùng này");
             }
@@ -205,10 +206,10 @@ namespace EW.Services.Business
         public async Task<bool> IsHasRole(ApplicationUserModel model)
         {
             var currentRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username, "Company");
-            if (currentRecruiter == null)
+            if (currentRecruiter is null)
                 throw new EWException("Không tồn tại user này");
             var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == model.ApplicationId);
-            if (currentApplication == null)
+            if (currentApplication is null)
                 throw new EWException("Không tồn tại ứng tuyển này");
             var currentRecruitmentPost = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == currentApplication.RecruitmentPostId);
 
@@ -218,7 +219,7 @@ namespace EW.Services.Business
         public async Task<bool> Update(Application application)
         {
             var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == application.Id);
-            if (currentApplication == null)
+            if (currentApplication is null)
                 throw new EWException("Không tồn tại ứng tuyển này");
             currentApplication.UpdatedDate = DateTimeOffset.Now;
             currentApplication.Description = application.Description;

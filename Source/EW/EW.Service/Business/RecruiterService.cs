@@ -23,7 +23,7 @@ namespace EW.Services.Business
         public async Task<bool> AddNewRecruiter(RegisterRecruiterModel model)
         {
             var exist = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Email == model.Email || model.PhoneNumber == item.PhoneNumber);
-            if(exist == null)
+            if(exist is null)
             {
                 _unitOfWork.BeginTransaction();
                 var newCompany = new Company
@@ -62,7 +62,7 @@ namespace EW.Services.Business
                     TokenResetPassword = MyRandom.RandomString(30)
                 };
 
-                if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) != null) 
+                if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) is not null) 
                 {
                     _unitOfWork.RollBack();
                     throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
@@ -123,7 +123,7 @@ namespace EW.Services.Business
         public async Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model)
         {
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username || item.Email == model.Email || item.PhoneNumber == model.PhoneNumber);
-            if (exist != null)
+            if (exist is not null)
                 throw new EWException("Tài khoản này đã tồn tại, vui lòng thử lại");
             _unitOfWork.BeginTransaction();
             var newRecruiter = new User
@@ -149,7 +149,7 @@ namespace EW.Services.Business
             }
             var userAdded = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username && item.Email == model.Email && item.PhoneNumber == model.PhoneNumber);
             var companyCurrent = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.CompanyId);
-            if (userAdded == null || companyCurrent == null)
+            if (userAdded is null || companyCurrent is null)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
