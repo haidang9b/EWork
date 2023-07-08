@@ -16,7 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEWDbConfiguration(builder.Configuration);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins, builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy(MyAllowSpecificOrigins, 
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
 builder.Services.AddCors();
 
