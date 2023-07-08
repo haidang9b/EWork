@@ -16,9 +16,13 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly ICertificateService _certificateService;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public CertificatesController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, ICertificateService certificateService)
+        public CertificatesController(
+            ILogger<ProfileController> logger, 
+            IProfileSerivce profileSerivce, 
+            ICertificateService certificateService
+        )
         {
             _logger = logger;
             _profileSerivce = profileSerivce;
@@ -35,7 +39,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;
