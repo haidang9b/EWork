@@ -18,7 +18,7 @@ namespace EW.WebAPI.Controllers
         private readonly IBlogService _blogService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         private readonly ApiResult _apiResult;
 
         public BlogsController(

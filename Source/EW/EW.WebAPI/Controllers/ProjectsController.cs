@@ -18,12 +18,12 @@ namespace EW.WebAPI.Controllers
         private readonly IProfileSerivce _profileSerivce;
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public ProjectsController(
-            ILogger<ProfileController> logger, 
-            IProfileSerivce profileSerivce, 
-            IProjectService projectService, 
+            ILogger<ProfileController> logger,
+            IProfileSerivce profileSerivce,
+            IProjectService projectService,
             IMapper mapper
         )
         {

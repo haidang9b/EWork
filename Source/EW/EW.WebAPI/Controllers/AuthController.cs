@@ -26,7 +26,7 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IMapper _mapper;
 
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         private readonly ApiResult _apiResult;
         public AuthController(
@@ -37,7 +37,7 @@ namespace EW.WebAPI.Controllers
             ICompanyService companyService,
             IOptions<CustomConfig> customConfig,
             IMapper mapper
-            )
+        )
         {
             _userService = userService;
             _tokenService = tokenService;

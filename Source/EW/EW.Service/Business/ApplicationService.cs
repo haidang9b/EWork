@@ -12,7 +12,10 @@ namespace EW.Services.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRecruitmentPostService _recruitmentPostService;
 
-        public ApplicationService(IUnitOfWork unitOfWork, IRecruitmentPostService recruitmentPostService)
+        public ApplicationService(
+            IUnitOfWork unitOfWork, 
+            IRecruitmentPostService recruitmentPostService
+        )
         {
             _unitOfWork = unitOfWork;
             _recruitmentPostService = recruitmentPostService;

@@ -11,7 +11,10 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IChartService _chartService;
         private readonly ILogger<ChartsController> _logger;
-        public ChartsController(IChartService chartService, ILogger<ChartsController> logger)
+        public ChartsController(
+            IChartService chartService, 
+            ILogger<ChartsController> logger
+        )
         {
             _chartService = chartService;
             _logger = logger;

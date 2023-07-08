@@ -17,7 +17,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitersController> _logger;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public RecruitersController(
             IRecruiterService recruiterService,

@@ -18,7 +18,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserCVService _userCVService;
         private readonly IUserService _userService;
         private readonly IProfileSerivce _profileSerivce;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public DocumentsController(
             ILogger<UploadsController> logger,

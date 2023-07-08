@@ -27,7 +27,7 @@ namespace EW.Services.Business
         {
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
             return recruitmentPosts
-                .GroupBy(item => new { Year = item.CreatedDate.Year, Month = item.CreatedDate.Month, Day = item.CreatedDate.Day })
+                .GroupBy(item => new { item.CreatedDate.Year, item.CreatedDate.Month, item.CreatedDate.Day })
                 .Select(row => new ChartResultViewModel
                 {
                     Label = $"{row.Key.Day}/{row.Key.Month}/{row.Key.Year}",

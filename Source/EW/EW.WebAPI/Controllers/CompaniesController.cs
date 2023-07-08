@@ -27,7 +27,7 @@ namespace EW.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ApiResult _apiResult;
 
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public CompaniesController(
             IUserService userService,

@@ -19,7 +19,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         private readonly ApiResult _apiResult;
 
         public ApplicationsController(

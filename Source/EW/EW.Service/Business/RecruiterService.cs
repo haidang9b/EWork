@@ -14,7 +14,10 @@ namespace EW.Services.Business
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        public RecruiterService(IUnitOfWork unitOfWork, IUserService userService)
+        public RecruiterService(
+            IUnitOfWork unitOfWork, 
+            IUserService userService
+        )
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

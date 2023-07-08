@@ -44,7 +44,9 @@ namespace EW.Services.Business
 
         public async Task<Blog> Update(Blog blog)
         {
-            var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id) ?? throw new EWException("Không tồn tại bài viết này, vui lòng kiểm tra lại");
+            var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id) 
+                            ?? throw new EWException("Không tồn tại bài viết này, vui lòng kiểm tra lại");
+
             exist.Title = blog.Title;
             exist.Content = blog.Content;
             exist.BlogCategoryId = blog.BlogCategoryId;

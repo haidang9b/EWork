@@ -16,11 +16,11 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly ICertificateService _certificateService;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public CertificatesController(
-            ILogger<ProfileController> logger, 
-            IProfileSerivce profileSerivce, 
+            ILogger<ProfileController> logger,
+            IProfileSerivce profileSerivce,
             ICertificateService certificateService
         )
         {
