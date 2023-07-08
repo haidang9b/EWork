@@ -1,0 +1,13 @@
+﻿D:\Dacntt2\Source\EW\EW.Commons\Constaints\Constaints.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\EApplicationStatus.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\ECompanyType.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\ECurrency.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\EFileType.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\ERole.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\ESalaryType.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\EStatusRecruiter.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\ETeamSize.cs
+D:\Dacntt2\Source\EW\EW.Commons\Enums\EWorkingType.cs
+D:\Dacntt2\Source\EW\EW.Commons\Exceptions\EWException.cs
+D:\Dacntt2\Source\EW\EW.Commons\Helpers\EnumHelper.cs
+D:\Dacntt2\Source\EW\EW.Commons\Helpers\MyRandom.cs

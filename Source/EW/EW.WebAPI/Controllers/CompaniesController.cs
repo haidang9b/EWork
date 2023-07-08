@@ -53,7 +53,6 @@ namespace EW.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-
             _apiResult.Message = "Lấy dữ liệu thành công";
             _apiResult.Data = await _companyService.GetCompanies();
 
