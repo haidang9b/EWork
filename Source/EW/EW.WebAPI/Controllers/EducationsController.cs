@@ -16,10 +16,10 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IEducationService _educationService;
         private readonly IProfileSerivce _profileSerivce;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         public EducationsController(
-            ILogger<ProfileController> logger, 
-            IEducationService educationService, 
+            ILogger<ProfileController> logger,
+            IEducationService educationService,
             IProfileSerivce profileSerivce
         )
         {

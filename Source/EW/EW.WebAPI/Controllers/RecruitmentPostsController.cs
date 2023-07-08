@@ -22,7 +22,7 @@ namespace EW.WebAPI.Controllers
         private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitmentPostsController> _logger;
         private readonly IMapper _mapper;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         public RecruitmentPostsController(
             IRecruitmentPostService recruitmentPostService,
             IUserService userService,

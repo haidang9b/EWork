@@ -14,8 +14,8 @@ namespace EW.Services.Business
         private readonly SymmetricSecurityKey _keyRefreshToken;
         public TokenService()
         {
-            _keyAccessToken = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constaints.ACCES_TOKEN_KEY));
-            _keyRefreshToken = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constaints.REFRESH_TOKEN_KEY));
+            _keyAccessToken = new(Encoding.UTF8.GetBytes(Constaints.ACCES_TOKEN_KEY));
+            _keyRefreshToken = new(Encoding.UTF8.GetBytes(Constaints.REFRESH_TOKEN_KEY));
 
         }
         public string CreateRefreshToken(User user)

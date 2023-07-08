@@ -16,10 +16,10 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IWorkHistoryService _workHistoryService;
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         public WorkHistoriesController(
-            ILogger<ProfileController> logger, 
-            IProfileSerivce profileSerivce, 
+            ILogger<ProfileController> logger,
+            IProfileSerivce profileSerivce,
             IWorkHistoryService workHistoryService
         )
         {
