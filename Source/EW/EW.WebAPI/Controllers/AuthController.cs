@@ -25,7 +25,10 @@ namespace EW.WebAPI.Controllers
         private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<AuthController> _logger;
         private IMapper _mapper;
+
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        private ApiResult _apiResult;
         public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig, IMapper mapper)
         {
             _userService = userService;
@@ -35,60 +38,46 @@ namespace EW.WebAPI.Controllers
             _logger = logger;
             _customConfig = customConfig;
             _mapper = mapper;
+            _apiResult = new ApiResult();
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var result = new ApiResult();
-            try
-            {
-                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exist != null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "User is exist in System";
-                }
-                else
-                {
-                    var newUser = _mapper.Map<User>(model);
-                    result.IsSuccess = await _userService.Register(newUser);
-                }
-            }
-            catch (Exception error)
-            {
-                _logger.LogError(error.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            var _apiResult = new ApiResult();
+
+            var newUser = _mapper.Map<User>(model);
+            _apiResult.IsSuccess = await _userService.Register(newUser);
+
+            return Ok(_apiResult);
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var result = new ApiResult();
+            var _apiResult = new ApiResult();
             try
             {
                 var exist = await _userService.GetUser(new User { Username = model.Username });
-                if (exist != null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
+                if (exist is not null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
                 {
 
-                    if(exist.RoleId == (long)ERole.ID_Business)
+                    if (exist.RoleId == (long)ERole.ID_Business)
                     {
                         var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
-                        if (company != null && company.Status == EStatusRecruiter.Pending)
+                        if (company is not null && company.Status == EStatusRecruiter.Pending)
                         {
                             throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
                         }
 
-                        if (company != null && company.Status == EStatusRecruiter.Disabled)
+                        if (company is not null && company.Status == EStatusRecruiter.Disabled)
                         {
                             throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
                         }
 
-                        if (company == null)
+                        if (company is null)
                         {
                             throw new EWException("Tài khoản đang không gắn với công ti nào");
                         }
@@ -97,130 +86,100 @@ namespace EW.WebAPI.Controllers
                     {
                         throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                     }
-                    result.Message = "Đăng nhập thành công";
+                    _apiResult.Message = "Đăng nhập thành công";
                     var rfToken = _tokenService.CreateRefreshToken(exist);
                     var data = new LoginViewModel
                     {
                         AccessToken = _tokenService.CreateToken(exist),
                         RefreshToken = rfToken,
                     };
-                    result.Data = data;
+                    _apiResult.Data = data;
                 }
                 else
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Tài khoản hoặc mật khẩu không chính xác";
+                    _apiResult.IsSuccess = false;
+                    _apiResult.Message = "Tài khoản hoặc mật khẩu không chính xác";
                 }
             }
             catch (Exception error)
             {
                 _logger.LogError(error.Message);
-                result.InternalError(error.Message);
+                _apiResult.InternalError(error.Message);
             }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         [HttpPost("RefreshToken")]
         public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
         {
-            var result = new ApiResult();
-            try
-            {
-                var refreshToken = model.RefreshToken;
-                var validate = _tokenService.GetPayloadRefreshToken(refreshToken);
-                var exist = await _userService.GetUser(new User
-                {
-                    Email = validate.Issuer,
-                    Username = validate.Issuer,
-                });
-                if(!exist.IsActive)
-                {
-                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
-                }
-                var token = _tokenService.CreateToken(exist);
-                var rfToken = _tokenService.CreateRefreshToken(exist);
-                result.Data = new LoginViewModel
-                {
-                    AccessToken = token,
-                    RefreshToken = rfToken,
-                };
 
-            }
-            catch (Exception ex)
+            var refreshToken = model.RefreshToken;
+            var validate = _tokenService.GetPayloadRefreshToken(refreshToken);
+            var exist = await _userService.GetUser(new User
             {
-                result.InternalError();
-                _logger.LogError(ex.Message);
-                return Forbid();
+                Email = validate.Issuer,
+                Username = validate.Issuer,
+            });
+            if (!exist.IsActive)
+            {
+                throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
             }
-            return Ok(result);
+            var token = _tokenService.CreateToken(exist);
+            var rfToken = _tokenService.CreateRefreshToken(exist);
+            _apiResult.Data = new LoginViewModel
+            {
+                AccessToken = token,
+                RefreshToken = rfToken,
+            };
+
+
+            return Ok(_apiResult);
         }
 
         [HttpGet("users")]
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> Users()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _userService.GetUsers();
-            }
-            catch (Exception ex)
-            {
-                result.InternalError();
-                _logger.LogError(ex.Message);
-            }
-            return Ok(result);
+
+            _apiResult.Data = await _userService.GetUsers();
+
+            return Ok(_apiResult);
         }
 
         [HttpGet("users/{id}")]
         public async Task<IActionResult> GetUsersById(int id)
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _userService.GetUser(new User { Id = id });
-            }
-            catch(Exception ex)
-            {
-                result.InternalError();
-                _logger.LogError(ex.Message);
-            }
 
-            return Ok(result);
+            _apiResult.Data = await _userService.GetUser(new User { Id = id });
+
+
+            return Ok(_apiResult);
         }
 
         [HttpPost("login-google")]
         public async Task<IActionResult> LoginWithGoogle(LoginWithGoogleModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var newUser = _mapper.Map<User>(model);
+            var resultRegister = await _userService.RegisterWithGoogle(newUser);
+            if (!resultRegister)
             {
-                var newUser = _mapper.Map<User>(model);
-                var resultRegister = await _userService.RegisterWithGoogle(newUser);
-                if(!resultRegister)
-                {
-                    throw new EWException("Có lỗi trong quá trình đăng nhập");
-                }
-                else
-                {
-                    var exist = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
-                    var rfToken = _tokenService.CreateRefreshToken(exist);
-                    var data = new LoginViewModel
-                    {
-                        AccessToken = _tokenService.CreateToken(exist),
-                        RefreshToken = rfToken,
-                    };
-                    result.Data = data;
-                    result.Message = "Đăng nhập thành công";
-                }
-                
+                throw new EWException("Có lỗi trong quá trình đăng nhập");
             }
-            catch(Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                var exist = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
+                var rfToken = _tokenService.CreateRefreshToken(exist);
+                var data = new LoginViewModel
+                {
+                    AccessToken = _tokenService.CreateToken(exist),
+                    RefreshToken = rfToken,
+                };
+                _apiResult.Data = data;
+                _apiResult.Message = "Đăng nhập thành công";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -232,37 +191,29 @@ namespace EW.WebAPI.Controllers
         [HttpPost("recovery")]
         public async Task<IActionResult> RecoveryPassword(RecoveryPasswordModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+            if (exist is null || exist.Email != model.Email || exist.Username != model.Username)
             {
-                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exist == null || exist.Email != model.Email || exist.Username != model.Username)  
-                {
-                    throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
-                }
-                if(!exist.IsActive)
-                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
-                var body = string.Empty;
-                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
-                {
-                    body = reader.ReadToEnd();
-                }
-                var key = await _userService.GenKeyResetPassword(exist);
-                var bodyBuilder = new System.Text.StringBuilder(body);
-                bodyBuilder.Replace("{username}", exist.FullName);
-                bodyBuilder.Replace("{url}", $"{_customConfig.Value.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
-                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
-                await _emailService.SendEmail(data);
-                result.IsSuccess = true;
-                result.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
+                throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
             }
-            catch(Exception ex)
+            if (!exist.IsActive)
+                throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+            var body = string.Empty;
+            using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-                result.Message = ex.Message;
+                body = reader.ReadToEnd();
             }
-            return Ok(result);
+            var key = await _userService.GenKeyResetPassword(exist);
+            var bodyBuilder = new System.Text.StringBuilder(body);
+            bodyBuilder.Replace("{username}", exist.FullName);
+            bodyBuilder.Replace("{url}", $"{_customConfig.Value.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
+            var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
+            await _emailService.SendEmail(data);
+            _apiResult.IsSuccess = true;
+            _apiResult.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// This password check code reset password is valid or not valid, this step pass then user can using next step
@@ -273,27 +224,19 @@ namespace EW.WebAPI.Controllers
         [HttpPost("is-valid-code-recover")]
         public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var exist = await _userService.GetUser(new User { Username = model.Username });
+            if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
             {
-                var exist = await _userService.GetUser(new User { Username = model.Username });
-                if(exist == null || (exist!= null && exist.TokenResetPassword != model.Code))
-                {
-                    throw new EWException("Không tồn tại mã này");
-                }
-                else
-                {
-                    result.Message = "OK";
-                    result.IsSuccess = true;
-                }
+                throw new EWException("Không tồn tại mã này");
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-                result.Message = ex.Message;
+                _apiResult.Message = "OK";
+                _apiResult.IsSuccess = true;
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -305,28 +248,20 @@ namespace EW.WebAPI.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var exist = await _userService.GetUser(new User { Username = model.Username });
+            if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
             {
-                var exist = await _userService.GetUser(new User { Username = model.Username });
-                if (exist == null || (exist != null && exist.TokenResetPassword != model.Code))
-                {
-                    throw new EWException("Không tồn tại mã này");
-                }
-                else
-                {
-                    exist.Password = model.Password;
-                    result.Message = "Khôi phục tài khoản thành công";
-                    result.IsSuccess = await _userService.ResetPassword(exist);
-                }
+                throw new EWException("Không tồn tại mã này");
             }
-            catch(Exception ex)
+            else
             {
-                result.InternalError();
-                result.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                exist.Password = model.Password;
+                _apiResult.Message = "Khôi phục tài khoản thành công";
+                _apiResult.IsSuccess = await _userService.ResetPassword(exist);
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Update password from request model
@@ -337,67 +272,53 @@ namespace EW.WebAPI.Controllers
         [HttpPost("update-password")]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
         {
-            var result = new ApiResult();
-            try
+
+            if (string.IsNullOrWhiteSpace(model.ConfirmPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
             {
-                if (string.IsNullOrWhiteSpace(model.ConfirmPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+                _apiResult.Message = "Mật khẩu không được có khoảng trắng";
+                _apiResult.IsSuccess = false;
+            }
+            else if (model.NewPassword != model.ConfirmPassword)
+            {
+                _apiResult.Message = "Mật khẩu mới và xác minh mật khẩu không khớp";
+                _apiResult.IsSuccess = false;
+            }
+            else
+            {
+                var currentUser = await _userService.GetUser(new User { Username = _username });
+                if (BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
                 {
-                    result.Message = "Mật khẩu không được có khoảng trắng";
-                    result.IsSuccess = false;
-                }
-                else if (model.NewPassword != model.ConfirmPassword)
-                {
-                    result.Message = "Mật khẩu mới và xác minh mật khẩu không khớp";
-                    result.IsSuccess = false;
-                }
-                else
-                {
-                    var currentUser = await _userService.GetUser(new User { Username = _username });
-                    if(BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
+                    var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
+                    currentUser.Password = hashed;
+                    _apiResult.IsSuccess = await _userService.UpdateUser(currentUser);
+                    if (_apiResult.IsSuccess)
                     {
-                        var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
-                        currentUser.Password = hashed;
-                        result.IsSuccess = await _userService.UpdateUser(currentUser);
-                        if (result.IsSuccess)
-                        {
-                            result.Message = "Cập nhật mật khẩu thành công";
-                        }
-                        else
-                        {
-                            result.Message = "Cập nhật mật khẩu thất bại";
-                        }
+                        _apiResult.Message = "Cập nhật mật khẩu thành công";
                     }
                     else
                     {
-                        result.IsSuccess = false;
-                        result.Message = "Mật khẩu cũ không chính xác, vui lòng kiểm tra lại";
+                        _apiResult.Message = "Cập nhật mật khẩu thất bại";
                     }
                 }
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                else
+                {
+                    _apiResult.IsSuccess = false;
+                    _apiResult.Message = "Mật khẩu cũ không chính xác, vui lòng kiểm tra lại";
+                }
             }
 
-            return Ok(result);
+            return Ok(_apiResult);
         }
         [HttpGet("get-user-info")]
         [Authorize]
         public async Task<IActionResult> GetUserInfo()
         {
-            var result = new ApiResult();
-            try
-            {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
-                result.IsSuccess = true;
-                result.Data = _mapper.Map<UserInfoViewModel>(currentUser);
-            }
-            catch(Exception ex)
-            {
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+
+            var currentUser = await _userService.GetUser(new User { Username = _username });
+            _apiResult.IsSuccess = true;
+            _apiResult.Data = _mapper.Map<UserInfoViewModel>(currentUser);
+
+            return Ok(_apiResult);
         }
     }
 }

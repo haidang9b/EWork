@@ -18,7 +18,7 @@ namespace EW.Services.Business
         public async Task<bool> AddUser(User user)
         {
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Email == user.Email || item.PhoneNumber == user.PhoneNumber);
-            if (exist != null)
+            if (exist is not null)
             {
                 throw new EWException("Tài khoản này đã tồn tại");
             }
@@ -44,6 +44,13 @@ namespace EW.Services.Business
 
         public async Task<bool> Register(User user)
         {
+            var exist = await GetUser(new User { Username = user.Username, Email = user.Email });
+
+            if (exist is not null)
+            {
+                throw new EWException("User is exist in System");
+            }
+
             var hashed = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
             await _unitOfWork.Repository<User>().AddAsync(new User
             {
@@ -67,7 +74,7 @@ namespace EW.Services.Business
         public async Task<bool> RegisterWithGoogle(User user)
         {
             var isExist = await GetUser(user);
-            if(isExist != null)
+            if (isExist is not null)
             {
                 return true;
             }
