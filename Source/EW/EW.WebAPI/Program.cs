@@ -7,7 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+string MyAllowSpecificOrigins = builder.Configuration.GetValue<string>("MyAllowSpecificOrigins")
+     ?? throw new ArgumentNullException("Add section MyAllowSpecificOrigins");
 
 // Add services to the container.
 
