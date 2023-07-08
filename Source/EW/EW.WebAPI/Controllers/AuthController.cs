@@ -22,21 +22,29 @@ namespace EW.WebAPI.Controllers
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly ICompanyService _companyService;
-        private readonly IOptions<CustomConfig> _customConfig;
+        private readonly CustomConfig _customConfig;
         private readonly ILogger<AuthController> _logger;
         private readonly IMapper _mapper;
 
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         private readonly ApiResult _apiResult;
-        public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig, IMapper mapper)
+        public AuthController(
+            IUserService userService, 
+            ITokenService tokenService, 
+            ILogger<AuthController> logger, 
+            IEmailService emailService, 
+            ICompanyService companyService, 
+            IOptions<CustomConfig> customConfig, 
+            IMapper mapper
+            )
         {
             _userService = userService;
             _tokenService = tokenService;
             _companyService = companyService;
             _emailService = emailService;
             _logger = logger;
-            _customConfig = customConfig;
+            _customConfig = customConfig.Value;
             _mapper = mapper;
             _apiResult = new ApiResult();
         }
@@ -200,14 +208,14 @@ namespace EW.WebAPI.Controllers
             if (!exist.IsActive)
                 throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
             var body = string.Empty;
-            using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
+            using (StreamReader reader = new(Path.Combine("EmailTemplates/RecoveryPassword.html")))
             {
                 body = reader.ReadToEnd();
             }
             var key = await _userService.GenKeyResetPassword(exist);
             var bodyBuilder = new System.Text.StringBuilder(body);
             bodyBuilder.Replace("{username}", exist.FullName);
-            bodyBuilder.Replace("{url}", $"{_customConfig.Value.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
+            bodyBuilder.Replace("{url}", $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
             var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
             await _emailService.SendEmail(data);
             _apiResult.IsSuccess = true;

@@ -61,7 +61,7 @@ namespace EW.WebAPI.Controllers
             {
                 var body = string.Empty;
                 var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/AppliedNotify.html")))
+                using (StreamReader reader = new(Path.Combine("EmailTemplates/AppliedNotify.html")))
                 {
                     body = reader.ReadToEnd();
                 }
@@ -187,7 +187,7 @@ namespace EW.WebAPI.Controllers
                 var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
                 var body = string.Empty;
                 var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/MarkedNotify.html")))
+                using (StreamReader reader = new(Path.Combine("EmailTemplates/MarkedNotify.html")))
                 {
                     body = reader.ReadToEnd();
                 }
