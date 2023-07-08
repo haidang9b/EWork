@@ -43,7 +43,7 @@ namespace EW.Services.Business
                     AvatarUrl = Constaints.STRING_BLANK,
                     Featured = false,
                 };
-                _unitOfWork.Repository<Company>().Add(newCompany);
+                await _unitOfWork.Repository<Company>().AddAsync(newCompany);
                 var resultAddCompany = await _unitOfWork.SaveChangeAsync();
 
                 var firstAccountOfCompany = new User

@@ -14,29 +14,15 @@ namespace EW.Infrastructure
         {
             _dbContext = dbContext;
         }
-        public void Add(TEntity entity)
-        {
-            _dbSet.Add(entity);
-        }
 
         public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
-        {
-            _dbSet.AddRange(entities);
-        }
-
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await _dbSet.AddRangeAsync(entities);
-        }
-
-        public bool Any(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbSet.Where(predicate).Any();
         }
 
         public void Delete(TEntity entity)
@@ -49,20 +35,7 @@ namespace EW.Infrastructure
             _dbSet.RemoveRange(entities);
         }
 
-        public TEntity Find(long id) => _dbSet.Find(id);
-
         public async Task<TEntity> FindAsync(long id) => await _dbSet.FindAsync(id);
-
-        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
-        {
-            var query = _dbSet.Where(predicate);
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-            return query.FirstOrDefault();
-        }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
         {
@@ -73,28 +46,6 @@ namespace EW.Infrastructure
                 query = query.Include(includeProperty);
             }
             return await query.FirstOrDefaultAsync();
-        }
-
-        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
-        {
-            var query = _dbSet.Where(predicate);
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-            return query;
-        }
-
-        public IQueryable<TEntity> GetAll(string includeProperties = "")
-        {
-            var query = _dbSet.AsQueryable();
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-            return query;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(string includeProperties = "")
