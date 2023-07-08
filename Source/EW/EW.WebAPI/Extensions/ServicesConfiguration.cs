@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using EW.Domain.Models;
 using EW.Infrastructure;
 using EW.Repository;
 using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EW.WebAPI.Extensions
 {
@@ -32,6 +34,25 @@ namespace EW.WebAPI.Extensions
             services.AddScoped<IBlogCategoryService, BlogCategoryService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static void AddCustomsConfigureObject(
+            this IServiceCollection services,
+            ConfigurationManager configurationManager
+        )
+        {
+            services.Configure<EmailConfig>(configurationManager.GetSection("MailSettings"));
+            services.Configure<CustomConfig>(configurationManager.GetSection("CustomConfigs"));
+        }
+
+        public static void AddEWDbConfiguration(
+            this IServiceCollection services,
+            ConfigurationManager configurationManager
+        )
+        {
+            var connectionString = configurationManager.GetConnectionString("DefaultDatabase");
+            services.AddDbContext<EWContext>(options =>
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
         }
     }
 }

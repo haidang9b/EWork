@@ -1,10 +1,7 @@
 using EW.Commons.Constaints;
-using EW.Domain.Models;
-using EW.Infrastructure;
-using EW.WebAPI.ExceptionHandlers;
 using EW.WebAPI.Extensions;
+using EW.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,19 +12,18 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 
 builder.Services.AddControllers();
-var connectionString = builder.Configuration.GetConnectionString("DefaultDatabase");
-builder.Services.AddDbContext<EWContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddEWDbConfiguration(builder.Configuration);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins, builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
-
-builder.Services.RegisterService();
-builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.Configure<CustomConfig>(builder.Configuration.GetSection("CustomConfigs"));
 builder.Services.AddCors();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+builder.Services.RegisterService();
+builder.Services.AddCustomsConfigureObject(builder.Configuration);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -57,14 +53,6 @@ if (app.Environment.IsDevelopment() == false)
 {
     app.UseHsts();
 }
-
-
-/*using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<EWContext>();
-    context.Database.Migrate();
-}*/
 
 app.UseEWExceptionHandler();
 app.UseHttpsRedirection();

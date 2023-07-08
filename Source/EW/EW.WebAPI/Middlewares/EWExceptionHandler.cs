@@ -3,7 +3,7 @@ using EW.WebAPI.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
-namespace EW.WebAPI.ExceptionHandlers
+namespace EW.WebAPI.Middlewares
 {
     public static class EWExceptionHandler
     {
@@ -13,7 +13,7 @@ namespace EW.WebAPI.ExceptionHandlers
             {
                 exceptionHandlerApp.Run(async context =>
                 {
-                    
+
                     var exceptionHandlerPathFeature =
                         context.Features.Get<IExceptionHandlerPathFeature>();
 

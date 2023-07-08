@@ -16,209 +16,147 @@ namespace EW.WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ILogger<UsersController> _logger;
+        private readonly ApiResult _apiResult;
+
         public UsersController(
-            IUserService userService,
-            ILogger<UsersController> logger
+            IUserService userService
         )
         {
             _userService = userService;
-            _logger = logger;
+            _apiResult = new();
         }
         // GET: api/<UsersController>
         [Authorize(Roles = "Faculty")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = new ApiResult();
-            try
-            {
-                var data = await _userService.GetUsers();
-                result.Data = data.OrderByDescending(item => item.CreatedDate);
-            }
-            catch (Exception ex)
-            {
-                result.InternalError();
-                _logger.LogError(ex.Message);
-            }
-            return Ok(result);
+            var data = await _userService.GetUsers();
+            _apiResult.Data = data.OrderByDescending(item => item.CreatedDate);
+
+            return Ok(_apiResult);
         }
 
         [HttpPost("add-account-faculty")]
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var result = new ApiResult();
-            try
+            var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+            if (exist is not null)
             {
-                var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-                if (exist is not null)
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Tài khoản này đã tồn tại";
+            }
+            else
+            {
+                _apiResult.IsSuccess = await _userService.Register(new User
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Tài khoản này đã tồn tại";
-                }
-                else
+                    Email = model.Email,
+                    Username = model.Username,
+                    Password = model.Password,
+                    PhoneNumber = model.NumberPhone,
+                    FullName = model.FullName,
+                    RoleId = (long)ERole.ID_Faculty,
+                });
+                if (_apiResult.IsSuccess)
                 {
-                    result.IsSuccess = await _userService.Register(new User
+                    _apiResult.Message = "Thêm tài khoản thành công";
+                    _apiResult.Data = await _userService.GetUser(new User
                     {
                         Email = model.Email,
                         Username = model.Username,
                         Password = model.Password,
                         PhoneNumber = model.NumberPhone,
                         FullName = model.FullName,
-                        RoleId = (long)ERole.ID_Faculty,
                     });
-                    if (result.IsSuccess)
-                    {
-                        result.Message = "Thêm tài khoản thành công";
-                        result.Data = await _userService.GetUser(new User
-                        {
-                            Email = model.Email,
-                            Username = model.Username,
-                            Password = model.Password,
-                            PhoneNumber = model.NumberPhone,
-                            FullName = model.FullName,
-                        });
-                    }
-                    else
-                    {
-                        result.Message = "Không thể thêm tài khoản này";
-                    }
+                }
+                else
+                {
+                    _apiResult.Message = "Không thể thêm tài khoản này";
                 }
             }
-            catch (Exception error)
-            {
-                _logger.LogError(error.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         [HttpGet("roles")]
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> GetRoles()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _userService.GetRoles();
-                result.IsSuccess = true;
-                result.Message = "Lấy các quyền thành công";
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            _apiResult.Data = await _userService.GetRoles();
+            _apiResult.IsSuccess = true;
+            _apiResult.Message = "Lấy các quyền thành công";
+            return Ok(_apiResult);
         }
 
         [HttpPut("set-active")]
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> SetActive(UserActiveModel model)
         {
-            var result = new ApiResult();
-            try
+            var userExist = await _userService.GetUser(new User { Id = model.Id, Username = model.Username });
+            if (userExist is null)
             {
-                var userExist = await _userService.GetUser(new User { Id = model.Id, Username = model.Username });
-                if (userExist is null)
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Tài khoản này không tồn tại";
+            }
+            else if (userExist.IsActive == model.IsActive)
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể thay đổi trạng thái giống như trạng thái cũ";
+            }
+            else
+            {
+                userExist.IsActive = model.IsActive;
+                _apiResult.IsSuccess = await _userService.UpdateUser(userExist);
+                if (_apiResult.IsSuccess)
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Tài khoản này không tồn tại";
-                }
-                else if (userExist.IsActive == model.IsActive)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể thay đổi trạng thái giống như trạng thái cũ";
+                    _apiResult.Message = "Cập nhật trạng thái tài khoản thành công";
+                    _apiResult.Data = userExist;
                 }
                 else
                 {
-                    userExist.IsActive = model.IsActive;
-                    result.IsSuccess = await _userService.UpdateUser(userExist);
-                    if (result.IsSuccess)
-                    {
-                        result.Message = "Cập nhật trạng thái tài khoản thành công";
-                        result.Data = userExist;
-                    }
-                    else
-                    {
-                        result.Message = "Cập nhật trạng thái tài khoản thất bại";
-                    }
+                    _apiResult.Message = "Cập nhật trạng thái tài khoản thất bại";
                 }
+            }
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         [HttpPut("update-account/{id}")]
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> Update(long id, UpdateAccount model)
         {
-            var result = new ApiResult();
-            try
+            var exist = await _userService.GetUser(new User { Id = id });
+            if (exist is null)
             {
-                var exist = await _userService.GetUser(new User { Id = id });
-                if (exist is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Tài khoản này không tồn tại";
-                    return Ok(result);
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Tài khoản này không tồn tại";
+                return Ok(_apiResult);
+            }
 
-                else if (exist.Username != model.Username || exist.Email != model.Email)
+            else if (exist.Username != model.Username || exist.Email != model.Email)
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Tài khoản này không tồn tại";
+            }
+            else
+            {
+                exist.FullName = model.FullName;
+                exist.PhoneNumber = model.NumberPhone;
+                exist.UpdatedDate = DateTimeOffset.Now;
+                _apiResult.IsSuccess = await _userService.UpdateUser(exist);
+                if (_apiResult.IsSuccess)
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Tài khoản này không tồn tại";
+                    _apiResult.Message = "Cập nhật tài khoản thành công";
+                    _apiResult.IsSuccess = true;
+                    _apiResult.Data = exist;
                 }
                 else
                 {
-                    exist.FullName = model.FullName;
-                    exist.PhoneNumber = model.NumberPhone;
-                    exist.UpdatedDate = DateTimeOffset.Now;
-                    result.IsSuccess = await _userService.UpdateUser(exist);
-                    if (result.IsSuccess)
-                    {
-                        result.Message = "Cập nhật tài khoản thành công";
-                        result.IsSuccess = true;
-                        result.Data = exist;
-                    }
-                    else
-                    {
-                        result.Message = "Cập nhật tài khoản thất bại";
-                        result.IsSuccess = false;
-                    }
+                    _apiResult.Message = "Cập nhật tài khoản thất bại";
+                    _apiResult.IsSuccess = false;
                 }
             }
-            catch (Exception error)
-            {
-                _logger.LogError(error.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
-        /*[HttpPut("update-password")]
-        [Authorize]
-        public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
-        {
-            var result = new ApiResult();
-            try
-            {
-
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-
-            return Ok(result);
-        }*/
     }
 }
