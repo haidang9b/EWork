@@ -6,7 +6,7 @@ namespace EW.Services.Constracts
 {
     public interface ICompanyService
     {
-        Task<Company> Find(Company recruiter);
+        Task<Company> Find(Company company);
         Task<Company> GetCompanyByUser(User user);
         Task<IEnumerable<Company>> GetCompanies();
         Task<bool> UpdateInformationCompany(UpdateCompanyModel model);
