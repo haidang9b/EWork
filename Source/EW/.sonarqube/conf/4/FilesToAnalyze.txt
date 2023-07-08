@@ -1,4 +1,0 @@
-﻿D:\Dacntt2\Source\EW\EW.Infrastructure\DatabaseFactory.cs
-D:\Dacntt2\Source\EW\EW.Infrastructure\EWContext.cs
-D:\Dacntt2\Source\EW\EW.Infrastructure\EWRepository.cs
-D:\Dacntt2\Source\EW\EW.Infrastructure\UnitOfWork.cs
