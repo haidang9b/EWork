@@ -17,7 +17,7 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IProjectService _projectService;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public ProjectsController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, IProjectService projectService, IMapper mapper)

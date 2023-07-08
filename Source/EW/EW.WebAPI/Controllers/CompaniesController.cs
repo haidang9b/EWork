@@ -26,7 +26,7 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<RecruitersController> _logger;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         public CompaniesController(IRecruiterService recruiterService, IUserService userService, ICompanyService companyService, ILogger<RecruitersController> logger, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IOptions<CustomConfig> customConfig, IMapper mapper)
         {

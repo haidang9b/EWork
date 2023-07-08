@@ -28,7 +28,7 @@ namespace EW.WebAPI.Controllers
 
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        private ApiResult _apiResult;
+        private readonly ApiResult _apiResult;
         public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger, IEmailService emailService, ICompanyService companyService, IOptions<CustomConfig> customConfig, IMapper mapper)
         {
             _userService = userService;
