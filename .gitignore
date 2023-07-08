@@ -398,3 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 *.env
 /Source/EW/EW.WebAPI/Uploads
+
+
+# ---- SonarQube
+.sonarqube/
+/Source/EW/.sonarqube/
