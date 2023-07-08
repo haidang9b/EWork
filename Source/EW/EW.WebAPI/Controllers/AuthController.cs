@@ -122,7 +122,8 @@ namespace EW.WebAPI.Controllers
         {
 
             var refreshToken = model.RefreshToken;
-            var validate = _tokenService.GetPayloadRefreshToken(refreshToken);
+            var validate = _tokenService.GetPayloadRefreshToken(refreshToken) 
+                ?? throw new EWException("User này không tồn tại");
             var exist = await _userService.GetUser(new User
             {
                 Email = validate.Issuer,

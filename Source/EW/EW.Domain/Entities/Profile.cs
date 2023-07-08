@@ -11,13 +11,13 @@ namespace EW.Domain.Entities
         public string PhoneNumber { get; set; }
         public long UserId { get; set; }
         [JsonIgnore]
-        public User? User { get; set; }
+        public User User { get; set; }
         public string Objective { get; set; }
         public string Skills { get; set; }
-        public virtual ICollection<WorkHistory>? WorkHistory { get; set; }
-        public virtual ICollection<Education>? Educations { get; set; }
-        public virtual ICollection<Project>? Projects { get; set; }
-        public virtual ICollection<Certificate>? Certificates { get; set; }
+        public virtual ICollection<WorkHistory> WorkHistory { get; set; }
+        public virtual ICollection<Education> Educations { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Certificate> Certificates { get; set; }
         public bool IsOpenForWork { get; set; }
     }
 }
