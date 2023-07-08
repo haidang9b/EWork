@@ -19,7 +19,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IUserCVService _userCVService;
         private readonly ICompanyService _companyService;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         private readonly ApiResult _apiResult;
 
         public UploadsController(
@@ -28,7 +28,7 @@ namespace EW.WebAPI.Controllers
             IUserService userService,
             IUserCVService userCVService,
             ICompanyService companyService
-            )
+        )
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
@@ -67,7 +67,7 @@ namespace EW.WebAPI.Controllers
 
             var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CV };
             var resultUpload = await WriteFile(uploadModel);
-            var user = await _userService.GetUser(new User { Username = _username });
+            var user = await _userService.GetUser(new User { Username = Username });
 
             if (resultUpload.IsSuccess)
             {
@@ -113,7 +113,7 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> UploadAvatarCompany([FromForm] UploadAvatarModel model)
         {
 
-            var user = await _userService.GetUser(new User { Username = _username });
+            var user = await _userService.GetUser(new User { Username = Username });
             var companyByUser = await _companyService.GetCompanyByUser(user);
             var fileExtension = Path.GetExtension(model.File.FileName).ToLower();
             var acceptExtensionFiles = new string[] { ".jpg", ".jpeg", ".apng", ".png", ".svg", ".webp" };

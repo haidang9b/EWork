@@ -17,8 +17,14 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitersController> _logger;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public RecruitersController(IRecruiterService recruiterService, IUserService userService, ILogger<RecruitersController> logger, ICompanyService companyService)
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public RecruitersController(
+            IRecruiterService recruiterService, 
+            IUserService userService, 
+            ILogger<RecruitersController> logger, 
+            ICompanyService companyService
+        )
         {
             _recruiterService = recruiterService;
             _userService = userService;
@@ -40,7 +46,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
+                var currentUser = await _userService.GetUser(new User { Username = Username });
                 if (currentUser.RoleId == (long)ERole.ID_Business)
                 {
                     var currentCompany = await _companyService.GetCompanyByUser(currentUser);
@@ -99,7 +105,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
+                var currentUser = await _userService.GetUser(new User { Username = Username });
                 var existUser = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
 
                 if (currentUser.RoleId == (long)ERole.ID_Business)

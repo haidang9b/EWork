@@ -27,7 +27,7 @@ namespace EW.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ApiResult _apiResult;
 
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public CompaniesController(
             IUserService userService,
@@ -70,7 +70,7 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Faculty,Business")]
         public async Task<IActionResult> Put(UpdateCompanyModel model)
         {
-            var currentUser = await _userService.GetUser(new User { Username = _username });
+            var currentUser = await _userService.GetUser(new User { Username = Username });
 
             var existCompany = await _companyService.GetCompany(new Company { Id = model.Id });
             var currentStatus = existCompany.Status;
@@ -163,7 +163,7 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Business")]
         public async Task<IActionResult> Profile()
         {
-            var existUser = await _userService.GetUser(new User { Username = _username });
+            var existUser = await _userService.GetUser(new User { Username = Username });
 
             _apiResult.Data = await _companyService.GetCompanyByUser(existUser);
             _apiResult.Message = "Lấy dữ liệu thành công";

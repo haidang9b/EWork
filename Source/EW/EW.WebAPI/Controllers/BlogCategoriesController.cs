@@ -18,7 +18,7 @@ namespace EW.WebAPI.Controllers
             )
         {
             _blogCategoryService = blogCategoryService;
-            _apiResult = new ApiResult();
+            _apiResult = new();
         }
 
         /// <summary>

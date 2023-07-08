@@ -18,8 +18,14 @@ namespace EW.WebAPI.Controllers
         private readonly IUserCVService _userCVService;
         private readonly IUserService _userService;
         private readonly IProfileSerivce _profileSerivce;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public DocumentsController(ILogger<UploadsController> logger, IUserCVService userCVService, IUserService userService, IProfileSerivce profileSerivce)
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public DocumentsController(
+            ILogger<UploadsController> logger, 
+            IUserCVService userCVService, 
+            IUserService userService, 
+            IProfileSerivce profileSerivce
+        )
         {
             _logger = logger;
             _userCVService = userCVService;
@@ -38,7 +44,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var user = await _userService.GetUser(new User { Username = _username });
+                var user = await _userService.GetUser(new User { Username = Username });
                 var dataCV = await _userCVService.GetUserCVsByUser(user);
                 result.Data = new UserProfileViewModel
                 {
@@ -67,7 +73,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var user = await _userService.GetUser(new User { Username = _username });
+                var user = await _userService.GetUser(new User { Username = Username });
                 if (user is null)
                 {
                     result.IsSuccess = false;
@@ -150,9 +156,9 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
-                if(currentCV is not null && currentCV.User.Username == _username)
+                if(currentCV is not null && currentCV.User.Username == Username)
                 {
-                    var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                    var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                     if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured) 
                     {
                         result.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
