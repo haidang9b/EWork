@@ -2,6 +2,6 @@
 {
     public class UpdateCoverLetterModel
     {
-        public string CoverLetter { get; set; }
+        public string CoverLetter { get; set; } = string.Empty;
     }
 }

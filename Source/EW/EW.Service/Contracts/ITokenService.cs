@@ -7,7 +7,6 @@ namespace EW.Services.Constracts
     {
         string CreateToken(User user);
         string CreateRefreshToken(User user);
-        JwtSecurityToken GetPayloadRefreshToken(string refreshToken);
-        JwtSecurityToken GetPayloadAccessToken(string accessToken);
+        JwtSecurityToken? GetPayloadRefreshToken(string refreshToken);
     }
 }
