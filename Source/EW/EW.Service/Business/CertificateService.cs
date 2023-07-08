@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -17,7 +18,7 @@ namespace EW.Services.Business
             model.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<Certificate>().AddAsync(model);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Không thể thêm chứng chỉ này");
+                throw new EWException("Không thể thêm chứng chỉ này");
             return model;
         }
 
@@ -26,7 +27,7 @@ namespace EW.Services.Business
             var currentCertificate = await _unitOfWork.Repository<Certificate>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentCertificate == null)
             {
-                throw new Exception("Không tồn tại chứng chỉ này");
+                throw new EWException("Không tồn tại chứng chỉ này");
             }
             _unitOfWork.Repository<Certificate>().Delete(currentCertificate);
             return await _unitOfWork.SaveChangeAsync();
@@ -37,7 +38,7 @@ namespace EW.Services.Business
             var currentCertificate = await _unitOfWork.Repository<Certificate>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentCertificate == null)
             {
-                throw new Exception("Không tồn tại chứng chỉ này");
+                throw new EWException("Không tồn tại chứng chỉ này");
             }
             currentCertificate.UpdatedDate = DateTimeOffset.Now;
             currentCertificate.Description = model.Description;

@@ -227,7 +227,7 @@ namespace EW.WebAPI.Controllers
                 var existCompany = await _companyService.GetCompany(new Company { Id = id });
                 if(existCompany == null)
                 {
-                    throw new Exception("Không tồn tại công ty này");
+                    throw new EWException("Không tồn tại công ty này");
                 }
                 var recruitmentPosts = await _recruitmentPostService.GetRecruitmentPostsByCompany(existCompany);
                 result.Data = new CompanyDetailViewModel

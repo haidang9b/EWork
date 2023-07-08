@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -17,7 +18,7 @@ namespace EW.Services.Business
             model.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<Education>().AddAsync(model);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Không thể thêm học vấn này");
+                throw new EWException("Không thể thêm học vấn này");
             return model;
         }
 
@@ -26,7 +27,7 @@ namespace EW.Services.Business
             var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentEducation == null)
             {
-                throw new Exception("Không tồn tại học vấn này");
+                throw new EWException("Không tồn tại học vấn này");
             }
             _unitOfWork.Repository<Education>().Delete(currentEducation);
             return await _unitOfWork.SaveChangeAsync();
@@ -37,7 +38,7 @@ namespace EW.Services.Business
             var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id);
             if (currentEducation == null)
             {
-                throw new Exception("Không tồn tại học vấn này");
+                throw new EWException("Không tồn tại học vấn này");
             }
             currentEducation.UpdatedDate = DateTimeOffset.Now;
             currentEducation.Description = model.Description;

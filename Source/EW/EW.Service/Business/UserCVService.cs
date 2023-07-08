@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Constracts;
 
@@ -18,7 +19,7 @@ namespace EW.Services.Business
             model.CreatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<UserCV>().AddAsync(model);
             if (await _unitOfWork.SaveChangeAsync() == false)
-                throw new Exception("Thêm cv thất bại");
+                throw new EWException("Thêm cv thất bại");
             return model;
         }
 

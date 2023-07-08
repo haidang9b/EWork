@@ -79,22 +79,22 @@ namespace EW.WebAPI.Controllers
                         var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
                         if (company != null && company.Status == EStatusRecruiter.Pending)
                         {
-                            throw new Exception("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
+                            throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
                         }
 
                         if (company != null && company.Status == EStatusRecruiter.Disabled)
                         {
-                            throw new Exception("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
+                            throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
                         }
 
                         if (company == null)
                         {
-                            throw new Exception("Tài khoản đang không gắn với công ti nào");
+                            throw new EWException("Tài khoản đang không gắn với công ti nào");
                         }
                     }
                     if (!exist.IsActive)
                     {
-                        throw new Exception("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                        throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                     }
                     result.Message = "Đăng nhập thành công";
                     var rfToken = _tokenService.CreateRefreshToken(exist);
@@ -134,7 +134,7 @@ namespace EW.WebAPI.Controllers
                 });
                 if(!exist.IsActive)
                 {
-                    throw new Exception("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                 }
                 var token = _tokenService.CreateToken(exist);
                 var rfToken = _tokenService.CreateRefreshToken(exist);
@@ -198,7 +198,7 @@ namespace EW.WebAPI.Controllers
                 var resultRegister = await _userService.RegisterWithGoogle(newUser);
                 if(!resultRegister)
                 {
-                    throw new Exception("Có lỗi trong quá trình đăng nhập");
+                    throw new EWException("Có lỗi trong quá trình đăng nhập");
                 }
                 else
                 {
@@ -237,10 +237,10 @@ namespace EW.WebAPI.Controllers
                 var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
                 if (exist == null || exist.Email != model.Email || exist.Username != model.Username)  
                 {
-                    throw new Exception("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
+                    throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
                 }
                 if(!exist.IsActive)
-                    throw new Exception("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                 var body = string.Empty;
                 using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/RecoveryPassword.html")))
                 {
@@ -278,7 +278,7 @@ namespace EW.WebAPI.Controllers
                 var exist = await _userService.GetUser(new User { Username = model.Username });
                 if(exist == null || (exist!= null && exist.TokenResetPassword != model.Code))
                 {
-                    throw new Exception("Không tồn tại mã này");
+                    throw new EWException("Không tồn tại mã này");
                 }
                 else
                 {
@@ -310,7 +310,7 @@ namespace EW.WebAPI.Controllers
                 var exist = await _userService.GetUser(new User { Username = model.Username });
                 if (exist == null || (exist != null && exist.TokenResetPassword != model.Code))
                 {
-                    throw new Exception("Không tồn tại mã này");
+                    throw new EWException("Không tồn tại mã này");
                 }
                 else
                 {

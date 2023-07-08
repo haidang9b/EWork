@@ -206,7 +206,7 @@ namespace EW.WebAPI.Controllers
                 var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id });
                 if(post == null)
                 {
-                    throw new Exception("Không có dữ liệu từ id này");
+                    throw new EWException("Không có dữ liệu từ id này");
                 }
                 result.Data = post;
                 result.Message = "Lấy dữ liệu thành công";

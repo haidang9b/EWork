@@ -1,4 +1,5 @@
-﻿using EW.Domain.Entities;
+﻿using EW.Commons.Exceptions;
+using EW.Domain.Entities;
 using EW.Repository;
 using EW.Services.Contracts;
 
@@ -18,7 +19,7 @@ namespace EW.Services.Business
             blog.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<Blog>().AddAsync(blog);
             if (!(await _unitOfWork.SaveChangeAsync()))
-                throw new Exception("Không thể thêm danh mục này");
+                throw new EWException("Không thể thêm danh mục này");
             return blog;
         }
 
@@ -26,7 +27,7 @@ namespace EW.Services.Business
         {
             var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id);
             if (exist == null)
-                throw new Exception("Không tồn tại bài viết này, vui lòng kiểm tra lại");
+                throw new EWException("Không tồn tại bài viết này, vui lòng kiểm tra lại");
             _unitOfWork.Repository<Blog>().Delete(exist);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -46,14 +47,14 @@ namespace EW.Services.Business
         {
             var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id);
             if (exist == null)
-                throw new Exception("Không tồn tại bài viết này, vui lòng kiểm tra lại");
+                throw new EWException("Không tồn tại bài viết này, vui lòng kiểm tra lại");
             exist.Title = blog.Title;
             exist.Content = blog.Content;
             exist.BlogCategoryId = blog.BlogCategoryId;
             exist.UpdatedDate = DateTimeOffset.Now;
             _unitOfWork.Repository<Blog>().Update(exist);
             if (!(await _unitOfWork.SaveChangeAsync()))
-                throw new Exception("Không thể cập nhật bài viết này");
+                throw new EWException("Không thể cập nhật bài viết này");
             return exist;
         }
     }
