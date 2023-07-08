@@ -77,7 +77,7 @@ namespace EW.WebAPI.Controllers
             {
                 var existCompany = await _companyService.GetCompany(new Company { Id = model.Id });
                 var currentStatus = existCompany.Status;
-                if (existCompany == null)
+                if (existCompany is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không tồn tại công ty này";
@@ -141,7 +141,7 @@ namespace EW.WebAPI.Controllers
                 {
                     Email = model.Email,
                 });
-                if (exist != null)
+                if (exist is not null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Email này đã được sử dụng";
@@ -149,7 +149,7 @@ namespace EW.WebAPI.Controllers
                 }
                 var newCompany = _mapper.Map<Company>(model);
                 var data = await _companyService.AddCompany(newCompany);
-                if(data != null)
+                if(data is not null)
                 {
                     result.Message = "Thêm công ty thành công ";
                     result.Data = data;
@@ -226,7 +226,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var existCompany = await _companyService.GetCompany(new Company { Id = id });
-                if(existCompany == null)
+                if(existCompany is null)
                 {
                     throw new EWException("Không tồn tại công ty này");
                 }

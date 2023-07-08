@@ -55,7 +55,7 @@ namespace EW.WebAPI.Controllers
                 Description = ""
             });
             _apiResult.Message = "Ứng tuyển thành công";
-            if (_apiResult.Data != null)
+            if (_apiResult.Data is not null)
             {
                 var body = string.Empty;
                 var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
@@ -180,7 +180,7 @@ namespace EW.WebAPI.Controllers
             };
             _apiResult.Data = await _applicationService.Add(newApplication);
             _apiResult.Message = "Đánh dấu thành công";
-            if (_apiResult.Data != null)
+            if (_apiResult.Data is not null)
             {
                 var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
                 var body = string.Empty;

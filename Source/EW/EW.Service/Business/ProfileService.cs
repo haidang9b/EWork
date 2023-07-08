@@ -29,7 +29,7 @@ namespace EW.Services.Business
             foreach(var profile in candidates)
             {
                 var cvFeaturedOfProfile = cvsFeatured.FirstOrDefault(item => item.UserId == profile.UserId);
-                if (cvFeaturedOfProfile == null)
+                if (cvFeaturedOfProfile is null)
                     continue;
                 result.Add(new ProfileOpenForWorkViewModel
                 {
@@ -80,7 +80,7 @@ namespace EW.Services.Business
         {
             var currentProfile = await _unitOfWork.Repository<Profile>().FirstOrDefaultAsync(item => item.Id == profile.Id);
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == profile.UserId);
-            if(currentProfile == null || currentUser == null)
+            if(currentProfile is null || currentUser is null)
             {
                 throw new EWException("Không có profile, vui lòng thử lại");
             }

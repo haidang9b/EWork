@@ -43,7 +43,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if(profile == null)
+                if(profile is null)
                 {
                     var initProfile = await _profileSerivce.InitProfile(new User { Username = _username });
                     result.IsSuccess = true;
@@ -78,7 +78,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if(profile == null)
+                if(profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -123,7 +123,7 @@ namespace EW.WebAPI.Controllers
             {
                 var currrentUser = await _userService.GetUser(new User { Username = _username});
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if (profile == null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";

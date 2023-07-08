@@ -25,7 +25,7 @@ namespace EW.Services.Business
         public async Task<bool> Delete(Project model)
         {
             var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentProject == null)
+            if (currentProject is null)
             {
                 throw new EWException("Không tồn tại dự án này");
             }
@@ -36,7 +36,7 @@ namespace EW.Services.Business
         public async Task<bool> Update(Project model)
         {
             var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentProject == null)
+            if (currentProject is null)
             {
                 throw new EWException("Không tồn tại dự án này");
             }

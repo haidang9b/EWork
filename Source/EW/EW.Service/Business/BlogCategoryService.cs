@@ -16,7 +16,7 @@ namespace EW.Services.Business
         public async Task<BlogCategory> Add(BlogCategory model)
         {
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Name == model.Name);
-            if (exist != null)
+            if (exist is not null)
             {
                 throw new EWException("Đã tồn tại danh mục này rồi, vui lòng kiểm tra lại");
             }
@@ -31,7 +31,7 @@ namespace EW.Services.Business
         public async Task<bool> Delete(BlogCategory model)
         {
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (exist == null) 
+            if (exist is null) 
             {
                 throw new EWException("Không tồn tại danh mục này");
             }
@@ -48,7 +48,7 @@ namespace EW.Services.Business
         public async Task<BlogCategory> Update(BlogCategory model)
         {
             var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (exist == null)
+            if (exist is null)
             {
                 throw new EWException("Không tồn tại danh mục này");
             }

@@ -65,7 +65,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var data = await _blogService.Get(id);
-                if(data == null)
+                if(data is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không tồn tại bài viết này";

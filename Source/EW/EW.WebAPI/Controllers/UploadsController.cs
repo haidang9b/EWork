@@ -77,7 +77,7 @@ namespace EW.WebAPI.Controllers
                     };
 
                     var resultAddCV = await _userCVService.AddCV(ownerCV);
-                    if (resultAddCV != null) 
+                    if (resultAddCV is not null) 
                     {
                         result.IsSuccess = true;
                         result.Message = "Upload cv thành công";
@@ -170,7 +170,7 @@ namespace EW.WebAPI.Controllers
                     Directory.CreateDirectory(folder);
                 }
 
-                if (model.File != null && model.File.Length > 0)
+                if (model.File is not null && model.File.Length > 0)
                 {
                     string filePath = Path.Combine(folder, fileName);
                     using (var stream = new FileStream(filePath, FileMode.Create))

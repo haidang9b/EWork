@@ -40,7 +40,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if (profile == null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -50,7 +50,7 @@ namespace EW.WebAPI.Controllers
                 newProject.ProfileId = profile.Id;
                 
                 var data = await _projectService.Add(newProject);
-                if (data == null)
+                if (data is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không thể thêm dự án này";

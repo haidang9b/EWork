@@ -64,7 +64,7 @@ namespace EW.Services.Business
             {
                 var recruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.UserId == user.Id, "Company");
 
-                if(recruiter == null)
+                if(recruiter is null)
                 {
                     return new List<RecruitmentPost>();
                 }

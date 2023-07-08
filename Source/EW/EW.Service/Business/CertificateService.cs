@@ -25,7 +25,7 @@ namespace EW.Services.Business
         public async Task<bool> Delete(Certificate model)
         {
             var currentCertificate = await _unitOfWork.Repository<Certificate>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentCertificate == null)
+            if (currentCertificate is null)
             {
                 throw new EWException("Không tồn tại chứng chỉ này");
             }
@@ -36,7 +36,7 @@ namespace EW.Services.Business
         public async Task<bool> Update(Certificate model)
         {
             var currentCertificate = await _unitOfWork.Repository<Certificate>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentCertificate == null)
+            if (currentCertificate is null)
             {
                 throw new EWException("Không tồn tại chứng chỉ này");
             }

@@ -68,7 +68,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var user = await _userService.GetUser(new User { Username = _username });
-                if (user == null)
+                if (user is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Cập nhật thư giới thiệu thất bại";
@@ -111,7 +111,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var exist = await _userCVService.GetUserCVByInfo(new UserCV { Id = Id });
-                if (exist == null)
+                if (exist is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không có CV nào từ mã số này";
@@ -150,10 +150,10 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
-                if(currentCV != null && currentCV.User.Username == _username)
+                if(currentCV is not null && currentCV.User.Username == _username)
                 {
                     var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                    if (profile != null && profile.IsOpenForWork && currentCV.Featured && !model.Featured) 
+                    if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured) 
                     {
                         result.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
                         result.IsSuccess = false;

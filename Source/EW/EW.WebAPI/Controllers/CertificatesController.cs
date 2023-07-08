@@ -36,7 +36,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if (profile == null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -52,7 +52,7 @@ namespace EW.WebAPI.Controllers
                     CertificateName = model.CertificateName
                 };
                 var data = await _certificateService.Add(newCertificate);
-                if (data == null)
+                if (data is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không thể thêm chứng chỉ này";

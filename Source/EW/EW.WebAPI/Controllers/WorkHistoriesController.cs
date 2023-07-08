@@ -37,7 +37,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if (profile == null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -54,7 +54,7 @@ namespace EW.WebAPI.Controllers
                     CompanyName = model.CompanyName,
                 };
                 var data = await _workHistoryService.Add(newWorkHistory);
-                if (data == null)
+                if (data is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Không thể thêm kinh nghiệm làm việc này";
