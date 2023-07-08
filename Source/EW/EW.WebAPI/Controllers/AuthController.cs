@@ -30,12 +30,12 @@ namespace EW.WebAPI.Controllers
 
         private readonly ApiResult _apiResult;
         public AuthController(
-            IUserService userService, 
-            ITokenService tokenService, 
-            ILogger<AuthController> logger, 
-            IEmailService emailService, 
-            ICompanyService companyService, 
-            IOptions<CustomConfig> customConfig, 
+            IUserService userService,
+            ITokenService tokenService,
+            ILogger<AuthController> logger,
+            IEmailService emailService,
+            ICompanyService companyService,
+            IOptions<CustomConfig> customConfig,
             IMapper mapper
             )
         {
@@ -257,8 +257,9 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
         {
 
-            var exist = await _userService.GetUser(new User { Username = model.Username });
-            if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
+            var exist = await _userService.GetUser(new User { Username = model.Username }) ?? throw new EWException("Không tồn tại User này"); ;
+
+            if (exist.TokenResetPassword != model.Code)
             {
                 throw new EWException("Không tồn tại mã này");
             }

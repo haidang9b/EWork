@@ -13,11 +13,9 @@ namespace EW.Services.Business
     public class CompanyService: ICompanyService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
-        public CompanyService(IUnitOfWork unitOfWork, IUserService userService)
+        public CompanyService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userService = userService;
         }
         public async Task<Company> Find(Company company)
         {

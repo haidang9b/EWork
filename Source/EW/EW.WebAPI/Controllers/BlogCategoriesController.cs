@@ -11,13 +11,13 @@ namespace EW.WebAPI.Controllers
     public class BlogCategoriesController : ControllerBase
     {
         private readonly IBlogCategoryService _blogCategoryService;
-        private readonly ILogger<BlogCategoriesController> _logger;
         private readonly ApiResult _apiResult;
 
-        public BlogCategoriesController(IBlogCategoryService blogCategoryService, ILogger<BlogCategoriesController> logger)
+        public BlogCategoriesController(
+            IBlogCategoryService blogCategoryService
+            )
         {
             _blogCategoryService = blogCategoryService;
-            _logger = logger;
             _apiResult = new ApiResult();
         }
 

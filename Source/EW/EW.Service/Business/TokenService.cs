@@ -10,8 +10,8 @@ namespace EW.Services.Business
 {
     public class TokenService : ITokenService
     {
-        private SymmetricSecurityKey _keyAccessToken;
-        private SymmetricSecurityKey _keyRefreshToken;
+        private readonly SymmetricSecurityKey _keyAccessToken;
+        private readonly SymmetricSecurityKey _keyRefreshToken;
         public TokenService()
         {
             _keyAccessToken = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constaints.ACCES_TOKEN_KEY));

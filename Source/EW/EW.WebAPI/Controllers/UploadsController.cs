@@ -19,17 +19,23 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IUserCVService _userCVService;
         private readonly ICompanyService _companyService;
-        private readonly IRecruiterService _recruiterService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private readonly ApiResult _apiResult;
 
-        public UploadsController(ILogger<UploadsController> logger, IWebHostEnvironment webHostEnvironment, IUserService userService, IUserCVService userCVService, IRecruiterService recruiterService, ICompanyService companyService)
+        public UploadsController(
+            ILogger<UploadsController> logger,
+            IWebHostEnvironment webHostEnvironment,
+            IUserService userService,
+            IUserCVService userCVService,
+            ICompanyService companyService
+            )
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _userService = userService;
             _userCVService = userCVService;
-            _recruiterService = recruiterService;
             _companyService = companyService;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -37,74 +43,64 @@ namespace EW.WebAPI.Controllers
         /// </summary>
         /// <param name="UploadNewCVModel"></param>
         /// <returns>Data cv newest upload of user</returns>
-        [Authorize(Roles= "Student")]
+        [Authorize(Roles = "Student")]
         [HttpPost("upload-new-cv")]
-        public async Task<IActionResult> UploadNewCV([FromForm]UploadNewCVModel model)
+        public async Task<IActionResult> UploadNewCV([FromForm] UploadNewCVModel model)
         {
-            var result = new ApiResult();
 
-            try
+            var fileExtension = Path.GetExtension(model.File.FileName);
+            var acceptExtensionFiles = new string[] { ".docx", ".doc", ".pdf" };
+            var fileNameRequest = model.File.FileName;
+            if (!acceptExtensionFiles.Contains(fileExtension))
             {
-                var fileExtension = Path.GetExtension(model.File.FileName);
-                var acceptExtensionFiles = new string[] { ".docx", ".doc", ".pdf" };
-                var fileNameRequest = model.File.FileName; 
-                if (!acceptExtensionFiles.Contains(fileExtension))
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Loại file này không được chấp nhận";
+
+                return Ok(_apiResult);
+            }
+            if (model.File.Length > 10000000)
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "File lớn hơn 10MB, không thể upload";
+                return Ok(_apiResult);
+            }
+
+            var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CV };
+            var resultUpload = await WriteFile(uploadModel);
+            var user = await _userService.GetUser(new User { Username = _username });
+
+            if (resultUpload.IsSuccess)
+            {
+                var ownerCV = new UserCV
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Loại file này không được chấp nhận";
+                    CVUrl = resultUpload.Path,
+                    CVName = fileNameRequest,
+                    UserId = user.Id,
+                    Featured = false,
+                };
 
-                    return Ok(result);
-                }
-                if (model.File.Length > 10000000)
+                var resultAddCV = await _userCVService.AddCV(ownerCV);
+                if (resultAddCV is not null)
                 {
-                    result.IsSuccess = false;
-                    result.Message = "File lớn hơn 10MB, không thể upload";
-                    return Ok(result);
-                }
-
-                var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CV };
-                var resultUpload = await WriteFile(uploadModel);
-                var user = await _userService.GetUser(new User { Username = _username });
-
-                if (resultUpload.IsSuccess)
-                {
-                    var ownerCV = new UserCV
-                    {
-                        CVUrl = resultUpload.Path,
-                        CVName = fileNameRequest,
-                        UserId = user.Id,
-                        Featured = false,
-                    };
-
-                    var resultAddCV = await _userCVService.AddCV(ownerCV);
-                    if (resultAddCV is not null) 
-                    {
-                        result.IsSuccess = true;
-                        result.Message = "Upload cv thành công";
-                        result.Data = resultAddCV;
-                    }
-                    else
-                    {
-                        result.IsSuccess = false;
-                        result.Message = "Không thể upload cv này lên";
-                    }
-
+                    _apiResult.IsSuccess = true;
+                    _apiResult.Message = "Upload cv thành công";
+                    _apiResult.Data = resultAddCV;
                 }
                 else
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể upload cv này lên";
+                    _apiResult.IsSuccess = false;
+                    _apiResult.Message = "Không thể upload cv này lên";
                 }
 
-                
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể upload cv này lên";
             }
 
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -116,38 +112,38 @@ namespace EW.WebAPI.Controllers
         [HttpPost("upload-avatar-company")]
         public async Task<IActionResult> UploadAvatarCompany([FromForm] UploadAvatarModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var user = await _userService.GetUser(new User { Username = _username });
+            var companyByUser = await _companyService.GetCompanyByUser(user);
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLower();
+            var acceptExtensionFiles = new string[] { ".jpg", ".jpeg", ".apng", ".png", ".svg", ".webp" };
+
+            if (!acceptExtensionFiles.Contains(fileExtension))
             {
-                var user = await _userService.GetUser(new User { Username = _username });
-                var companyByUser = await _companyService.GetCompanyByUser(user);
-                var fileExtension = Path.GetExtension(model.File.FileName);
-                var acceptExtensionFiles = new string[] { ".jpg", ".jpeg", ".apng", ".png", ".svg", ".webp" };
-                var fileNameRequest = model.File.FileName;
-                var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CompanyAvatar };
-                var resultUpload = await WriteFile(uploadModel);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể upload hình ảnh này lên";
+                return Ok(_apiResult);
+            }
+
+            var uploadModel = new ImportFileModel { File = model.File, Type = EFileType.CompanyAvatar };
+            var resultUpload = await WriteFile(uploadModel);
+            if (resultUpload.IsSuccess)
+            {
+                companyByUser.AvatarUrl = resultUpload.Path;
+                _apiResult.IsSuccess = await _companyService.UploadAvatarCompany(companyByUser);
+                _apiResult.Message = _apiResult.IsSuccess ? "Upload hình ảnh thành công" : "Không thể upload hình ảnh này lên";
                 if (resultUpload.IsSuccess)
                 {
-                    companyByUser.AvatarUrl = resultUpload.Path;
-                    result.IsSuccess = await _companyService.UploadAvatarCompany(companyByUser);
-                    result.Message = result.IsSuccess ? "Upload hình ảnh thành công" : "Không thể upload hình ảnh này lên";
-                    if (resultUpload.IsSuccess)
-                    {
-                        result.Data = companyByUser;
-                    }
-                }
-                else
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể upload hình ảnh này lên";
+                    _apiResult.Data = companyByUser;
                 }
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể upload hình ảnh này lên";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
 
@@ -159,12 +155,12 @@ namespace EW.WebAPI.Controllers
         [NonAction]
         private async Task<ResponseWriteFile> WriteFile(ImportFileModel model)
         {
-            var result = new ResponseWriteFile();
+            var response = new ResponseWriteFile();
             try
             {
                 var folder = Path.Combine(_webHostEnvironment.ContentRootPath, "Uploads");
 
-                var fileName = $"{model.Type}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{model.File.FileName}";
+                var fileName = $"{model.Type}_{DateTime.Now:yyyyMMddHHmmss}_{model.File.FileName}";
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
@@ -177,17 +173,17 @@ namespace EW.WebAPI.Controllers
                     {
                         await model.File.CopyToAsync(stream);
                     }
-                    result.IsSuccess = true;
-                    result.Path = fileName;
+                    response.IsSuccess = true;
+                    response.Path = fileName;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                result.IsSuccess = false;
+                response.IsSuccess = false;
             }
-            return result;
-            
+            return response;
+
         }
     }
 }
