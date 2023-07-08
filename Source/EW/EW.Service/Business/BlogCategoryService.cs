@@ -30,11 +30,8 @@ namespace EW.Services.Business
 
         public async Task<bool> Delete(BlogCategory model)
         {
-            var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (exist is null) 
-            {
-                throw new EWException("Không tồn tại danh mục này");
-            }
+            var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+                            ?? throw new EWException("Không tồn tại danh mục này");
             _unitOfWork.Repository<BlogCategory>().Delete(exist);
             return await _unitOfWork.SaveChangeAsync();
         }
@@ -47,11 +44,8 @@ namespace EW.Services.Business
 
         public async Task<BlogCategory> Update(BlogCategory model)
         {
-            var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (exist is null)
-            {
-                throw new EWException("Không tồn tại danh mục này");
-            }
+            var exist = await _unitOfWork.Repository<BlogCategory>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+                        ?? throw new EWException("Không tồn tại danh mục này");
             exist.UpdatedDate = DateTimeOffset.Now;
             exist.Name = model.Name;
             exist.Description = model.Description;

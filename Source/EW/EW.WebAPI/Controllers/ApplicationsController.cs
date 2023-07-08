@@ -54,7 +54,9 @@ namespace EW.WebAPI.Controllers
                 Status = EApplicationStatus.ReceptionCV,
                 Description = ""
             });
+
             _apiResult.Message = "Ứng tuyển thành công";
+
             if (_apiResult.Data is not null)
             {
                 var body = string.Empty;

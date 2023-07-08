@@ -204,11 +204,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id });
-                if(post is null)
-                {
-                    throw new EWException("Không có dữ liệu từ id này");
-                }
+                var post = await _recruitmentPostService.GetRecruitmentPostForDetail(new RecruitmentPost { Id = id }) 
+                            ?? throw new EWException("Không có dữ liệu từ id này");
                 result.Data = post;
                 result.Message = "Lấy dữ liệu thành công";
             }

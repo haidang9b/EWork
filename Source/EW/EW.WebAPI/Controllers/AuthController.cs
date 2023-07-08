@@ -24,7 +24,7 @@ namespace EW.WebAPI.Controllers
         private readonly ICompanyService _companyService;
         private readonly IOptions<CustomConfig> _customConfig;
         private readonly ILogger<AuthController> _logger;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 

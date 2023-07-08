@@ -24,22 +24,17 @@ namespace EW.Services.Business
 
         public async Task<bool> Delete(Project model)
         {
-            var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentProject is null)
-            {
-                throw new EWException("Không tồn tại dự án này");
-            }
+            var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+                                    ?? throw new EWException("Không tồn tại dự án này");
             _unitOfWork.Repository<Project>().Delete(currentProject);
             return await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<bool> Update(Project model)
         {
-            var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id);
-            if (currentProject is null)
-            {
-                throw new EWException("Không tồn tại dự án này");
-            }
+            var currentProject = await _unitOfWork.Repository<Project>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+                                    ?? throw new EWException("Không tồn tại dự án này");
+            
             currentProject.UpdatedDate = DateTimeOffset.Now;
             currentProject.Description = model.Description;
             currentProject.From = model.From;
