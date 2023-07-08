@@ -1,4 +1,5 @@
 ﻿using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Services.Constracts;
@@ -66,6 +67,12 @@ namespace EW.WebAPI.Controllers
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
             });
+
+            if (exist is not null)
+            {
+                throw new EWException("Đã tồn tại email và số điện thoại trong hệ thống");
+            }
+
             _apiResult.IsSuccess = await _recruiterService.AddNewRecruiter(model);
             _apiResult.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
 

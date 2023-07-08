@@ -66,7 +66,7 @@ namespace EW.Services.Business
                 IsOpenForWork = false,
             };
             await _unitOfWork.Repository<Profile>().AddAsync(newProfile);
-            if ((await _unitOfWork.SaveChangeAsync()) == false)
+            if (!await _unitOfWork.SaveChangeAsync())
             {
                 throw new EWException("Không thể khởi tại profile");
             }

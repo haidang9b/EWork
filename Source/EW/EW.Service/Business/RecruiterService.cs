@@ -15,7 +15,7 @@ namespace EW.Services.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         public RecruiterService(
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
             IUserService userService
         )
         {
@@ -71,7 +71,7 @@ namespace EW.Services.Business
                     throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
                 }
                 var resultAddFirstAccount = await _userService.Register(firstAccountOfCompany);
-                if (resultAddCompany == false || resultAddFirstAccount == false)
+                if (!resultAddCompany || !resultAddFirstAccount)
                 {
                     _unitOfWork.RollBack();
                     throw new EWException("Không thể thêm tài khoản hoặc công ty này");
@@ -145,7 +145,7 @@ namespace EW.Services.Business
                 TokenResetPassword = MyRandom.RandomString(30)
             };
             var resultAdded = await _userService.Register(newRecruiter);
-            if (resultAdded == false)
+            if (!resultAdded)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
@@ -168,7 +168,7 @@ namespace EW.Services.Business
             await _unitOfWork.Repository<Recruiter>().AddAsync(newAsign);
             var resultAssign = await _unitOfWork.SaveChangeAsync();
 
-            if (resultAdded == false)
+            if (!resultAdded)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");

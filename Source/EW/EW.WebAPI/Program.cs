@@ -8,7 +8,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = builder.Configuration.GetValue<string>("MyAllowSpecificOrigins")
-     ?? throw new ArgumentNullException("Add section MyAllowSpecificOrigins");
+     ?? throw new ArgumentNullException(paramName: "Add section MyAllowSpecificOrigins");
 
 // Add services to the container.
 

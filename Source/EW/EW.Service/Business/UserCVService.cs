@@ -18,7 +18,7 @@ namespace EW.Services.Business
             model.UpdatedDate = DateTimeOffset.Now;
             model.CreatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<UserCV>().AddAsync(model);
-            if (await _unitOfWork.SaveChangeAsync() == false)
+            if (!await _unitOfWork.SaveChangeAsync())
                 throw new EWException("Thêm cv thất bại");
             return model;
         }

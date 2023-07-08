@@ -23,7 +23,6 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly ICompanyService _companyService;
         private readonly CustomConfig _customConfig;
-        private readonly ILogger<AuthController> _logger;
         private readonly IMapper _mapper;
 
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
@@ -32,7 +31,6 @@ namespace EW.WebAPI.Controllers
         public AuthController(
             IUserService userService,
             ITokenService tokenService,
-            ILogger<AuthController> logger,
             IEmailService emailService,
             ICompanyService companyService,
             IOptions<CustomConfig> customConfig,
@@ -43,7 +41,6 @@ namespace EW.WebAPI.Controllers
             _tokenService = tokenService;
             _companyService = companyService;
             _emailService = emailService;
-            _logger = logger;
             _customConfig = customConfig.Value;
             _mapper = mapper;
             _apiResult = new();
@@ -53,8 +50,6 @@ namespace EW.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var _apiResult = new ApiResult();
-
             var newUser = _mapper.Map<User>(model);
             _apiResult.IsSuccess = await _userService.Register(newUser);
 
@@ -65,55 +60,47 @@ namespace EW.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var _apiResult = new ApiResult();
-            try
+            var exist = await _userService.GetUser(new User { Username = model.Username });
+            if (exist is not null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
             {
-                var exist = await _userService.GetUser(new User { Username = model.Username });
-                if (exist is not null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
+
+                if (exist.RoleId == (long)ERole.ID_Business)
                 {
-
-                    if (exist.RoleId == (long)ERole.ID_Business)
+                    var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
+                    if (company is not null && company.Status == EStatusRecruiter.Pending)
                     {
-                        var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
-                        if (company is not null && company.Status == EStatusRecruiter.Pending)
-                        {
-                            throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
-                        }
-
-                        if (company is not null && company.Status == EStatusRecruiter.Disabled)
-                        {
-                            throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
-                        }
-
-                        if (company is null)
-                        {
-                            throw new EWException("Tài khoản đang không gắn với công ti nào");
-                        }
+                        throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
                     }
-                    if (!exist.IsActive)
+
+                    if (company is not null && company.Status == EStatusRecruiter.Disabled)
                     {
-                        throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                        throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
                     }
-                    _apiResult.Message = "Đăng nhập thành công";
-                    var rfToken = _tokenService.CreateRefreshToken(exist);
-                    var data = new LoginViewModel
+
+                    if (company is null)
                     {
-                        AccessToken = _tokenService.CreateToken(exist),
-                        RefreshToken = rfToken,
-                    };
-                    _apiResult.Data = data;
+                        throw new EWException("Tài khoản đang không gắn với công ti nào");
+                    }
                 }
-                else
+                if (!exist.IsActive)
                 {
-                    _apiResult.IsSuccess = false;
-                    _apiResult.Message = "Tài khoản hoặc mật khẩu không chính xác";
+                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
                 }
+                _apiResult.Message = "Đăng nhập thành công";
+                var rfToken = _tokenService.CreateRefreshToken(exist);
+                var data = new LoginViewModel
+                {
+                    AccessToken = _tokenService.CreateToken(exist),
+                    RefreshToken = rfToken,
+                };
+                _apiResult.Data = data;
             }
-            catch (Exception error)
+            else
             {
-                _logger.LogError(error.Message);
-                _apiResult.InternalError(error.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Tài khoản hoặc mật khẩu không chính xác";
             }
+
             return Ok(_apiResult);
         }
 
@@ -122,7 +109,7 @@ namespace EW.WebAPI.Controllers
         {
 
             var refreshToken = model.RefreshToken;
-            var validate = _tokenService.GetPayloadRefreshToken(refreshToken) 
+            var validate = _tokenService.GetPayloadRefreshToken(refreshToken)
                 ?? throw new EWException("User này không tồn tại");
             var exist = await _userService.GetUser(new User
             {
@@ -215,10 +202,14 @@ namespace EW.WebAPI.Controllers
             }
             var key = await _userService.GenKeyResetPassword(exist);
             var bodyBuilder = new System.Text.StringBuilder(body);
+
             bodyBuilder.Replace("{username}", exist.FullName);
             bodyBuilder.Replace("{url}", $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
+
             var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
+
             await _emailService.SendEmail(data);
+
             _apiResult.IsSuccess = true;
             _apiResult.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
 
@@ -233,7 +224,6 @@ namespace EW.WebAPI.Controllers
         [HttpPost("is-valid-code-recover")]
         public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
         {
-
             var exist = await _userService.GetUser(new User { Username = model.Username });
             if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
             {
@@ -258,7 +248,8 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
         {
 
-            var exist = await _userService.GetUser(new User { Username = model.Username }) ?? throw new EWException("Không tồn tại User này"); ;
+            var exist = await _userService.GetUser(new User { Username = model.Username })
+                ?? throw new EWException("Không tồn tại User này");
 
             if (exist.TokenResetPassword != model.Code)
             {
@@ -319,6 +310,7 @@ namespace EW.WebAPI.Controllers
 
             return Ok(_apiResult);
         }
+
         [HttpGet("get-user-info")]
         [Authorize]
         public async Task<IActionResult> GetUserInfo()

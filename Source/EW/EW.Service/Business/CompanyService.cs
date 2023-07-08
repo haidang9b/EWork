@@ -26,10 +26,10 @@ namespace EW.Services.Business
             return await _unitOfWork.Repository<Company>().GetAllAsync();
         }
 
-        public async Task<Company> GetCompanyByUser(User model)
+        public async Task<Company> GetCompanyByUser(User user)
         {
-            var user = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(u => u.Id == model.Id);
-            var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == user.Id, includeProperties: "Company");
+            var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
+            var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == exist.Id, includeProperties: "Company");
             return companyRecruiter.Company;
         }
         public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
@@ -76,7 +76,7 @@ namespace EW.Services.Business
                 Featured = model.Featured,
             };
             await _unitOfWork.Repository<Company>().AddAsync(newCompany);
-            if (await _unitOfWork.SaveChangeAsync() == false)
+            if (!await _unitOfWork.SaveChangeAsync())
                 throw new EWException("Thêm công ty mới thất bại");
             return newCompany;
         }
