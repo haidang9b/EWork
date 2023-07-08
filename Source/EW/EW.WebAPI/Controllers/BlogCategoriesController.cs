@@ -12,7 +12,7 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IBlogCategoryService _blogCategoryService;
         private readonly ILogger<BlogCategoriesController> _logger;
-        private ApiResult _apiResult;
+        private readonly ApiResult _apiResult;
 
         public BlogCategoriesController(IBlogCategoryService blogCategoryService, ILogger<BlogCategoriesController> logger)
         {

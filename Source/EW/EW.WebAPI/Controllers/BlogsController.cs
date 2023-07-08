@@ -18,7 +18,7 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<BlogsController> _logger;
         private readonly IBlogService _blogService;
         private readonly IUserService _userService;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public BlogsController(ILogger<BlogsController> logger, IBlogService blogService, IUserService userService, IMapper mapper)

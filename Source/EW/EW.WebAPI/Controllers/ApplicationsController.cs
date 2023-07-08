@@ -21,7 +21,7 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        private ApiResult _apiResult;
+        private readonly ApiResult _apiResult;
 
         public ApplicationsController(IApplicationService applicationService, ILogger<ApplicationsController> logger, IUserService userService, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IUserCVService userCVService)
         {
