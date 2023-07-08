@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EW.Commons.Enums;
+using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Domain.Models;
 using EW.Services.Constracts;

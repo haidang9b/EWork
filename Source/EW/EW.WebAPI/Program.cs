@@ -1,6 +1,7 @@
 using EW.Commons.Constaints;
 using EW.Domain.Models;
 using EW.Infrastructure;
+using EW.WebAPI.ExceptionHandlers;
 using EW.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,8 @@ if (app.Environment.IsDevelopment() == false)
     var context = services.GetRequiredService<EWContext>();
     context.Database.Migrate();
 }*/
+
+app.UseEWExceptionHandler();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
