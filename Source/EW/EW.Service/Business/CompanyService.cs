@@ -105,7 +105,7 @@ namespace EW.Services.Business
                     Id = company.Id,
                     CompanyName = company.CompanyName,
                     AvatarUrl = company.AvatarUrl,
-                    JobsHiring = JobsHiring.Count(),
+                    JobsHiring = JobsHiring.Count,
                     CompanyType = company.CompanyType,
                     Featured = company.Featured,
                 });

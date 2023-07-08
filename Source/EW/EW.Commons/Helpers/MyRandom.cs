@@ -2,7 +2,7 @@
 {
     public static class MyRandom
     {
-        private static Random random = new Random();
+        private static Random random = new();
 
         public static string RandomString(int length)
         {
