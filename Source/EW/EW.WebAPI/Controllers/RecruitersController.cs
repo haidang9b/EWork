@@ -20,9 +20,9 @@ namespace EW.WebAPI.Controllers
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         public RecruitersController(
-            IRecruiterService recruiterService, 
-            IUserService userService, 
-            ILogger<RecruitersController> logger, 
+            IRecruiterService recruiterService,
+            IUserService userService,
+            ILogger<RecruitersController> logger,
             ICompanyService companyService
         )
         {
@@ -58,7 +58,7 @@ namespace EW.WebAPI.Controllers
                 }
                 result.Message = "Lấy dữ liệu thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
@@ -81,7 +81,7 @@ namespace EW.WebAPI.Controllers
                 result.IsSuccess = await _recruiterService.AddNewRecruiter(model);
                 result.Message = "Đăng ký doanh nghiệp thành công, vui lòng chờ xác minh và kiểm tra email";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();
@@ -100,7 +100,7 @@ namespace EW.WebAPI.Controllers
         /// <returns>Data recruiter added</returns>
         [HttpPost("add-new-recruiter")]
         [Authorize(Roles = "Faculty,Business")]
-        public async  Task<IActionResult> AddNewRecruiter(AddNewRecruiterAccountModel model)
+        public async Task<IActionResult> AddNewRecruiter(AddNewRecruiterAccountModel model)
         {
             var result = new ApiResult();
             try
@@ -138,12 +138,12 @@ namespace EW.WebAPI.Controllers
 
                 result.IsSuccess = await _recruiterService.AssignUserToCompany(model);
                 result.Message = result.IsSuccess ? "Thêm tài khoản nhân sự thành công" : "Thêm tài khoản nhân sự thất bại";
-                if(result.IsSuccess)
+                if (result.IsSuccess)
                 {
                     result.Data = await _recruiterService.GetRecruiterByUser(new User { Username = model.Username, Email = model.Email });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError();

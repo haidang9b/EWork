@@ -27,7 +27,7 @@ namespace EW.Services.Business
         {
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
             return recruitmentPosts
-                .GroupBy(item => new { Year = item.CreatedDate.Year, Month = item.CreatedDate.Month, Day = item.CreatedDate.Day  })
+                .GroupBy(item => new { Year = item.CreatedDate.Year, Month = item.CreatedDate.Month, Day = item.CreatedDate.Day })
                 .Select(row => new ChartResultViewModel
                 {
                     Label = $"{row.Key.Day}/{row.Key.Month}/{row.Key.Year}",
@@ -40,7 +40,7 @@ namespace EW.Services.Business
             var result = new List<ChartResultViewModel>();
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
             var techOnPosts = recruitmentPosts.Select(item => item.TechStacks).ToList();
-            for(var i = 0; i< techStacks.Length; i++)
+            for (var i = 0; i < techStacks.Length; i++)
             {
                 result.Add(new ChartResultViewModel
                 {

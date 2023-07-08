@@ -25,7 +25,7 @@ namespace EW.Services.Business
 
         public async Task<bool> Delete(Blog blog)
         {
-            var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id) 
+            var exist = await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == blog.Id)
                             ?? throw new EWException("Không tồn tại bài viết này, vui lòng kiểm tra lại");
             _unitOfWork.Repository<Blog>().Delete(exist);
             return await _unitOfWork.SaveChangeAsync();

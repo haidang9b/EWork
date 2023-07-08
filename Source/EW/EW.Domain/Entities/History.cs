@@ -2,7 +2,7 @@
 
 namespace EW.Domain.Entities
 {
-    public class History: BaseEntity
+    public class History : BaseEntity
     {
         public long ProfileId { get; set; }
         [JsonIgnore]

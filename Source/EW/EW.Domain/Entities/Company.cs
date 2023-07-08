@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EW.Domain.Entities
 {
-    public class Company: BaseEntity
+    public class Company : BaseEntity
     {
         [StringLength(200)]
         public string CompanyName { get; set; }

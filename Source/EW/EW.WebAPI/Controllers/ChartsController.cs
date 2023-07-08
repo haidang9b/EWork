@@ -29,7 +29,7 @@ namespace EW.WebAPI.Controllers
             {
                 result.Data = await _chartService.GetNumberApplication();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);

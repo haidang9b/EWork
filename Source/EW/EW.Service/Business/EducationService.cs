@@ -24,7 +24,7 @@ namespace EW.Services.Business
 
         public async Task<bool> Delete(Education model)
         {
-            var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+            var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id)
                                     ?? throw new EWException("Không tồn tại học vấn này");
             _unitOfWork.Repository<Education>().Delete(currentEducation);
             return await _unitOfWork.SaveChangeAsync();
@@ -32,9 +32,9 @@ namespace EW.Services.Business
 
         public async Task<bool> Update(Education model)
         {
-            var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+            var currentEducation = await _unitOfWork.Repository<Education>().FirstOrDefaultAsync(item => item.Id == model.Id)
                                     ?? throw new EWException("Không tồn tại học vấn này");
-            
+
             currentEducation.UpdatedDate = DateTimeOffset.Now;
             currentEducation.Description = model.Description;
             currentEducation.From = model.From;

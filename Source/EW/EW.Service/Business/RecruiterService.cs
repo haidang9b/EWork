@@ -23,7 +23,7 @@ namespace EW.Services.Business
         public async Task<bool> AddNewRecruiter(RegisterRecruiterModel model)
         {
             var exist = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Email == model.Email || model.PhoneNumber == item.PhoneNumber);
-            if(exist is null)
+            if (exist is null)
             {
                 _unitOfWork.BeginTransaction();
                 var newCompany = new Company
@@ -62,13 +62,13 @@ namespace EW.Services.Business
                     TokenResetPassword = MyRandom.RandomString(30)
                 };
 
-                if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) is not null) 
+                if (await _userService.GetUser(new User { Username = model.Username, Email = model.Email }) is not null)
                 {
                     _unitOfWork.RollBack();
                     throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
                 }
                 var resultAddFirstAccount = await _userService.Register(firstAccountOfCompany);
-                if(resultAddCompany == false || resultAddFirstAccount ==  false)
+                if (resultAddCompany == false || resultAddFirstAccount == false)
                 {
                     _unitOfWork.RollBack();
                     throw new EWException("Không thể thêm tài khoản hoặc công ty này");
@@ -100,7 +100,7 @@ namespace EW.Services.Business
             }
             throw new EWException("Username hoặc email này đã đăng ký, vui lòng thử lại");
         }
-       
+
         public async Task<IEnumerable<RecruiterViewModel>> GetRecruiters()
         {
             var data = await _unitOfWork.Repository<Recruiter>().GetAllAsync("User,Company");
@@ -119,7 +119,7 @@ namespace EW.Services.Business
 
             }).OrderByDescending(r => r.CreatedDate).ToList();
         }
-        
+
         public async Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model)
         {
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username || item.Email == model.Email || item.PhoneNumber == model.PhoneNumber);
@@ -142,7 +142,7 @@ namespace EW.Services.Business
                 TokenResetPassword = MyRandom.RandomString(30)
             };
             var resultAdded = await _userService.Register(newRecruiter);
-            if(resultAdded == false)
+            if (resultAdded == false)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
@@ -165,7 +165,7 @@ namespace EW.Services.Business
             await _unitOfWork.Repository<Recruiter>().AddAsync(newAsign);
             var resultAssign = await _unitOfWork.SaveChangeAsync();
 
-            if(resultAdded == false)
+            if (resultAdded == false)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
@@ -176,7 +176,7 @@ namespace EW.Services.Business
 
         public async Task<RecruiterViewModel> GetRecruiterByUser(User model)
         {
-            var data = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username && item.User.Email == model.Email,"User,Company");
+            var data = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username && item.User.Email == model.Email, "User,Company");
             return new RecruiterViewModel
             {
                 Id = data.UserId,
@@ -194,7 +194,7 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<RecruiterViewModel>> GetRecruitersByCompany(Company company)
         {
-            var data = await _unitOfWork.Repository<Recruiter>().GetAsync(item => item.CompanyId == company.Id,"User,Company");
+            var data = await _unitOfWork.Repository<Recruiter>().GetAsync(item => item.CompanyId == company.Id, "User,Company");
             return data.Select(item => new RecruiterViewModel
             {
                 Id = item.UserId,

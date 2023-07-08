@@ -2,7 +2,7 @@
 
 namespace EW.Domain.Entities
 {
-    public class Application: BaseEntity
+    public class Application : BaseEntity
     {
         public string CoverLetter { get; set; }
         public long UserCVId { get; set; }

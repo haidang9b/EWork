@@ -19,9 +19,9 @@ namespace EW.WebAPI.Controllers
         private readonly IProfileSerivce _profileSerivce;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProfileController(IUserService userService, 
-                                ILogger<ProfileController> logger, 
-                                IUserCVService userCVService, 
+        public ProfileController(IUserService userService,
+                                ILogger<ProfileController> logger,
+                                IUserCVService userCVService,
                                 IProfileSerivce profileSerivce)
         {
             _userService = userService;
@@ -29,7 +29,7 @@ namespace EW.WebAPI.Controllers
             _userCVService = userCVService;
             _profileSerivce = profileSerivce;
         }
-        
+
 
         /// <summary>
         /// Get profile user request, role: student
@@ -43,7 +43,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if(profile is null)
+                if (profile is null)
                 {
                     var initProfile = await _profileSerivce.InitProfile(new User { Username = _username });
                     result.IsSuccess = true;
@@ -57,7 +57,7 @@ namespace EW.WebAPI.Controllers
                     result.Data = profile;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);
@@ -78,7 +78,7 @@ namespace EW.WebAPI.Controllers
             try
             {
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
-                if(profile is null)
+                if (profile is null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Vui lòng get dữ liệu trước khi update";
@@ -92,7 +92,7 @@ namespace EW.WebAPI.Controllers
                 profile.Objective = model.Objective;
                 profile.Skills = model.Skills;
                 result.IsSuccess = await _profileSerivce.UpdateProfile(profile);
-                if(result.IsSuccess)
+                if (result.IsSuccess)
                 {
                     result.Data = profile;
                     result.Message = "Cập nhật thông tin thành công";
@@ -121,7 +121,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currrentUser = await _userService.GetUser(new User { Username = _username});
+                var currrentUser = await _userService.GetUser(new User { Username = _username });
                 var profile = await _profileSerivce.GetProfile(new User { Username = _username });
                 if (profile is null)
                 {
@@ -130,8 +130,8 @@ namespace EW.WebAPI.Controllers
                     return Ok(result);
                 }
 
-                if(string.IsNullOrEmpty(profile.PhoneNumber) 
-                    || string.IsNullOrEmpty(profile.Objective) 
+                if (string.IsNullOrEmpty(profile.PhoneNumber)
+                    || string.IsNullOrEmpty(profile.Objective)
                     || string.IsNullOrEmpty(profile.Skills))
                 {
                     result.IsSuccess = false;
@@ -157,7 +157,7 @@ namespace EW.WebAPI.Controllers
                     result.Message = model.IsOpenForWork ? "Bật tìm kiếm việc thất bại" : "Tắt tìm kiếm việc thất bại";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError(ex.Message);
                 _logger.LogError(ex.Message);
@@ -179,7 +179,7 @@ namespace EW.WebAPI.Controllers
                 result.IsSuccess = true;
                 result.Message = "Lấy dữ liệu thành công";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 result.InternalError(ex.Message);

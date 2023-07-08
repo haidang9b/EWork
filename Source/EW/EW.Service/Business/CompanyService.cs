@@ -10,7 +10,7 @@ using EW.Services.Constracts;
 
 namespace EW.Services.Business
 {
-    public class CompanyService: ICompanyService
+    public class CompanyService : ICompanyService
     {
         private readonly IUnitOfWork _unitOfWork;
         public CompanyService(IUnitOfWork unitOfWork)
@@ -34,9 +34,9 @@ namespace EW.Services.Business
         }
         public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
         {
-            var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id) 
+            var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id)
                                     ?? throw new EWException("Công ty này không tồn tại, vui lòng kiểm tra lại");
-            
+
             existCompany.CompanyName = model.CompanyName;
             existCompany.Address = model.Address;
             existCompany.Status = model.Status;
@@ -95,7 +95,7 @@ namespace EW.Services.Business
             var companies = await _unitOfWork.Repository<Company>().GetAsync(item => item.Status == EStatusRecruiter.Active);
             var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync();
             var result = new List<TopComapnyModel>();
-            foreach(var company in companies)
+            foreach (var company in companies)
             {
                 var JobsHiring = recruitmentPosts.Where(item => item.CompanyId == company.Id).ToList();
                 result.Add(new TopComapnyModel

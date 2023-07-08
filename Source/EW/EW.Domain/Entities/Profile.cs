@@ -2,7 +2,7 @@
 
 namespace EW.Domain.Entities
 {
-    public class Profile: BaseEntity
+    public class Profile : BaseEntity
     {
         public string Address { get; set; }
         public string Linkedin { get; set; }
