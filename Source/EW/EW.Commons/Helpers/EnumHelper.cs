@@ -21,17 +21,24 @@ namespace EW.Commons.Helpers
                 typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
                 {
                     if (attribute.Description == description)
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                         return (T)field.GetValue(null);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8603 // Possible null reference return.
                 }
                 else
                 {
                     if (field.Name == description)
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                         return (T)field.GetValue(null);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8603 // Possible null reference return.
                 }
             }
 
             throw new ArgumentException("Not found.", nameof(description));
-            // Or return default(T);
         }
     }
 }

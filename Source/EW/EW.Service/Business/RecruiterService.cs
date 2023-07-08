@@ -168,7 +168,7 @@ namespace EW.Services.Business
             await _unitOfWork.Repository<Recruiter>().AddAsync(newAsign);
             var resultAssign = await _unitOfWork.SaveChangeAsync();
 
-            if (!resultAdded)
+            if (!resultAssign)
             {
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
