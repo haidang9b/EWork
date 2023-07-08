@@ -15,18 +15,22 @@ namespace EW.WebAPI.Controllers
     [ApiController]
     public class BlogsController : ControllerBase
     {
-        private readonly ILogger<BlogsController> _logger;
         private readonly IBlogService _blogService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private readonly ApiResult _apiResult;
 
-        public BlogsController(ILogger<BlogsController> logger, IBlogService blogService, IUserService userService, IMapper mapper)
+        public BlogsController(
+            IBlogService blogService,
+            IUserService userService,
+            IMapper mapper
+        )
         {
-            _logger = logger;
             _blogService = blogService;
             _userService = userService;
             _mapper = mapper;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -35,21 +39,14 @@ namespace EW.WebAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Index() 
+        public async Task<IActionResult> Index()
         {
-            var result = new ApiResult();
-            try
-            {
-                var data = await _blogService.GetAll();
-                result.Data = _mapper.Map<IEnumerable<BlogDetailViewModel>>(data);
-                result.Message = "Lấy dữ liệu thành công";
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+
+            var data = await _blogService.GetAll();
+            _apiResult.Data = _mapper.Map<IEnumerable<BlogDetailViewModel>>(data);
+            _apiResult.Message = "Lấy dữ liệu thành công";
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -61,27 +58,20 @@ namespace EW.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var result = new ApiResult();
-            try
+
+            var data = await _blogService.Get(id);
+            if (data is null)
             {
-                var data = await _blogService.Get(id);
-                if(data is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không tồn tại bài viết này";
-                }
-                else
-                {
-                    result.Data = _mapper.Map<BlogDetailViewModel>(data);
-                    result.Message = "Lấy dữ liệu thành công";
-                }
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không tồn tại bài viết này";
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
+                _apiResult.Data = _mapper.Map<BlogDetailViewModel>(data);
+                _apiResult.Message = "Lấy dữ liệu thành công";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Add new blog
@@ -92,29 +82,22 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AddBlogModel model)
         {
-            var result = new ApiResult();
-            try
+
+            var user = await _userService.GetUser(new User { Username = Username });
+            var newBlog = new Blog
             {
-                var user = await _userService.GetUser(new User { Username = _username });
-                var newBlog = new Blog
-                {
-                    Title = model.Title,
-                    Content = model.Content,
-                    UserId = user.Id,
-                    BlogCategoryId = model.BlogCategoryId,
-                    
-                };
-                await _blogService.Add(newBlog);
-                var data = await _blogService.Get(newBlog.Id);
-                result.Data = _mapper.Map<BlogDetailViewModel>(data);
-                result.Message = "Thêm bài viết thành công";
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+                Title = model.Title,
+                Content = model.Content,
+                UserId = user.Id,
+                BlogCategoryId = model.BlogCategoryId,
+
+            };
+            await _blogService.Add(newBlog);
+            var data = await _blogService.Get(newBlog.Id);
+            _apiResult.Data = _mapper.Map<BlogDetailViewModel>(data);
+            _apiResult.Message = "Thêm bài viết thành công";
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Delete blog by id
@@ -125,29 +108,22 @@ namespace EW.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = new ApiResult();
-            try
+
+            if (await _blogService.Delete(new Blog { Id = id }))
             {
-                if(await _blogService.Delete(new Blog { Id = id}))
+                _apiResult.Data = new Blog
                 {
-                    result.Data = new Blog
-                    {
-                        Id = id
-                    };
-                    result.Message = "Xóa thành công bài viết";
-                }
-                else
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Xóa bài viết thất bại";
-                }
+                    Id = id
+                };
+                _apiResult.Message = "Xóa thành công bài viết";
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Xóa bài viết thất bại";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Update blog exist
@@ -158,20 +134,13 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Blog model)
         {
-            var result = new ApiResult();
-            try
-            {
-                await _blogService.Update(model);
-                var data = await _blogService.Get(model.Id);
-                result.Data = _mapper.Map<BlogDetailViewModel>(data);
-                result.Message = "Cập nhật bài viết thành công";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+
+            await _blogService.Update(model);
+            var data = await _blogService.Get(model.Id);
+            _apiResult.Data = _mapper.Map<BlogDetailViewModel>(data);
+            _apiResult.Message = "Cập nhật bài viết thành công";
+
+            return Ok(_apiResult);
         }
     }
 }

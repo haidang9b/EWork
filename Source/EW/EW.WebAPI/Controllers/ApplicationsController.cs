@@ -19,14 +19,14 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
         private readonly ApiResult _apiResult;
 
         public ApplicationsController(
-            IApplicationService applicationService, 
-            IUserService userService, 
-            IRecruitmentPostService recruitmentPostService, 
-            IEmailService emailService, 
+            IApplicationService applicationService,
+            IUserService userService,
+            IRecruitmentPostService recruitmentPostService,
+            IEmailService emailService,
             IUserCVService userCVService
             )
         {
@@ -35,7 +35,7 @@ namespace EW.WebAPI.Controllers
             _recruitmentPostService = recruitmentPostService;
             _emailService = emailService;
             _userCVService = userCVService;
-            _apiResult = new ApiResult();
+            _apiResult = new();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ApplicationRequestModel model)
         {
-            var currentUser = await _userService.GetUser(new User { Username = _username });
+            var currentUser = await _userService.GetUser(new User { Username = Username });
 
             _apiResult.Data = await _applicationService.Add(new AddApplicationModel
             {
@@ -89,7 +89,7 @@ namespace EW.WebAPI.Controllers
         {
             _apiResult.Data = await _applicationService.GetByApplier(new User
             {
-                Username = _username,
+                Username = Username,
             });
 
             return Ok(_apiResult);
@@ -105,7 +105,7 @@ namespace EW.WebAPI.Controllers
         {
             _apiResult.Data = await _applicationService.GetJobsApplied(new User
             {
-                Username = _username,
+                Username = Username,
             });
 
             return Ok(_apiResult);
@@ -118,14 +118,14 @@ namespace EW.WebAPI.Controllers
         [HttpGet("applieds")]
         public async Task<IActionResult> GetApplied()
         {
-            var currentUser = await _userService.GetUser(new User { Username = _username });
+            var currentUser = await _userService.GetUser(new User { Username = Username });
             if (currentUser.RoleId == (long)ERole.ID_Faculty)
             {
                 _apiResult.Data = await _applicationService.GetApplieds();
             }
             else
             {
-                _apiResult.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
+                _apiResult.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = Username, });
             }
             _apiResult.Message = "Lấy dữ liệu thành công";
 
@@ -140,7 +140,7 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateApplication(UpdateProgressModel model)
         {
-            var isHasRole = await _applicationService.IsHasRole(new ApplicationUserModel { Username = _username, ApplicationId = model.Id });
+            var isHasRole = await _applicationService.IsHasRole(new ApplicationUserModel { Username = Username, ApplicationId = model.Id });
             if (!isHasRole)
             {
                 _apiResult.IsSuccess = false;

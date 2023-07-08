@@ -26,7 +26,7 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IMapper _mapper;
 
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         private readonly ApiResult _apiResult;
         public AuthController(
@@ -46,7 +46,7 @@ namespace EW.WebAPI.Controllers
             _logger = logger;
             _customConfig = customConfig.Value;
             _mapper = mapper;
-            _apiResult = new ApiResult();
+            _apiResult = new();
         }
 
         [HttpPost("Register")]
@@ -294,7 +294,7 @@ namespace EW.WebAPI.Controllers
             }
             else
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
+                var currentUser = await _userService.GetUser(new User { Username = Username });
                 if (BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
                 {
                     var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
@@ -323,7 +323,7 @@ namespace EW.WebAPI.Controllers
         public async Task<IActionResult> GetUserInfo()
         {
 
-            var currentUser = await _userService.GetUser(new User { Username = _username });
+            var currentUser = await _userService.GetUser(new User { Username = Username });
             _apiResult.IsSuccess = true;
             _apiResult.Data = _mapper.Map<UserInfoViewModel>(currentUser);
 

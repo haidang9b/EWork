@@ -22,8 +22,15 @@ namespace EW.WebAPI.Controllers
         private readonly ICompanyService _companyService;
         private readonly ILogger<RecruitmentPostsController> _logger;
         private readonly IMapper _mapper;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public RecruitmentPostsController(IRecruitmentPostService recruitmentPostService, IUserService userService, IRecruiterService recruiterService, ILogger<RecruitmentPostsController> logger, ICompanyService companyService, IMapper mapper)
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        public RecruitmentPostsController(
+            IRecruitmentPostService recruitmentPostService, 
+            IUserService userService, 
+            IRecruiterService recruiterService, 
+            ILogger<RecruitmentPostsController> logger, 
+            ICompanyService companyService, 
+            IMapper mapper
+        )
         {
             _recruitmentPostService = recruitmentPostService;
             _userService = userService;
@@ -40,7 +47,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
+                var currentUser = await _userService.GetUser(new User { Username = Username });
                 result.Data = await _recruitmentPostService.GetRecruitmentPostsByUser(currentUser);
                 result.Message = "Lấy dữ liệu thành công";
             }
@@ -59,7 +66,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
+                var currentUser = await _userService.GetUser(new User { Username = Username });
                 if (model.Id == 0)
                 {
                     // if user is Business, company Id get from request, else get from user and company (table recruiter)
