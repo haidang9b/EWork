@@ -6,7 +6,7 @@ namespace EW.Domain.Entities
     {
         public long ProfileId { get; set; }
         [JsonIgnore]
-        public Profile? Profile { get; set; }
+        public Profile Profile { get; set; }
         public DateTimeOffset From { get; set; }
         public DateTimeOffset To { get; set; }
         public string Description { get; set; }

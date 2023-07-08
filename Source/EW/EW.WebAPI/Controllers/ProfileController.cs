@@ -124,7 +124,7 @@ namespace EW.WebAPI.Controllers
                 return Ok(_apiResult);
             }
             var cvsOfUser = await _userCVService.GetUserCVsByUser(currrentUser);
-            if (!cvsOfUser.Where(item => item.Featured).Any())
+            if (!cvsOfUser.Any(item => item.Featured))
             {
                 _apiResult.IsSuccess = false;
                 _apiResult.Message = "Bạn vui lòng chọn CV chính để bật tìm việc tại quản lý CV";

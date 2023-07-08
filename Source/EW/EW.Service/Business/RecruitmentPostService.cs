@@ -19,7 +19,7 @@ namespace EW.Services.Business
             model.UpdatedDate = DateTime.Now;
             model.CreatedDate = DateTime.Now;
             await _unitOfWork.Repository<RecruitmentPost>().AddAsync(model);
-            if (await _unitOfWork.SaveChangeAsync() == false)
+            if (!await _unitOfWork.SaveChangeAsync())
                 throw new EWException("Thêm bài viết thất bại");
             return model;
         }

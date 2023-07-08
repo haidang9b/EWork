@@ -17,7 +17,7 @@ namespace EW.Services.Business
             model.CreatedDate = DateTimeOffset.Now;
             model.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<Education>().AddAsync(model);
-            if (await _unitOfWork.SaveChangeAsync() == false)
+            if (!await _unitOfWork.SaveChangeAsync())
                 throw new EWException("Không thể thêm học vấn này");
             return model;
         }

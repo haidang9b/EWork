@@ -17,7 +17,7 @@ namespace EW.Services.Business
             workHistory.CreatedDate = DateTimeOffset.Now;
             workHistory.UpdatedDate = DateTimeOffset.Now;
             await _unitOfWork.Repository<WorkHistory>().AddAsync(workHistory);
-            if (await _unitOfWork.SaveChangeAsync() == false)
+            if (!await _unitOfWork.SaveChangeAsync())
                 throw new EWException("Không thể thêm kinh nghiệm làm việc này");
             return workHistory;
         }
