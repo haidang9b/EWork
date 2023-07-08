@@ -1,0 +1,3 @@
+﻿D:\Dacntt2\Source\EW\EW.Repository\IDatabaseFactory.cs
+D:\Dacntt2\Source\EW\EW.Repository\IRepository.cs
+D:\Dacntt2\Source\EW\EW.Repository\IUnitOfWork.cs

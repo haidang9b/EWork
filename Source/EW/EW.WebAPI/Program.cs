@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-if (app.Environment.IsDevelopment() == false)
+if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
