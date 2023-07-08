@@ -12,11 +12,13 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IBlogCategoryService _blogCategoryService;
         private readonly ILogger<BlogCategoriesController> _logger;
+        private ApiResult _apiResult;
 
         public BlogCategoriesController(IBlogCategoryService blogCategoryService, ILogger<BlogCategoriesController> logger)
         {
             _blogCategoryService = blogCategoryService;
             _logger = logger;
+            _apiResult = new ApiResult();
         }
 
         /// <summary>
@@ -27,18 +29,10 @@ namespace EW.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _blogCategoryService.GetAll();
-                result.Message = "Lấy dữ liệu thành công";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            _apiResult.Data = await _blogCategoryService.GetAll();
+            _apiResult.Message = "Lấy dữ liệu thành công";
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -50,18 +44,9 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(BlogCategory model)
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _blogCategoryService.Add(model);
-                result.Message = "Thêm danh mục mới thành công";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+            _apiResult.Data = await _blogCategoryService.Add(model);
+            _apiResult.Message = "Thêm danh mục mới thành công";
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Delete blog category by id
@@ -72,29 +57,20 @@ namespace EW.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = new ApiResult();
-            try
+            if (await _blogCategoryService.Delete(new BlogCategory { Id = id }))
             {
-                if (await _blogCategoryService.Delete(new BlogCategory { Id = id }))
+                _apiResult.Data = new Blog
                 {
-                    result.Data = new Blog
-                    {
-                        Id = id
-                    };
-                    result.Message = "Xóa thành công danh mục";
-                }
-                else
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Xóa danh mục thất bại";
-                }
+                    Id = id
+                };
+                _apiResult.Message = "Xóa thành công danh mục";
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Xóa danh mục thất bại";
             }
-            return Ok(result);
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Update blog category exist
@@ -105,18 +81,9 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(BlogCategory model)
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _blogCategoryService.Update(model);
-                result.Message = "Cập nhật danh mục thành công";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            _apiResult.Data = await _blogCategoryService.Update(model);
+            _apiResult.Message = "Cập nhật danh mục thành công";
+            return Ok(_apiResult);
         }
     }
 }

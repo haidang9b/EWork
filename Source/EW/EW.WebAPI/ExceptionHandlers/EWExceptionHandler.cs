@@ -13,6 +13,7 @@ namespace EW.WebAPI.ExceptionHandlers
             {
                 exceptionHandlerApp.Run(async context =>
                 {
+                    
                     var exceptionHandlerPathFeature =
                         context.Features.Get<IExceptionHandlerPathFeature>();
 
@@ -26,7 +27,7 @@ namespace EW.WebAPI.ExceptionHandlers
                         {
                             IsSuccess = false,
                             Message = model.Message,
-
+                            HttpStatusCode = 400,
                         };
 
                         var data = JsonSerializer.Serialize(response);

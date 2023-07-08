@@ -21,6 +21,7 @@ namespace EW.WebAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
         private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private ApiResult _apiResult;
 
         public ApplicationsController(IApplicationService applicationService, ILogger<ApplicationsController> logger, IUserService userService, IRecruitmentPostService recruitmentPostService, IEmailService emailService, IUserCVService userCVService)
         {
@@ -30,6 +31,7 @@ namespace EW.WebAPI.Controllers
             _recruitmentPostService = recruitmentPostService;
             _emailService = emailService;
             _userCVService = userCVService;
+            _apiResult = new ApiResult();
         }
 
         /// <summary>
@@ -37,46 +39,38 @@ namespace EW.WebAPI.Controllers
         /// </summary>
         /// <param name="model">ApplicationRequestModel</param>
         /// <returns>data object request added</returns>
-        [Authorize(Roles ="Student")]
+        [Authorize(Roles = "Student")]
         [HttpPost]
         public async Task<IActionResult> Post(ApplicationRequestModel model)
         {
-            var result = new ApiResult();
-            try
+            var currentUser = await _userService.GetUser(new User { Username = _username });
+
+            _apiResult.Data = await _applicationService.Add(new AddApplicationModel
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
-                
-                result.Data = await _applicationService.Add(new AddApplicationModel
+                RecruitmentPostId = model.RecruitmentPostId,
+                UserCVId = model.UserCVId,
+                UserId = currentUser.Id,
+                CoverLetter = model.CoverLetter,
+                Status = EApplicationStatus.ReceptionCV,
+                Description = ""
+            });
+            _apiResult.Message = "Ứng tuyển thành công";
+            if (_apiResult.Data != null)
+            {
+                var body = string.Empty;
+                var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
+                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/AppliedNotify.html")))
                 {
-                    RecruitmentPostId = model.RecruitmentPostId,
-                    UserCVId = model.UserCVId,
-                    UserId = currentUser.Id,
-                    CoverLetter = model.CoverLetter,
-                    Status = EApplicationStatus.ReceptionCV,
-                    Description = ""
-                });
-                result.Message = "Ứng tuyển thành công";
-                if(result.Data != null)
-                {
-                    var body = string.Empty;
-                    var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                    using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/AppliedNotify.html")))
-                    {
-                        body = reader.ReadToEnd();
-                    }
-                    var bodyBuilder = new System.Text.StringBuilder(body);
-                    bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
-                    bodyBuilder.Replace("{receiver}", currentUser.FullName);
-                    var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã nhận được hồ sơ ứng tuyển của bạn", ToEmail = currentUser.Email };
-                    await _emailService.SendEmail(data);
+                    body = reader.ReadToEnd();
                 }
+                var bodyBuilder = new System.Text.StringBuilder(body);
+                bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
+                bodyBuilder.Replace("{receiver}", currentUser.FullName);
+                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã nhận được hồ sơ ứng tuyển của bạn", ToEmail = currentUser.Email };
+                await _emailService.SendEmail(data);
             }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -87,21 +81,12 @@ namespace EW.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = new ApiResult();
-            try
+            _apiResult.Data = await _applicationService.GetByApplier(new User
             {
-                result.Data = await _applicationService.GetByApplier(new User
-                {
-                    Username= _username,
-                });
+                Username = _username,
+            });
 
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -112,20 +97,12 @@ namespace EW.WebAPI.Controllers
         [HttpGet("jobs-applied")]
         public async Task<IActionResult> GetJobsApplied()
         {
-            var result = new ApiResult();
-            try
+            _apiResult.Data = await _applicationService.GetJobsApplied(new User
             {
-                result.Data = await _applicationService.GetJobsApplied(new User
-                {
-                    Username = _username,
-                });
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+                Username = _username,
+            });
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Get applied for business, this route will return data all applier and infor applied
@@ -135,26 +112,18 @@ namespace EW.WebAPI.Controllers
         [HttpGet("applieds")]
         public async Task<IActionResult> GetApplied()
         {
-            var result = new ApiResult();
-            try
+            var currentUser = await _userService.GetUser(new User { Username = _username });
+            if (currentUser.RoleId == (long)ERole.ID_Faculty)
             {
-                var currentUser = await _userService.GetUser(new User { Username = _username });
-                if(currentUser.RoleId == (long)ERole.ID_Faculty)
-                {
-                    result.Data = await _applicationService.GetApplieds();
-                }
-                else
-                {
-                    result.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
-                }
-                result.Message = "Lấy dữ liệu thành công";
+                _apiResult.Data = await _applicationService.GetApplieds();
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.Data = await _applicationService.GetAppliedsForBusiness(new User { Username = _username, });
             }
-            return Ok(result);
+            _apiResult.Message = "Lấy dữ liệu thành công";
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Update status and description of application
@@ -165,39 +134,31 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateApplication(UpdateProgressModel model)
         {
-            var result = new ApiResult();
-            try
+            var isHasRole = await _applicationService.IsHasRole(new ApplicationUserModel { Username = _username, ApplicationId = model.Id });
+            if (!isHasRole)
             {
-                var isHasRole = await _applicationService.IsHasRole(new ApplicationUserModel { Username = _username, ApplicationId = model.Id });
-                if(!isHasRole)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Bạn không có quyền cập nhật";
-                    return Ok(result);
-                }
-                result.IsSuccess = await _applicationService.Update(new Application
-                {
-                    Id = model.Id,
-                    Status = model.Status,
-                    Description = model.Description
-                });
-                if(result.IsSuccess)
-                {
-                    result.Data = model;
-                    result.Message = "Cập nhật thông tin thành công";
-                }
-                else
-                {
-                    result.Message = "Cập nhật thông tin không thành công";
-                }
-                
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Bạn không có quyền cập nhật";
+                return Ok(_apiResult);
             }
-            catch (Exception ex)
+            _apiResult.IsSuccess = await _applicationService.Update(new Application
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                Id = model.Id,
+                Status = model.Status,
+                Description = model.Description
+            });
+            if (_apiResult.IsSuccess)
+            {
+                _apiResult.Data = model;
+                _apiResult.Message = "Cập nhật thông tin thành công";
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.Message = "Cập nhật thông tin không thành công";
+            }
+
+
+            return Ok(_apiResult);
         }
         /// <summary>
         /// This controller add new application by business
@@ -208,42 +169,34 @@ namespace EW.WebAPI.Controllers
         [HttpPost("marked")]
         public async Task<IActionResult> MarkedUser(MarkedApplicationRequestModel model)
         {
-            var result = new ApiResult();
-            try
+            var newApplication = new AddApplicationModel
             {
-                var newApplication = new AddApplicationModel
+                RecruitmentPostId = model.RecruitmentPostId,
+                UserCVId = model.UserCVId,
+                Description = model.Description,
+                CoverLetter = "",
+                Status = EApplicationStatus.Marked,
+                UserId = model.UserId ?? 0,
+            };
+            _apiResult.Data = await _applicationService.Add(newApplication);
+            _apiResult.Message = "Đánh dấu thành công";
+            if (_apiResult.Data != null)
+            {
+                var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
+                var body = string.Empty;
+                var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
+                using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/MarkedNotify.html")))
                 {
-                    RecruitmentPostId = model.RecruitmentPostId,
-                    UserCVId = model.UserCVId,
-                    Description = model.Description,
-                    CoverLetter = "",
-                    Status = EApplicationStatus.Marked,
-                    UserId = model.UserId ?? 0,
-                };
-                result.Data = await _applicationService.Add(newApplication);
-                result.Message = "Đánh dấu thành công";
-                if (result.Data != null)
-                {
-                    var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
-                    var body = string.Empty;
-                    var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                    using (StreamReader reader = new StreamReader(Path.Combine("EmailTemplates/MarkedNotify.html")))
-                    {
-                        body = reader.ReadToEnd();
-                    }
-                    var bodyBuilder = new System.Text.StringBuilder(body);
-                    bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
-                    bodyBuilder.Replace("{receiver}", currentUserCV.User.FullName);
-                    var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã đánh dấu hồ sơ của bạn", ToEmail = currentUserCV.User.Email };
-                    await _emailService.SendEmail(data);
+                    body = reader.ReadToEnd();
                 }
+                var bodyBuilder = new System.Text.StringBuilder(body);
+                bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
+                bodyBuilder.Replace("{receiver}", currentUserCV.User.FullName);
+                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã đánh dấu hồ sơ của bạn", ToEmail = currentUserCV.User.Email };
+                await _emailService.SendEmail(data);
             }
-            catch(Exception ex)
-            {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
-            }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
     }
 }
