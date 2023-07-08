@@ -45,11 +45,6 @@ namespace EW.Infrastructure
             _dbContext.Database.RollbackTransaction();
         }
 
-        public bool SaveChange()
-        {
-            return _dbContext.SaveChanges() > 0;
-        }
-
         public async Task<bool> SaveChangeAsync()
         {
             return await _dbContext.SaveChangesAsync() > 0;
