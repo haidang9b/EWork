@@ -8,7 +8,7 @@ namespace EW.Infrastructure
     public class EWRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly EWContext _dbContext;
-        private DbSet<TEntity> _dbSet => _dbContext.Set<TEntity>();
+        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
         public EWRepository(EWContext dbContext)
         {
@@ -17,29 +17,29 @@ namespace EW.Infrastructure
 
         public async Task AddAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await DbSet.AddAsync(entity);
         }
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            await _dbSet.AddRangeAsync(entities);
+            await DbSet.AddRangeAsync(entities);
         }
 
         public void Delete(TEntity entity)
         {
-            _dbSet.Remove(entity);
+            DbSet.Remove(entity);
         }
 
         public void DeleteRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.RemoveRange(entities);
+            DbSet.RemoveRange(entities);
         }
 
-        public async Task<TEntity> FindAsync(long id) => await _dbSet.FindAsync(id);
+        public async Task<TEntity> FindAsync(long id) => await DbSet.FindAsync(id);
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
         {
-            var query = _dbSet.Where(predicate);
+            var query = DbSet.Where(predicate);
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -50,7 +50,7 @@ namespace EW.Infrastructure
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(string includeProperties = "")
         {
-            var query = _dbSet.AsQueryable();
+            var query = DbSet.AsQueryable();
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -61,7 +61,7 @@ namespace EW.Infrastructure
 
         public async Task<IList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "")
         {
-            var query = _dbSet.Where(predicate);
+            var query = DbSet.Where(predicate);
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -72,14 +72,14 @@ namespace EW.Infrastructure
 
         public TEntity InsertOrUpdate(TEntity entity)
         {
-            var result = _dbSet.Attach(entity);
+            var result = DbSet.Attach(entity);
             _dbContext.SaveChanges();
             return result.Entity;
         }
 
         public void Update(TEntity entity)
         {
-            _dbSet.Attach(entity);
+            DbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
@@ -91,7 +91,7 @@ namespace EW.Infrastructure
             {
                 _dbContext.Entry(en).State = EntityState.Modified;
             }
-            _dbSet.UpdateRange(entities);
+            DbSet.UpdateRange(entities);
         }
     }
 }

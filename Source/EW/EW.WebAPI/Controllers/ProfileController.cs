@@ -17,12 +17,14 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IUserCVService _userCVService;
         private readonly IProfileSerivce _profileSerivce;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProfileController(IUserService userService,
-                                ILogger<ProfileController> logger,
-                                IUserCVService userCVService,
-                                IProfileSerivce profileSerivce)
+        public ProfileController(
+            IUserService userService,
+            ILogger<ProfileController> logger,
+            IUserCVService userCVService,
+            IProfileSerivce profileSerivce
+        )
         {
             _userService = userService;
             _logger = logger;
@@ -42,10 +44,10 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
-                    var initProfile = await _profileSerivce.InitProfile(new User { Username = _username });
+                    var initProfile = await _profileSerivce.InitProfile(new User { Username = Username });
                     result.IsSuccess = true;
                     result.Message = "Lấy dữ liệu thành công";
                     result.Data = initProfile;
@@ -77,7 +79,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;
@@ -121,8 +123,8 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var currrentUser = await _userService.GetUser(new User { Username = _username });
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var currrentUser = await _userService.GetUser(new User { Username = Username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;

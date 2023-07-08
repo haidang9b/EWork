@@ -16,8 +16,12 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IEducationService _educationService;
         private readonly IProfileSerivce _profileSerivce;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public EducationsController(ILogger<ProfileController> logger, IEducationService educationService, IProfileSerivce profileSerivce)
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        public EducationsController(
+            ILogger<ProfileController> logger, 
+            IEducationService educationService, 
+            IProfileSerivce profileSerivce
+        )
         {
             _logger = logger;
             _educationService = educationService;
@@ -35,7 +39,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;

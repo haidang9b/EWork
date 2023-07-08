@@ -18,9 +18,14 @@ namespace EW.WebAPI.Controllers
         private readonly IProfileSerivce _profileSerivce;
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        public ProjectsController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, IProjectService projectService, IMapper mapper)
+        public ProjectsController(
+            ILogger<ProfileController> logger, 
+            IProfileSerivce profileSerivce, 
+            IProjectService projectService, 
+            IMapper mapper
+        )
         {
             _logger = logger;
             _profileSerivce = profileSerivce;
@@ -39,7 +44,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;

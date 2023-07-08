@@ -16,8 +16,12 @@ namespace EW.WebAPI.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IWorkHistoryService _workHistoryService;
-        private string _username => User.FindFirstValue(ClaimTypes.NameIdentifier);
-        public WorkHistoriesController(ILogger<ProfileController> logger, IProfileSerivce profileSerivce, IWorkHistoryService workHistoryService)
+        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        public WorkHistoriesController(
+            ILogger<ProfileController> logger, 
+            IProfileSerivce profileSerivce, 
+            IWorkHistoryService workHistoryService
+        )
         {
             _logger = logger;
             _profileSerivce = profileSerivce;
@@ -36,7 +40,7 @@ namespace EW.WebAPI.Controllers
             var result = new ApiResult();
             try
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = _username });
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
                 if (profile is null)
                 {
                     result.IsSuccess = false;

@@ -6,7 +6,7 @@ namespace EW.Infrastructure
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private bool _disposed;
-        private EWContext _dbContext;
+        private readonly EWContext _dbContext;
         private Dictionary<Type, object> repositories;
         public UnitOfWork(EWContext dbContext)
         {
