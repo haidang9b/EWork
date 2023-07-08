@@ -2,10 +2,10 @@
 
 namespace EW.Commons.Exceptions
 {
-    public class EWException : Exception, ISerializable
+    public class EWException : Exception
     {
         public EWException(string message) : base(message) { }
 
-        protected EWException(SerializationInfo serializations, StreamingContext context) : base(serializations, context) { }
+        protected EWException(SerializationInfo information, StreamingContext context) : base(information, context) { }
     }
 }

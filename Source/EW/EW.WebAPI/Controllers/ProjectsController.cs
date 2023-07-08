@@ -14,23 +14,23 @@ namespace EW.WebAPI.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly ILogger<ProfileController> _logger;
         private readonly IProfileSerivce _profileSerivce;
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
+        private readonly ApiResult _apiResult;
+
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public ProjectsController(
-            ILogger<ProfileController> logger,
             IProfileSerivce profileSerivce,
             IProjectService projectService,
             IMapper mapper
         )
         {
-            _logger = logger;
             _profileSerivce = profileSerivce;
             _projectService = projectService;
             _mapper = mapper;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -41,39 +41,31 @@ namespace EW.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AddProjectModel model)
         {
-            var result = new ApiResult();
-            try
+            var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+            if (profile is null)
             {
-                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                if (profile is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Vui lòng get dữ liệu trước khi update";
-                    return Ok(result);
-                }
-                var newProject = _mapper.Map<Project>(model);
-                newProject.ProfileId = profile.Id;
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Vui lòng get dữ liệu trước khi update";
+                return Ok(_apiResult);
+            }
+            var newProject = _mapper.Map<Project>(model);
+            newProject.ProfileId = profile.Id;
 
-                var data = await _projectService.Add(newProject);
-                if (data is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không thể thêm dự án này";
-                    return Ok(result);
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = "Thêm dự án thành công";
-                    result.Data = data;
-                }
-            }
-            catch (Exception ex)
+            var data = await _projectService.Add(newProject);
+            if (data is null)
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không thể thêm dự án này";
+                return Ok(_apiResult);
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.IsSuccess = true;
+                _apiResult.Message = "Thêm dự án thành công";
+                _apiResult.Data = data;
+            }
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -85,26 +77,18 @@ namespace EW.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _projectService.Delete(new Project { Id = id });
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _projectService.Delete(new Project { Id = id });
-                if (result.IsSuccess)
-                {
-                    result.Message = "Xóa dự án thành công";
-                    result.Data = new Project { Id = id };
-                }
-                else
-                {
-                    result.Message = "Xóa dự án thất bại";
-                }
+                _apiResult.Message = "Xóa dự án thành công";
+                _apiResult.Data = new Project { Id = id };
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Xóa dự án thất bại";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -116,26 +100,18 @@ namespace EW.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Project model)
         {
-            var result = new ApiResult();
-            try
+            _apiResult.IsSuccess = await _projectService.Update(model);
+            if (_apiResult.IsSuccess)
             {
-                result.IsSuccess = await _projectService.Update(model);
-                if (result.IsSuccess)
-                {
-                    result.Message = "Cập nhật dự án thành công";
-                    result.Data = model;
-                }
-                else
-                {
-                    result.Message = "Cập nhật dự án thất bại";
-                }
+                _apiResult.Message = "Cập nhật dự án thành công";
+                _apiResult.Data = model;
             }
-            catch (Exception ex)
+            else
             {
-                result.InternalError(ex.Message);
-                _logger.LogError(ex.Message);
+                _apiResult.Message = "Cập nhật dự án thất bại";
             }
-            return Ok(result);
+
+            return Ok(_apiResult);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace EW.WebAPI.Controllers
             _emailService = emailService;
             _customConfig = customConfig.Value;
             _mapper = mapper;
-            _apiResult = new ApiResult();
+            _apiResult = new();
         }
 
         /// <summary>

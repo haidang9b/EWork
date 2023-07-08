@@ -10,14 +10,14 @@ namespace EW.WebAPI.Controllers
     public class ChartsController : ControllerBase
     {
         private readonly IChartService _chartService;
-        private readonly ILogger<ChartsController> _logger;
+        private readonly ApiResult _apiResult;
+
         public ChartsController(
-            IChartService chartService, 
-            ILogger<ChartsController> logger
+            IChartService chartService
         )
         {
             _chartService = chartService;
-            _logger = logger;
+            _apiResult = new();
         }
         /// <summary>
         /// Get number apply per status
@@ -27,17 +27,9 @@ namespace EW.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetApplication()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _chartService.GetNumberApplication();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+
+            _apiResult.Data = await _chartService.GetNumberApplication();
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -48,17 +40,8 @@ namespace EW.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetPost()
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _chartService.GetNumberRecruitmentPost();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+            _apiResult.Data = await _chartService.GetNumberRecruitmentPost();
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Get ranking teck stack for jobs looking
@@ -69,17 +52,8 @@ namespace EW.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetRanking(string[] techStacks)
         {
-            var result = new ApiResult();
-            try
-            {
-                result.Data = await _chartService.GetRankingTechStacks(techStacks);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
-            }
-            return Ok(result);
+            _apiResult.Data = await _chartService.GetRankingTechStacks(techStacks);
+            return Ok(_apiResult);
         }
     }
 }

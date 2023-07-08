@@ -14,23 +14,23 @@ namespace EW.WebAPI.Controllers
     [ApiController]
     public class DocumentsController : ControllerBase
     {
-        private readonly ILogger<UploadsController> _logger;
         private readonly IUserCVService _userCVService;
         private readonly IUserService _userService;
         private readonly IProfileSerivce _profileSerivce;
+        private readonly ApiResult _apiResult;
+
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
         public DocumentsController(
-            ILogger<UploadsController> logger,
             IUserCVService userCVService,
             IUserService userService,
             IProfileSerivce profileSerivce
         )
         {
-            _logger = logger;
             _userCVService = userCVService;
             _userService = userService;
             _profileSerivce = profileSerivce;
+            _apiResult = new();
         }
 
         /// <summary>
@@ -41,24 +41,15 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Get()
         {
-            var result = new ApiResult();
-            try
+            var user = await _userService.GetUser(new User { Username = Username });
+            var dataCV = await _userCVService.GetUserCVsByUser(user);
+            _apiResult.Data = new UserProfileViewModel
             {
-                var user = await _userService.GetUser(new User { Username = Username });
-                var dataCV = await _userCVService.GetUserCVsByUser(user);
-                result.Data = new UserProfileViewModel
-                {
-                    Experiences = user.Experences,
-                    CVs = dataCV.OrderByDescending(item => item.CreatedDate).ToList(),
-                    CoverLetter = user.CoverLetter,
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+                Experiences = user.Experences,
+                CVs = dataCV.OrderByDescending(item => item.CreatedDate).ToList(),
+                CoverLetter = user.CoverLetter,
+            };
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -70,38 +61,29 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateCoverLetter(UpdateCoverLetterModel model)
         {
-            var result = new ApiResult();
-            try
+            var user = await _userService.GetUser(new User { Username = Username });
+            if (user is null)
             {
-                var user = await _userService.GetUser(new User { Username = Username });
-                if (user is null)
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Cập nhật thư giới thiệu thất bại";
+            }
+            else
+            {
+                user.CoverLetter = model.CoverLetter;
+
+                var updateResult = await _userService.UpdateUser(user);
+                _apiResult.IsSuccess = updateResult;
+                if (updateResult)
                 {
-                    result.IsSuccess = false;
-                    result.Message = "Cập nhật thư giới thiệu thất bại";
+                    _apiResult.Data = model.CoverLetter;
+                    _apiResult.Message = "Cập nhật thư giới thiệu thành công";
                 }
                 else
                 {
-                    user.CoverLetter = model.CoverLetter;
-
-                    var updateResult = await _userService.UpdateUser(user);
-                    result.IsSuccess = updateResult;
-                    if (updateResult)
-                    {
-                        result.Data = model.CoverLetter;
-                        result.Message = "Cập nhật thư giới thiệu thành công";
-                    }
-                    else
-                    {
-                        result.Message = "Cập nhật thư giới thiệu thất bại";
-                    }
+                    _apiResult.Message = "Cập nhật thư giới thiệu thất bại";
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                result.InternalError();
-            }
-            return Ok(result);
+            return Ok(_apiResult);
         }
 
         /// <summary>
@@ -113,34 +95,25 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> RemoveCVUser(long Id)
         {
-            var result = new ApiResult();
-            try
+            var exist = await _userCVService.GetUserCVByInfo(new UserCV { Id = Id });
+            if (exist is null)
             {
-                var exist = await _userCVService.GetUserCVByInfo(new UserCV { Id = Id });
-                if (exist is null)
-                {
-                    result.IsSuccess = false;
-                    result.Message = "Không có CV nào từ mã số này";
-                    return Ok(result);
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Không có CV nào từ mã số này";
+                return Ok(_apiResult);
 
-                }
-                result.IsSuccess = await _userCVService.RemoveCV(exist);
-                if (result.IsSuccess)
-                {
-                    result.Message = "Xóa CV này thành công";
-                    result.Data = exist;
-                }
-                else
-                {
-                    result.Message = "Không thể xóa CV này";
-                }
             }
-            catch (Exception ex)
+            _apiResult.IsSuccess = await _userCVService.RemoveCV(exist);
+            if (_apiResult.IsSuccess)
             {
-                _logger.LogError(ex.Message);
-                result.InternalError();
+                _apiResult.Message = "Xóa CV này thành công";
+                _apiResult.Data = exist;
             }
-            return Ok(result);
+            else
+            {
+                _apiResult.Message = "Không thể xóa CV này";
+            }
+            return Ok(_apiResult);
         }
         /// <summary>
         /// Pick cv featured of user
@@ -152,43 +125,34 @@ namespace EW.WebAPI.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Put(ChangeStatusCVModel model)
         {
-            var result = new ApiResult();
-            try
+            var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
+            if (currentCV is not null && currentCV.User.Username == Username)
             {
-                var currentCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.Id });
-                if (currentCV is not null && currentCV.User.Username == Username)
+                var profile = await _profileSerivce.GetProfile(new User { Username = Username });
+                if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured)
                 {
-                    var profile = await _profileSerivce.GetProfile(new User { Username = Username });
-                    if (profile is not null && profile.IsOpenForWork && currentCV.Featured && !model.Featured)
-                    {
-                        result.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
-                        result.IsSuccess = false;
-                        return Ok(result);
-                    }
-                    currentCV.Featured = model.Featured;
-                    result.IsSuccess = await _userCVService.UpdateFeaturedCV(currentCV);
-                    if (result.IsSuccess)
-                    {
-                        result.Message = "Cập nhật thành công cv chính";
-                        result.Data = model;
-                    }
-                    else
-                    {
-                        result.Message = "Cập nhật thất bại cv chính";
-                    }
+                    _apiResult.Message = "Bạn không thể tắt CV chính trong trạng thái đang tìm kiếm việc";
+                    _apiResult.IsSuccess = false;
+                    return Ok(_apiResult);
+                }
+                currentCV.Featured = model.Featured;
+                _apiResult.IsSuccess = await _userCVService.UpdateFeaturedCV(currentCV);
+                if (_apiResult.IsSuccess)
+                {
+                    _apiResult.Message = "Cập nhật thành công cv chính";
+                    _apiResult.Data = model;
                 }
                 else
                 {
-                    result.Message = "Bạn không sở hữu CV này";
-                    result.IsSuccess = false;
+                    _apiResult.Message = "Cập nhật thất bại cv chính";
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                result.InternalError(ex.Message);
+                _apiResult.Message = "Bạn không sở hữu CV này";
+                _apiResult.IsSuccess = false;
             }
-            return Ok(result);
+            return Ok(_apiResult);
         }
     }
 }

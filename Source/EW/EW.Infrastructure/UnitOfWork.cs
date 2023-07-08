@@ -7,7 +7,7 @@ namespace EW.Infrastructure
     {
         private bool _disposed;
         private readonly EWContext _dbContext;
-        private Dictionary<Type, object> repositories;
+        private readonly Dictionary<Type, object> repositories;
         public UnitOfWork(EWContext dbContext)
         {
             _dbContext = dbContext;
@@ -33,7 +33,7 @@ namespace EW.Infrastructure
         public IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
         {
             var type = typeof(TEntity);
-            if (!repositories.ContainsKey(type))
+            if (!repositories.TryGetValue(type, out _))
             {
                 repositories.Add(type, new EWRepository<TEntity>(_dbContext));
             }
