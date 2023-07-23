@@ -18,12 +18,14 @@ namespace EW.Services.Business
         public async Task<Profile> GetProfile(User user)
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
-            return await _unitOfWork.Repository<Profile>().FirstOrDefaultAsync(item => item.UserId == currentUser.Id, "WorkHistory,Educations,Projects,Certificates");
+            return await _unitOfWork.Repository<Profile>()
+                .FirstOrDefaultAsync(item => item.UserId == currentUser.Id, 
+                $"{nameof(Profile.WorkHistory)},{nameof(Profile.Educations)},{nameof(Profile.Projects)},{nameof(Profile.Certificates)}");
         }
 
         public async Task<IEnumerable<ProfileOpenForWorkViewModel>> GetProfileOpenForWorks()
         {
-            var candidates = await _unitOfWork.Repository<Profile>().GetAsync(item => item.IsOpenForWork, "User");
+            var candidates = await _unitOfWork.Repository<Profile>().GetAsync(item => item.IsOpenForWork, nameof(Profile.User));
             var cvsFeatured = await _unitOfWork.Repository<UserCV>().GetAsync(item => item.Featured);
             var result = new List<ProfileOpenForWorkViewModel>();
             foreach (var profile in candidates)

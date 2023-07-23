@@ -25,7 +25,7 @@ namespace EW.Services.Business
 
         public async Task<UserCV> GetUserCVByInfo(UserCV model)
         {
-            return await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.Id || item.CVUrl == model.CVUrl, "User");
+            return await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.Id || item.CVUrl == model.CVUrl, nameof(UserCV.User));
         }
 
         public async Task<IEnumerable<UserCV>> GetUserCVsByUser(User model)
