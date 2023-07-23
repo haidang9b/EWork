@@ -33,7 +33,7 @@ namespace EW.Services.Business
 
         public async Task<Blog> Get(long id)
         {
-            return await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == id, "BlogCategory,User");
+            return await _unitOfWork.Repository<Blog>().FirstOrDefaultAsync(item => item.Id == id, $"{nameof(Blog.BlogCategory)},{nameof(Blog.User)}");
         }
 
         public async Task<IEnumerable<Blog>> GetAll()

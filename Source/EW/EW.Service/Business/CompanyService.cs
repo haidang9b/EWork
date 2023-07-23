@@ -29,7 +29,7 @@ namespace EW.Services.Business
         public async Task<Company> GetCompanyByUser(User user)
         {
             var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
-            var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == exist.Id, includeProperties: "Company");
+            var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == exist.Id, nameof(Recruiter.Company));
             return companyRecruiter.Company;
         }
         public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)

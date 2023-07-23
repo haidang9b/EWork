@@ -125,7 +125,9 @@ namespace EW.Services.Business
 
         public async Task<bool> AssignUserToCompany(AddNewRecruiterAccountModel model)
         {
-            var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username || item.Email == model.Email || item.PhoneNumber == model.PhoneNumber);
+            var exist = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username 
+                                                                                        || item.Email == model.Email 
+                                                                                        || item.PhoneNumber == model.PhoneNumber);
             if (exist is not null)
                 throw new EWException("Tài khoản này đã tồn tại, vui lòng thử lại");
             _unitOfWork.BeginTransaction();
@@ -150,7 +152,10 @@ namespace EW.Services.Business
                 _unitOfWork.RollBack();
                 throw new EWException("Không thể đăng ký tài khoản này");
             }
-            var userAdded = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username && item.Email == model.Email && item.PhoneNumber == model.PhoneNumber);
+            var userAdded = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == model.Username 
+                                                                                            && item.Email == model.Email 
+                                                                                            && item.PhoneNumber == model.PhoneNumber);
+
             var companyCurrent = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.CompanyId);
             if (userAdded is null || companyCurrent is null)
             {
@@ -179,7 +184,9 @@ namespace EW.Services.Business
 
         public async Task<RecruiterViewModel> GetRecruiterByUser(User model)
         {
-            var data = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username && item.User.Email == model.Email, "User,Company");
+            var data = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username 
+                                                                                            && item.User.Email == model.Email, 
+                                                                                            $"{nameof(Recruiter.User)},{nameof(Recruiter.Company)}");
             return new RecruiterViewModel
             {
                 Id = data.UserId,
@@ -197,7 +204,8 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<RecruiterViewModel>> GetRecruitersByCompany(Company company)
         {
-            var data = await _unitOfWork.Repository<Recruiter>().GetAsync(item => item.CompanyId == company.Id, "User,Company");
+            var data = await _unitOfWork.Repository<Recruiter>().GetAsync(item => item.CompanyId == company.Id, $"{nameof(Recruiter.User)},{nameof(Recruiter.Company)}");
+
             return data.Select(item => new RecruiterViewModel
             {
                 Id = item.UserId,

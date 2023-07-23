@@ -33,7 +33,7 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<RecruitmentPost>> GetAll()
         {
-            return await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync("Company,UpdatedByUser");
+            return await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync($"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
         }
 
         public async Task<RecruitmentPost> GetRecruitmentPost(RecruitmentPost model)
@@ -42,12 +42,13 @@ namespace EW.Services.Business
                             || item.JobTitle == model.JobTitle
                             || item.JobDescription == model.JobDescription
                             || item.CreatedDate == model.CreatedDate
-                            || item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
+                            || item.UpdatedBy == model.UpdatedBy, 
+                            $"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
         }
 
         public async Task<RecruitmentPost> GetRecruitmentPostForDetail(RecruitmentPost model)
         {
-            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id, "Company");
+            return await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.Id, nameof(RecruitmentPost.Company));
         }
 
         public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByCompany(Company company)
@@ -57,12 +58,12 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<RecruitmentPost>> GetRecruitmentPostsByUser(User user)
         {
-            var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync("Company,UpdatedByUser");
+            var recruitmentPosts = await _unitOfWork.Repository<RecruitmentPost>().GetAllAsync($"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
 
             // if user is business, load only data recruitment post of user's company
             if (user.RoleId == (long)ERole.ID_Business)
             {
-                var recruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.UserId == user.Id, "Company");
+                var recruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.UserId == user.Id, nameof(RecruitmentPost.Company));
 
                 if (recruiter is null)
                 {
@@ -81,7 +82,8 @@ namespace EW.Services.Business
                              && item.JobDescription == model.JobDescription
                              && item.CreatedDate == model.CreatedDate
                              && item.UpdatedDate == model.UpdatedDate
-                             && item.UpdatedBy == model.UpdatedBy, "Company,UpdatedByUser");
+                             && item.UpdatedBy == model.UpdatedBy, 
+                             $"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
         }
 
         public async Task<bool> Update(RecruitmentPost model)

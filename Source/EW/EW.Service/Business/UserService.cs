@@ -33,13 +33,16 @@ namespace EW.Services.Business
 
         public async Task<User> GetUser(User user)
         {
-            var result = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id || item.Email == user.Email || item.Username == user.Username, includeProperties: "Role");
+            var result = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id
+            || item.Email == user.Email
+            || item.Username == user.Username,
+            nameof(User.Role));
             return result;
         }
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _unitOfWork.Repository<User>().GetAllAsync(includeProperties: "Role");
+            return await _unitOfWork.Repository<User>().GetAllAsync(includeProperties: nameof(User.Role));
         }
 
         public async Task<bool> Register(User user)
@@ -100,7 +103,9 @@ namespace EW.Services.Business
         public async Task<string> GenKeyResetPassword(User user)
         {
             var key = MyRandom.RandomString(16);
-            var userCurrent = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id && item.Email == user.Email && item.Username == user.Username);
+            var userCurrent = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == user.Id
+                                                                                            && item.Email == user.Email
+                                                                                            && item.Username == user.Username);
             userCurrent.TokenResetPassword = key;
             await _unitOfWork.SaveChangeAsync();
             return key;

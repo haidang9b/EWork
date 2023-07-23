@@ -13,7 +13,7 @@ namespace EW.Services.Business
         private readonly IRecruitmentPostService _recruitmentPostService;
 
         public ApplicationService(
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
             IRecruitmentPostService recruitmentPostService
         )
         {
@@ -26,7 +26,7 @@ namespace EW.Services.Business
             var user = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Id == model.UserId);
             var recruitmentPost = await _unitOfWork.Repository<RecruitmentPost>().FirstOrDefaultAsync(item => item.Id == model.RecruitmentPostId);
 
-            var cvApply = await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.UserCVId, "User");
+            var cvApply = await _unitOfWork.Repository<UserCV>().FirstOrDefaultAsync(item => item.Id == model.UserCVId, nameof(UserCV.User));
             if (recruitmentPost is null)
             {
                 throw new EWException("Bài viết không tồn tại");
@@ -41,7 +41,8 @@ namespace EW.Services.Business
             {
                 throw new EWException("Người dùng không sở hữu cv này");
             }
-            var existApplied = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.RecruitmentPostId == model.RecruitmentPostId && item.UserCV.UserId == user.Id);
+            var existApplied = await _unitOfWork.Repository<Application>()
+                        .FirstOrDefaultAsync(item => item.RecruitmentPostId == model.RecruitmentPostId && item.UserCV.UserId == user.Id);
             if (existApplied is not null)
             {
                 throw new EWException("Yêu cầu này đã tồn tại, vui lòng kiểm tra lại");
@@ -69,7 +70,7 @@ namespace EW.Services.Business
 
         public async Task<IEnumerable<AppliedForBusinessViewModel>> GetApplieds()
         {
-            var applications = await _unitOfWork.Repository<Application>().GetAllAsync("RecruitmentPost,UserCV");
+            var applications = await _unitOfWork.Repository<Application>().GetAllAsync($"{nameof(Application.RecruitmentPost)},{nameof(Application.UserCV)}");
             var responseData = new List<AppliedForBusinessViewModel>();
             var users = await _unitOfWork.Repository<User>().GetAllAsync();
             foreach (var application in applications)
@@ -122,7 +123,8 @@ namespace EW.Services.Business
             var posts = await _recruitmentPostService.GetRecruitmentPostsByUser(currentUser);
             var postIds = posts.Select(item => item.Id).ToList();
             var users = await _unitOfWork.Repository<User>().GetAllAsync();
-            var applications = await _unitOfWork.Repository<Application>().GetAsync(item => postIds.Contains(item.RecruitmentPostId), "RecruitmentPost,UserCV");
+            var applications = await _unitOfWork.Repository<Application>()
+                .GetAsync(item => postIds.Contains(item.RecruitmentPostId), $"{nameof(Application.RecruitmentPost)},{nameof(Application.UserCV)}");
             var responseData = new List<AppliedForBusinessViewModel>();
             foreach (var application in applications)
             {
@@ -178,9 +180,12 @@ namespace EW.Services.Business
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username)
                                 ?? throw new EWException("Không tồn tại người dùng này");
-            var applieds = await _unitOfWork.Repository<Application>().GetAsync(item => item.UserCV.UserId == currentUser.Id, "RecruitmentPost,UserCV");
+            var applieds = await _unitOfWork.Repository<Application>()
+                .GetAsync(item => item.UserCV.UserId == currentUser.Id, $"{nameof(Application.RecruitmentPost)},{nameof(Application.UserCV)}");
             var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
-            return applieds.AsQueryable().Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company) => new JobAppliedViewModel
+            return applieds.AsQueryable()
+                .Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company) 
+                => new JobAppliedViewModel
             {
                 Id = apply.Id,
                 RecruitmentPostId = apply.RecruitmentPostId,
@@ -199,7 +204,8 @@ namespace EW.Services.Business
 
         public async Task<bool> IsHasRole(ApplicationUserModel model)
         {
-            var currentRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(item => item.User.Username == model.Username, "Company")
+            var currentRecruiter = await _unitOfWork.Repository<Recruiter>()
+                .FirstOrDefaultAsync(item => item.User.Username == model.Username, $"{nameof(Recruiter.Company)}")
                                     ?? throw new EWException("Không tồn tại user này");
 
             var currentApplication = await _unitOfWork.Repository<Application>().FirstOrDefaultAsync(item => item.Id == model.ApplicationId)
