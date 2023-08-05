@@ -4,8 +4,8 @@ namespace EW.WebAPI.Models.Models.Emails
 {
     public class AppliedNotifyMessage : BaseMessage
     {
-        public string? ToEmail { get; set; }
-        public string? CompanyName { get; set; }
-        public string? FullName { get; set; }
+        public required string CompanyName { get; set; }
+        public required string ToEmail { get; set; }
+        public required string FullName { get; set; }
     }
 }

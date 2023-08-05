@@ -1,5 +1,4 @@
-﻿using EW.Domain.Models;
-using EW.Services.Email.Messages;
+﻿using EW.Services.Email.Messages;
 using EW.Services.Email.Models;
 using EW.Services.Email.Services;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,6 @@ namespace EW.Services.Email.Messaging
         private const string ExchangeName = "DirectRecoveryPassword_Exchange";
         private const string RecoveryPasswordQueueName = "DirectRecoveryPasswordQueueName";
         private readonly IEmailService _emailService;
-        string queueName = "";
 
         public RabbitMQRecoveryPasswordConsumer(IEmailService emailService,
             IOptions<RabbitMQConfiguration> rabbitMQConfiguration
@@ -50,7 +48,7 @@ namespace EW.Services.Email.Messaging
             consumer.Received += (ch, ea) =>
             {
                 var body = Encoding.UTF8.GetString(ea.Body.ToArray());
-                RecoveryPasswordMessage RecoveryPasswordMessage = JsonSerializer.Deserialize<RecoveryPasswordMessage>(body);
+                RecoveryPasswordMessage RecoveryPasswordMessage = JsonSerializer.Deserialize<RecoveryPasswordMessage>(body)!;
                 HandleMessage(RecoveryPasswordMessage).GetAwaiter().GetResult();
 
                 _channel.BasicAck(ea.DeliveryTag, false);
@@ -72,15 +70,14 @@ namespace EW.Services.Email.Messaging
                 }
 
                 var bodyBuilder = new System.Text.StringBuilder(body);
-                bodyBuilder.Replace("{companyName}", model.CompanyName);
-                bodyBuilder.Replace("{fromStatus}", currentStatus.Description());
-                bodyBuilder.Replace("{toStatus}", model.Status.Description());
-                bodyBuilder.Replace("{url}", _customConfig.FrontEndURL);
+                bodyBuilder.Replace("{username}", model.FullName);
+                bodyBuilder.Replace("{url}", model.URL);
+
                 var data = new EmailDataModel
                 {
                     Body = bodyBuilder.ToString(),
                     Subject = $"[EWork] Khôi phục mật khẩu",
-                    ToEmail = model.To
+                    ToEmail = model.ToEmail
                 };
 
                 await _emailService.SendEmail(data);

@@ -5,9 +5,9 @@ using EW.Services.Email.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("MailSettings"));
 
-builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQConfiguration"));
+builder.Services.Configure<RabbitMQConfiguration>(builder.Configuration.GetSection("RabbitMQConfiguration"));
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
 

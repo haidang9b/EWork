@@ -12,10 +12,12 @@ namespace EW.MessageSender
         private readonly RabbitMQConfiguration _rabbitMQConfiguration;
         public RabbitMQMessageSender(IOptions<RabbitMQConfiguration> rabbitMQConfiguration)
         {
-           _rabbitMQConfiguration = rabbitMQConfiguration.Value;
+            _rabbitMQConfiguration = rabbitMQConfiguration.Value;
         }
+
         public void SendMessage(BaseMessage baseMessage, string queueName)
         {
+            
             if (IsConnected())
             {
                 using var channel = _connection.CreateModel();

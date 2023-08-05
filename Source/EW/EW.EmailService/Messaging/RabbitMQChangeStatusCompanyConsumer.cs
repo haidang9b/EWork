@@ -16,7 +16,6 @@ namespace EW.Services.Email.Messaging
         private const string ExchangeName = "DirectChangeStatusCompany_Exchange";
         private const string ChangeStatusCompanyQueueName = "DirectChangeStatusCompanyQueueName";
         private readonly IEmailService _emailService;
-        string queueName = "";
 
         public RabbitMQChangeStatusCompanyConsumer(IEmailService emailService,
             IOptions<RabbitMQConfiguration> rabbitMQConfiguration
@@ -49,7 +48,7 @@ namespace EW.Services.Email.Messaging
             consumer.Received += (ch, ea) =>
             {
                 var body = Encoding.UTF8.GetString(ea.Body.ToArray());
-                ChangeStatusCompanyMessage changeStatusCompanyMessage = JsonSerializer.Deserialize<ChangeStatusCompanyMessage>(body);
+                ChangeStatusCompanyMessage changeStatusCompanyMessage = JsonSerializer.Deserialize<ChangeStatusCompanyMessage>(body)!;
                 HandleMessage(changeStatusCompanyMessage).GetAwaiter().GetResult();
 
                 _channel.BasicAck(ea.DeliveryTag, false);

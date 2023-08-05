@@ -3,6 +3,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a4044fda-80c9-4b97-9a26-2537d12f375f</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Models\Models\Recruiters\**" />

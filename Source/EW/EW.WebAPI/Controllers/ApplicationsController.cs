@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace EW.WebAPI.Controllers;
+namespace EW.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
