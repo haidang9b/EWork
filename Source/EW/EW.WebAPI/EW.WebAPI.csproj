@@ -25,18 +25,6 @@
     <ProjectReference Include="..\EW.Service\EW.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="EmailTemplates\AppliedNotify.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="EmailTemplates\ChangeStatusCompany.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="EmailTemplates\MarkedNotify.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="EmailTemplates\RecoveryPassword.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Uploads\CompanyAvatar_20221217172417_scott-graham-5fNmWej4tAA-unsplash.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
