@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel;
 
-namespace EW.Commons.Enums
+namespace EW.Commons.Enums;
+
+public enum EStatusRecruiter
 {
-    public enum EStatusRecruiter
-    {
-        [Description("Đang chờ xác minh")]
-        Pending,
-        [Description("Hoạt động")]
-        Active,
-        [Description("Vô hiệu hóa")]
-        Disabled,
-    }
+    [Description("Đang chờ xác minh")]
+    Pending,
+    [Description("Hoạt động")]
+    Active,
+    [Description("Vô hiệu hóa")]
+    Disabled,
 }

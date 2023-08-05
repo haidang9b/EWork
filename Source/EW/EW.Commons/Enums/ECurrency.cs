@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
 
-namespace EW.Commons.Enums
+namespace EW.Commons.Enums;
+
+public enum ECurrency
 {
-    public enum ECurrency
-    {
-        [Description("Vietnam Dong")]
-        VND = 0,
-        [Description("USD")]
-        USD
-    }
+    [Description("Vietnam Dong")]
+    VND = 0,
+    [Description("USD")]
+    USD
 }

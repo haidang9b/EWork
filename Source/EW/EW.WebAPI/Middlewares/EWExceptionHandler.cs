@@ -3,39 +3,38 @@ using EW.WebAPI.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
-namespace EW.WebAPI.Middlewares
+namespace EW.WebAPI.Middlewares;
+
+public static class EWExceptionHandler
 {
-    public static class EWExceptionHandler
+    public static void UseEWExceptionHandler(this WebApplication app)
     {
-        public static void UseEWExceptionHandler(this WebApplication app)
+        app.UseExceptionHandler(exceptionHandlerApp =>
         {
-            app.UseExceptionHandler(exceptionHandlerApp =>
+            exceptionHandlerApp.Run(async context =>
             {
-                exceptionHandlerApp.Run(async context =>
+
+                var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionHandlerPathFeature?.Error is EWException model)
                 {
+                    context.Response.StatusCode = StatusCodes.Status200OK;
 
-                    var exceptionHandlerPathFeature =
-                        context.Features.Get<IExceptionHandlerPathFeature>();
+                    context.Response.ContentType = "application/json";
 
-                    if (exceptionHandlerPathFeature?.Error is EWException model)
+                    var response = new ApiResult
                     {
-                        context.Response.StatusCode = StatusCodes.Status200OK;
+                        IsSuccess = false,
+                        Message = model.Message,
+                        HttpStatusCode = 400,
+                    };
 
-                        context.Response.ContentType = "application/json";
+                    var data = JsonSerializer.Serialize(response);
 
-                        var response = new ApiResult
-                        {
-                            IsSuccess = false,
-                            Message = model.Message,
-                            HttpStatusCode = 400,
-                        };
-
-                        var data = JsonSerializer.Serialize(response);
-
-                        await context.Response.WriteAsync(data);
-                    }
-                });
+                    await context.Response.WriteAsync(data);
+                }
             });
-        }
+        });
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace EW.WebAPI.Models.Models.Auths
+﻿namespace EW.WebAPI.Models.Models.Auths;
+
+public class RefreshTokenModel
 {
-    public class RefreshTokenModel
-    {
-        public string RefreshToken { get; set; } = string.Empty;
-    }
+    public string RefreshToken { get; set; } = string.Empty;
 }

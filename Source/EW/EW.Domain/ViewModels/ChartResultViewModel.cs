@@ -1,8 +1,7 @@
-﻿namespace EW.Domain.ViewModels
+﻿namespace EW.Domain.ViewModels;
+
+public class ChartResultViewModel
 {
-    public class ChartResultViewModel
-    {
-        public string Label { get; set; }
-        public int Value { get; set; }
-    }
+    public string Label { get; set; }
+    public int Value { get; set; }
 }

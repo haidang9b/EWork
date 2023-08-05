@@ -1,8 +1,7 @@
-﻿namespace EW.Commons.Enums
+﻿namespace EW.Commons.Enums;
+
+public enum ECompanyType
 {
-    public enum ECompanyType
-    {
-        Outsourcing,
-        Product
-    }
+    Outsourcing,
+    Product
 }

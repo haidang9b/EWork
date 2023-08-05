@@ -1,10 +1,9 @@
 ﻿using EW.Commons.Enums;
 
-namespace EW.Domain.ViewModels
+namespace EW.Domain.ViewModels;
+
+public class NumberApplicationViewModel
 {
-    public class NumberApplicationViewModel
-    {
-        public EApplicationStatus Type { get; set; }
-        public int Number { get; set; }
-    }
+    public EApplicationStatus Type { get; set; }
+    public int Number { get; set; }
 }

@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel;
 
-namespace EW.Commons.Enums
+namespace EW.Commons.Enums;
+
+public enum ERole
 {
-    public enum ERole
-    {
-        [Description("Faculty")]
-        ID_Faculty = 1,
-        [Description("Business")]
-        ID_Business = 2,
-        [Description("Student")]
-        ID_Student = 3,
-    }
+    [Description("Faculty")]
+    ID_Faculty = 1,
+    [Description("Business")]
+    ID_Business = 2,
+    [Description("Student")]
+    ID_Student = 3,
 }

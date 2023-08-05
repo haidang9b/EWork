@@ -1,7 +1,6 @@
-﻿namespace EW.Domain.Entities
+﻿namespace EW.Domain.Entities;
+
+public class Certificate : History
 {
-    public class Certificate : History
-    {
-        public string CertificateName { get; set; }
-    }
+    public string CertificateName { get; set; }
 }

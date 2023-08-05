@@ -1,9 +1,8 @@
 ﻿using EW.Services.Email.Models;
 
-namespace EW.Services.Email.Services
+namespace EW.Services.Email.Services;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmail(EmailDataModel data);
-    }
+    Task SendEmail(EmailDataModel data);
 }
