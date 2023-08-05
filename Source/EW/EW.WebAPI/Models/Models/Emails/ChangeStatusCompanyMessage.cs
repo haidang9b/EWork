@@ -2,7 +2,7 @@
 
 namespace EW.WebAPI.Models.Models.Emails
 {
-    public class ChangeStatusCompanyMessage: BaseMessage
+    public class ChangeStatusCompanyMessage : BaseMessage
     {
         public required string CompanyName { get; set; }
         public required string ToEmail { get; set; }

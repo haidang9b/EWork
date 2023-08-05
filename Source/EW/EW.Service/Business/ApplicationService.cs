@@ -184,22 +184,22 @@ namespace EW.Services.Business
                 .GetAsync(item => item.UserCV.UserId == currentUser.Id, $"{nameof(Application.RecruitmentPost)},{nameof(Application.UserCV)}");
             var companies = await _unitOfWork.Repository<Company>().GetAllAsync();
             return applieds.AsQueryable()
-                .Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company) 
+                .Join(companies, apply => apply.RecruitmentPost.CompanyId, company => company.Id, (apply, company)
                 => new JobAppliedViewModel
-            {
-                Id = apply.Id,
-                RecruitmentPostId = apply.RecruitmentPostId,
-                CompanyId = company.Id,
-                CompanyName = company.CompanyName,
-                CreatedDate = apply.CreatedDate,
-                UpdatedDate = apply.UpdatedDate,
-                Description = apply.Description,
-                CVName = apply.UserCV.CVName,
-                UserCVId = apply.UserCV.UserId,
-                CVUrl = apply.UserCV.CVUrl,
-                JobTitle = apply.RecruitmentPost.JobTitle,
-                Status = apply.Status,
-            }).ToList();
+                {
+                    Id = apply.Id,
+                    RecruitmentPostId = apply.RecruitmentPostId,
+                    CompanyId = company.Id,
+                    CompanyName = company.CompanyName,
+                    CreatedDate = apply.CreatedDate,
+                    UpdatedDate = apply.UpdatedDate,
+                    Description = apply.Description,
+                    CVName = apply.UserCV.CVName,
+                    UserCVId = apply.UserCV.UserId,
+                    CVUrl = apply.UserCV.CVUrl,
+                    JobTitle = apply.RecruitmentPost.JobTitle,
+                    Status = apply.Status,
+                }).ToList();
         }
 
         public async Task<bool> IsHasRole(ApplicationUserModel model)

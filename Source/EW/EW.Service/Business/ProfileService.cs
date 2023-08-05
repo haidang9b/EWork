@@ -19,7 +19,7 @@ namespace EW.Services.Business
         {
             var currentUser = await _unitOfWork.Repository<User>().FirstOrDefaultAsync(item => item.Username == user.Username);
             return await _unitOfWork.Repository<Profile>()
-                .FirstOrDefaultAsync(item => item.UserId == currentUser.Id, 
+                .FirstOrDefaultAsync(item => item.UserId == currentUser.Id,
                 $"{nameof(Profile.WorkHistory)},{nameof(Profile.Educations)},{nameof(Profile.Projects)},{nameof(Profile.Certificates)}");
         }
 

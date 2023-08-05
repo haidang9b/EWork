@@ -42,7 +42,7 @@ namespace EW.Services.Business
                             || item.JobTitle == model.JobTitle
                             || item.JobDescription == model.JobDescription
                             || item.CreatedDate == model.CreatedDate
-                            || item.UpdatedBy == model.UpdatedBy, 
+                            || item.UpdatedBy == model.UpdatedBy,
                             $"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
         }
 
@@ -82,7 +82,7 @@ namespace EW.Services.Business
                              && item.JobDescription == model.JobDescription
                              && item.CreatedDate == model.CreatedDate
                              && item.UpdatedDate == model.UpdatedDate
-                             && item.UpdatedBy == model.UpdatedBy, 
+                             && item.UpdatedBy == model.UpdatedBy,
                              $"{nameof(RecruitmentPost.Company)},{nameof(RecruitmentPost.UpdatedByUser)}");
         }
 

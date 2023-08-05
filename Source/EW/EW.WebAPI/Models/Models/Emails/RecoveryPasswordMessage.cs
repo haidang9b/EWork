@@ -2,7 +2,7 @@
 
 namespace EW.WebAPI.Models.Models.Emails
 {
-    public class RecoveryPasswordMessage:BaseMessage
+    public class RecoveryPasswordMessage : BaseMessage
     {
         public required string URL { get; set; }
         public required string FullName { get; set; }

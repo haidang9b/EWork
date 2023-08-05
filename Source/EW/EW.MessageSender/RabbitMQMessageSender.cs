@@ -17,12 +17,12 @@ namespace EW.MessageSender
 
         public void SendMessage(BaseMessage baseMessage, string queueName)
         {
-            
+
             if (IsConnected())
             {
                 using var channel = _connection.CreateModel();
 
-                channel.QueueDeclare(queue: queueName, 
+                channel.QueueDeclare(queue: queueName,
                                     durable: false,
                                     exclusive: false,
                                     autoDelete: false,
