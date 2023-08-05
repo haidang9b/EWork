@@ -14,315 +14,314 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
-namespace EW.WebAPI.Controllers
+namespace EW.WebAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly IUserService _userService;
+    private readonly ITokenService _tokenService;
+    private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
+    private readonly ICompanyService _companyService;
+    private readonly CustomConfig _customConfig;
+    private readonly IMapper _mapper;
+
+    private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+
+    private readonly ApiResult _apiResult;
+    public AuthController(
+        IUserService userService,
+        ITokenService tokenService,
+        IRabbitMQMessageSender rabbitMQMessageSender,
+        ICompanyService companyService,
+        IOptions<CustomConfig> customConfig,
+        IMapper mapper
+    )
     {
-        private readonly IUserService _userService;
-        private readonly ITokenService _tokenService;
-        private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
-        private readonly ICompanyService _companyService;
-        private readonly CustomConfig _customConfig;
-        private readonly IMapper _mapper;
+        _userService = userService;
+        _tokenService = tokenService;
+        _companyService = companyService;
+        _rabbitMQMessageSender = rabbitMQMessageSender;
+        _customConfig = customConfig.Value;
+        _mapper = mapper;
+        _apiResult = new();
+    }
 
-        private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+    [HttpPost("Register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(RegisterModel model)
+    {
+        var newUser = _mapper.Map<User>(model);
+        _apiResult.IsSuccess = await _userService.Register(newUser);
 
-        private readonly ApiResult _apiResult;
-        public AuthController(
-            IUserService userService,
-            ITokenService tokenService,
-            IRabbitMQMessageSender rabbitMQMessageSender,
-            ICompanyService companyService,
-            IOptions<CustomConfig> customConfig,
-            IMapper mapper
-        )
+        return Ok(_apiResult);
+    }
+
+    [HttpPost("Login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(LoginModel model)
+    {
+        var exist = await _userService.GetUser(new User { Username = model.Username });
+        if (exist is not null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
         {
-            _userService = userService;
-            _tokenService = tokenService;
-            _companyService = companyService;
-            _rabbitMQMessageSender = rabbitMQMessageSender;
-            _customConfig = customConfig.Value;
-            _mapper = mapper;
-            _apiResult = new();
-        }
 
-        [HttpPost("Register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterModel model)
-        {
-            var newUser = _mapper.Map<User>(model);
-            _apiResult.IsSuccess = await _userService.Register(newUser);
-
-            return Ok(_apiResult);
-        }
-
-        [HttpPost("Login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            var exist = await _userService.GetUser(new User { Username = model.Username });
-            if (exist is not null && BCrypt.Net.BCrypt.Verify(model.Password, exist.Password))
+            if (exist.RoleId == (long)ERole.ID_Business)
             {
-
-                if (exist.RoleId == (long)ERole.ID_Business)
+                var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
+                if (company is not null && company.Status == EStatusRecruiter.Pending)
                 {
-                    var company = await _companyService.GetCompanyByUser(new User { Id = exist.Id });
-                    if (company is not null && company.Status == EStatusRecruiter.Pending)
-                    {
-                        throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
-                    }
-
-                    if (company is not null && company.Status == EStatusRecruiter.Disabled)
-                    {
-                        throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
-                    }
-
-                    if (company is null)
-                    {
-                        throw new EWException("Tài khoản đang không gắn với công ti nào");
-                    }
+                    throw new EWException("Công ti của bạn đã được đăng ký, đang trong thời gian chờ xét");
                 }
-                if (!exist.IsActive)
+
+                if (company is not null && company.Status == EStatusRecruiter.Disabled)
                 {
-                    throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+                    throw new EWException("Công ti của bạn đã bị vô hiệu hóa, vui lòng liên hệ Phòng khoa để mở lại");
                 }
-                _apiResult.Message = "Đăng nhập thành công";
-                var rfToken = _tokenService.CreateRefreshToken(exist);
-                var data = new LoginViewModel
+
+                if (company is null)
                 {
-                    AccessToken = _tokenService.CreateToken(exist),
-                    RefreshToken = rfToken,
-                };
-                _apiResult.Data = data;
+                    throw new EWException("Tài khoản đang không gắn với công ti nào");
+                }
             }
-            else
-            {
-                _apiResult.IsSuccess = false;
-                _apiResult.Message = "Tài khoản hoặc mật khẩu không chính xác";
-            }
-
-            return Ok(_apiResult);
-        }
-
-        [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
-        {
-
-            var refreshToken = model.RefreshToken;
-            var validate = _tokenService.GetPayloadRefreshToken(refreshToken)
-                ?? throw new EWException("User này không tồn tại");
-            var exist = await _userService.GetUser(new User
-            {
-                Email = validate.Issuer,
-                Username = validate.Issuer,
-            });
             if (!exist.IsActive)
             {
                 throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
             }
-            var token = _tokenService.CreateToken(exist);
+            _apiResult.Message = "Đăng nhập thành công";
             var rfToken = _tokenService.CreateRefreshToken(exist);
-            _apiResult.Data = new LoginViewModel
+            var data = new LoginViewModel
             {
-                AccessToken = token,
+                AccessToken = _tokenService.CreateToken(exist),
                 RefreshToken = rfToken,
             };
-
-
-            return Ok(_apiResult);
+            _apiResult.Data = data;
+        }
+        else
+        {
+            _apiResult.IsSuccess = false;
+            _apiResult.Message = "Tài khoản hoặc mật khẩu không chính xác";
         }
 
-        [HttpGet("users")]
-        [Authorize(Roles = "Faculty")]
-        public async Task<IActionResult> Users()
+        return Ok(_apiResult);
+    }
+
+    [HttpPost("RefreshToken")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
+    {
+
+        var refreshToken = model.RefreshToken;
+        var validate = _tokenService.GetPayloadRefreshToken(refreshToken)
+            ?? throw new EWException("User này không tồn tại");
+        var exist = await _userService.GetUser(new User
         {
-
-            _apiResult.Data = await _userService.GetUsers();
-
-            return Ok(_apiResult);
+            Email = validate.Issuer,
+            Username = validate.Issuer,
+        });
+        if (!exist.IsActive)
+        {
+            throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
         }
-
-        [HttpGet("users/{id}")]
-        public async Task<IActionResult> GetUsersById(int id)
+        var token = _tokenService.CreateToken(exist);
+        var rfToken = _tokenService.CreateRefreshToken(exist);
+        _apiResult.Data = new LoginViewModel
         {
+            AccessToken = token,
+            RefreshToken = rfToken,
+        };
 
-            _apiResult.Data = await _userService.GetUser(new User { Id = id });
+
+        return Ok(_apiResult);
+    }
+
+    [HttpGet("users")]
+    [Authorize(Roles = "Faculty")]
+    public async Task<IActionResult> Users()
+    {
+
+        _apiResult.Data = await _userService.GetUsers();
+
+        return Ok(_apiResult);
+    }
+
+    [HttpGet("users/{id}")]
+    public async Task<IActionResult> GetUsersById(int id)
+    {
+
+        _apiResult.Data = await _userService.GetUser(new User { Id = id });
 
 
-            return Ok(_apiResult);
+        return Ok(_apiResult);
+    }
+
+    [HttpPost("login-google")]
+    public async Task<IActionResult> LoginWithGoogle(LoginWithGoogleModel model)
+    {
+
+        var newUser = _mapper.Map<User>(model);
+        var resultRegister = await _userService.RegisterWithGoogle(newUser);
+        if (!resultRegister)
+        {
+            throw new EWException("Có lỗi trong quá trình đăng nhập");
         }
-
-        [HttpPost("login-google")]
-        public async Task<IActionResult> LoginWithGoogle(LoginWithGoogleModel model)
+        else
         {
-
-            var newUser = _mapper.Map<User>(model);
-            var resultRegister = await _userService.RegisterWithGoogle(newUser);
-            if (!resultRegister)
+            var exist = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
+            var rfToken = _tokenService.CreateRefreshToken(exist);
+            var data = new LoginViewModel
             {
-                throw new EWException("Có lỗi trong quá trình đăng nhập");
-            }
-            else
-            {
-                var exist = await _userService.GetUser(new User { Username = model.GoogleId, Email = model.Email });
-                var rfToken = _tokenService.CreateRefreshToken(exist);
-                var data = new LoginViewModel
-                {
-                    AccessToken = _tokenService.CreateToken(exist),
-                    RefreshToken = rfToken,
-                };
-                _apiResult.Data = data;
-                _apiResult.Message = "Đăng nhập thành công";
-            }
-
-            return Ok(_apiResult);
-        }
-
-        /// <summary>
-        /// This request to generate code and send email reset password
-        /// </summary>
-        /// <param name="model">RecoveryPasswordModel</param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost("recovery")]
-        public async Task<IActionResult> RecoveryPassword(RecoveryPasswordModel model)
-        {
-
-            var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
-            if (exist is null || exist.Email != model.Email || exist.Username != model.Username)
-            {
-                throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
-            }
-
-            if (!exist.IsActive)
-            {
-                throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
-            }
-
-            var key = await _userService.GenKeyResetPassword(exist);
-
-            var recoveryPasswordMessage = new RecoveryPasswordMessage
-            {
-                ToEmail = exist.Email,
-                URL = $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}",
-                FullName = exist.Username,
+                AccessToken = _tokenService.CreateToken(exist),
+                RefreshToken = rfToken,
             };
+            _apiResult.Data = data;
+            _apiResult.Message = "Đăng nhập thành công";
+        }
 
-            _rabbitMQMessageSender.SendMessage(recoveryPasswordMessage, "DirectRecoveryPasswordQueueName");
+        return Ok(_apiResult);
+    }
 
+    /// <summary>
+    /// This request to generate code and send email reset password
+    /// </summary>
+    /// <param name="model">RecoveryPasswordModel</param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("recovery")]
+    public async Task<IActionResult> RecoveryPassword(RecoveryPasswordModel model)
+    {
+
+        var exist = await _userService.GetUser(new User { Username = model.Username, Email = model.Email });
+        if (exist is null || exist.Email != model.Email || exist.Username != model.Username)
+        {
+            throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
+        }
+
+        if (!exist.IsActive)
+        {
+            throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
+        }
+
+        var key = await _userService.GenKeyResetPassword(exist);
+
+        var recoveryPasswordMessage = new RecoveryPasswordMessage
+        {
+            ToEmail = exist.Email,
+            URL = $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}",
+            FullName = exist.Username,
+        };
+
+        _rabbitMQMessageSender.SendMessage(recoveryPasswordMessage, "DirectRecoveryPasswordQueueName");
+
+        _apiResult.IsSuccess = true;
+        _apiResult.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
+
+        return Ok(_apiResult);
+    }
+    /// <summary>
+    /// This password check code reset password is valid or not valid, this step pass then user can using next step
+    /// </summary>
+    /// <param name="model">ValidateRecoverModel</param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("is-valid-code-recover")]
+    public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
+    {
+        var exist = await _userService.GetUser(new User { Username = model.Username });
+        if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
+        {
+            throw new EWException("Không tồn tại mã này");
+        }
+        else
+        {
+            _apiResult.Message = "OK";
             _apiResult.IsSuccess = true;
-            _apiResult.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
-
-            return Ok(_apiResult);
-        }
-        /// <summary>
-        /// This password check code reset password is valid or not valid, this step pass then user can using next step
-        /// </summary>
-        /// <param name="model">ValidateRecoverModel</param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost("is-valid-code-recover")]
-        public async Task<IActionResult> IsValidCodeRecover(ValidateRecoverModel model)
-        {
-            var exist = await _userService.GetUser(new User { Username = model.Username });
-            if (exist is null || (exist is not null && exist.TokenResetPassword != model.Code))
-            {
-                throw new EWException("Không tồn tại mã này");
-            }
-            else
-            {
-                _apiResult.Message = "OK";
-                _apiResult.IsSuccess = true;
-            }
-
-            return Ok(_apiResult);
         }
 
-        /// <summary>
-        /// Reset password with code sent(by email) and access to link, enter password to reset
-        /// </summary>
-        /// <param name="model">SubmitRecoverModel</param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
+        return Ok(_apiResult);
+    }
+
+    /// <summary>
+    /// Reset password with code sent(by email) and access to link, enter password to reset
+    /// </summary>
+    /// <param name="model">SubmitRecoverModel</param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(SubmitRecoverModel model)
+    {
+
+        var exist = await _userService.GetUser(new User { Username = model.Username })
+            ?? throw new EWException("Không tồn tại User này");
+
+        if (exist.TokenResetPassword != model.Code)
         {
-
-            var exist = await _userService.GetUser(new User { Username = model.Username })
-                ?? throw new EWException("Không tồn tại User này");
-
-            if (exist.TokenResetPassword != model.Code)
-            {
-                throw new EWException("Không tồn tại mã này");
-            }
-            else
-            {
-                exist.Password = model.Password;
-                _apiResult.Message = "Khôi phục tài khoản thành công";
-                _apiResult.IsSuccess = await _userService.ResetPassword(exist);
-            }
-
-            return Ok(_apiResult);
+            throw new EWException("Không tồn tại mã này");
         }
-        /// <summary>
-        /// Update password from request model
-        /// </summary>
-        /// <param name="model">UpdatePassword</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost("update-password")]
-        public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
+        else
         {
+            exist.Password = model.Password;
+            _apiResult.Message = "Khôi phục tài khoản thành công";
+            _apiResult.IsSuccess = await _userService.ResetPassword(exist);
+        }
 
-            if (string.IsNullOrWhiteSpace(model.ConfirmPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+        return Ok(_apiResult);
+    }
+    /// <summary>
+    /// Update password from request model
+    /// </summary>
+    /// <param name="model">UpdatePassword</param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("update-password")]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordModel model)
+    {
+
+        if (string.IsNullOrWhiteSpace(model.ConfirmPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+        {
+            _apiResult.Message = "Mật khẩu không được có khoảng trắng";
+            _apiResult.IsSuccess = false;
+        }
+        else if (model.NewPassword != model.ConfirmPassword)
+        {
+            _apiResult.Message = "Mật khẩu mới và xác minh mật khẩu không khớp";
+            _apiResult.IsSuccess = false;
+        }
+        else
+        {
+            var currentUser = await _userService.GetUser(new User { Username = Username });
+            if (BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
             {
-                _apiResult.Message = "Mật khẩu không được có khoảng trắng";
-                _apiResult.IsSuccess = false;
-            }
-            else if (model.NewPassword != model.ConfirmPassword)
-            {
-                _apiResult.Message = "Mật khẩu mới và xác minh mật khẩu không khớp";
-                _apiResult.IsSuccess = false;
-            }
-            else
-            {
-                var currentUser = await _userService.GetUser(new User { Username = Username });
-                if (BCrypt.Net.BCrypt.Verify(model.OldPassword, currentUser.Password))
+                var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
+                currentUser.Password = hashed;
+                _apiResult.IsSuccess = await _userService.UpdateUser(currentUser);
+                if (_apiResult.IsSuccess)
                 {
-                    var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
-                    currentUser.Password = hashed;
-                    _apiResult.IsSuccess = await _userService.UpdateUser(currentUser);
-                    if (_apiResult.IsSuccess)
-                    {
-                        _apiResult.Message = "Cập nhật mật khẩu thành công";
-                    }
-                    else
-                    {
-                        _apiResult.Message = "Cập nhật mật khẩu thất bại";
-                    }
+                    _apiResult.Message = "Cập nhật mật khẩu thành công";
                 }
                 else
                 {
-                    _apiResult.IsSuccess = false;
-                    _apiResult.Message = "Mật khẩu cũ không chính xác, vui lòng kiểm tra lại";
+                    _apiResult.Message = "Cập nhật mật khẩu thất bại";
                 }
             }
-
-            return Ok(_apiResult);
+            else
+            {
+                _apiResult.IsSuccess = false;
+                _apiResult.Message = "Mật khẩu cũ không chính xác, vui lòng kiểm tra lại";
+            }
         }
 
-        [HttpGet("get-user-info")]
-        [Authorize]
-        public async Task<IActionResult> GetUserInfo()
-        {
+        return Ok(_apiResult);
+    }
 
-            var currentUser = await _userService.GetUser(new User { Username = Username });
-            _apiResult.IsSuccess = true;
-            _apiResult.Data = _mapper.Map<UserInfoViewModel>(currentUser);
+    [HttpGet("get-user-info")]
+    [Authorize]
+    public async Task<IActionResult> GetUserInfo()
+    {
 
-            return Ok(_apiResult);
-        }
+        var currentUser = await _userService.GetUser(new User { Username = Username });
+        _apiResult.IsSuccess = true;
+        _apiResult.Data = _mapper.Map<UserInfoViewModel>(currentUser);
+
+        return Ok(_apiResult);
     }
 }

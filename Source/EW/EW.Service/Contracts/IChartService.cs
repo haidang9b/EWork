@@ -1,11 +1,10 @@
 ﻿using EW.Domain.ViewModels;
 
-namespace EW.Services.Contracts
+namespace EW.Services.Contracts;
+
+public interface IChartService
 {
-    public interface IChartService
-    {
-        Task<IEnumerable<NumberApplicationViewModel>> GetNumberApplication();
-        Task<IEnumerable<ChartResultViewModel>> GetNumberRecruitmentPost();
-        Task<IEnumerable<ChartResultViewModel>> GetRankingTechStacks(string[] techStacks);
-    }
+    Task<IEnumerable<NumberApplicationViewModel>> GetNumberApplication();
+    Task<IEnumerable<ChartResultViewModel>> GetNumberRecruitmentPost();
+    Task<IEnumerable<ChartResultViewModel>> GetRankingTechStacks(string[] techStacks);
 }

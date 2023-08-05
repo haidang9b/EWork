@@ -1,8 +1,7 @@
-﻿namespace EW.Domain.Models
+﻿namespace EW.Domain.Models;
+
+public class ApplicationUserModel
 {
-    public class ApplicationUserModel
-    {
-        public string Username { get; set; }
-        public long ApplicationId { get; set; }
-    }
+    public string Username { get; set; }
+    public long ApplicationId { get; set; }
 }

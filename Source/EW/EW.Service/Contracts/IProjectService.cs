@@ -1,11 +1,10 @@
 ﻿using EW.Domain.Entities;
 
-namespace EW.Services.Contracts
+namespace EW.Services.Contracts;
+
+public interface IProjectService
 {
-    public interface IProjectService
-    {
-        Task<Project> Add(Project model);
-        Task<bool> Delete(Project model);
-        Task<bool> Update(Project model);
-    }
+    Task<Project> Add(Project model);
+    Task<bool> Delete(Project model);
+    Task<bool> Update(Project model);
 }

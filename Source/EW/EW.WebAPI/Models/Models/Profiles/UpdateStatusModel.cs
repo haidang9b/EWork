@@ -1,7 +1,6 @@
-﻿namespace EW.WebAPI.Models.Models.Profiles
+﻿namespace EW.WebAPI.Models.Models.Profiles;
+
+public class UpdateStatusModel
 {
-    public class UpdateStatusModel
-    {
-        public bool IsOpenForWork { get; set; }
-    }
+    public bool IsOpenForWork { get; set; }
 }

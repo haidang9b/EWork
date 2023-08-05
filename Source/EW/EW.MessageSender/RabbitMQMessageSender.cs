@@ -4,64 +4,63 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace EW.MessageSender
+namespace EW.MessageSender;
+
+public class RabbitMQMessageSender : IRabbitMQMessageSender
 {
-    public class RabbitMQMessageSender : IRabbitMQMessageSender
+    private IConnection _connection;
+    private readonly RabbitMQConfiguration _rabbitMQConfiguration;
+    public RabbitMQMessageSender(IOptions<RabbitMQConfiguration> rabbitMQConfiguration)
     {
-        private IConnection _connection;
-        private readonly RabbitMQConfiguration _rabbitMQConfiguration;
-        public RabbitMQMessageSender(IOptions<RabbitMQConfiguration> rabbitMQConfiguration)
+        _rabbitMQConfiguration = rabbitMQConfiguration.Value;
+    }
+
+    public void SendMessage(BaseMessage baseMessage, string queueName)
+    {
+
+        if (IsConnected())
         {
-            _rabbitMQConfiguration = rabbitMQConfiguration.Value;
-        }
+            using var channel = _connection.CreateModel();
 
-        public void SendMessage(BaseMessage baseMessage, string queueName)
+            channel.QueueDeclare(queue: queueName,
+                                durable: false,
+                                exclusive: false,
+                                autoDelete: false,
+                                arguments: null);
+
+            var json = JsonConvert.SerializeObject(baseMessage);
+
+            var body = Encoding.UTF8.GetBytes(json);
+
+            channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+        }
+    }
+
+    private void CreateConnection()
+    {
+        try
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = _rabbitMQConfiguration.HostName,
+                UserName = _rabbitMQConfiguration.UserName,
+                Password = _rabbitMQConfiguration.Password,
+            };
+            _connection = factory.CreateConnection();
+        }
+        catch
         {
 
-            if (IsConnected())
-            {
-                using var channel = _connection.CreateModel();
-
-                channel.QueueDeclare(queue: queueName,
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null);
-
-                var json = JsonConvert.SerializeObject(baseMessage);
-
-                var body = Encoding.UTF8.GetBytes(json);
-
-                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
-            }
         }
+    }
 
-        private void CreateConnection()
+    private bool IsConnected()
+    {
+        if (_connection != null)
         {
-            try
-            {
-                var factory = new ConnectionFactory
-                {
-                    HostName = _rabbitMQConfiguration.HostName,
-                    UserName = _rabbitMQConfiguration.UserName,
-                    Password = _rabbitMQConfiguration.Password,
-                };
-                _connection = factory.CreateConnection();
-            }
-            catch
-            {
-
-            }
+            return true;
         }
-
-        private bool IsConnected()
-        {
-            if (_connection != null)
-            {
-                return true;
-            }
-            CreateConnection();
-            return _connection != null;
-        }
+        CreateConnection();
+        return _connection != null;
     }
 }

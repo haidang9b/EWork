@@ -1,11 +1,10 @@
-﻿namespace EW.WebAPI.Models.ViewModels
+﻿namespace EW.WebAPI.Models.ViewModels;
+
+public class UserInfoViewModel
 {
-    public class UserInfoViewModel
-    {
-        public string Username { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-    }
+    public string Username { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
 }

@@ -1,10 +1,9 @@
-﻿namespace EW.Commons.Enums
+﻿namespace EW.Commons.Enums;
+
+public enum ESalaryType
 {
-    public enum ESalaryType
-    {
-        Negotiate = 1,
-        Range,
-        UpTo,
-        Minimum
-    }
+    Negotiate = 1,
+    Range,
+    UpTo,
+    Minimum
 }

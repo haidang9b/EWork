@@ -1,9 +1,8 @@
-﻿namespace EW.Domain
+﻿namespace EW.Domain;
+
+public abstract class BaseEntity
 {
-    public abstract class BaseEntity
-    {
-        public long Id { get; set; }
-        public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset UpdatedDate { get; set; }
-    }
+    public long Id { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset UpdatedDate { get; set; }
 }
