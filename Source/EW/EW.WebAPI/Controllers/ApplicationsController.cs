@@ -1,14 +1,16 @@
 ﻿using EW.Commons.Enums;
 using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.MessageSender;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Applications;
+using EW.WebAPI.Models.Models.Emails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace EW.WebAPI.Controllers
+namespace EW.WebAPI.Controllers;
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,8 +19,8 @@ namespace EW.WebAPI.Controllers
         private readonly IApplicationService _applicationService;
         private readonly IRecruitmentPostService _recruitmentPostService;
         private readonly IUserService _userService;
-        private readonly IEmailService _emailService;
         private readonly IUserCVService _userCVService;
+        private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
         private string Username => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         private readonly ApiResult _apiResult;
 
@@ -26,16 +28,16 @@ namespace EW.WebAPI.Controllers
             IApplicationService applicationService,
             IUserService userService,
             IRecruitmentPostService recruitmentPostService,
-            IEmailService emailService,
-            IUserCVService userCVService
+            IUserCVService userCVService,
+            IRabbitMQMessageSender rabbitMQMessageSender
             )
         {
             _applicationService = applicationService;
             _userService = userService;
             _recruitmentPostService = recruitmentPostService;
-            _emailService = emailService;
             _userCVService = userCVService;
             _apiResult = new();
+            _rabbitMQMessageSender = rabbitMQMessageSender;
         }
 
         /// <summary>
@@ -63,17 +65,16 @@ namespace EW.WebAPI.Controllers
 
             if (_apiResult.Data is not null)
             {
-                var body = string.Empty;
                 var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                using (StreamReader reader = new(Path.Combine("EmailTemplates/AppliedNotify.html")))
+
+                var appliedNotify = new AppliedNotifyMessage
                 {
-                    body = reader.ReadToEnd();
-                }
-                var bodyBuilder = new System.Text.StringBuilder(body);
-                bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
-                bodyBuilder.Replace("{receiver}", currentUser.FullName);
-                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã nhận được hồ sơ ứng tuyển của bạn", ToEmail = currentUser.Email };
-                await _emailService.SendEmail(data);
+                    CompanyName = recruitmentPostCurrent.Company.CompanyName,
+                    FullName = currentUser.FullName,
+                    ToEmail = currentUser.Email,
+                };
+
+                _rabbitMQMessageSender.SendMessage(appliedNotify, "DirectAppliedNotifyQueueName");
             }
 
             return Ok(_apiResult);
@@ -186,20 +187,21 @@ namespace EW.WebAPI.Controllers
             };
             _apiResult.Data = await _applicationService.Add(newApplication);
             _apiResult.Message = "Đánh dấu thành công";
+
             if (_apiResult.Data is not null)
             {
                 var currentUserCV = await _userCVService.GetUserCVByInfo(new UserCV { Id = model.UserCVId });
-                var body = string.Empty;
                 var recruitmentPostCurrent = await _recruitmentPostService.GetRecruitmentPost(new RecruitmentPost { Id = model.RecruitmentPostId });
-                using (StreamReader reader = new(Path.Combine("EmailTemplates/MarkedNotify.html")))
+
+                var markedEmailDto = new MarkedEmailMessage
                 {
-                    body = reader.ReadToEnd();
-                }
-                var bodyBuilder = new System.Text.StringBuilder(body);
-                bodyBuilder.Replace("{companyName}", recruitmentPostCurrent.Company.CompanyName);
-                bodyBuilder.Replace("{receiver}", currentUserCV.User.FullName);
-                var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = $"[EWork] {recruitmentPostCurrent.Company.CompanyName} đã đánh dấu hồ sơ của bạn", ToEmail = currentUserCV.User.Email };
-                await _emailService.SendEmail(data);
+                    CompanyName = recruitmentPostCurrent.Company.CompanyName,
+                    FullName = currentUserCV.User.FullName,
+                    ToEmail = currentUserCV.User.Email,
+                };
+
+                _rabbitMQMessageSender.SendMessage(markedEmailDto, "DirectMarkedEmailQueueName");
+
             }
 
             return Ok(_apiResult);

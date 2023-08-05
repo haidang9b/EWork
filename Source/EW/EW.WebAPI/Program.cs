@@ -1,4 +1,5 @@
 using EW.Commons.Constaints;
+using EW.MessageSender;
 using EW.WebAPI.Extensions;
 using EW.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +14,7 @@ string MyAllowSpecificOrigins = builder.Configuration.GetValue<string>("MyAllowS
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddRabbitMQSender(builder.Configuration);
 builder.Services.AddEWDbConfiguration(builder.Configuration);
 builder.Services.AddCors(options =>
 {
