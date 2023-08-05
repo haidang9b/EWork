@@ -13,6 +13,9 @@ builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.AddHostedService<RabbitMQMarkedEmailConsumer>();
 builder.Services.AddHostedService<RabbitMQAppliedNotifyConsumer>();
+builder.Services.AddHostedService<RabbitMQRecoveryPasswordConsumer>();
+builder.Services.AddHostedService<RabbitMQChangeStatusCompanyConsumer>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
