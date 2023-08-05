@@ -18,7 +18,7 @@ builder.Services.AddRabbitMQSender(builder.Configuration);
 builder.Services.AddEWDbConfiguration(builder.Configuration);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins, 
+    options.AddPolicy(MyAllowSpecificOrigins,
         builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
 builder.Services.AddCors();
