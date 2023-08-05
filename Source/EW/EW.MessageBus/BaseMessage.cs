@@ -2,7 +2,7 @@
 {
     public abstract class BaseMessage
     {
-        public int Id { get; set; }
-        public DateTime MessageCreated { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public DateTimeOffset MessageCreated { get; set; } = DateTimeOffset.Now;
     }
 }
