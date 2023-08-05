@@ -1,13 +1,12 @@
 ﻿using EW.Domain;
 
-namespace EW.Repository
+namespace EW.Repository;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task<bool> SaveChangeAsync();
-        void BeginTransaction();
-        void Commit();
-        void RollBack();
-        IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
-    }
+    Task<bool> SaveChangeAsync();
+    void BeginTransaction();
+    void Commit();
+    void RollBack();
+    IRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity;
 }

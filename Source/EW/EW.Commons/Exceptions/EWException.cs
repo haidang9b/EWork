@@ -1,11 +1,10 @@
 ﻿using System.Runtime.Serialization;
 
-namespace EW.Commons.Exceptions
-{
-    public class EWException : Exception
-    {
-        public EWException(string message) : base(message) { }
+namespace EW.Commons.Exceptions;
 
-        protected EWException(SerializationInfo information, StreamingContext context) : base(information, context) { }
-    }
+public class EWException : Exception
+{
+    public EWException(string message) : base(message) { }
+
+    protected EWException(SerializationInfo information, StreamingContext context) : base(information, context) { }
 }

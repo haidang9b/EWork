@@ -1,7 +1,6 @@
-﻿namespace EW.WebAPI.Models.Models.Profiles
+﻿namespace EW.WebAPI.Models.Models.Profiles;
+
+public class UpdateCoverLetterModel
 {
-    public class UpdateCoverLetterModel
-    {
-        public string CoverLetter { get; set; } = string.Empty;
-    }
+    public string CoverLetter { get; set; } = string.Empty;
 }

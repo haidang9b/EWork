@@ -1,11 +1,10 @@
 ﻿using EW.MessageBus;
 
-namespace EW.WebAPI.Models.Models.Emails
+namespace EW.WebAPI.Models.Models.Emails;
+
+public class RecoveryPasswordMessage : BaseMessage
 {
-    public class RecoveryPasswordMessage : BaseMessage
-    {
-        public required string URL { get; set; }
-        public required string FullName { get; set; }
-        public required string ToEmail { get; set; }
-    }
+    public required string URL { get; set; }
+    public required string FullName { get; set; }
+    public required string ToEmail { get; set; }
 }

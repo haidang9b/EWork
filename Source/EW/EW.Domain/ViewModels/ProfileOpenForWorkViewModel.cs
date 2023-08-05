@@ -1,18 +1,17 @@
-﻿namespace EW.Domain.ViewModels
+﻿namespace EW.Domain.ViewModels;
+
+public class ProfileOpenForWorkViewModel
 {
-    public class ProfileOpenForWorkViewModel
-    {
-        public long UserId { get; set; }
-        public string FullName { get; set; }
-        public string Address { get; set; }
-        public string Linkedin { get; set; }
-        public string Github { get; set; }
-        public string EmailContact { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Objective { get; set; }
-        public string Skill { get; set; }
-        public long CVId { get; set; }
-        public string CVName { get; set; }
-        public string CVUrl { get; set; }
-    }
+    public long UserId { get; set; }
+    public string FullName { get; set; }
+    public string Address { get; set; }
+    public string Linkedin { get; set; }
+    public string Github { get; set; }
+    public string EmailContact { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Objective { get; set; }
+    public string Skill { get; set; }
+    public long CVId { get; set; }
+    public string CVName { get; set; }
+    public string CVUrl { get; set; }
 }

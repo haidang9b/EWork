@@ -1,7 +1,6 @@
-﻿namespace EW.Domain.Entities
+﻿namespace EW.Domain.Entities;
+
+public class Education : History
 {
-    public class Education : History
-    {
-        public string OrgName { get; set; }
-    }
+    public string OrgName { get; set; }
 }

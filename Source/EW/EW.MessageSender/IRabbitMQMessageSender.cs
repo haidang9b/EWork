@@ -1,9 +1,8 @@
 ﻿using EW.MessageBus;
 
-namespace EW.MessageSender
+namespace EW.MessageSender;
+
+public interface IRabbitMQMessageSender
 {
-    public interface IRabbitMQMessageSender
-    {
-        void SendMessage(BaseMessage baseMessage, string queueName);
-    }
+    void SendMessage(BaseMessage baseMessage, string queueName);
 }

@@ -1,9 +1,8 @@
-﻿namespace EW.Commons.Enums
+﻿namespace EW.Commons.Enums;
+
+public enum EWorkingType
 {
-    public enum EWorkingType
-    {
-        AtOffice = 1,
-        Remote,
-        Flexible,
-    }
+    AtOffice = 1,
+    Remote,
+    Flexible,
 }

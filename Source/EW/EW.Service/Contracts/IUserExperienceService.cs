@@ -1,9 +1,8 @@
 ﻿using EW.Domain.Entities;
 
-namespace EW.Services.Constracts
+namespace EW.Services.Constracts;
+
+public interface IUserExperienceService
 {
-    public interface IUserExperienceService
-    {
-        Task<IEnumerable<UserExperience>> GetUserExperiencesByUser(User model);
-    }
+    Task<IEnumerable<UserExperience>> GetUserExperiencesByUser(User model);
 }

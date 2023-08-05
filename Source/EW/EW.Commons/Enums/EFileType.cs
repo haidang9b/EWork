@@ -1,9 +1,8 @@
-﻿namespace EW.Commons.Enums
+﻿namespace EW.Commons.Enums;
+
+public enum EFileType
 {
-    public enum EFileType
-    {
-        CV = 1,
-        Report,
-        CompanyAvatar
-    }
+    CV = 1,
+    Report,
+    CompanyAvatar
 }
