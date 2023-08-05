@@ -16,7 +16,6 @@ namespace EW.Services.Email.Messaging
         private const string ExchangeName = "DirectAppliedNotify_Exchange";
         private const string AppliedNotifyQueueName = "DirectAppliedNotifyQueueName";
         private readonly IEmailService _emailService;
-        string queueName = "";
 
         public RabbitMQAppliedNotifyConsumer(
             IEmailService emailService,
@@ -50,7 +49,7 @@ namespace EW.Services.Email.Messaging
             consumer.Received += (ch, ea) =>
             {
                 var body = Encoding.UTF8.GetString(ea.Body.ToArray());
-                AppliedNotifyMessage updatePaymentResultMessage = JsonSerializer.Deserialize<AppliedNotifyMessage>(body);
+                AppliedNotifyMessage updatePaymentResultMessage = JsonSerializer.Deserialize<AppliedNotifyMessage>(body)!;
                 HandleMessage(updatePaymentResultMessage).GetAwaiter().GetResult();
 
                 _channel.BasicAck(ea.DeliveryTag, false);

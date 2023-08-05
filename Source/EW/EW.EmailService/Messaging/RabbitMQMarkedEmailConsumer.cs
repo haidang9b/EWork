@@ -16,7 +16,6 @@ namespace EW.Services.Email.Messaging
         private const string ExchangeName = "DirectMarkedEmail_Exchange";
         private const string MarkedEmailQueueName = "DirectMarkedEmailQueueName";
         private readonly IEmailService _emailService;
-        string queueName = "";
 
         public RabbitMQMarkedEmailConsumer(IEmailService emailService,
             IOptions<RabbitMQConfiguration> rabbitMQConfiguration
@@ -49,7 +48,7 @@ namespace EW.Services.Email.Messaging
             consumer.Received += (ch, ea) =>
             {
                 var body = Encoding.UTF8.GetString(ea.Body.ToArray());
-                MarkedEmailMessage markedEmailMessage = JsonSerializer.Deserialize<MarkedEmailMessage>(body);
+                MarkedEmailMessage markedEmailMessage = JsonSerializer.Deserialize<MarkedEmailMessage>(body)!;
                 HandleMessage(markedEmailMessage).GetAwaiter().GetResult();
 
                 _channel.BasicAck(ea.DeliveryTag, false);

@@ -4,8 +4,8 @@ namespace EW.Services.Email.Messages
 {
     public class RecoveryPasswordMessage: BaseMessage
     {
-        public string? URL { get; set; }
-        public string? FullName { get; set; }
-        public string? To { get; set; }
+        public required string URL { get; set; }
+        public required string FullName { get; set; }
+        public required string ToEmail { get; set; }
     }
 }

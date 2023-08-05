@@ -94,8 +94,8 @@ namespace EW.WebAPI.Controllers
                         var changeStatusMessage = new ChangeStatusCompanyMessage
                         {
                             CompanyName = existCompany.CompanyName,
-                            FromStatus = currentStatus.Description(),
-                            ToStatus = model.Status.Description(),
+                            FromStatus = currentStatus.Description()!,
+                            ToStatus = model.Status.Description()!,
                             URL = _customConfig.FrontEndURL,
                             ToEmail = existCompany.Email
                         };

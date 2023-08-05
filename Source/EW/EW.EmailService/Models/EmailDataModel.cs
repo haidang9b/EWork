@@ -2,8 +2,8 @@
 {
     public class EmailDataModel
     {
-        public string Subject { get; set; }
-        public string Body { get; set; }
-        public string ToEmail { get; set; }
+        public required string Subject { get; set; }
+        public required string Body { get; set; }
+        public required string ToEmail { get; set; }
     }
 }

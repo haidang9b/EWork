@@ -205,7 +205,7 @@ namespace EW.WebAPI.Controllers
 
             var recoveryPasswordMessage = new RecoveryPasswordMessage
             {
-                To = exist.Email,
+                ToEmail = exist.Email,
                 URL = $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}",
                 FullName = exist.Username,
             };

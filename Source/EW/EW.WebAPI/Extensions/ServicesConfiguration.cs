@@ -22,7 +22,6 @@ namespace EW.WebAPI.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IRecruiterService, RecruiterService>();
             services.AddScoped<IUserCVService, UserCVService>();
-            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IRecruitmentPostService, RecruitmentPostService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IApplicationService, ApplicationService>();

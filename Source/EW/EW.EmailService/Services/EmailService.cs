@@ -7,8 +7,8 @@ namespace EW.Services.Email.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly EmailConfig _emailConfig;
-        public EmailService(IOptions<EmailConfig> emailConfig)
+        private readonly EmailConfiguration _emailConfig;
+        public EmailService(IOptions<EmailConfiguration> emailConfig)
         {
             _emailConfig = emailConfig.Value;
         }
