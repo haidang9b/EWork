@@ -42,8 +42,8 @@ namespace EW.MessageSender
             {
                 var factory = new ConnectionFactory
                 {
-                    HostName = _rabbitMQConfiguration.Host,
-                    UserName = _rabbitMQConfiguration.Username,
+                    HostName = _rabbitMQConfiguration.HostName,
+                    UserName = _rabbitMQConfiguration.UserName,
                     Password = _rabbitMQConfiguration.Password,
                 };
                 _connection = factory.CreateConnection();

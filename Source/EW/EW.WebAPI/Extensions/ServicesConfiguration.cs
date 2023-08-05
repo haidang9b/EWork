@@ -44,7 +44,6 @@ namespace EW.WebAPI.Extensions
             ConfigurationManager configurationManager
         )
         {
-            services.Configure<EmailConfig>(configurationManager.GetSection("MailSettings"));
             services.Configure<CustomConfig>(configurationManager.GetSection("CustomConfigs"));
         }
 
