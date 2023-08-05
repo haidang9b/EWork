@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EW.Infrastructure\EW.Infrastructure.csproj" />
+    <ProjectReference Include="..\EW.MessageSender\EW.MessageSender.csproj" />
     <ProjectReference Include="..\EW.Service\EW.Services.csproj" />
   </ItemGroup>
   <ItemGroup>

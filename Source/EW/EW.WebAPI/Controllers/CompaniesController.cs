@@ -4,9 +4,11 @@ using EW.Commons.Exceptions;
 using EW.Commons.Helpers;
 using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.MessageSender;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Companies;
+using EW.WebAPI.Models.Models.Emails;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,7 @@ namespace EW.WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly ICompanyService _companyService;
         private readonly IRecruitmentPostService _recruitmentPostService;
-        private readonly IEmailService _emailService;
+        private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
         private readonly CustomConfig _customConfig;
         private readonly IMapper _mapper;
         private readonly ApiResult _apiResult;
@@ -33,14 +35,14 @@ namespace EW.WebAPI.Controllers
             IUserService userService,
             ICompanyService companyService,
             IRecruitmentPostService recruitmentPostService,
-            IEmailService emailService,
+            IRabbitMQMessageSender rabbitMQMessageSender,
             IOptions<CustomConfig> customConfig,
             IMapper mapper)
         {
             _userService = userService;
             _companyService = companyService;
             _recruitmentPostService = recruitmentPostService;
-            _emailService = emailService;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
             _customConfig = customConfig.Value;
             _mapper = mapper;
             _apiResult = new();
@@ -88,22 +90,17 @@ namespace EW.WebAPI.Controllers
 
                     if (currentUser.RoleId == (long)ERole.ID_Faculty && currentStatus != model.Status && model.Status != EStatusRecruiter.Pending)
                     {
-                        var body = string.Empty;
-                        using (StreamReader reader = new(Path.Combine("EmailTemplates/ChangeStatusCompany.html")))
+
+                        var changeStatusMessage = new ChangeStatusCompanyMessage
                         {
+                            CompanyName = existCompany.CompanyName,
+                            FromStatus = currentStatus.Description(),
+                            ToStatus = model.Status.Description(),
+                            URL = _customConfig.FrontEndURL,
+                            ToEmail = existCompany.Email
+                        };
 
-                            body = reader.ReadToEnd();
-
-                        }
-                        var bodyBuilder = new System.Text.StringBuilder(body);
-                        bodyBuilder.Replace("{companyName}", existCompany.CompanyName);
-                        bodyBuilder.Replace("{fromStatus}", EnumHelper.Description(currentStatus));
-                        bodyBuilder.Replace("{toStatus}", EnumHelper.Description(model.Status));
-                        bodyBuilder.Replace("{url}", _customConfig.FrontEndURL);
-
-                        var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Cập nhật trạng thái cho doanh nghiệp", ToEmail = existCompany.Email };
-                        await _emailService.SendEmail(data);
-
+                        _rabbitMQMessageSender.SendMessage(changeStatusMessage, "DirectChangeStatusCompanyQueueName");
                         _apiResult.Message = "Cập nhật thông tin thành công và đã gửi mail về công ty";
                     }
                 }

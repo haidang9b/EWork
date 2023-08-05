@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EW.Domain.Models;
 using EW.Infrastructure;
+using EW.MessageSender;
 using EW.Repository;
 using EW.Services.Business;
 using EW.Services.Constracts;
@@ -34,6 +35,9 @@ namespace EW.WebAPI.Extensions
             services.AddScoped<IBlogCategoryService, BlogCategoryService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+
         }
 
         public static void AddCustomsConfigureObject(

@@ -3,9 +3,11 @@ using EW.Commons.Enums;
 using EW.Commons.Exceptions;
 using EW.Domain.Entities;
 using EW.Domain.Models;
+using EW.MessageSender;
 using EW.Services.Constracts;
 using EW.WebAPI.Models;
 using EW.WebAPI.Models.Models.Auths;
+using EW.WebAPI.Models.Models.Emails;
 using EW.WebAPI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,7 @@ namespace EW.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly IEmailService _emailService;
+        private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
         private readonly ICompanyService _companyService;
         private readonly CustomConfig _customConfig;
         private readonly IMapper _mapper;
@@ -31,7 +33,7 @@ namespace EW.WebAPI.Controllers
         public AuthController(
             IUserService userService,
             ITokenService tokenService,
-            IEmailService emailService,
+            IRabbitMQMessageSender rabbitMQMessageSender,
             ICompanyService companyService,
             IOptions<CustomConfig> customConfig,
             IMapper mapper
@@ -40,7 +42,7 @@ namespace EW.WebAPI.Controllers
             _userService = userService;
             _tokenService = tokenService;
             _companyService = companyService;
-            _emailService = emailService;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
             _customConfig = customConfig.Value;
             _mapper = mapper;
             _apiResult = new();
@@ -193,22 +195,22 @@ namespace EW.WebAPI.Controllers
             {
                 throw new EWException("Tài khoản và email này không tại hoặc không chính xác, vui lòng thử lại");
             }
+
             if (!exist.IsActive)
-                throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
-            var body = string.Empty;
-            using (StreamReader reader = new(Path.Combine("EmailTemplates/RecoveryPassword.html")))
             {
-                body = reader.ReadToEnd();
+                throw new EWException("Tài khoản đang bị vô hiệu hóa, vui lòng liên hệ khoa để mở lại");
             }
+
             var key = await _userService.GenKeyResetPassword(exist);
-            var bodyBuilder = new System.Text.StringBuilder(body);
 
-            bodyBuilder.Replace("{username}", exist.FullName);
-            bodyBuilder.Replace("{url}", $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}");
+            var recoveryPasswordMessage = new RecoveryPasswordMessage
+            {
+                To = exist.Email,
+                URL = $"{_customConfig.FrontEndURL}/confirm-recover?code={key}&username={exist.Username}",
+                FullName = exist.Username,
+            };
 
-            var data = new EmailDataModel { Body = bodyBuilder.ToString(), Subject = "[EWork] Khôi phục mật khẩu", ToEmail = exist.Email };
-
-            await _emailService.SendEmail(data);
+            _rabbitMQMessageSender.SendMessage(recoveryPasswordMessage, "DirectRecoveryPasswordQueueName");
 
             _apiResult.IsSuccess = true;
             _apiResult.Message = "Khôi phục mật khẩu thành công, vui lòng kiểm tra email";
