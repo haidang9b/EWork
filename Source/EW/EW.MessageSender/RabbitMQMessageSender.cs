@@ -8,9 +8,10 @@ namespace EW.MessageSender;
 
 public class RabbitMQMessageSender : IRabbitMQMessageSender
 {
-    private IConnection _connection;
+    private  IConnection _connection;
 
     private readonly RabbitMQConfiguration _rabbitMQConfiguration;
+
     public RabbitMQMessageSender(IOptions<RabbitMQConfiguration> rabbitMQConfiguration)
     {
         _rabbitMQConfiguration = rabbitMQConfiguration.Value;

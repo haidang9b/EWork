@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EW.Commons.Constaints;
 using EW.Domain.Models;
 using EW.Infrastructure;
 using EW.MessageSender;
@@ -6,11 +7,14 @@ using EW.Repository;
 using EW.Services.Business;
 using EW.Services.Constracts;
 using EW.Services.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace EW.WebAPI.Extensions;
 
-public static class ServicesConfiguration
+public static class IServiceCollectionExtensions
 {
     public static void RegisterService(this IServiceCollection services)
     {
@@ -55,5 +59,46 @@ public static class ServicesConfiguration
         var connectionString = configurationManager.GetConnectionString("DefaultDatabase");
         services.AddDbContext<EWContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    }
+
+    public static void AddServices(this IServiceCollection services,
+        ConfigurationManager configurationManager)
+    {
+        string MyAllowSpecificOrigins = configurationManager.GetValue<string>("MyAllowSpecificOrigins")
+            ?? throw new ArgumentNullException(paramName: nameof(MyAllowSpecificOrigins));
+
+        // Add services to the container.
+
+        services.AddControllers();
+        services.AddRabbitMQSender(configurationManager);
+        services.AddEWDbConfiguration(configurationManager);
+        services.AddCors(options =>
+        {
+            options.AddPolicy(MyAllowSpecificOrigins,
+                builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        });
+        services.AddCors();
+
+        services.RegisterService();
+        services.AddCustomsConfigureObject(configurationManager);
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                        .AddJwtBearer(options =>
+                        {
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuerSigningKey = true,
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constaints.ACCES_TOKEN_KEY)),
+                                ValidateIssuer = false,
+                                ValidateAudience = false,
+                                ValidateLifetime = true,
+                                ClockSkew = TimeSpan.Zero
+
+                            };
+                        });
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
     }
 }
