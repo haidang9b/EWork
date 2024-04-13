@@ -10,6 +10,7 @@ namespace EW.Services.Business;
 public class ApplicationService : IApplicationService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     private readonly IRecruitmentPostService _recruitmentPostService;
 
     public ApplicationService(

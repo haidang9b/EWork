@@ -9,6 +9,7 @@ namespace EW.Services.Business;
 public class RecruitmentPostService : IRecruitmentPostService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public RecruitmentPostService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

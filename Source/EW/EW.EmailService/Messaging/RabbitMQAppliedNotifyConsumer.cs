@@ -11,10 +11,14 @@ namespace EW.Services.Email.Messaging;
 
 public class RabbitMQAppliedNotifyConsumer : BackgroundService
 {
-    private IConnection _connection;
-    private IModel _channel;
+    private readonly IConnection _connection;
+
+    private readonly IModel _channel;
+
     private const string ExchangeName = "DirectAppliedNotify_Exchange";
+
     private const string AppliedNotifyQueueName = "DirectAppliedNotifyQueueName";
+
     private readonly IEmailService _emailService;
 
     public RabbitMQAppliedNotifyConsumer(
@@ -83,7 +87,7 @@ public class RabbitMQAppliedNotifyConsumer : BackgroundService
 
             await _emailService.SendEmail(data);
         }
-        catch (Exception ex)
+        catch
         {
             throw;
         }

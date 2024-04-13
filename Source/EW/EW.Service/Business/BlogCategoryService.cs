@@ -8,6 +8,7 @@ namespace EW.Services.Business;
 public class BlogCategoryService : IBlogCategoryService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public BlogCategoryService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

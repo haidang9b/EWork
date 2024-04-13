@@ -8,6 +8,7 @@ namespace EW.Services.Business;
 public class ChartService : IChartService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public ChartService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

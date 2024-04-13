@@ -6,10 +6,41 @@ namespace EW.Infrastructure;
 
 public class EWContext : DbContext
 {
+    public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Company> Companies { get; set; }
+
+    public virtual DbSet<UserCV> UserCvs { get; set; }
+
+    public virtual DbSet<UserExperience> UserExperiences { get; set; }
+
+    public virtual DbSet<Recruiter> Recruiters { get; set; }
+
+    public virtual DbSet<RecruitmentPost> RecruitmentPosts { get; set; }
+
+    public virtual DbSet<Application> Applications { get; set; }
+
+    public virtual DbSet<Education> Educations { get; set; }
+
+    public virtual DbSet<WorkHistory> WorkHistory { get; set; }
+
+    public virtual DbSet<Project> Projects { get; set; }
+
+    public virtual DbSet<Profile> Profiles { get; set; }
+
+    public virtual DbSet<Certificate> Certificates { get; set; }
+
+    public virtual DbSet<BlogCategory> BlogCategories { get; set; }
+
+    public virtual DbSet<Blog> Blogs { get; set; }
+
     public EWContext(DbContextOptions<EWContext> options) : base(options)
     {
 
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Role>().HasData(
@@ -19,19 +50,5 @@ public class EWContext : DbContext
                 );
 
     }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Company> Companies { get; set; }
-    public DbSet<UserCV> UserCvs { get; set; }
-    public DbSet<UserExperience> UserExperiences { get; set; }
-    public DbSet<Recruiter> Recruiters { get; set; }
-    public DbSet<RecruitmentPost> RecruitmentPosts { get; set; }
-    public DbSet<Application> Applications { get; set; }
-    public DbSet<Education> Educations { get; set; }
-    public DbSet<WorkHistory> WorkHistory { get; set; }
-    public DbSet<Project> Projects { get; set; }
-    public DbSet<Profile> Profiles { get; set; }
-    public DbSet<Certificate> Certificates { get; set; }
-    public DbSet<BlogCategory> BlogCategories { get; set; }
-    public DbSet<Blog> Blogs { get; set; }
+
 }

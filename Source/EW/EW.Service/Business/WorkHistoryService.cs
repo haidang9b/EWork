@@ -8,10 +8,12 @@ namespace EW.Services.Business;
 public class WorkHistoryService : IWorkHistoryService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public WorkHistoryService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
+
     public async Task<WorkHistory> Add(WorkHistory workHistory)
     {
         workHistory.CreatedDate = DateTimeOffset.Now;

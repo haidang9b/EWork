@@ -8,10 +8,12 @@ namespace EW.Services.Business;
 public class ProjectService : IProjectService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public ProjectService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
+
     public async Task<Project> Add(Project model)
     {
         model.CreatedDate = DateTimeOffset.Now;

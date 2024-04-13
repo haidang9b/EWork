@@ -8,10 +8,12 @@ namespace EW.Services.Business;
 public class EducationService : IEducationService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public EducationService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
+
     public async Task<Education> Add(Education model)
     {
         model.CreatedDate = DateTimeOffset.Now;

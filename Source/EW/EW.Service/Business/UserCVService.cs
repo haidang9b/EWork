@@ -8,6 +8,7 @@ namespace EW.Services.Business;
 public class UserCVService : IUserCVService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public UserCVService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

@@ -8,6 +8,7 @@ namespace EW.Infrastructure;
 public class EWRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {
     private readonly EWContext _dbContext;
+
     private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
     public EWRepository(EWContext dbContext)
@@ -82,7 +83,6 @@ public class EWRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEn
         DbSet.Attach(entity);
         _dbContext.Entry(entity).State = EntityState.Modified;
     }
-
 
     public void UpdateRange(IEnumerable<TEntity> entities)
     {

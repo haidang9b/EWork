@@ -11,7 +11,9 @@ namespace EW.Services.Business;
 public class TokenService : ITokenService
 {
     private readonly SymmetricSecurityKey _keyAccessToken;
+
     private readonly SymmetricSecurityKey _keyRefreshToken;
+
     public TokenService()
     {
         _keyAccessToken = new(Encoding.UTF8.GetBytes(Constaints.ACCES_TOKEN_KEY));
@@ -32,12 +34,12 @@ public class TokenService : ITokenService
     {
         var claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.NameId, user.Username),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role.Name),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.GivenName, user.FullName),
-            new Claim(ClaimTypes.Thumbprint, user.ImageUrl),
+            new(JwtRegisteredClaimNames.NameId, user.Username),
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.Role, user.Role.Name),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.GivenName, user.FullName),
+            new(ClaimTypes.Thumbprint, user.ImageUrl),
         };
         var creds = new SigningCredentials(_keyAccessToken, SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor

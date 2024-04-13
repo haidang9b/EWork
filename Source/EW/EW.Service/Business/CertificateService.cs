@@ -8,6 +8,7 @@ namespace EW.Services.Business;
 public class CertificateService : ICertificateService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public CertificateService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

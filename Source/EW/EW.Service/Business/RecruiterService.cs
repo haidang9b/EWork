@@ -13,7 +13,9 @@ namespace EW.Services.Business;
 public class RecruiterService : IRecruiterService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     private readonly IUserService _userService;
+
     public RecruiterService(
         IUnitOfWork unitOfWork,
         IUserService userService

@@ -10,6 +10,7 @@ namespace EW.Services.Business;
 public class ProfileService : IProfileSerivce
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public ProfileService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

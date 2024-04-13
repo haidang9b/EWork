@@ -11,10 +11,14 @@ namespace EW.Services.Email.Messaging;
 
 public class RabbitMQChangeStatusCompanyConsumer : BackgroundService
 {
-    private IConnection _connection;
-    private IModel _channel;
+    private readonly IConnection _connection;
+
+    private readonly IModel _channel;
+
     private const string ExchangeName = "DirectChangeStatusCompany_Exchange";
+
     private const string ChangeStatusCompanyQueueName = "DirectChangeStatusCompanyQueueName";
+
     private readonly IEmailService _emailService;
 
     public RabbitMQChangeStatusCompanyConsumer(IEmailService emailService,
@@ -84,7 +88,7 @@ public class RabbitMQChangeStatusCompanyConsumer : BackgroundService
 
             await _emailService.SendEmail(data);
         }
-        catch (Exception ex)
+        catch 
         {
             throw;
         }

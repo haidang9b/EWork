@@ -6,13 +6,17 @@ namespace EW.Infrastructure;
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private bool _disposed;
+
     private readonly EWContext _dbContext;
+
     private readonly Dictionary<Type, object> repositories;
+
     public UnitOfWork(EWContext dbContext)
     {
         _dbContext = dbContext;
         repositories = new Dictionary<Type, object>();
     }
+
     public void BeginTransaction()
     {
         _dbContext.Database.BeginTransaction();
@@ -49,6 +53,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     {
         return await _dbContext.SaveChangesAsync() > 0;
     }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposed && disposing)

@@ -13,14 +13,17 @@ namespace EW.Services.Business;
 public class CompanyService : ICompanyService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public CompanyService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
+
     public async Task<Company> Find(Company company)
     {
         return await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Email == company.Email || company.PhoneNumber == item.PhoneNumber || company.Id == item.Id);
     }
+
     public async Task<IEnumerable<Company>> GetCompanies()
     {
         return await _unitOfWork.Repository<Company>().GetAllAsync();
@@ -32,6 +35,7 @@ public class CompanyService : ICompanyService
         var companyRecruiter = await _unitOfWork.Repository<Recruiter>().FirstOrDefaultAsync(c => c.UserId == exist.Id, nameof(Recruiter.Company));
         return companyRecruiter.Company;
     }
+
     public async Task<bool> UpdateInformationCompany(UpdateCompanyModel model)
     {
         var existCompany = await _unitOfWork.Repository<Company>().FirstOrDefaultAsync(item => item.Id == model.Id)

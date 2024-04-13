@@ -11,8 +11,8 @@ namespace EW.Services.Email.Messaging;
 
 public class RabbitMQRecoveryPasswordConsumer : BackgroundService
 {
-    private IConnection _connection;
-    private IModel _channel;
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
     private const string ExchangeName = "DirectRecoveryPassword_Exchange";
     private const string RecoveryPasswordQueueName = "DirectRecoveryPasswordQueueName";
     private readonly IEmailService _emailService;
@@ -82,7 +82,7 @@ public class RabbitMQRecoveryPasswordConsumer : BackgroundService
 
             await _emailService.SendEmail(data);
         }
-        catch (Exception ex)
+        catch 
         {
             throw;
         }

@@ -7,6 +7,7 @@ namespace EW.Services.Business;
 public class UserExperienceService : IUserExperienceService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public UserExperienceService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;

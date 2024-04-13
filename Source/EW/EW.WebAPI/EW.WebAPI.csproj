@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EW.Infrastructure\EW.Infrastructure.csproj" />
@@ -25,6 +25,18 @@
     <ProjectReference Include="..\EW.Service\EW.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="EmailTemplates\AppliedNotify.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailTemplates\ChangeStatusCompany.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailTemplates\MarkedNotify.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailTemplates\RecoveryPassword.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Uploads\CompanyAvatar_20221217172417_scott-graham-5fNmWej4tAA-unsplash.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
