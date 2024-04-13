@@ -6,6 +6,6 @@ builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseCommons();
+app.UseCommons(builder.Configuration);
 
 app.Run();
